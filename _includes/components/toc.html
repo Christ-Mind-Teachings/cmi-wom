@@ -1,0 +1,24 @@
+<h3 class="ui centered header">
+  Table of Contents
+</h3>
+<table class="ui celled striped table">
+  <thead>
+    <tr>
+      <th>Bookmark</th>
+      <th>Chapter Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for page in include.data.pages %}
+      <tr>
+        <td class="collapsing">
+          <i class="bookmark outline icon"></i>
+        </td>
+        <td class="selectable">
+          <a href="{{page.url}}">{{page.title}}</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+

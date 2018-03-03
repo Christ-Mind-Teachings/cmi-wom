@@ -1,0 +1,28 @@
+{
+  "name": "cmi-wom",
+  "version": "0.1.0",
+  "description": "Way of Mastery",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "jekyll": "bundle exec jekyll s"
+  },
+  "keywords": [
+    "cmi"
+  ],
+  "author": "Rick Mercer",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.11.0"
+  },
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.5",
+    "netlify-identity-widget": "^1.4.11",
+    "scroll-into-view": "^1.9.1"
+  }
+}

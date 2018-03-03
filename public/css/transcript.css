@@ -1,0 +1,10 @@
+/* transcript css */
+.transcript.ui.text.container {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* bookmarks: hides paragraph book markers */
+i.bookmark.bkmark-hide {
+  display: none;
+}

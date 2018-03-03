@@ -1,0 +1,91 @@
+# CMI
+sourceId: 1
+cmiTitle: "Teachings of Christ Mind"
+
+# Setup
+title:        'Way of Mastery'
+tagline:      'Now, we begin...'
+description:  'A pathway of awakening from Jeshua through Jon Marc Hammer (Jayem)'
+url:          'https://wom.christmind.info'
+baseurl:      ''
+keywords:     "Christ Mind, Way of Mastery, Jeshua, Jayem, Way of the Heart, Way of Transformation, Way of Knowing"
+gems:
+  - jekyll-sitemap
+
+# About/contact
+author:
+  name:              Rick Mercer
+  url:               https://twitter.com/rmercer33
+  email:             rmercer33@gmail.com
+
+# Permalinks
+permalink: pretty
+permalink: /:title/
+
+# Set encoding to UTF-8
+encoding: utf-8
+
+# Build settings
+markdown: kramdown
+gems:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Collections for transcripts
+collections:
+  woh:
+    output: true
+    title: Way of the Heart
+  wot:
+    output: true
+    title: Way of Transformation
+  wok:
+    output: true
+    title: Way of Knowing
+  wos:
+    output: true
+    title: Way of the Servant
+  tjl:
+    output: true
+    title: The Jeshua Letters
+
+defaults:
+  - scope:
+      path: ""
+      type: woh
+    values:
+      layout: transcript
+      book: "Way of the Heart"
+      bid: "WOH"
+  - scope:
+      path: ""
+      type: wot
+    values:
+      layout: transcript
+      book: "Way of Transformation"
+      "bid": "WOT"
+  - scope:
+      path: ""
+      type: wok
+    values:
+      layout: transcript
+      book: "Way of Knowing"
+      bid: "WOK"
+  - scope:
+      path: ""
+      type: wos
+    values:
+      layout: transcript
+      book: "Way of the Servant"
+      bid: "WOS"
+  - scope:
+      path: ""
+      type: tjl
+    values:
+      layout: transcript
+      book: "The Jeshua Letters"
+      bid: "TJL"
+
+exclude: [
+  Gemfile, Gemfile.lock, package.json, package-lock.json, node_modules, webpack.config.js, src, project
+]
