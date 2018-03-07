@@ -10,6 +10,7 @@ import {showParagraph} from "./modules/url";
 import bookmark from "./modules/bookmark";
 import search from "./modules/_search/search";
 import auth from "./modules/_user/netlify";
+import toc from "./modules/_contents/toc";
 
 /*
  * For all transcript paragraphs -
@@ -77,6 +78,8 @@ $(document).ready(() => {
   showParagraph();
   bookmark.initialize();
   search.initialize();
+  toc.initialize();
   auth.initialize();
+
 
 });

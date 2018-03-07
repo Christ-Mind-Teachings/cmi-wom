@@ -7,11 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>{{page.bid}}:{{page.title}}</title>
+  <title></title>
 
   <link rel="stylesheet" href="/public/css/semantic.css">
   <link rel="stylesheet" href="/public/css/cmi.css">
-  <link rel="stylesheet" href="/public/css/transcript.css">
   <link rel="stylesheet" href="/public/css/wom.css">
 
   {% include favicon/cmi.html %}
@@ -19,14 +18,9 @@
 </head>
 <body>
   {% include common/masthead.html %}
-  {% include common/transcript-menu.html %}
+  {% include common/page-menu.html %}
 
-  <!-- class: {{page.class}}, bid: {{page.bid}} -->
-  {% if page.bid %}
-  <div class="{{page.bid | downcase }} transcript ui text container">
-  {% else %}
-  <div class="transcript ui text container">
-  {% endif %}
+  <div class="ui text container">
     {{ content }}
   </div>
 
@@ -40,9 +34,7 @@
   {% include components/toc-modal.html %}
   <div class="fixed" id="netlify-modal"></div>
 
-  {% include common/javascript.html %}
-
-  <script src="/public/js/transcript.js"></script>
+  <script src="/public/js/page.js"></script>
 </body>
 
 </html>

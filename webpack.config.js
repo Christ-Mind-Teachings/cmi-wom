@@ -1,10 +1,19 @@
 const path = require("path");
+const Jarvis = require("webpack-jarvis");
 
 module.exports = {
-  entry: "./src/js/transcript.js",
+  devtool: "source-map",
+  stats: {
+    colors: true
+  },
+  entry: {
+    transcript: ["./src/js/transcript.js"],
+    page: ["./src/js/page.js"]
+  },
   output: {
-    filename: "transcript.js",
-    path: path.resolve(__dirname, "public")
+    path: path.join(__dirname, "public/js"),
+    publicPath: "/public/js",
+    filename: "[name].js"
   },
   module: {
     rules: [
@@ -15,6 +24,11 @@ module.exports = {
         query: {cacheDirectory: true}
       }
     ]
-  }
+  },
+  plugins: [
+    new Jarvis({
+      port: 1337 // optional: set a port
+    })
+  ]
 };
 

@@ -1,4 +1,9 @@
 /* cmi styles */
+
+:root {
+  --masthead-color:#871212;
+  --signed-in-color: green;
+}
 <!-- 
 body {
   color: #454545;
@@ -26,7 +31,7 @@ body {
 .cmi-header .ui.header,
 .cmi-header .cmi-header-breadcrumb,
 .cmi-header .cmi-header-breadcrumb a {
-  color: #871212;
+  color: var(--masthead-color);
 }
 
 .cmi-header > a > h1.ui.header:hover {
@@ -57,6 +62,27 @@ body {
   background-color: #FFFFFF;
   border: 1px solid #DDD;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* When user is logged in */
+.colorGreen {
+  color: var(--signed-in-color);
+}
+
+a.current-unit {
+  background-color: var(--masthead-color);
+  color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  cursor: default!important;
+}
+
+a.current-unit:before {
+  content: ">> ";
+}
+
+a.current-unit:after {
+  content: " <<";
 }
 
 /* footer */

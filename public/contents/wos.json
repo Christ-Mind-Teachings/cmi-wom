@@ -1,0 +1,42 @@
+{
+  "title": "Way of the Servant",
+  "image": "/public/img/wom/wos-toc.jpg",
+  "contents": [
+    {
+      "title": "Foreword",
+      "url": "/wos/foreword/"
+    },
+    {
+      "title": "Preface",
+      "url": "/wos/preface/"
+    },
+    {
+      "title": "Book One",
+      "url": "/wos/chap01/"
+    },
+    {
+      "title": "Book Two",
+      "url": "/wos/chap02/"
+    },
+    {
+      "title": "Book Three",
+      "url": "/wos/chap03/"
+    },
+    {
+      "title": "Book Four",
+      "url": "/wos/chap04/"
+    },
+    {
+      "title": "After Words",
+      "url": "/wos/afterwords/"
+    },
+    {
+      "title": "Epilogue",
+      "url": "/wos/epilogue"
+    },
+    {
+      "title": "Prayer of Remembrance",
+      "url": "/wos/prayer"
+    }
+  ]
+}
