@@ -1,5 +1,6 @@
 ---
 layout: page
+masthead: home
 ---
 
 <div class="ui three cards">

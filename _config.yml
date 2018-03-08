@@ -48,6 +48,12 @@ collections:
   tjl:
     output: true
     title: The Jeshua Letters
+  early:
+    output: true
+    title: The Early Years
+  questions:
+    output: true
+    title: Questions
 
 defaults:
   - scope:
@@ -85,6 +91,20 @@ defaults:
       layout: transcript
       book: "The Jeshua Letters"
       bid: "TJL"
+  - scope:
+      path: ""
+      type: early
+    values:
+      layout: transcript
+      book: "The Early Years"
+      bid: "Early"
+  - scope:
+      path: ""
+      type: questions
+    values:
+      layout: transcript
+      book: "Questions"
+      bid: "Questions"
 
 exclude: [
   Gemfile, Gemfile.lock, package.json, package-lock.json, node_modules, webpack.config.js, src, project

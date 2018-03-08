@@ -69,20 +69,14 @@ body {
   color: var(--signed-in-color);
 }
 
-a.current-unit {
+.toc-list .item > a.current-unit,
+.toc-list .list > .item.current-unit {
   background-color: var(--masthead-color);
-  color: white;
+  color: white!important;
   padding-left: 4px;
   padding-right: 4px;
   cursor: default!important;
-}
-
-a.current-unit:before {
-  content: ">> ";
-}
-
-a.current-unit:after {
-  content: " <<";
+  border-radius: 5px;
 }
 
 /* footer */

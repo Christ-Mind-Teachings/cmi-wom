@@ -16594,6 +16594,9 @@ let userInfo;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_scroll_into_view__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_scroll_into_view__);
+
 
 
 
@@ -16613,7 +16616,7 @@ function renderQuestions(questions) {
 //generate html for Contents
 function makeContents(contents) {
   return `
-    <div class="ui ordered list">
+    <div class="ui ordered relaxed list">
       ${contents.map(unit => `
         <div class="item"> 
           <a href="${unit.url}">${unit.title}</a>
@@ -16641,6 +16644,7 @@ function makeContents(contents) {
         $(".toc-image").attr("src", `${contents.image}`);
         $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
         $(".toc-list").html(makeContents(contents.contents));
+        $(uiTocModal).modal("show");
       } else {
         let url = `${contentsUrl}/${book}.json`;
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(response => {
@@ -16648,8 +16652,12 @@ function makeContents(contents) {
           $(".toc-title").html(`Table of Contents: <em>${response.data.title}</em>`);
           $(".toc-list").html(makeContents(response.data.contents));
           __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(`contents-${book}`, response.data);
+          $(uiTocModal).modal("show");
         }).catch(error => {
-          //report error
+          $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
+          $(".toc-title").html("Table of Contents: <em>Error</em>");
+          $(".toc-list").html(`<p>Error: ${error.message}</p>`);
+          $(uiTocModal).modal("show");
         });
       }
 
@@ -16657,9 +16665,11 @@ function makeContents(contents) {
       // the list
       if ($(".transcript").length > 0) {
         let page = location.pathname;
-        $(`.toc-list a[href='${page}']`).addClass("current-unit").removeAttr("href");
+        let $el = $(`.toc-list a[href='${page}']`);
+
+        $el.addClass("current-unit").removeAttr("href");
+        __WEBPACK_IMPORTED_MODULE_2_scroll_into_view___default()($el.get(0));
       }
-      $(uiTocModal).modal("show");
     });
   }
 });

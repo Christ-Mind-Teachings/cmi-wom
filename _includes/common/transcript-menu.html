@@ -20,19 +20,23 @@
         <i class="volume up icon"></i></a>
       </span>
     </a>
+    {% if page.bid == "Questions" %}
+    <a href="#" data-book="{{page.contents}}" class="item toc-modal-open">
+    {% else %}
     <a href="#" data-book="{{page.bid}}" class="item toc-modal-open">
+    {% endif %}
       <span data-position="bottom center" data-tooltip="Show Contents">
         <i class="align justify icon"></i>
       </span>
     </a>
     <a href="#" class="item">
-      <span data-position="bottom center" data-tooltip="Get Help">
-        <i class="question icon"></i>
+      <span data-position="bottom center" data-tooltip="Jump to Top of Page">
+        <i class="level up icon"></i>
       </span>
     </a>
     <a href="#" class="item">
-      <span data-position="bottom center" data-tooltip="Jump to Top of Page">
-        <i class="level up icon"></i>
+      <span data-position="bottom center" data-tooltip="Get Help">
+        <i class="question icon"></i>
       </span>
     </a>
     <a href="#" class="login-menu-option ui right floated item">

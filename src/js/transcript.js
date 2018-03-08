@@ -81,5 +81,4 @@ $(document).ready(() => {
   toc.initialize();
   auth.initialize();
 
-
 });
