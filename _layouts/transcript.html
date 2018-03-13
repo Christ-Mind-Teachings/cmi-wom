@@ -10,6 +10,7 @@
   <title>{{page.bid}}:{{page.title}}</title>
 
   <link rel="stylesheet" href="/public/css/semantic.css">
+  <link rel="stylesheet" href="/public/js/me-styles.css">
   <link rel="stylesheet" href="/public/css/cmi.css">
   <link rel="stylesheet" href="/public/css/transcript.css">
   <link rel="stylesheet" href="/public/css/wom.css">
@@ -35,6 +36,7 @@
     {% include common/footer.html %}
   {% endif %}
 
+  {% include components/audio-player.html %}
   {% include components/bookmark-modal.html %}
   {% include components/search-modal.html %}
   {% include components/toc-modal.html %}

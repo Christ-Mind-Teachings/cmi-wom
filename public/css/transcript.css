@@ -2,9 +2,60 @@
 .transcript.ui.text.container {
   font-size: 20px;
   line-height: 1.5;
+  margin-bottom: 60px;
 }
 
 /* bookmarks: hides paragraph book markers */
-i.bookmark.bkmark-hide {
+i.bookmark.icon.hide {
   display: none;
 }
+
+/* audio hilite */
+
+.hilight {
+  border: 1px dashed black;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+
+/* ------ Audio Player --------- */
+
+.ui.menu .audio-player-toggle.hide.item,
+.hide.audio-player-wrapper {
+  display:none;
+}
+
+.playmark-hide.transcript p.cmiTranPara > i.playmark.icon {
+  display: none;
+}
+
+.mejs__ptoggle.mejs-ptoggle-visible > button {
+  background-color: red; 
+}
+
+.mejs__ptoggle.mejs-ptoggle-hidden > button {
+  background-color: green;
+}
+
+.audio-player-wrapper {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+}
+
+.audio-player-wrapper .wrapper-wrapper {
+  position: relative;
+  left: -50%;
+}
+
+/* mediaelements audio player controls */
+.mejs__controls .mejs__button, .mejs__controls .mejs__time, .mejs__controls .mejs__time-rail {
+  margin-right: 25px;
+}
+
+/* audio player shadow */
+.shadow {
+  box-shadow: 5px 5px 4px 0 #6f6f6d;
+}
+

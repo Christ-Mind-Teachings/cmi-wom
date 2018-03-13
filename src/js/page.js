@@ -28,11 +28,9 @@ function initStickyMenu() {
 }
 
 $(document).ready(() => {
-
   initStickyMenu();
   bookmark.initialize();
   search.initialize();
   toc.initialize();
   auth.initialize();
-
 });

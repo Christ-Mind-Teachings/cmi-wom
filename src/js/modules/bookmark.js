@@ -26,7 +26,7 @@ function initBookmarkModal() {
  */
 function addBookMarkers() {
   $("p.cmiTranPara").each(function() {
-    $(this).prepend("<i class='bkmark bkmark-hide bookmark outline icon'></i>");
+    $(this).prepend("<i class='bkmark hide bookmark outline icon'></i>");
   });
 }
 
@@ -37,11 +37,11 @@ function addBookMarkers() {
 function createBookmarkToggle(selector) {
   $(selector).on("click", function() {
     $("p.cmiTranPara > i.bkmark").each(function() {
-      if ($(this).hasClass("bkmark-hide")) {
-        $(this).removeClass("bkmark-hide");
+      if ($(this).hasClass("hide")) {
+        $(this).removeClass("hide");
       }
       else {
-        $(this).addClass("bkmark-hide");
+        $(this).addClass("hide");
       }
     });
   });

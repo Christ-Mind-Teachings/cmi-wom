@@ -1,0 +1,113 @@
+{
+  "bid": "wot",
+  "title": "Way of Transformation",
+  "image": "/public/img/wom/wot-toc.jpg",
+  "contents": [
+    {
+      "title": "Lesson One",
+      "url": "/wot/l01/",
+      "questions": [
+        {
+          "title": "Q. Who are the other Masters occasionally mentioned?",
+          "url": "/questions/t01q1/"
+        },
+        {
+          "title": "Q. What is the difference between judgment and discernment?",
+          "url": "/questions/t01q2/"
+        }
+      ]
+    },
+    {
+      "title": "Lesson Two",
+      "url": "/wot/l02/"
+    },
+    {
+      "title": "Lesson Three",
+      "url": "/wot/l03/"
+    },
+    {
+      "title": "Lesson Four",
+      "url": "/wot/l04/"
+    },
+    {
+      "title": "Lesson Five",
+      "url": "/wot/l05/"
+    },
+    {
+      "title": "Lesson Six",
+      "url": "/wot/l06/",
+      "questions": [
+        {
+          "title": "Q. About vulnerability",
+          "url": "/questions/t06q1/"
+        },
+        {
+          "title": "Q. What was the message of the Cross?",
+          "url": "/questions/t06q2/"
+        }
+      ]
+    },
+    {
+      "title": "Lesson Seven",
+      "url": "/wot/l07/",
+      "questions": [
+        {
+          "title": "Q. Please talk about Enlightenment",
+          "url": "/questions/t07q1/"
+        }
+      ]
+    },
+    {
+      "title": "Lesson Eight",
+      "url": "/wot/l08/"
+    },
+    {
+      "title": "Lesson Nine",
+      "url": "/wot/l09/",
+      "questions": [
+        {
+          "title": "Q. About guidance",
+          "url": "/questions/t09q1/"
+        },
+        {
+          "title": "Q. All events are neutral",
+          "url": "/questions/t09q2/"
+        },
+        {
+          "title": "Q. About Christ Consciousness and Individuality",
+          "url": "/questions/t09q3/"
+        },
+        {
+          "title": "Q. About not being in denial of the shadow",
+          "url": "/questions/t09q4/"
+        }
+      ]
+    },
+    {
+      "title": "Lesson Ten",
+      "url": "/wot/l10/"
+    },
+    {
+      "title": "Lesson Eleven",
+      "url": "/wot/l11/",
+      "questions": [
+        {
+          "title": "Q. Do you have our own unique purpose?",
+          "url": "/questions/t11q1/"
+        },
+        {
+          "title": "Q. About The Lineage",
+          "url": "/questions/t11q2/"
+        },
+        {
+          "title": "Q. About specialness, holiness, and sexuality",
+          "url": "/questions/t11q3/"
+        }
+      ]
+    },
+    {
+      "title": "Lesson Twelve",
+      "url": "/wot/l12/"
+    }
+  ]
+}

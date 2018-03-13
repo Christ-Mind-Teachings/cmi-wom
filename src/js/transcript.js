@@ -1,16 +1,18 @@
 /* eslint no-console: off */
 
-import jQuery from "jquery";
-window.$ = window.jQuery = jQuery;
-
-//import "../vendor/semantic/semantic.min.js";
-window.semantic = require("../vendor/semantic/semantic.min.js");
+/*
+  semantic requires jquery which is loaded used
+  webpack.ProvidePlugin
+*/
+import "../vendor/semantic/semantic.min.js";
 
 import {showParagraph} from "./modules/url";
+import {loadConfig} from "./modules/config";
 import bookmark from "./modules/bookmark";
 import search from "./modules/_search/search";
 import auth from "./modules/_user/netlify";
-import toc from "./modules/_contents/toc";
+import toc, {getBookId} from "./modules/_contents/toc";
+import audio from "./modules/_audio/audio";
 
 /*
  * For all transcript paragraphs -
@@ -78,7 +80,18 @@ $(document).ready(() => {
   showParagraph();
   bookmark.initialize();
   search.initialize();
-  toc.initialize();
   auth.initialize();
+
+  //load config file and do initializations that depend on a loaded config file
+  loadConfig(getBookId())
+    .then((source) => {
+      console.log(source);
+      toc.initialize();
+      audio.initialize();
+    })
+    .catch((error) => {
+      //report error to the user - somehow
+      console.error(error);
+    });
 
 });
