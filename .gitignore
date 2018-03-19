@@ -4,6 +4,5 @@ _site
 .DS_Store
 node_modules/
 project/
-public/js/
 *.map
 
