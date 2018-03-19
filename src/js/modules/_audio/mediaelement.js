@@ -23,33 +23,60 @@ import "me-plugin/capture/capture.css";
 import "me-plugin/capture/capture";
 //-----------------------------
 
-import focus, {setPlayer, togglePlayFromHere} from "./focus";
+import notify from "toastr";
+import focus, {switchToParagraph, togglePlayFromHere} from "./focus";
+import {getUserInfo} from "../_user/netlify";
+import {getReservation} from "../config";
 
-function setEventListeners(haveTimingData) {
-  let playerId = $("#cmi-audio-player").closest(".mejs__container").attr("id");
-  let player = mejs.players[playerId];
+import timeCapture from "./capture";
 
-  //send player instance to focus
-  setPlayer(player);
+/*
+  This is called after successful audio player initialization
+*/
+function setEventListeners(player, userStatus, haveTimingData) {
+  console.log("userStatus: %s, haveTimingData: %s", userStatus, haveTimingData !== undefined);
+  let capture = false;
 
+  //initialize focus
+  if (haveTimingData) {
+    focus.initialize(haveTimingData, player, userStatus);
+
+    //play from here toggle
+    $(".mejs__ptoggle").addClass("mejs-ptoggle-hidden");
+  }
+
+  //initialize time capture and, if we have timing data, time capture editing
+  if (userStatus === "TIMER") {
+    capture = true;
+    timeCapture.initialize(player, haveTimingData);
+  }
+
+  /*
+    Communicate current audio playback time to focus and capture
+  */
   player.media.addEventListener("timeupdate", function() {
     var time = player.getCurrentTime();
 
     if (haveTimingData) {
       focus.setCurrentPlaybackTime(time);
     }
-    else {
-      //timeCapture.setCurrentPlaybackTime(time);
+
+    if (capture) {
+      timeCapture.setCurrentPlaybackTime(time);
     }
   });
 
   /*
-    * one time notification to 'focus' that
-    * play has started.
+   * play has started.
   */
   player.media.addEventListener("playing", function() {
-    //timeCapture.play();
-    focus.play();
+    if (haveTimingData) {
+      focus.play();
+    }
+
+    if (capture) {
+      timeCapture.play();
+    }
   });
 
   /*
@@ -59,22 +86,23 @@ function setEventListeners(haveTimingData) {
     if (haveTimingData) {
       focus.ended();
     }
-    else {
-      //timeCapture.ended();
+
+    if (capture) {
+      timeCapture.ended();
     }
   });
 
   player.media.addEventListener("pause", function() {
-    focus.pause();
-    //timeCapture.pause();
+    if (haveTimingData) {
+      focus.pause();
+    }
+
+    if (capture) {
+      timeCapture.pause();
+    }
   });
 
   if (haveTimingData) {
-
-    //this is the play-from-here icon toggle, .ptoggle-hidden sets the background-color
-    //of the control to the initial hidden state
-    $(".mejs__ptoggle").addClass("mejs-ptoggle-hidden");
-
     player.media.addEventListener("ptoggle", function() {
       if (togglePlayFromHere()) {
         $(".mejs__ptoggle").addClass("mejs-ptoggle-visible").removeClass("mejs-ptoggle-hidden");
@@ -84,6 +112,7 @@ function setEventListeners(haveTimingData) {
       }
     });
 
+    /* don't think we need this when we have timing data
     //get notified when seek start
     player.media.addEventListener("seeking", function() {
       var time = player.getCurrentTime();
@@ -95,35 +124,89 @@ function setEventListeners(haveTimingData) {
       var time = player.getCurrentTime();
       focus.setSeeked(time);
     });
+    */
 
     player.media.addEventListener("prevp", function() {
-      let newTime = focus.getTime("PREV");
-      console.log("time for previous paragraph is: %s", newTime);
-      if (newTime > -1) {
-        player.setCurrentTime(newTime);
-      }
+      switchToParagraph("PREV");
     });
 
     player.media.addEventListener("nextp", function() {
-      let newTime = focus.getTime("NEXT");
-      console.log("time for next paragraph is: %s", newTime);
-      if (newTime > -1) {
-        player.setCurrentTime(newTime);
-      }
+      switchToParagraph("NEXT");
     });
   }
-  else {
-    //set listeners when no timing data present
 
-    //timeCapture.initialize(player);
-
+  if (capture) {
     //Audio player control that shows/hides time capture icon
     player.media.addEventListener("capture", function() {
-      //timeCapture.toggleMarkers();
+      timeCapture.toggleMarkers();
     });
+  }
+}
 
+/*
+  A user is either a LISTENER or a TIMER. TIMER's are logged in and have a role of "timer",
+  additionally, if there is a reservation the timer is a timer only when the reservation
+  is for him.
+*/
+function getUserStatus() {
+  let user = getUserInfo("julie");
+
+  if (!user) {
+    return "LISTENER";
   }
 
+  let timer = user.roles.find(r => r === "timer");
+
+  if (!timer) {
+    return "LISTENER";
+  }
+
+  //User is a timer, check there is a timing reservation on the page
+  let reservation = getReservation(location.pathname);
+
+  //no reservation, the user is a timer
+  if (!reservation) {
+    return "TIMER";  
+  }
+
+  //check if reservation is for the user
+  if (reservation === user.email) {
+    return "TIMER";
+  }
+
+  //user is a timer but does not have a reservation
+  return "LISTENER";
+}
+
+/*
+  Determine audio player controls to use, we enable timing if timing data exists or not.
+*/
+function assignPlayerFeatures(timingData) {
+  let info = {
+    status: getUserStatus(),
+    features: []
+  };
+
+  if (info.status === "LISTENER") {
+    if (timingData) {
+      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle"];
+    }
+    else {
+      info.features = ["playpause", "current", "duration", "skipback", "jumpforward"];
+    }
+
+  }
+  //TIMER
+  else {
+    if (timingData) {
+      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle", "capture"];
+    }
+    else {
+      info.features = ["playpause", "current", "duration", "skipback", "jumpforward", "capture"];
+    }
+  }
+
+  return info;
 }
 
 export default {
@@ -136,18 +219,10 @@ export default {
    *  timingData: uri of timing data, pass it to focus.js
    */
   initialize: function(src, timingData) {
-    let features = [];
-
     //add source of audio file to player
     $("audio.mejs-player").attr("src", src);
 
-    //player controls when we have timing data
-    if (timingData) {
-      features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle"];
-    }
-    else {
-      features = ["playpause", "current", "duration", "skipback", "jumpforward", "capture"];
-    }
+    const {status, features} = assignPlayerFeatures(timingData);
 
     $("#cmi-audio-player").mediaelementplayer({
       pluginPath: "/public/vendor/mediaelement/plugin/",
@@ -156,17 +231,13 @@ export default {
       timeFormat: "h:mm:ss",
       features: features,
       error: function(error) {
-        console.error("Failed to initialize audio player: ", error);
+        notify.error("Audio error: ", error);
       },
-      success: function(mediaElement) {
-        //console.log("mediaelement initialized!");
-        if (timingData) {
-          focus.initialize(timingData);
-        }
+      success: function(media, node, player) {
+        //audio initialized, continue with setup for capture and focus
+        setEventListeners(player, status, timingData);
       }
     });
-
-    setEventListeners(timingData !== null);
   }
 
 };

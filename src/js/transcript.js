@@ -6,7 +6,7 @@
 */
 import "../vendor/semantic/semantic.min.js";
 
-import {showParagraph} from "./modules/url";
+import {showParagraph} from "./modules/_util/url";
 import {loadConfig} from "./modules/config";
 import bookmark from "./modules/bookmark";
 import search from "./modules/_search/search";
@@ -36,6 +36,7 @@ function labelParagraphs() {
     return;
   }
 
+  //add .cmiTranPara, #id and paragraph numbers to each paragraph that doesn't have .omit
   transcriptParagraphs.each(function(idx) {
     //skip omitted paragraphs (they are omitted in the markdown file)
     if ($(this).hasClass("omit")) {
@@ -49,7 +50,11 @@ function labelParagraphs() {
       return;
     }
     count++;
-    $(this).attr("id", "p" + idx).addClass("cmiTranPara");
+    $(this)
+      .attr("id", "p" + idx)
+      .addClass("cmiTranPara")
+      .prepend(`<span class='pnum'>(p${idx})&nbsp;</span>`);
+
   });
 
   //log number of not omitted paragraphs
@@ -73,11 +78,25 @@ function initStickyMenu() {
   });
 }
 
+//create listener to toggle display of paragraph numbers
+function createParagraphNumberToggleListener() {
+  $(".toggle-paragraph-markers").on("click", function(e) {
+    e.preventDefault();
+    let el = $(".transcript.ui.text.container");
+    if (el.hasClass("hide-pnum")) {
+      el.removeClass("hide-pnum");
+    }
+    else {
+      el.addClass("hide-pnum");
+    }
+  });
+}
+
 $(document).ready(() => {
 
   initStickyMenu();
   labelParagraphs();
-  showParagraph();
+  createParagraphNumberToggleListener();
   bookmark.initialize();
   search.initialize();
   auth.initialize();
@@ -88,6 +107,7 @@ $(document).ready(() => {
       console.log(source);
       toc.initialize();
       audio.initialize();
+      showParagraph();
     })
     .catch((error) => {
       //report error to the user - somehow

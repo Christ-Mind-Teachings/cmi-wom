@@ -12,11 +12,52 @@ import _find from "lodash/find";
 import _findLastIndex from "lodash/findLastIndex";
 import _map from "lodash/map";
 
-//paragraph timing array assigned on module initialization
-let timingData;
+import {setCaptureData} from "./capture";
 
-let ptr = -1;
-let prevPtr = -1;
+//paragraph timing array assigned on module initialization
+let timingData = null;
+
+//capture.js can disable scroll is timing is enabled
+let scrollEnabled = true;
+
+class Ptr {
+  constructor(value = -1, pvalue = -1) {
+    this.val = value;
+    this.pval = pvalue; //previous ptr position
+  }
+
+  //get val
+  get ptrVal() {
+    return this.val;
+  }
+
+  //set val
+  set ptrVal(value) {
+    this.val = value;
+    console.log("set ptr: %s", this.val);
+  }
+
+  //get previous val
+  get pVal() {
+    return this.pval;
+  }
+
+  //set previous val
+  set pVal(value) {
+    this.pval = value;
+    console.log("set prevPtr: %s", this.pval);
+  }
+
+  //increment val
+  set inc(value = 1) {
+    this.val = this.val + value;
+    console.log("inc ptr: %s", this.val);
+  }
+}
+
+//pointers to the current and previous paragraphs
+const ptr = new Ptr(-1, -1);
+
 let seeking = false;
 let ended = false;
 let player;
@@ -39,27 +80,62 @@ function initializePlayFromHere() {
     let el = $(this);
     let id = el.parent().attr("id");
 
+    switchToParagraph(id);
+
+    /*
     //remove the 'p' from id before calling getTime()
     let newTime = getTime(id.substr(1));
+    console.log(`play-from-here clicked: ${id}`);
 
     //set new playtime
     if (newTime > -1) {
+      adjustPlayPosition(id.substr(1));
       player.setCurrentTime(newTime);
     }
+    */
   });
 }
 
-function removeCurrentHilight() {
-  if (prevPtr > -1) {
-    $("#" + timingData[prevPtr].id).removeClass("hilight");
+/*
+  called by play-from-here event handlers
+*/
+export function switchToParagraph(p) {
+  let time;
+  let idx;
+  console.log("switchToParagraph: %s", p);
+  switch(p) {
+    case "NEXT":
+      if ((ptr.val + 1) < timingData.length) {
+        time = getTime(ptr.val + 1);
+        adjustPlayPosition(ptr.val + 1);
+        player.setCurrentTime(time);
+      }
+      break;
+    case "PREV":
+      if ((ptr.val - 1) >= 0) {
+        time = getTime(ptr.val - 1);
+        adjustPlayPosition(ptr.val - 1);
+        player.setCurrentTime(time);
+      }
+      break;
+    default:
+      idx = parseInt(p.substr(1),10);
+      time = getTime(idx);
+
+      //set new playtime
+      if (time > -1) {
+        adjustPlayPosition(idx);
+        player.setCurrentTime(time);
+      }
+      break;
   }
 }
 
-/*
-  Called by mediaelement when the audio player is initialized
-*/
-export function setPlayer(p) {
-  player = p;
+//remove highlighting from currently highlighted paragraph
+function removeCurrentHilight() {
+  if (ptr.pval > -1) {
+    $("#" + timingData[ptr.pval].id).removeClass("hilight");
+  }
 }
 
 /*
@@ -85,9 +161,11 @@ function round(time) {
 
 function getIndex(time) {
   let index = _findLastIndex(timingData, (o) => {
+    console.log(`findLastIndex: checking ${o.id}, ${o.seconds} <= ${time}`);
     return o.seconds <= time;
   });
 
+  console.log("found: %s", index);
   return index;
 }
 
@@ -95,17 +173,20 @@ function getTime(idx) {
   if (idx < 0 || idx >= timingData.length ) {
     return 60 * 60 * 24; //return a big number
   }
+  else {
+    console.log("getTime(%s)", idx);
+    return timingData[idx].seconds;
+  }
 
-  return timingData[idx].seconds;
 }
 
 function manageHiLight(current) {
 
   //initial state of pointer is -1
-  if ((ptr === -1) || current > getTime(ptr + 1)) {
-    ptr++;
+  if ((ptr.val === -1) || current > getTime(ptr.val + 1)) {
+    ptr.inc = 1;
     if (!seeking) {
-      showNscroll(ptr);
+      showNscroll(ptr.val);
     }
   }
 }
@@ -115,8 +196,9 @@ function manageHiLight(current) {
  * - adjust hilight accordingly
  */
 function adjustPlayPosition(index) {
-  ptr = index;
-  showNscroll(ptr);
+  console.log(`adjusting play position to: p${index}`)
+  ptr.val = index;
+  showNscroll(ptr.val);
 }
 
 function showNscroll(idx) {
@@ -124,19 +206,28 @@ function showNscroll(idx) {
   //console.log("hilight transition at time %s to paragraph %s", current, tinfo.id);
 
   //scroll into view
-  scroll(document.getElementById(tinfo.id));
+  if (scrollEnabled) {
+    scroll(document.getElementById(tinfo.id));
+  }
 
-  if (prevPtr > -1) {
-    $("#" + timingData[prevPtr].id).removeClass("hilight");
+  if (ptr.pval > -1) {
+    $("#" + timingData[ptr.pval].id).removeClass("hilight");
   }
 
   $("#" + tinfo.id).addClass("hilight");
-  prevPtr = idx;
+  ptr.pval = idx;
 }
 
 export default {
 
-  initialize: function(timingDataUri) {
+  /*
+    args:
+      timingDataUri: name of timing data to fetch
+      p: reference to the audio player
+      userStatus: when equal TIMER send timing data to capture.js
+  */
+  initialize: function(timingDataUri, p, userStatus) {
+    player = p;
     
     //load the timing data
     fetchTimingData(timingDataUri)
@@ -148,9 +239,12 @@ export default {
           value.seconds = round(value.seconds);
           return value;
         });
-        //console.log("timing data: ", timingData);
 
         initializePlayFromHere();
+
+        if (userStatus === "TIMER") {
+          setCaptureData(timingData);
+        }
       })
       .catch((error) => {
         console.error("Failed to load timing data: %s, error: ", timingDataUri, error);
@@ -175,14 +269,11 @@ export default {
     //if ended is true, the audio is being replayed
     // - set pointers and flags to default values
     if (ended) {
-      ptr = -1;
-      prevPtr = -1;
+      ptr.val = -1;
+      ptr.pval = -1;
       seeking = false;
       ended = false;
       console.log("audio restarting");
-    }
-    else {
-      console.log("audio playing");
     }
   },
 
@@ -238,7 +329,7 @@ export default {
 
     var index = getIndex(round(time));
 
-    //console.log("seeked from %s to %s", ptr, index);
+    //console.log("seeked from %s to %s", ptr.val, index);
     adjustPlayPosition(index);
   },
 
@@ -247,20 +338,21 @@ export default {
    *  - arg p: is an id of a paragraph or
    *    NEXT, PREV for next and previous paragraphs relative to current
    *    playback time
-   */
   getTime: function(p) {
     let time = -1;
     let info;
 
     switch(p) {
       case "NEXT":
-        if ((ptr + 1) < timingData.length) {
-          time = getTime(ptr + 1);
+        if ((ptr.val + 1) < timingData.length) {
+          time = getTime(ptr.val + 1);
+          //console.log("ptr: %s, nextPtr: %s, nextPtr time: %s", ptr.val, ptr.val + 1, time);
         }
         break;
       case "PREV":
-        if ((ptr - 1) >= 0) {
-          time = getTime(ptr - 1);
+        if ((ptr.val - 1) >= 0) {
+          time = getTime(ptr.val - 1);
+          //console.log("ptr: %s, prevPtr: %s, prevPtr time: %s", ptr.val, ptr.val - 1, time);
         }
         break;
       default:
@@ -276,6 +368,15 @@ export default {
 
     return time;
   }
+   */
 
 };
+
+/*
+  called by capture when capture of existing timing
+  is happening
+*/
+export function disableScroll() {
+  scrollEnabled = false;
+}
 

@@ -10,6 +10,7 @@ const configUrl = "/public/config";
 
 //the current configuration, initially null, assigned by getConfig()
 let config;
+let timingData;
 
 function requestConfiguration(url) {
   return axios.get(url);
@@ -80,9 +81,9 @@ export function getConfig(book) {
         config = response.data;
         resolve(response.data);
       })
-      .catch((error) => {
+      .catch(() => {
         config = null;
-        reject(error);
+        reject(`Config file: ${url} is not valid JSON`);
       });
   });
 }
@@ -117,7 +118,7 @@ export function loadConfig(book) {
       })
       .catch((error) => {
         config = null;
-        reject(error);
+        reject(`Config file: ${url} is not valid JSON`);
       });
   });
 
@@ -145,15 +146,29 @@ export function getAudioInfo(url) {
 
   if (idx.length === 3) {
     let qIdx = parseInt(idx[2].substr(1), 10) - 1;
-    console.log("getAudioInfo(): cIdx: %s, qIdx: %s", cIdx, qIdx);
+    //console.log("getAudioInfo(): cIdx: %s, qIdx: %s", cIdx, qIdx);
 
     audioInfo = config.contents[cIdx].questions[qIdx];
   }
   else {
-    console.log("getAudioInfo(): cIdx: %s", cIdx);
+    //console.log("getAudioInfo(): cIdx: %s", cIdx);
     audioInfo = config.contents[cIdx];
   }
 
   audioInfo.audioBase = audioBase;
   return audioInfo;
+}
+
+/*
+ * get timer info for the current page
+ */
+export function getReservation(url) {
+  let audioInfo = getAudioInfo(url);
+
+  if (audioInfo.timer) {
+    return audioInfo.timer;
+  }
+
+  return null;
+
 }

@@ -20,18 +20,23 @@
         <i class="volume up icon"></i></a>
       </span>
     </a>
-    {% if page.bid == "Questions" %}
-    <a href="#" data-book="{{page.contents}}" class="item toc-modal-open">
-    {% else %}
-    <a href="#" data-book="{{page.bid}}" class="item toc-modal-open">
-    {% endif %}
-      <span data-position="bottom center" data-tooltip="Show Contents">
-        <i class="align justify icon"></i>
+    <a href="#" class="toggle-paragraph-markers item">
+      <span data-position="bottom center" data-tooltip="Toggle Display of Paragraph Numbers">
+        <i class="paragraph icon"></i>
       </span>
     </a>
     <a href="#" class="item">
-      <span data-position="bottom center" data-tooltip="Jump to Top of Page">
+      <span data-position="bottom center" data-tooltip="Top of Page">
         <i class="level up icon"></i>
+      </span>
+    </a>
+    {% if page.bid == "Questions" %}
+    <a href="#" data-book="{{page.contents | downcase}}" class="item toc-modal-open">
+    {% else %}
+    <a href="#" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
+    {% endif %}
+      <span data-position="bottom center" data-tooltip="Show Contents">
+        <i class="align justify icon"></i>
       </span>
     </a>
     <a href="#" class="item">

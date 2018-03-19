@@ -31,6 +31,7 @@
     "mediaelement": "^4.2.8",
     "netlify-identity-widget": "^1.4.11",
     "scroll-into-view": "^1.9.1",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "toastr": "^2.1.4"
   }
 }

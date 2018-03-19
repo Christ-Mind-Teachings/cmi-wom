@@ -7,7 +7,8 @@
       "title": "Lesson One",
       "url": "/woh/l01/",
       "audio": "/woh/L01.mp3",
-      "timing": "/woh/l01.json",
+      "xtiming": "/woh/l01.json",
+      "timer": "julief8@me.com",
       "questions": [
         {
           "title": "Q. What Motivates You?",
@@ -65,7 +66,7 @@
       "title": "Lesson Five",
       "url": "/woh/l05/",
       "audio": "/woh/L05.mp3",
-      "timing": "l05.json"
+      "timing": "/woh/l05.json"
     },
     {
       "title": "Lesson Six",
@@ -238,6 +239,11 @@
           "url": "/woh/l12/q3/",
           "audio": "/questions/Q12.03.mp3",
           "timing": "/questions/h12q3.json"
+        },
+        {
+          "title": "Q. Audio Test",
+          "url": "/woh/l12/q4/",
+          "audio": "/questions/test.mp3"
         }
       ]
     }
