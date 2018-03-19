@@ -57,7 +57,7 @@ module.exports = {
       jQuery: "jquery"
     }),
     new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(false),
+      PRODUCTION: JSON.stringify(true),
       WOH_CONFIG: JSON.stringify(Date.now()),
       WOT_CONFIG: JSON.stringify(Date.now()),
       WOK_CONFIG: JSON.stringify(Date.now()),

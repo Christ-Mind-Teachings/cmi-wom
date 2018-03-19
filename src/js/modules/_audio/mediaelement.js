@@ -149,7 +149,7 @@ function setEventListeners(player, userStatus, haveTimingData) {
   is for him.
 */
 function getUserStatus() {
-  let user = getUserInfo("julie");
+  let user = getUserInfo();
 
   if (!user) {
     return "LISTENER";

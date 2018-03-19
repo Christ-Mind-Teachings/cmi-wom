@@ -387,6 +387,18 @@ export default {
   ended: function() {
 
     audioPlaying = false;
+
+    //if data was not captured, return
+    if (haveTimingData && !editInitialized) {
+      return;
+    }
+    //if we don't have timingData and user, who is a TIMER, did not 
+    //capture time there will be one value in the timing array
+    else if (!haveTimingData && captureData.length() === 1) {
+      captureProgress("REMOVE");
+      return;
+    }
+
     let newData = captureData.getData();
 
     //we have previously collected timing data and the user
@@ -425,7 +437,7 @@ export default {
 
     let pCount = $("p.cmiTranPara").length;
     if (pCount !== newData.time.length) {
-      $("#captured-audio-comments").text(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+      $("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
     }
 
     //add timing data to form
