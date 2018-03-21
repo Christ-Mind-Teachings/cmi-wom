@@ -28,8 +28,10 @@ $(document).ready(() => {
   bookmark.initialize();
   search.initialize();
   auth.initialize();
+  toc.initialize();
 
   //load config file and do initializations that depend on a loaded config file
+  /*
   loadConfig(getBookId())
     .then((source) => {
       console.log(source);
@@ -39,4 +41,5 @@ $(document).ready(() => {
       //report error to the user - somehow
       console.error(error);
     });
+    */
 });

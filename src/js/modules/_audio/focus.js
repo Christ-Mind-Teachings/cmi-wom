@@ -34,7 +34,7 @@ class Ptr {
   //set val
   set ptrVal(value) {
     this.val = value;
-    console.log("set ptr: %s", this.val);
+    //console.log("set ptr: %s", this.val);
   }
 
   //get previous val
@@ -45,13 +45,13 @@ class Ptr {
   //set previous val
   set pVal(value) {
     this.pval = value;
-    console.log("set prevPtr: %s", this.pval);
+    //console.log("set prevPtr: %s", this.pval);
   }
 
   //increment val
   set inc(value = 1) {
     this.val = this.val + value;
-    console.log("inc ptr: %s", this.val);
+    //console.log("inc ptr: %s", this.val);
   }
 }
 
@@ -85,7 +85,7 @@ function initializePlayFromHere() {
     /*
     //remove the 'p' from id before calling getTime()
     let newTime = getTime(id.substr(1));
-    console.log(`play-from-here clicked: ${id}`);
+    //console.log(`play-from-here clicked: ${id}`);
 
     //set new playtime
     if (newTime > -1) {
@@ -102,7 +102,7 @@ function initializePlayFromHere() {
 export function switchToParagraph(p) {
   let time;
   let idx;
-  console.log("switchToParagraph: %s", p);
+  //console.log("switchToParagraph: %s", p);
   switch(p) {
     case "NEXT":
       if ((ptr.val + 1) < timingData.length) {
@@ -161,11 +161,11 @@ function round(time) {
 
 function getIndex(time) {
   let index = _findLastIndex(timingData, (o) => {
-    console.log(`findLastIndex: checking ${o.id}, ${o.seconds} <= ${time}`);
+    //console.log(`findLastIndex: checking ${o.id}, ${o.seconds} <= ${time}`);
     return o.seconds <= time;
   });
 
-  console.log("found: %s", index);
+  //console.log("found: %s", index);
   return index;
 }
 
@@ -174,7 +174,7 @@ function getTime(idx) {
     return 60 * 60 * 24; //return a big number
   }
   else {
-    console.log("getTime(%s)", idx);
+    //console.log("getTime(%s)", idx);
     return timingData[idx].seconds;
   }
 
@@ -196,7 +196,7 @@ function manageHiLight(current) {
  * - adjust hilight accordingly
  */
 function adjustPlayPosition(index) {
-  console.log(`adjusting play position to: p${index}`)
+  //console.log(`adjusting play position to: p${index}`)
   ptr.val = index;
   showNscroll(ptr.val);
 }
@@ -273,7 +273,7 @@ export default {
       ptr.pval = -1;
       seeking = false;
       ended = false;
-      console.log("audio restarting");
+      //console.log("audio restarting");
     }
   },
 
@@ -281,7 +281,7 @@ export default {
     called each time the pause button is pressed
   */
   pause: function() {
-    console.log("audio paused");
+    //console.log("audio paused");
   },
 
   /*
@@ -296,7 +296,7 @@ export default {
       return;
     }
     ended = true;
-    console.log("play ended");
+    //console.log("play ended");
 
     //remove hilight
     removeCurrentHilight();
@@ -331,44 +331,7 @@ export default {
 
     //console.log("seeked from %s to %s", ptr.val, index);
     adjustPlayPosition(index);
-  },
-
-  /*
-   * Get audio start time for paragraph 'p'.
-   *  - arg p: is an id of a paragraph or
-   *    NEXT, PREV for next and previous paragraphs relative to current
-   *    playback time
-  getTime: function(p) {
-    let time = -1;
-    let info;
-
-    switch(p) {
-      case "NEXT":
-        if ((ptr.val + 1) < timingData.length) {
-          time = getTime(ptr.val + 1);
-          //console.log("ptr: %s, nextPtr: %s, nextPtr time: %s", ptr.val, ptr.val + 1, time);
-        }
-        break;
-      case "PREV":
-        if ((ptr.val - 1) >= 0) {
-          time = getTime(ptr.val - 1);
-          //console.log("ptr: %s, prevPtr: %s, prevPtr time: %s", ptr.val, ptr.val - 1, time);
-        }
-        break;
-      default:
-        info = _find(timingData, function(item) {
-          return item.id === p;
-        });
-
-        if (info) {
-          time = info.seconds;
-        }
-        break;
-    }
-
-    return time;
   }
-   */
 
 };
 

@@ -32,7 +32,7 @@ function makeContents(contents) {
   If we're on a transcript page, highlight the 
   current transcript in the list
 
-  THIS IS NOT WORKING...
+  THE SCROLL IS NOT WORKING...
 */
 function highlightCurrentTranscript() {
   if ($(".transcript").length > 0) {

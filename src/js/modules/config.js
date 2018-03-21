@@ -1,5 +1,6 @@
 import store from "store";
 import axios from "axios";
+import indexOf from "lodash/indexOf";
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
@@ -30,8 +31,9 @@ function refreshNeeded(bid, fetchDate) {
     early: EARLY_CONFIG
   };
 
+  console.log(`${bid} configuration: last changed: ${lastChanged[bid]}, fetch date: ${fetchDate}`);
   if (lastChanged[bid] > fetchDate) {
-    //console.log("Requesting %s config file", bid);
+    console.log("Requesting %s config file", bid);
     return true;
   }
 
@@ -121,7 +123,22 @@ export function loadConfig(book) {
         reject(`Config file: ${url} is not valid JSON`);
       });
   });
+}
 
+/*
+  get audio info from config file
+*/
+function _getAudioInfo(idx, cIdx) {
+  let audioInfo;
+
+  if (idx.length === 3) {
+    let qIdx = parseInt(idx[2].substr(1), 10) - 1;
+    audioInfo = config.contents[cIdx].questions[qIdx];
+  }
+  else {
+    audioInfo = config.contents[cIdx];
+  }
+  return audioInfo ? audioInfo: {};
 }
 
 export function getAudioInfo(url) {
@@ -130,6 +147,7 @@ export function getAudioInfo(url) {
     throw new Error("Configuration has not been initialized");
   }
 
+  //remove leading and trailing "/"
   url = url.substr(1);
   url = url.substr(0, url.length - 1);
 
@@ -140,19 +158,22 @@ export function getAudioInfo(url) {
     throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[0], config.bid);
   }
 
-  //idx.length == 2 means page is a wom lesson, idx.length == 3 means it's a question
-  let cIdx = parseInt(idx[1].substr(1), 10) - 1;
-  let audioInfo;
+  let audioInfo = {};
+  let cIdx;
+  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
 
-  if (idx.length === 3) {
-    let qIdx = parseInt(idx[2].substr(1), 10) - 1;
-    //console.log("getAudioInfo(): cIdx: %s, qIdx: %s", cIdx, qIdx);
-
-    audioInfo = config.contents[cIdx].questions[qIdx];
-  }
-  else {
-    //console.log("getAudioInfo(): cIdx: %s", cIdx);
-    audioInfo = config.contents[cIdx];
+  switch(idx[0]) {
+    case "tjl":
+    case "wos":
+      break;
+    case "early":
+      cIdx = indexOf(lookup, idx[1]);
+      audioInfo = _getAudioInfo(idx, cIdx);
+      break;
+    default:
+      cIdx = parseInt(idx[1].substr(1), 10) - 1;
+      audioInfo = _getAudioInfo(idx, cIdx);
+      break;
   }
 
   audioInfo.audioBase = audioBase;

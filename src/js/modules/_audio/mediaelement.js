@@ -10,6 +10,9 @@ import "me-plugin/jump-forward/jump-forward";
 import "me-plugin/skip-back/skip-back.css";
 import "me-plugin/skip-back/skip-back";
 
+import "me-plugin/speed/speed.css";
+import "me-plugin/speed/speed";
+
 import "me-plugin/nextp/nextp.css";
 import "me-plugin/nextp/nextp";
 
@@ -34,7 +37,7 @@ import timeCapture from "./capture";
   This is called after successful audio player initialization
 */
 function setEventListeners(player, userStatus, haveTimingData) {
-  console.log("userStatus: %s, haveTimingData: %s", userStatus, haveTimingData !== undefined);
+  //console.log("userStatus: %s, haveTimingData: %s", userStatus, haveTimingData !== undefined);
   let capture = false;
 
   //initialize focus
@@ -154,10 +157,12 @@ function getUserStatus() {
   if (!user) {
     return "LISTENER";
   }
+  console.log("userInfo: ", user);
 
   let timer = user.roles.find(r => r === "timer");
+  let editor = user.roles.find(r => r === "editor");
 
-  if (!timer) {
+  if (!timer && !editor) {
     return "LISTENER";
   }
 
@@ -171,6 +176,10 @@ function getUserStatus() {
 
   //check if reservation is for the user
   if (reservation === user.email) {
+    return "TIMER";
+  }
+  //editors can time even if a reservation is held by someone else
+  else if (editor) {
     return "TIMER";
   }
 
@@ -199,10 +208,10 @@ function assignPlayerFeatures(timingData) {
   //TIMER
   else {
     if (timingData) {
-      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle", "capture"];
+      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle", "capture", "speed"];
     }
     else {
-      info.features = ["playpause", "current", "duration", "skipback", "jumpforward", "capture"];
+      info.features = ["playpause", "current", "duration", "skipback", "jumpforward", "capture", "speed"];
     }
   }
 

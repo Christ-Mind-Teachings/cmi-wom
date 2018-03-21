@@ -109,7 +109,7 @@ function initializeEdit() {
   is sometimes needed due to previously inadequate job.
 */
 export function setCaptureData(data) {
-  console.log("capture: timing data received");
+  //console.log("capture: timing data received");
   timingData = data;
 }
 
@@ -201,7 +201,7 @@ function createListener() {
   //time submit form in modal window
   $("#audio-data-form").submit(function(e) {
     e.preventDefault();
-    console.log("submit pressed");
+    //console.log("submit pressed");
 
     let $form = $(this);
     $.post($form.attr("action"), $form.serialize())
@@ -239,7 +239,7 @@ function retrySubmit() {
     //store.remove(`captureData-${location.pathname}`);
 
     captureData.setData(data);
-    console.log("timing data: ", data);
+    //console.log("timing data: ", data);
     $("#captured-audio-data").html(JSON.stringify(data));
 
     let userInfo = getUserInfo();
@@ -274,7 +274,7 @@ function recoverPartialSession() {
     }
 
     let lastParagraph = data.time[data.time.length-1];
-    console.log("last paragraph: ", lastParagraph);
+    //console.log("last paragraph: ", lastParagraph);
 
     //adjust audio play time to last timed paragraph
     audioPlayer.setCurrentTime(lastParagraph.seconds);
@@ -321,7 +321,9 @@ function restoreState() {
 
     //if no partial session was found, just mark first paragraph as selected
     if (!recoverPartialSession()) {
-      autoCapture({id: "p0", seconds: 0});
+      if (!haveTimingData) {
+        autoCapture({id: "p0", seconds: 0});
+      }
     }
   }
 }

@@ -27,6 +27,7 @@ let testUsers = {
 };
 
 function devUserInfo(name) {
+  console.log("devUserInfo()");
   if (!name) {
     return testUsers["rick"];
   }
@@ -38,6 +39,7 @@ function devUserInfo(name) {
 }
 
 function prodUserInfo() {
+  //console.log("prodUserInfo()");
   if (userInfo) {
     return {
       email: userInfo.email,
@@ -51,7 +53,7 @@ function prodUserInfo() {
 }
 
 export function getUserInfo(name) {
-  if (PRODUCTION) {
+  if (location.hostname === "wom.christmind.info") {
     return prodUserInfo();
   }
   else {
@@ -93,7 +95,7 @@ export default {
         .html("<i class='sign in icon'></i>")
         .removeClass("colorGreen")
         .attr("data-tooltip", "Sign In");
-      console.log("logout: %s", userInfo.user_metadata.full_name );
+      //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
     });
 
