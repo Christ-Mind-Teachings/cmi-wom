@@ -16,10 +16,12 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
     "style-loader": "^0.20.3",
+    "toml": "^2.3.3",
     "webpack": "^3.11.0",
     "webpack-jarvis": "^0.3.0"
   },
@@ -30,6 +32,7 @@
     "mediaelement": "^4.2.8",
     "netlify-identity-widget": "^1.4.11",
     "scroll-into-view": "^1.9.1",
+    "sprintf-js": "^1.1.1",
     "store": "^2.0.12",
     "toastr": "^2.1.4"
   }

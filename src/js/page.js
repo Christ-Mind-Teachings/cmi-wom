@@ -29,17 +29,4 @@ $(document).ready(() => {
   search.initialize();
   auth.initialize();
   toc.initialize();
-
-  //load config file and do initializations that depend on a loaded config file
-  /*
-  loadConfig(getBookId())
-    .then((source) => {
-      console.log(source);
-      toc.initialize();
-    })
-    .catch((error) => {
-      //report error to the user - somehow
-      console.error(error);
-    });
-    */
 });

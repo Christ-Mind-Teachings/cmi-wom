@@ -8,7 +8,7 @@
 import scroll from "scroll-into-view";
 import {fetchTimingData} from "../config";
 
-import _find from "lodash/find";
+//import _find from "lodash/find";
 import _findLastIndex from "lodash/findLastIndex";
 import _map from "lodash/map";
 
@@ -67,7 +67,7 @@ let player;
  */
 function initializePlayFromHere() {
   //initially hide playmark icon added next
-  $(".transcript.ui.text.container").addClass("playmark-hide");
+  $(".transcript.ui.text.container").addClass("hide-playmark");
 
   // add 'play' markers to each paragraph
   $("p.cmiTranPara").each(function() {
@@ -81,18 +81,6 @@ function initializePlayFromHere() {
     let id = el.parent().attr("id");
 
     switchToParagraph(id);
-
-    /*
-    //remove the 'p' from id before calling getTime()
-    let newTime = getTime(id.substr(1));
-    //console.log(`play-from-here clicked: ${id}`);
-
-    //set new playtime
-    if (newTime > -1) {
-      adjustPlayPosition(id.substr(1));
-      player.setCurrentTime(newTime);
-    }
-    */
   });
 }
 
@@ -144,12 +132,12 @@ function removeCurrentHilight() {
 export function togglePlayFromHere() {
   let el = $(".transcript.ui.text.container");
 
-  if (el.hasClass("playmark-hide")) {
-    el.removeClass("playmark-hide");
+  if (el.hasClass("hide-playmark")) {
+    el.removeClass("hide-playmark");
     return true;
   }
   else {
-    el.addClass("playmark-hide");
+    el.addClass("hide-playmark");
     return false;
   }
 }
@@ -177,7 +165,6 @@ function getTime(idx) {
     //console.log("getTime(%s)", idx);
     return timingData[idx].seconds;
   }
-
 }
 
 function manageHiLight(current) {

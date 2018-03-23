@@ -35,9 +35,10 @@ form > .honeypot-field {
   display:none;
 }
 
+.hide-bkmark.transcript p.cmiTranPara > i.bkmark.icon,
 .hide-pnum.transcript p.cmiTranPara > span.pnum,
 .hide-timing.transcript p.cmiTranPara > i.timing.icon,
-.playmark-hide.transcript p.cmiTranPara > i.playmark.icon {
+.hide-playmark.transcript p.cmiTranPara > i.playmark.icon {
   display: none;
 }
 
@@ -70,18 +71,3 @@ form > .honeypot-field {
   box-shadow: 5px 5px 4px 0 #6f6f6d;
 }
 
-/*
-.hide-time-edit.timecapture-edit-confirmation {
-  display: none;
-}
-
-.timecapture-edit-confirmation {
-  position: fixed;
-  top: 45%;
-  left: 43%;
-  padding: 20px;
-  background-color: white;
-  border-radius: 10px;
-  border: 2px solid darkblue;
-}
-*/

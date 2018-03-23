@@ -1,10 +1,14 @@
 import store from "store";
 import axios from "axios";
 import indexOf from "lodash/indexOf";
+import {genKey} from "./_config/key";
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
 const timingBase = "/public/timing";
+
+//Index topics
+const topics = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
 
 //location of configuration files
 const configUrl = "/public/config";
@@ -46,6 +50,21 @@ function refreshNeeded(bid, fetchDate) {
 export function fetchTimingData(url) {
   return new Promise((resolve, reject) => {
     axios.get(`${timingBase}${url}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+/*
+  Fetch Indexing topics
+*/
+export function fetchTopics() {
+  return new Promise((resolve, reject) => {
+    axios.get(`${topics}`)
       .then((response) => {
         resolve(response.data);
       })
