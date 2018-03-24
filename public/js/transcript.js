@@ -4637,12 +4637,14 @@ module.exports = isArray;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = fetchTimingData;
-/* harmony export (immutable) */ __webpack_exports__["b"] = fetchTopics;
-/* harmony export (immutable) */ __webpack_exports__["d"] = getConfig;
-/* harmony export (immutable) */ __webpack_exports__["f"] = loadConfig;
-/* harmony export (immutable) */ __webpack_exports__["c"] = getAudioInfo;
-/* harmony export (immutable) */ __webpack_exports__["e"] = getReservation;
+/* harmony export (immutable) */ __webpack_exports__["h"] = postBookmark;
+/* harmony export (immutable) */ __webpack_exports__["b"] = fetchTimingData;
+/* harmony export (immutable) */ __webpack_exports__["c"] = fetchTopics;
+/* harmony export (immutable) */ __webpack_exports__["a"] = addToTopicList;
+/* harmony export (immutable) */ __webpack_exports__["e"] = getConfig;
+/* harmony export (immutable) */ __webpack_exports__["g"] = loadConfig;
+/* harmony export (immutable) */ __webpack_exports__["d"] = getAudioInfo;
+/* harmony export (immutable) */ __webpack_exports__["f"] = getReservation;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_store__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(149);
@@ -4668,6 +4670,10 @@ const configUrl = "/public/config";
 //the current configuration, initially null, assigned by getConfig()
 let config;
 let timingData;
+
+function postBookmark(pageId, bookmarkId, bookmark) {
+  console.log("post bookmark: %s, %s, ", pageId, bookmarkId, bookmark);
+}
 
 function requestConfiguration(url) {
   return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(url);
@@ -4711,15 +4717,47 @@ function fetchTimingData(url) {
 
 /*
   Fetch Indexing topics
+  args: force=true, get topics from server even when we have them cached
+
+  topics are cached for 2 hours (1000 * 60sec * 60min * 2) before being requested
+  from server
 */
-function fetchTopics() {
+function fetchTopics(force = false) {
+  //keep topics in cache for 2 hours
+  const retentionTime = 60 * 1000 * 60 * 2;
   return new Promise((resolve, reject) => {
+    if (!force) {
+      let topics = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get("topic-list");
+      if (topics && topics.lastFetchDate && topics.lastFetchDate + retentionTime > Date.now()) {
+        //return data from cache
+        console.log("topics read from cache");
+        resolve(topics);
+        return;
+      }
+    }
     __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(`${topics}`).then(response => {
+      response.data.lastFetchDate = Date.now();
+      console.log("topics returned from server");
+      __WEBPACK_IMPORTED_MODULE_0_store___default.a.set("topic-list", response.data);
       resolve(response.data);
     }).catch(error => {
       reject(error);
     });
   });
+}
+
+/*
+  add new topics to topic-list in application store
+*/
+function addToTopicList(newTopics) {
+  let topics = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get("topic-list");
+  let concatTopics = topics.topics.concat(newTopics);
+
+  concatTopics.sort();
+  topics.topics = concatTopics;
+  __WEBPACK_IMPORTED_MODULE_0_store___default.a.set("topic-list", topics);
+
+  return topics;
 }
 
 /*
@@ -21418,6 +21456,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(186);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_differenceWith__ = __webpack_require__(336);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_differenceWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_differenceWith__);
+
 
 
 
@@ -21455,10 +21496,71 @@ function generateOption(topic) {
 function makeTopicSelect(topics) {
   return `
     <label>Topics</label>
-    <select multiple="" class="search ui dropdown">
-      <option id="topic-option-list" value="">Select Topic</option>
+    <select name="topicList" id="annotation-topic-list" multiple="" class="search ui dropdown">
+      <option value="">Select Topic</option>
       ${topics.map(topic => `${generateOption(topic)}`).join("")}
     </select>
+  `;
+}
+
+/*
+  POST bookmark to API
+*/
+function createBookmark(bookmark) {
+  let { pageKey, rangeStart } = bookmark;
+  let bookmarkId;
+
+  rangeStart = rangeStart.trim();
+
+  if (rangeStart.startsWith("p")) {
+    bookmarkId = `${pageKey}.${rangeStart.substr(1)}`;
+  } else {
+    bookmarkId = `${pageKey}.${rangeStart}`;
+  }
+
+  bookmark.url = location.pathname;
+  delete bookmark.pageKey;
+
+  Object(__WEBPACK_IMPORTED_MODULE_1__config__["h" /* postBookmark */])(pageKey, bookmarkId, bookmark);
+
+  //store bookmark locally
+}
+
+/*
+  new topics entered on the annotation form are formatted
+  to keep only alpha chars and comma. Commas are used to delimit
+  topics.
+
+  Topics are converted from string to array and first character is
+  uppercased.
+*/
+function formatNewTopics({ newTopics }) {
+  //only allow alpha chars and comma's
+  let topics = newTopics.replace(/[^a-zA-Z,]/g, "");
+
+  if (!topics || topics === "") {
+    return [];
+  }
+
+  //remove leading and trailing comma's
+  topics = topics.replace(/^,*/, "");
+  topics = topics.replace(/,*$/, "");
+
+  let newTopicArray = topics.split(",");
+
+  //uppercase first char of each topic
+  newTopicArray = newTopicArray.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+
+  return newTopicArray;
+}
+
+/*
+  Update annotation form to add new topics
+*/
+function updateTopicOptions(topics) {
+  return `
+    <option value="">Select Topic</option>
+    ${topics.map(topic => `${generateOption(topic)}`).join("")}
   `;
 }
 
@@ -21473,9 +21575,9 @@ function addBookMarkers() {
     $(this).prepend("<i class='bkmark bookmark outline icon'></i>");
   });
 
-  Object(__WEBPACK_IMPORTED_MODULE_1__config__["b" /* fetchTopics */])().then(response => {
+  Object(__WEBPACK_IMPORTED_MODULE_1__config__["c" /* fetchTopics */])().then(response => {
     let select = makeTopicSelect(response.topics);
-    $("#topic-select").append(select);
+    $("#topic-select").html(select);
 
     $(".annotation.ui.modal").modal({
       centered: true,
@@ -21486,29 +21588,93 @@ function addBookMarkers() {
     });
 
     $("select.dropdown").dropdown();
+
+    //listen for user click of bookmark icon - then display dialog
+    $(".transcript.ui.text.container").on("click", "p.cmiTranPara > i.bookmark.icon", function (e) {
+      e.preventDefault();
+      let el = $(this);
+      let id = el.parent().attr("id");
+      let key = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["a" /* genKey */])();
+
+      //add start and end p's to form
+      let form = $("#annotation-form");
+      form.form("set values", {
+        rangeStart: id,
+        rangeEnd: id,
+        pageKey: key
+      });
+
+      //add selected paragraph to modal dialog
+      let paragraph = $(`#${id}`).text();
+      $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
+
+      $(".annotation.ui.modal").modal("show");
+
+      key = `${key}.${id.substr(1)}`;
+      console.log("bookmark clicked at %s, key: %s", id, key);
+    });
   }).catch(error => {
     __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.error("Unable to fetch bookmark topic list: ", error);
   });
-
-  //create listener
-  $(".transcript.ui.text.container").on("click", "p.cmiTranPara > i.bookmark.icon", function (e) {
-    e.preventDefault();
-    let el = $(this);
-    let id = el.parent().attr("id");
-    let key = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["a" /* genKey */])();
-
-    //add start and end p's to form
-    $("input[name|='range']").val(id);
-
-    let paragraph = $(`#${id}`).text();
-    $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
-
-    $(".annotation.ui.modal").modal("show");
-
-    key = `${key}.${id.substr(1)}`;
-    console.log("bookmark clicked at %s, key: %s", id, key);
-  });
 }
+
+//listen for user submit of annotation form
+$("#annotation-form").submit(e => {
+  e.preventDefault();
+
+  //get data from form
+  let form = $("#annotation-form");
+  let formValues = form.form("get values");
+
+  //format new topics
+  let newTopics = formatNewTopics(formValues);
+  delete formValues.newTopics;
+
+  //hide modal and reset fields
+  $(".annotation.ui.modal").modal("hide");
+  $("#annotation-form").form("clear");
+
+  //if no new topics post the bookmark and return
+  if (!newTopics || newTopics.length === 0) {
+    //post annotation to server
+    createBookmark(formValues);
+    return;
+  }
+
+  //Check for new topics already in topic list
+  Object(__WEBPACK_IMPORTED_MODULE_1__config__["c" /* fetchTopics */])().then(response => {
+    //remove duplicate topics from and return the rest in difference[]
+    let newUniqueTopics = __WEBPACK_IMPORTED_MODULE_3_lodash_differenceWith___default()(newTopics, response.topics, (n, t) => {
+      if (typeof t === "object") {
+        return t.value === n;
+      }
+      return t === n;
+    });
+
+    //console.log("newUniqueTopics: ", newUniqueTopics);
+
+    //these are the new topics
+    if (newUniqueTopics.length > 0) {
+      //add new topics topic list
+      let allTopics = Object(__WEBPACK_IMPORTED_MODULE_1__config__["a" /* addToTopicList */])(newUniqueTopics);
+
+      //add new topics to this annotations topicList
+      formValues.topicList = formValues.topicList.concat(newUniqueTopics);
+
+      //add newTopics to formValues for posting to server
+      formValues.newTopics = newUniqueTopics;
+
+      //update the annotation form
+      let select = updateTopicOptions(allTopics.topics);
+      $("#annotation-topic-list").html(select);
+    }
+
+    //post the bookmark
+    createBookmark(formValues);
+  }).catch(() => {
+    throw new Error("error in removing duplicate topics");
+  });
+});
 
 /*
  * show/hide paragraph bookmarks
@@ -21743,7 +21909,7 @@ function getBookId() {
       e.preventDefault();
       let book = $(e.currentTarget).attr("data-book").toLowerCase();
 
-      Object(__WEBPACK_IMPORTED_MODULE_1__config__["d" /* getConfig */])(book).then(contents => {
+      Object(__WEBPACK_IMPORTED_MODULE_1__config__["e" /* getConfig */])(book).then(contents => {
         $(".toc-image").attr("src", `${contents.image}`);
         $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
         $(".toc-list").html(makeContents(contents.contents));
@@ -22679,7 +22845,7 @@ function showNscroll(idx) {
     player = p;
 
     //load the timing data
-    Object(__WEBPACK_IMPORTED_MODULE_1__config__["a" /* fetchTimingData */])(timingDataUri).then(data => {
+    Object(__WEBPACK_IMPORTED_MODULE_1__config__["b" /* fetchTimingData */])(timingDataUri).then(data => {
       //console.log("timing data loaded");
 
       //round timing data to two decimal places
@@ -24071,7 +24237,7 @@ $(document).ready(() => {
   Object(__WEBPACK_IMPORTED_MODULE_3__modules_config_key__["a" /* genKey */])();
 
   //load config file and do initializations that depend on a loaded config file
-  Object(__WEBPACK_IMPORTED_MODULE_2__modules_config__["f" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_7__modules_contents_toc__["b" /* getBookId */])()).then(source => {
+  Object(__WEBPACK_IMPORTED_MODULE_2__modules_config__["g" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_7__modules_contents_toc__["b" /* getBookId */])()).then(source => {
     console.log(source);
     __WEBPACK_IMPORTED_MODULE_7__modules_contents_toc__["a" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_8__modules_audio_audio__["a" /* default */].initialize();
@@ -24126,7 +24292,7 @@ function createAudioPlayerToggleListener() {
 
   //setup page to play audio if audio available
   initialize: function () {
-    let info = Object(__WEBPACK_IMPORTED_MODULE_0__config__["c" /* getAudioInfo */])(location.pathname);
+    let info = Object(__WEBPACK_IMPORTED_MODULE_0__config__["d" /* getAudioInfo */])(location.pathname);
 
     //add audio url to audio player toggle
     if (info.audio) {
@@ -24353,7 +24519,7 @@ function getUserStatus() {
   }
 
   //User is a timer, check there is a timing reservation on the page
-  let reservation = Object(__WEBPACK_IMPORTED_MODULE_19__config__["e" /* getReservation */])(location.pathname);
+  let reservation = Object(__WEBPACK_IMPORTED_MODULE_19__config__["f" /* getReservation */])(location.pathname);
 
   //no reservation, the user is a timer
   if (!reservation) {
@@ -36476,6 +36642,564 @@ class CaptureData {
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = CaptureData;
+
+
+/***/ }),
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseDifference = __webpack_require__(337),
+    baseFlatten = __webpack_require__(340),
+    baseRest = __webpack_require__(342),
+    isArrayLikeObject = __webpack_require__(350),
+    last = __webpack_require__(351);
+
+/**
+ * This method is like `_.difference` except that it accepts `comparator`
+ * which is invoked to compare elements of `array` to `values`. The order and
+ * references of result values are determined by the first array. The comparator
+ * is invoked with two arguments: (arrVal, othVal).
+ *
+ * **Note:** Unlike `_.pullAllWith`, this method returns a new array.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @param {...Array} [values] The values to exclude.
+ * @param {Function} [comparator] The comparator invoked per element.
+ * @returns {Array} Returns the new array of filtered values.
+ * @example
+ *
+ * var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+ *
+ * _.differenceWith(objects, [{ 'x': 1, 'y': 2 }], _.isEqual);
+ * // => [{ 'x': 2, 'y': 1 }]
+ */
+var differenceWith = baseRest(function(array, values) {
+  var comparator = last(values);
+  if (isArrayLikeObject(comparator)) {
+    comparator = undefined;
+  }
+  return isArrayLikeObject(array)
+    ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true), undefined, comparator)
+    : [];
+});
+
+module.exports = differenceWith;
+
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var SetCache = __webpack_require__(260),
+    arrayIncludes = __webpack_require__(338),
+    arrayIncludesWith = __webpack_require__(339),
+    arrayMap = __webpack_require__(205),
+    baseUnary = __webpack_require__(281),
+    cacheHas = __webpack_require__(264);
+
+/** Used as the size to enable large array optimizations. */
+var LARGE_ARRAY_SIZE = 200;
+
+/**
+ * The base implementation of methods like `_.difference` without support
+ * for excluding multiple arrays or iteratee shorthands.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Array} values The values to exclude.
+ * @param {Function} [iteratee] The iteratee invoked per element.
+ * @param {Function} [comparator] The comparator invoked per element.
+ * @returns {Array} Returns the new array of filtered values.
+ */
+function baseDifference(array, values, iteratee, comparator) {
+  var index = -1,
+      includes = arrayIncludes,
+      isCommon = true,
+      length = array.length,
+      result = [],
+      valuesLength = values.length;
+
+  if (!length) {
+    return result;
+  }
+  if (iteratee) {
+    values = arrayMap(values, baseUnary(iteratee));
+  }
+  if (comparator) {
+    includes = arrayIncludesWith;
+    isCommon = false;
+  }
+  else if (values.length >= LARGE_ARRAY_SIZE) {
+    includes = cacheHas;
+    isCommon = false;
+    values = new SetCache(values);
+  }
+  outer:
+  while (++index < length) {
+    var value = array[index],
+        computed = iteratee == null ? value : iteratee(value);
+
+    value = (comparator || value !== 0) ? value : 0;
+    if (isCommon && computed === computed) {
+      var valuesIndex = valuesLength;
+      while (valuesIndex--) {
+        if (values[valuesIndex] === computed) {
+          continue outer;
+        }
+      }
+      result.push(value);
+    }
+    else if (!includes(values, computed, comparator)) {
+      result.push(value);
+    }
+  }
+  return result;
+}
+
+module.exports = baseDifference;
+
+
+/***/ }),
+/* 338 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseIndexOf = __webpack_require__(168);
+
+/**
+ * A specialized version of `_.includes` for arrays without support for
+ * specifying an index to search from.
+ *
+ * @private
+ * @param {Array} [array] The array to inspect.
+ * @param {*} target The value to search for.
+ * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ */
+function arrayIncludes(array, value) {
+  var length = array == null ? 0 : array.length;
+  return !!length && baseIndexOf(array, value, 0) > -1;
+}
+
+module.exports = arrayIncludes;
+
+
+/***/ }),
+/* 339 */
+/***/ (function(module, exports) {
+
+/**
+ * This function is like `arrayIncludes` except that it accepts a comparator.
+ *
+ * @private
+ * @param {Array} [array] The array to inspect.
+ * @param {*} target The value to search for.
+ * @param {Function} comparator The comparator invoked per element.
+ * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ */
+function arrayIncludesWith(array, value, comparator) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (comparator(value, array[index])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = arrayIncludesWith;
+
+
+/***/ }),
+/* 340 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayPush = __webpack_require__(272),
+    isFlattenable = __webpack_require__(341);
+
+/**
+ * The base implementation of `_.flatten` with support for restricting flattening.
+ *
+ * @private
+ * @param {Array} array The array to flatten.
+ * @param {number} depth The maximum recursion depth.
+ * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
+ * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
+ * @param {Array} [result=[]] The initial result value.
+ * @returns {Array} Returns the new flattened array.
+ */
+function baseFlatten(array, depth, predicate, isStrict, result) {
+  var index = -1,
+      length = array.length;
+
+  predicate || (predicate = isFlattenable);
+  result || (result = []);
+
+  while (++index < length) {
+    var value = array[index];
+    if (depth > 0 && predicate(value)) {
+      if (depth > 1) {
+        // Recursively flatten arrays (susceptible to call stack limits).
+        baseFlatten(value, depth - 1, predicate, isStrict, result);
+      } else {
+        arrayPush(result, value);
+      }
+    } else if (!isStrict) {
+      result[result.length] = value;
+    }
+  }
+  return result;
+}
+
+module.exports = baseFlatten;
+
+
+/***/ }),
+/* 341 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(47),
+    isArguments = __webpack_require__(196),
+    isArray = __webpack_require__(26);
+
+/** Built-in value references. */
+var spreadableSymbol = Symbol ? Symbol.isConcatSpreadable : undefined;
+
+/**
+ * Checks if `value` is a flattenable `arguments` object or array.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
+ */
+function isFlattenable(value) {
+  return isArray(value) || isArguments(value) ||
+    !!(spreadableSymbol && value && value[spreadableSymbol]);
+}
+
+module.exports = isFlattenable;
+
+
+/***/ }),
+/* 342 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var identity = __webpack_require__(303),
+    overRest = __webpack_require__(343),
+    setToString = __webpack_require__(345);
+
+/**
+ * The base implementation of `_.rest` which doesn't validate or coerce arguments.
+ *
+ * @private
+ * @param {Function} func The function to apply a rest parameter to.
+ * @param {number} [start=func.length-1] The start position of the rest parameter.
+ * @returns {Function} Returns the new function.
+ */
+function baseRest(func, start) {
+  return setToString(overRest(func, start, identity), func + '');
+}
+
+module.exports = baseRest;
+
+
+/***/ }),
+/* 343 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = __webpack_require__(344);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max;
+
+/**
+ * A specialized version of `baseRest` which transforms the rest array.
+ *
+ * @private
+ * @param {Function} func The function to apply a rest parameter to.
+ * @param {number} [start=func.length-1] The start position of the rest parameter.
+ * @param {Function} transform The rest array transform.
+ * @returns {Function} Returns the new function.
+ */
+function overRest(func, start, transform) {
+  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
+  return function() {
+    var args = arguments,
+        index = -1,
+        length = nativeMax(args.length - start, 0),
+        array = Array(length);
+
+    while (++index < length) {
+      array[index] = args[start + index];
+    }
+    index = -1;
+    var otherArgs = Array(start + 1);
+    while (++index < start) {
+      otherArgs[index] = args[index];
+    }
+    otherArgs[start] = transform(array);
+    return apply(func, this, otherArgs);
+  };
+}
+
+module.exports = overRest;
+
+
+/***/ }),
+/* 344 */
+/***/ (function(module, exports) {
+
+/**
+ * A faster alternative to `Function#apply`, this function invokes `func`
+ * with the `this` binding of `thisArg` and the arguments of `args`.
+ *
+ * @private
+ * @param {Function} func The function to invoke.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {Array} args The arguments to invoke `func` with.
+ * @returns {*} Returns the result of `func`.
+ */
+function apply(func, thisArg, args) {
+  switch (args.length) {
+    case 0: return func.call(thisArg);
+    case 1: return func.call(thisArg, args[0]);
+    case 2: return func.call(thisArg, args[0], args[1]);
+    case 3: return func.call(thisArg, args[0], args[1], args[2]);
+  }
+  return func.apply(thisArg, args);
+}
+
+module.exports = apply;
+
+
+/***/ }),
+/* 345 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseSetToString = __webpack_require__(346),
+    shortOut = __webpack_require__(349);
+
+/**
+ * Sets the `toString` method of `func` to return `string`.
+ *
+ * @private
+ * @param {Function} func The function to modify.
+ * @param {Function} string The `toString` result.
+ * @returns {Function} Returns `func`.
+ */
+var setToString = shortOut(baseSetToString);
+
+module.exports = setToString;
+
+
+/***/ }),
+/* 346 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var constant = __webpack_require__(347),
+    defineProperty = __webpack_require__(348),
+    identity = __webpack_require__(303);
+
+/**
+ * The base implementation of `setToString` without support for hot loop shorting.
+ *
+ * @private
+ * @param {Function} func The function to modify.
+ * @param {Function} string The `toString` result.
+ * @returns {Function} Returns `func`.
+ */
+var baseSetToString = !defineProperty ? identity : function(func, string) {
+  return defineProperty(func, 'toString', {
+    'configurable': true,
+    'enumerable': false,
+    'value': constant(string),
+    'writable': true
+  });
+};
+
+module.exports = baseSetToString;
+
+
+/***/ }),
+/* 347 */
+/***/ (function(module, exports) {
+
+/**
+ * Creates a function that returns `value`.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Util
+ * @param {*} value The value to return from the new function.
+ * @returns {Function} Returns the new constant function.
+ * @example
+ *
+ * var objects = _.times(2, _.constant({ 'a': 1 }));
+ *
+ * console.log(objects);
+ * // => [{ 'a': 1 }, { 'a': 1 }]
+ *
+ * console.log(objects[0] === objects[1]);
+ * // => true
+ */
+function constant(value) {
+  return function() {
+    return value;
+  };
+}
+
+module.exports = constant;
+
+
+/***/ }),
+/* 348 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var getNative = __webpack_require__(53);
+
+var defineProperty = (function() {
+  try {
+    var func = getNative(Object, 'defineProperty');
+    func({}, '', {});
+    return func;
+  } catch (e) {}
+}());
+
+module.exports = defineProperty;
+
+
+/***/ }),
+/* 349 */
+/***/ (function(module, exports) {
+
+/** Used to detect hot functions by number of calls within a span of milliseconds. */
+var HOT_COUNT = 800,
+    HOT_SPAN = 16;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeNow = Date.now;
+
+/**
+ * Creates a function that'll short out and invoke `identity` instead
+ * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`
+ * milliseconds.
+ *
+ * @private
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new shortable function.
+ */
+function shortOut(func) {
+  var count = 0,
+      lastCalled = 0;
+
+  return function() {
+    var stamp = nativeNow(),
+        remaining = HOT_SPAN - (stamp - lastCalled);
+
+    lastCalled = stamp;
+    if (remaining > 0) {
+      if (++count >= HOT_COUNT) {
+        return arguments[0];
+      }
+    } else {
+      count = 0;
+    }
+    return func.apply(undefined, arguments);
+  };
+}
+
+module.exports = shortOut;
+
+
+/***/ }),
+/* 350 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(184),
+    isObjectLike = __webpack_require__(48);
+
+/**
+ * This method is like `_.isArrayLike` except that it also checks if `value`
+ * is an object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array-like object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArrayLikeObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLikeObject(document.body.children);
+ * // => true
+ *
+ * _.isArrayLikeObject('abc');
+ * // => false
+ *
+ * _.isArrayLikeObject(_.noop);
+ * // => false
+ */
+function isArrayLikeObject(value) {
+  return isObjectLike(value) && isArrayLike(value);
+}
+
+module.exports = isArrayLikeObject;
+
+
+/***/ }),
+/* 351 */
+/***/ (function(module, exports) {
+
+/**
+ * Gets the last element of `array`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Array
+ * @param {Array} array The array to query.
+ * @returns {*} Returns the last element of `array`.
+ * @example
+ *
+ * _.last([1, 2, 3]);
+ * // => 3
+ */
+function last(array) {
+  var length = array == null ? 0 : array.length;
+  return length ? array[length - 1] : undefined;
+}
+
+module.exports = last;
 
 
 /***/ })

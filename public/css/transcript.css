@@ -5,9 +5,11 @@
   margin-bottom: 60px;
 }
 
-/* bookmarks: hides paragraph book markers */
-i.bookmark.icon.hide {
-  display: none;
+/* bookmarks: */
+
+/* show pointer cursor for bookmark icon */
+.transcript .cmiTranPara > i.bkmark.bookmark.icon {
+  cursor: pointer;
 }
 
 .pnum {
@@ -15,7 +17,8 @@ i.bookmark.icon.hide {
 }
 
 /* audio timing submit */
-form > .honeypot-field {
+.ui.form > input.hidden-field,
+.ui.form > .honeypot-field {
   display: none;
 }
 

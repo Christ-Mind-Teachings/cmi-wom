@@ -1,7 +1,8 @@
 
 import { genKey } from "./_config/key";
-import {fetchTopics} from "./config";
+import {postBookmark, addToTopicList, fetchTopics} from "./config";
 import notify from "toastr";
+import differenceWith from "lodash/differenceWith";
 
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -36,10 +37,73 @@ function generateOption(topic) {
 function makeTopicSelect(topics) {
   return (`
     <label>Topics</label>
-    <select multiple="" class="search ui dropdown">
-      <option id="topic-option-list" value="">Select Topic</option>
+    <select name="topicList" id="annotation-topic-list" multiple="" class="search ui dropdown">
+      <option value="">Select Topic</option>
       ${topics.map(topic => `${generateOption(topic)}`).join("")}
     </select>
+  `);
+}
+
+/*
+  POST bookmark to API
+*/
+function createBookmark(bookmark) {
+  let {pageKey, rangeStart} = bookmark;
+  let bookmarkId;
+
+  rangeStart = rangeStart.trim();
+
+  if (rangeStart.startsWith("p")) {
+    bookmarkId = `${pageKey}.${rangeStart.substr(1)}`;
+  }
+  else {
+    bookmarkId = `${pageKey}.${rangeStart}`;
+  }
+
+  bookmark.url = location.pathname;
+  delete bookmark.pageKey;
+
+  postBookmark(pageKey, bookmarkId, bookmark);
+
+  //store bookmark locally
+  
+}
+
+/*
+  new topics entered on the annotation form are formatted
+  to keep only alpha chars and comma. Commas are used to delimit
+  topics.
+
+  Topics are converted from string to array and first character is
+  uppercased.
+*/
+function formatNewTopics({newTopics}) {
+  //only allow alpha chars and comma's
+  let topics = newTopics.replace(/[^a-zA-Z,]/g, "");
+
+  if (!topics || topics === "" ) {
+    return [];
+  }
+
+  //remove leading and trailing comma's
+  topics = topics.replace(/^,*/, "");
+  topics = topics.replace(/,*$/, "");
+
+  let newTopicArray = topics.split(",");
+
+  //uppercase first char of each topic
+  newTopicArray = newTopicArray.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+
+  return newTopicArray;
+}
+
+/*
+  Update annotation form to add new topics
+*/
+function updateTopicOptions(topics) {
+  return (`
+    <option value="">Select Topic</option>
+    ${topics.map(topic => `${generateOption(topic)}`).join("")}
   `);
 }
 
@@ -57,7 +121,7 @@ function addBookMarkers() {
   fetchTopics()
     .then((response) => {
       let select = makeTopicSelect(response.topics);
-      $("#topic-select").append(select);
+      $("#topic-select").html(select);
 
       $(".annotation.ui.modal")
         .modal({
@@ -70,30 +134,95 @@ function addBookMarkers() {
 
       $("select.dropdown").dropdown();
 
+      //listen for user click of bookmark icon - then display dialog
+      $(".transcript.ui.text.container").on("click","p.cmiTranPara > i.bookmark.icon", function(e) {
+        e.preventDefault();
+        let el = $(this);
+        let id = el.parent().attr("id");
+        let key = genKey();
+        
+        //add start and end p's to form
+        let form = $("#annotation-form");
+        form.form("set values", {
+          rangeStart: id,
+          rangeEnd: id,
+          pageKey: key
+        });
+
+        //add selected paragraph to modal dialog
+        let paragraph = $(`#${id}`).text();
+        $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
+
+        $(".annotation.ui.modal") .modal("show");
+
+        key = `${key}.${id.substr(1)}`;
+        console.log("bookmark clicked at %s, key: %s", id, key);
+      });
     })
     .catch(( error ) => {
       notify.error("Unable to fetch bookmark topic list: ", error);
     });
-
-  //create listener
-  $(".transcript.ui.text.container").on("click","p.cmiTranPara > i.bookmark.icon", function(e) {
-    e.preventDefault();
-    let el = $(this);
-    let id = el.parent().attr("id");
-    let key = genKey();
-    
-    //add start and end p's to form
-    $("input[name|='range']").val(id);
-
-    let paragraph = $(`#${id}`).text();
-    $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
-
-    $(".annotation.ui.modal") .modal("show");
-
-    key = `${key}.${id.substr(1)}`;
-    console.log("bookmark clicked at %s, key: %s", id, key);
-  });
 }
+
+//listen for user submit of annotation form
+$("#annotation-form").submit((e) => {
+  e.preventDefault();
+
+  //get data from form
+  let form = $("#annotation-form");
+  let formValues = form.form("get values");
+
+  //format new topics
+  let newTopics = formatNewTopics(formValues);
+  delete formValues.newTopics;
+
+  //hide modal and reset fields
+  $(".annotation.ui.modal") .modal("hide");
+  $("#annotation-form").form("clear");
+
+  //if no new topics post the bookmark and return
+  if (!newTopics || newTopics.length === 0) {
+    //post annotation to server
+    createBookmark(formValues);
+    return;
+  }
+
+  //Check for new topics already in topic list
+  fetchTopics()
+    .then((response) => {
+      //remove duplicate topics from and return the rest in difference[]
+      let newUniqueTopics = differenceWith(newTopics, response.topics, (n,t) => {
+        if (typeof t === "object") {
+          return t.value === n;
+        }
+        return t === n;
+      });
+
+      //console.log("newUniqueTopics: ", newUniqueTopics);
+
+      //these are the new topics
+      if (newUniqueTopics.length > 0) {
+        //add new topics topic list
+        let allTopics = addToTopicList(newUniqueTopics);
+
+        //add new topics to this annotations topicList
+        formValues.topicList = formValues.topicList.concat(newUniqueTopics);
+
+        //add newTopics to formValues for posting to server
+        formValues.newTopics = newUniqueTopics;
+
+        //update the annotation form
+        let select = updateTopicOptions(allTopics.topics);
+        $("#annotation-topic-list").html(select);
+      }
+
+      //post the bookmark
+      createBookmark(formValues);
+    })
+    .catch(() => {
+      throw new Error("error in removing duplicate topics");
+    });
+});
 
 /*
  * show/hide paragraph bookmarks
