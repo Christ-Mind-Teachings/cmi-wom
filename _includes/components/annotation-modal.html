@@ -1,13 +1,12 @@
 <div class="annotation ui small modal">
   <i class="close icon"></i>
   <div class="image content">
-    <!--
-    <div class="image">
-      <img class="ui spaced  mini image" src="/public/img/cmi/annotation_modal.png" alt="Transcript Annotation">
-    </div>
-    -->
     <div content="container">
-      {% include form/annotation.html %}
+      <div class="annotation-list ui middle aligned divided list">
+      </div>
+      <div class="" id="new-annotation">
+        {% include form/annotation.html %}
+      </div>
       <h4 class="ui horizontal divider header">
         <i class="paragraph icon"></i>
         Paragraph

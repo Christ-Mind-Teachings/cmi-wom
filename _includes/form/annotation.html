@@ -2,11 +2,11 @@
 usage: {% include form/annotation.html %}
 {% endcomment %}
 <form name="annotation" id="annotation-form" class="ui form">
-  <input class="hidden-field" name="pageKey">
+  <input class="hidden-field" type="text" readonly="" name="creationDate">
   <div class="fields">
     <div class="three wide field">
       <label>Start</label>
-      <input type="text" name="rangeStart" maxlength="4" placeholder="Start">
+      <input type="text" readonly="" name="rangeStart" maxlength="4" placeholder="Start">
     </div>
     <div class="three wide field">
       <label>End</label>

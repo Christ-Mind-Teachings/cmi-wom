@@ -1,5 +1,5 @@
 
-import {getAudioInfo} from "../config";
+import {getAudioInfo} from "../_config/config";
 import player from "./mediaelement";
 
 const uiPlayerToggle = ".audio-player-toggle";

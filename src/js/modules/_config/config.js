@@ -1,29 +1,17 @@
 import store from "store";
 import axios from "axios";
 import indexOf from "lodash/indexOf";
-import {genKey} from "./_config/key";
+import {genKey} from "./key";
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
 const timingBase = "/public/timing";
-
-//Index topics
-const topics = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
 
 //location of configuration files
 const configUrl = "/public/config";
 
 //the current configuration, initially null, assigned by getConfig()
 let config;
-let timingData;
-
-export function postBookmark(pageId, bookmarkId, bookmark) {
-  console.log("post bookmark: %s, %s, ", pageId, bookmarkId, bookmark);
-}
-
-function requestConfiguration(url) {
-  return axios.get(url);
-}
 
 /* 
   check if config has changed since we last stored it
@@ -48,6 +36,10 @@ function refreshNeeded(bid, fetchDate) {
   return false;
 }
 
+function requestConfiguration(url) {
+  return axios.get(url);
+}
+
 /*
   Fetch audio timing data
 */
@@ -61,53 +53,6 @@ export function fetchTimingData(url) {
         reject(error);
       });
   });
-}
-
-/*
-  Fetch Indexing topics
-  args: force=true, get topics from server even when we have them cached
-
-  topics are cached for 2 hours (1000 * 60sec * 60min * 2) before being requested
-  from server
-*/
-export function fetchTopics(force=false) {
-  //keep topics in cache for 2 hours
-  const retentionTime = 60 * 1000 * 60 * 2;
-  return new Promise((resolve, reject) => {
-    if (!force) {
-      let topics = store.get("topic-list");
-      if (topics && topics.lastFetchDate && ((topics.lastFetchDate + retentionTime) > Date.now())) {
-        //return data from cache
-        console.log("topics read from cache");
-        resolve(topics);
-        return;
-      }
-    }
-    axios.get(`${topics}`)
-      .then((response) => {
-        response.data.lastFetchDate = Date.now();
-        console.log("topics returned from server");
-        store.set("topic-list", response.data);
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
-/*
-  add new topics to topic-list in application store
-*/
-export function addToTopicList(newTopics) {
-  let topics = store.get("topic-list");
-  let concatTopics = topics.topics.concat(newTopics);
-
-  concatTopics.sort();
-  topics.topics = concatTopics;
-  store.set("topic-list", topics);
-
-  return topics;
 }
 
 /*

@@ -1,6 +1,5 @@
 
-import { genKey } from "./_config/key";
-import {postBookmark, addToTopicList, fetchTopics} from "./config";
+import {getAnnotation, deleteBookmark, getParagraphAnnotations, addToTopicList, fetchTopics, getBookmarks, postAnnotation} from "./network";
 import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
 
@@ -45,27 +44,149 @@ function makeTopicSelect(topics) {
 }
 
 /*
-  POST bookmark to API
+  Generate html for the comment of a given annotation for
+  display in the modal dialog
 */
-function createBookmark(bookmark) {
-  let {pageKey, rangeStart} = bookmark;
-  let bookmarkId;
-
-  rangeStart = rangeStart.trim();
-
-  if (rangeStart.startsWith("p")) {
-    bookmarkId = `${pageKey}.${rangeStart.substr(1)}`;
+function renderComment(comment) {
+  if (comment) {
+    return `
+      <div>
+        <a class="edit-annotation" data-tooltip="Click to modify annotation">${comment}</a>
+      </div>
+    `;
   }
   else {
-    bookmarkId = `${pageKey}.${rangeStart}`;
+    return `
+      <div>
+        <a class="edit-annotation" data-tooltip='Click to modify annotation'>No Comment</a>;
+      </div>
+    `;
+  }
+}
+
+/*
+  Generate html for the topic list of a given annotation for
+  display in the modal dialog
+*/
+function renderTopics(topics) {
+  if (!topics || topics.length === 0) {
+    return "<div>No Topics</div>";
+  }
+  else {
+    return `
+      <div class="ui horizontal bulleted list">
+        ${topics.map(topic => `<div class="item"><em>${topic}</em></div>`).join("")}
+      </div>
+    `;
+  }
+}
+
+/*
+  add list of existing annotations to 
+  bookmark dialog
+
+  args: id: paragraph id
+*/
+function makeAnnotationList(pid) {
+  let annotations = getParagraphAnnotations(pid);
+
+  console.log("makeAnnotationList(%s), ", pid, annotations);
+
+  if (annotations && annotations.length > 0) {
+    //sort by rangeEnd
+    annotations.sort((a,b) => {
+      const aEnd = parseInt(a.rangeEnd.substr(1), 10);
+      const bEnd = parseInt(b.rangeEnd.substr(1), 10);
+      return aEnd - bEnd;
+    });
+
+    let list = (`
+      ${annotations.map(anno => `
+        <div data-pid="${pid}" data-aid="${anno.creationDate}" class="item">
+          <div class="right floated content">
+            <div class="tiny ui button">Delete</div>
+          </div>
+          <i class="edit icon"></i>
+          <div class="content">
+            ${renderTopics(anno.topicList)}
+            ${renderComment(anno.Comment)}
+          </div>
+        </div>
+      `).join("")}
+      <h4 class="ui horizontal divider header">
+        <i class="edit icon"></i>
+        Annotation
+      </h4>
+    `);
+
+    //add list to dialog
+    $(".annotation.modal .annotation-list").html(list);
+
+    //add listener to delete buttons
+    $(".annotation-list").on("click","div.button", function() {
+      let el = $(this);
+      let aid = el.parent().parent().data("aid");
+      let pid = el.parent().parent().data("pid");
+
+      //console.log("annotation ids: pid: %s, aid: %s", pid, aid);
+      $(`[data-aid='${aid}']`).remove();
+
+      //mark as having no annotations if all have been deleted
+      if (deleteBookmark(pid, aid) === 0) {
+        $(`#${pid} > i.bkmark.bookmark`).addClass("outline");
+      }
+    });
+
+    //add listener to edit an annotation in the list
+    $(".annotation-list").on("click","a.edit-annotation", function() {
+      let el = $(this);
+      let aid = el.parent().parent().parent().data("aid");
+      let pid = el.parent().parent().parent().data("pid");
+
+      let annotation = getAnnotation(pid, aid);
+
+      let form = $("#annotation-form");
+      form.form("set values", {
+        rangeStart: pid,
+        creationDate: annotation.creationDate,
+        rangeEnd: annotation.rangeEnd,
+        Comment: annotation.Comment,
+        topicList: annotation.topicList
+      });
+    });
+  }
+  else {
+    //delete annotation list if one exists
+    $(".annotation.modal .annotation-list").html("");
+  }
+}
+
+/*
+  POST annotation to API
+*/
+function createAnnotaion(bookmark) {
+  let {rangeStart} = bookmark;
+
+  rangeStart = bookmark.rangeStart.trim();
+  bookmark.rangeEnd = bookmark.rangeEnd.trim();
+
+  if (!bookmark.rangeEnd.startsWith("p")) {
+    bookmark.rangeEnd = `p${bookmark.rangeEnd}`;
   }
 
-  bookmark.url = location.pathname;
-  delete bookmark.pageKey;
+  delete bookmark.rangeStart;
 
-  postBookmark(pageKey, bookmarkId, bookmark);
+  //delete empty fields
+  if (bookmark.Comment === "") {
+    delete bookmark.Comment;
+  }
 
-  //store bookmark locally
+  if (bookmark.topicList.length === 0) {
+    delete bookmark.topicList;
+  }
+
+  //persist the bookmark
+  postAnnotation(rangeStart, bookmark);
   
 }
 
@@ -139,24 +260,22 @@ function addBookMarkers() {
         e.preventDefault();
         let el = $(this);
         let id = el.parent().attr("id");
-        let key = genKey();
         
         //add start and end p's to form
         let form = $("#annotation-form");
         form.form("set values", {
           rangeStart: id,
-          rangeEnd: id,
-          pageKey: key
+          rangeEnd: id
         });
+
+        //generate list of existing annotations for paragraph
+        makeAnnotationList(id);
 
         //add selected paragraph to modal dialog
         let paragraph = $(`#${id}`).text();
         $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
 
         $(".annotation.ui.modal") .modal("show");
-
-        key = `${key}.${id.substr(1)}`;
-        console.log("bookmark clicked at %s, key: %s", id, key);
       });
     })
     .catch(( error ) => {
@@ -180,10 +299,13 @@ $("#annotation-form").submit((e) => {
   $(".annotation.ui.modal") .modal("hide");
   $("#annotation-form").form("clear");
 
+  //indicate paragraph has a bookmark
+  $(`#${formValues.rangeStart} > i.bkmark.bookmark`).removeClass("outline");
+
   //if no new topics post the bookmark and return
   if (!newTopics || newTopics.length === 0) {
     //post annotation to server
-    createBookmark(formValues);
+    createAnnotaion(formValues);
     return;
   }
 
@@ -217,7 +339,7 @@ $("#annotation-form").submit((e) => {
       }
 
       //post the bookmark
-      createBookmark(formValues);
+      createAnnotaion(formValues);
     })
     .catch(() => {
       throw new Error("error in removing duplicate topics");
@@ -247,7 +369,23 @@ export default {
     if ($(".transcript").length) {
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
+      getBookmarks()
+        .then((response) => {
+          if (response) {
+            //mark each paragraph containing bookmarks
+            for (let id in response) {
+              if (response[id].length > 0) {
+                $(`#p${id} > i.bkmark.bookmark`).removeClass("outline");
+              }
+            }
+          }
+        })
+        .catch((error) => {
+
+        });
     }
+
+    //initialize bookmark list modal - available on all pages
     initBookmarkModal();
   }
 

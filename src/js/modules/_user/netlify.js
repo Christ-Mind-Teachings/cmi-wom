@@ -61,6 +61,42 @@ export function getUserInfo(name) {
   }
 }
 
+/*
+  Modify menubar icons "bookmark" and "sign in" to 
+  indicate user is signed in
+*/
+function setAsSignedIn() {
+  //change sign-in icon to sign-out and change color from red to green
+  $(".login-menu-option > span")
+    .html("<i class='sign out icon'></i>")
+    .addClass("green")
+    .removeClass("red")
+    .attr("data-tooltip", "Sign Out");
+
+  //change bookmark menu icon to green from red
+  $(".main.menu a > span > i.bookmark.icon")
+    .addClass("green")
+    .removeClass("red");
+}
+
+/*
+  Modify menubar icons "bookmark" and "sign in" to 
+  indicate user is signed in
+*/
+function setAsSignedOut() {
+  //change sign-in icon to sign-out and change color from red to green
+  $(".login-menu-option > span")
+    .html("<i class='sign in icon'></i>")
+    .addClass("red")
+    .removeClass("green")
+    .attr("data-tooltip", "Sign In");
+
+  //change bookmark menu icon to green from red
+  $(".main.menu a > span > i.bookmark.icon")
+    .addClass("red")
+    .removeClass("green");
+}
+
 export default {
 
   initialize: function() {
@@ -73,10 +109,7 @@ export default {
       userInfo = user;
       if (userInfo) {
         console.log("netlify init: user %s logged in", userInfo.user_metadata.full_name);
-        $(".login-menu-option > span")
-          .html("<i class='sign out icon'></i>")
-          .addClass("colorGreen")
-          .attr("data-tooltip", "Sign Out");
+        setAsSignedIn();
       }
     });
 
@@ -84,19 +117,16 @@ export default {
       console.log("netlify login: ", login);
 
       userInfo = login;
-      $(".login-menu-option > span")
-        .html("<i class='sign out icon'></i>")
-        .addClass("colorGreen")
-        .attr("data-tooltip", "Sign Out");
+      setAsSignedIn();
     });
 
     user.on("logout", () => {
-      $(".login-menu-option > span")
-        .html("<i class='sign in icon'></i>")
-        .removeClass("colorGreen")
-        .attr("data-tooltip", "Sign In");
+      setAsSignedOut();
       //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
+
+      //refresh page so user will be signed out
+      location.href = location.href;
     });
 
     //user.on("error", () => console.error("Logged out"));

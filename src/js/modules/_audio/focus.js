@@ -6,12 +6,9 @@
 */
 
 import scroll from "scroll-into-view";
-import {fetchTimingData} from "../config";
-
-//import _find from "lodash/find";
+import {fetchTimingData} from "../_config/config";
 import _findLastIndex from "lodash/findLastIndex";
 import _map from "lodash/map";
-
 import {setCaptureData} from "./capture";
 
 //paragraph timing array assigned on module initialization

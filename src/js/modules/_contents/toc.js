@@ -1,5 +1,5 @@
 import scroll from "scroll-into-view";
-import {getConfig} from "../config";
+import {getConfig} from "../_config/config";
 
 const uiTocModal = ".toc.ui.modal";
 const uiOpenTocModal = ".toc-modal-open";
