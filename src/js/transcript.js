@@ -8,7 +8,6 @@ import "../vendor/semantic/semantic.min.js";
 
 import {showParagraph} from "./modules/_util/url";
 import {loadConfig} from "./modules/_config/config";
-import {genKey} from "./modules/_config/key";
 import bookmark from "./modules/_bookmark/bookmark";
 import search from "./modules/_search/search";
 import auth from "./modules/_user/netlify";
@@ -101,7 +100,6 @@ $(document).ready(() => {
   bookmark.initialize();
   search.initialize();
   auth.initialize();
-  genKey();
 
   //load config file and do initializations that depend on a loaded config file
   loadConfig(getBookId())

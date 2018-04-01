@@ -3,20 +3,6 @@ const path = require("path");
 const Jarvis = require("webpack-jarvis");
 const etp = require("extract-text-webpack-plugin");
 
-const fs = require("fs");
-const toml = require('toml');
-const config = toml.parse(fs.readFileSync('./netlify.toml'));
-
-const LAMBDA_ENDPOINT = process.env.LAMBDA_ENDPOINT !== undefined
-  ? process.env.LAMBDA_ENDPOINT
-  : config.context.base.environment.LAMBDA_ENDPOINT;
-const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY !== undefined
-  ? process.env.STRIPE_PUBLISHABLE_KEY
-  : config.context.base.environment.STRIPE_PUBLISHABLE_KEY;
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY !== undefined
-  ? process.env.STRIPE_SECRET_KEY
-  : config.context.base.environment.STRIPE_SECRET_KEY;
-
 module.exports = {
   devtool: "source-map",
   stats: {
@@ -76,10 +62,7 @@ module.exports = {
       WOK_CONFIG: JSON.stringify(Date.now()),
       WOS_CONFIG: JSON.stringify(Date.now()),
       TJL_CONFIG: JSON.stringify(Date.now()),
-      EARLY_CONFIG: JSON.stringify(Date.now()),
-      LAMBDA_ENDPOINT: JSON.stringify(LAMBDA_ENDPOINT),
-      STRIPE_PUBLISHABLE_KEY: JSON.stringify(STRIPE_PUBLISHABLE_KEY),
-      STRIPE_SECRET_KEY: JSON.stringify(STRIPE_SECRET_KEY)
+      EARLY_CONFIG: JSON.stringify(Date.now())
     })
   ]
 };

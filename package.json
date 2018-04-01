@@ -4,6 +4,7 @@
   "description": "Way of Mastery",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "watch": "webpack --watch",
     "jekyll": "bundle exec jekyll s"
   },
@@ -26,9 +27,12 @@
     "webpack-jarvis": "^0.3.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.214.1",
     "axios": "^0.18.0",
+    "commander": "^2.15.1",
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
+    "md5": "^2.2.1",
     "mediaelement": "^4.2.8",
     "netlify-identity-widget": "^1.4.11",
     "scroll-into-view": "^1.9.1",

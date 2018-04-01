@@ -1,37 +1,40 @@
 /*eslint no-console: "off" */
 
 import user from "netlify-identity-widget";
+import md5 from "md5";
 let userInfo;
 
 let testUsers = {
   "rick": { 
     email: "rmercer33@gmail.com",
+    userId: md5("rmercer33@gmail.com"),
     name: "Rick Mercer",
     roles: ["timer", "editor"]
   },
   "julie": { 
     email: "julief8@me.com",
+    userId: md5("julief8@me.com"),
     name: "Julie Franklin",
     roles: ["timer", "editor"]
   },
   "yodi": { 
     email: "yodi@yodith.com",
+    userId: md5("yodi@yodith.com"),
     name: "Yodi Debebe",
     roles: ["timer"]
   },
   "hettie": { 
     email: "hcmercer@gmail.com",
+    userId: md5("hcmercer@gmail.com"),
     name: "Hettie Mercer",
     roles: []
   }
 };
 
 function devUserInfo(name) {
-  console.log("devUserInfo()");
-  if (!name) {
-    return testUsers["rick"];
-  }
-  else if (testUsers[name]) {
+  //console.log("devUserInfo()");
+  name = "rick";
+  if (testUsers[name]) {
     return testUsers[name];
   }
 
@@ -43,6 +46,7 @@ function prodUserInfo() {
   if (userInfo) {
     return {
       email: userInfo.email,
+      userId: md5(userInfo.email),
       name: userInfo.user_metadata.full_name,
       roles: userInfo.app_metadata.roles,
       avatar_url: userInfo.user_metadata.avatar_url
@@ -68,9 +72,7 @@ export function getUserInfo(name) {
 function setAsSignedIn() {
   //change sign-in icon to sign-out and change color from red to green
   $(".login-menu-option > span")
-    .html("<i class='sign out icon'></i>")
-    .addClass("green")
-    .removeClass("red")
+    .html("<i class='green sign out icon'></i>")
     .attr("data-tooltip", "Sign Out");
 
   //change bookmark menu icon to green from red
@@ -86,9 +88,7 @@ function setAsSignedIn() {
 function setAsSignedOut() {
   //change sign-in icon to sign-out and change color from red to green
   $(".login-menu-option > span")
-    .html("<i class='sign in icon'></i>")
-    .addClass("red")
-    .removeClass("green")
+    .html("<i class='red sign in icon'></i>")
     .attr("data-tooltip", "Sign In");
 
   //change bookmark menu icon to green from red
@@ -108,16 +108,17 @@ export default {
     user.on("init", user => {
       userInfo = user;
       if (userInfo) {
-        console.log("netlify init: user %s logged in", userInfo.user_metadata.full_name);
+        console.log("user %s", userInfo.user_metadata.full_name);
         setAsSignedIn();
       }
     });
 
     user.on("login", login => {
-      console.log("netlify login: ", login);
-
       userInfo = login;
       setAsSignedIn();
+
+      //reload page on sign in
+      location.reload();
     });
 
     user.on("logout", () => {
@@ -125,8 +126,8 @@ export default {
       //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
 
-      //refresh page so user will be signed out
-      location.href = location.href;
+      //reload page on sign out
+      location.reload();
     });
 
     //user.on("error", () => console.error("Logged out"));
