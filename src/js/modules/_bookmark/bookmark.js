@@ -31,6 +31,7 @@
 import net  from "./bmnet";
 import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
+import cloneDeep from "lodash/cloneDeep";
 
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -207,10 +208,11 @@ function makeAnnotationList(pid) {
 /*
   POST annotation to API
 */
-function createAnnotaion(annotation) {
-  let {rangeStart} = annotation;
+function createAnnotaion(formValues) {
 
-  rangeStart = annotation.rangeStart.trim();
+  let annotation = cloneDeep(formValues);
+
+  annotation.rangeStart = annotation.rangeStart.trim();
   annotation.rangeEnd = annotation.rangeEnd.trim();
 
   if (!annotation.rangeEnd.startsWith("p")) {
@@ -229,6 +231,8 @@ function createAnnotaion(annotation) {
   if (annotation.topicList.length === 0) {
     delete annotation.topicList;
   }
+
+  delete annotation.newTopics;
 
   //persist the bookmark
   net.postAnnotation(annotation);
@@ -338,7 +342,6 @@ $("#annotation-form").submit((e) => {
 
   //format new topics
   let newTopics = formatNewTopics(formValues);
-  delete formValues.newTopics;
 
   //hide modal and reset fields
   $(".annotation.ui.modal").modal("hide");

@@ -16,13 +16,14 @@ import store from "store";
 import notify from "toastr";
 import { getUserInfo} from "../_user/netlify";
 
-import { genPageKey, genParagraphKey } from "../_config/key";
+import {getSourceId, genPageKey, genParagraphKey } from "../_config/key";
 import isEqual from "lodash/isEqual";
 import findIndex from "lodash/findIndex";
 import cloneDeep from "lodash/cloneDeep";
 
 //Index topics
-const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
+//const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
+const topicsEndPoint = "https://93e93isn03.execute-api.us-east-1.amazonaws.com/latest";
 
 //Bookmark API
 const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/latest";
@@ -104,6 +105,7 @@ function getBookmarks() {
   args: annotation
 */
 function postAnnotation(annotation) {
+  console.log("annotation: ", annotation);
   const pageKey = genPageKey();
   const userInfo = getUserInfo();
 
@@ -200,25 +202,46 @@ function getAnnotation(pid, aid) {
   topics are cached for 2 hours (1000 * 60sec * 60min * 2) before being requested
   from server
 */
-function fetchTopics(force=false) {
+function fetchTopics() {
+  const userInfo = getUserInfo();
+  let topics = store.get("topic-list");
+
   //keep topics in cache for 2 hours
   const retentionTime = 60 * 1000 * 60 * 2;
+
   return new Promise((resolve, reject) => {
-    if (!force) {
-      let topics = store.get("topic-list");
-      if (topics && topics.lastFetchDate && ((topics.lastFetchDate + retentionTime) > Date.now())) {
-        //return data from cache
-        resolve(topics);
-        return;
+    //topics stored only in local store for users not signed in
+    if (!userInfo) {
+      //no topics created yet
+      if (!topics) {
+        topics = {
+          lastFetchDate: 0,
+          topics: []
+        };
+        store.set("topic-list", topics);
       }
+      resolve(topics);
+      return;
     }
-    axios.get(`${topicsEndPoint}`)
-      .then((response) => {
-        response.data.lastFetchDate = Date.now();
-        store.set("topic-list", response.data);
-        resolve(response.data);
+    //user signed in
+    else if (topics && ((topics.lastFetchDate + retentionTime) > Date.now())) {
+      //return topics from cache
+      resolve(topics);
+      return;
+    }
+
+    let sourceId = getSourceId().toString(10);
+
+    //user signed in, we need to get topics from server
+    axios.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`)
+      .then((topicInfo) => {
+        //console.log("topicInfo.data: ", topicInfo.data);
+        topicInfo.data.lastFetchDate = Date.now();
+        store.set("topic-list", topicInfo.data);
+        resolve(topicInfo.data);
       })
       .catch((error) => {
+        console.error("Error fetching topicList: ", error);
         reject(error);
       });
   });
@@ -231,9 +254,54 @@ function addToTopicList(newTopics) {
   let topics = store.get("topic-list");
   let concatTopics = topics.topics.concat(newTopics);
 
-  concatTopics.sort();
+  //improve sort
+  concatTopics.sort((a, b) => {
+    let aValue, bValue;
+
+    //objects have value and topic keys, sort them by topic
+    if (typeof a === "object") {
+      aValue = a.topic.toLowerCase();
+    }
+    else {
+      aValue = a.toLowerCase();
+    }
+
+    if (typeof b === "object") {
+      bValue = b.topic.toLowerCase();
+    }
+    else {
+      bValue = b.toLowerCase();
+    }
+
+    if (aValue < bValue) {
+      return -1;
+    }
+
+    if (aValue > bValue) {
+      return 1;
+    }
+
+    return 0;
+  });
+
   topics.topics = concatTopics;
   store.set("topic-list", topics);
+
+  //add topics to server if user signed in
+  let userInfo = getUserInfo();
+  if (userInfo) {
+    axios.post(`${topicsEndPoint}/user/topics`, {
+      userId: userInfo.userId,
+      sourceId: getSourceId(),
+      topicList: newTopics
+    })
+      .then((response) => {
+        console.log(`addToTopicList: ${response}`);
+      })
+      .catch((err) => {
+        console.error(`addToTopicList error: ${err}`);
+      });
+  }
 
   return topics;
 }

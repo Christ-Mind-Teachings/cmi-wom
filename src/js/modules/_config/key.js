@@ -46,6 +46,10 @@ function getUnitId(bid, unit) {
   }
 }
 
+export function getSourceId() {
+  return sourceId;
+}
+
 /*
   Convert url into key
   returns -1 for non-transcript url
