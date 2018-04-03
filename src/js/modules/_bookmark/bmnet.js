@@ -105,7 +105,7 @@ function getBookmarks() {
   args: annotation
 */
 function postAnnotation(annotation) {
-  console.log("annotation: ", annotation);
+  //console.log("annotation: ", annotation);
   const pageKey = genPageKey();
   const userInfo = getUserInfo();
 

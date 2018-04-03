@@ -39,6 +39,8 @@ const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 const uiBookmarkToggle = ".bookmark-toggle";
 
+let gMaxId;
+
 function initBookmarkModal() {
   $(uiBookmarkModal).modal({
     dimmerSettings: {opacity: uiModalOpacity}
@@ -112,6 +114,35 @@ function renderTopics(topics) {
 }
 
 /*
+  Generate html for a single annotation
+  - used in the bookmark modal dialog
+*/
+function makeAnnotationListItem(pid, annotation) {
+  return `
+    <div data-pid="${pid}" data-aid="${annotation.creationDate}" class="item">
+      <div class="right floated content">
+        <div class="tiny ui button">Delete</div>
+      </div>
+      <i class="edit icon"></i>
+      <div class="content">
+        ${renderTopics(annotation.topicList)}
+        ${renderComment(annotation.Comment)}
+      </div>
+    </div>
+  `;
+}
+
+//Divides annotation list from annotation form in bookmark modal
+function addAnnotationDivider() {
+  return `
+    <h4 class="ui horizontal divider header">
+      <i class="edit icon"></i>
+      Annotation
+    </h4>
+  `;
+}
+
+/*
   add list of existing annotations to 
   bookmark dialog
 
@@ -133,21 +164,9 @@ function makeAnnotationList(pid) {
 
         let list = (`
           ${annotations.map(anno => `
-            <div data-pid="${pid}" data-aid="${anno.creationDate}" class="item">
-              <div class="right floated content">
-                <div class="tiny ui button">Delete</div>
-              </div>
-              <i class="edit icon"></i>
-              <div class="content">
-                ${renderTopics(anno.topicList)}
-                ${renderComment(anno.Comment)}
-              </div>
-            </div>
+            ${makeAnnotationListItem(pid, anno)}
           `).join("")}
-          <h4 class="ui horizontal divider header">
-            <i class="edit icon"></i>
-            Annotation
-          </h4>
+          ${addAnnotationDivider()} 
         `);
 
         //add list to dialog
@@ -206,7 +225,7 @@ function makeAnnotationList(pid) {
 }
 
 /*
-  POST annotation to API
+  Clean up form values and prepare to send to API  
 */
 function createAnnotaion(formValues) {
 
@@ -236,6 +255,29 @@ function createAnnotaion(formValues) {
 
   //persist the bookmark
   net.postAnnotation(annotation);
+
+  //add new annotation to the annotation list of the modal dialog
+  let newAnnotationHTML = makeAnnotationListItem(annotation.rangeStart, annotation);
+  let annotationList = $(".annotation-list");
+
+  //check if there is already a list of annotations 
+  // -there will be if there is a h4 child
+  if (annotationList.children("h4").length === 0) {
+    $(annotationList.append(newAnnotationHTML));
+    $(annotationList).append(addAnnotationDivider());
+  }
+  else {
+    //check if the annotation already exists in the list, this will happen
+    //when an annotation has been modified
+    let aid = annotation.creationDate.toString(10);
+    $(".annotation-list").children("div").each(function() {
+      let listAid = $(this).attr("data-aid");
+      if (listAid === aid) {
+        $(this).remove();
+      }
+    });
+    $(annotationList.prepend(newAnnotationHTML));
+  }
 }
 
 /*
@@ -296,7 +338,7 @@ function addBookMarkers() {
       $(".annotation.ui.modal")
         .modal({
           centered: true,
-          duration: 100,
+          duration: 400,
           inverted: true,
           observeChanges: true,
           transition: "horizontal flip"
@@ -312,6 +354,7 @@ function addBookMarkers() {
         
         //add start and end p's to form
         let form = $("#annotation-form");
+        form.form("clear");
         form.form("set values", {
           rangeStart: id,
           rangeEnd: id
@@ -319,18 +362,77 @@ function addBookMarkers() {
 
         //generate list of existing annotations for paragraph
         makeAnnotationList(id);
-
-        // //add selected paragraph to modal dialog
-        // let paragraph = $(`#${id}`).text();
-        // $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
-
-        // $(".annotation.ui.modal") .modal("show");
       });
     })
     .catch(( error ) => {
       notify.error("Unable to fetch bookmark topic list: ", error);
     });
 }
+
+//add listener for next paragraph button on annotation modal
+$("div.annotate-next-paragraph.button").on("click", function(e) {
+  e.stopPropagation();
+  let form = $("#annotation-form");
+  let formValues = form.form("get values");
+
+  //get numeric paragraph number
+  let id;
+  let stillLooking = true;
+
+  while (stillLooking) {
+    id = parseInt(formValues.rangeStart.substr(1), 10);
+    id = id + 1;
+
+    //gone past the last paragraph
+    if (id > gMaxId) {
+      return;
+    }
+
+    //see if this is a valid paragraph id
+    if ($(`#p${id}`).length === 1) {
+      stillLooking = false;
+
+      //hide modal
+      //$(".annotation.ui.modal").modal("hide");
+
+      //trigger click of previous bookmark
+      $(`#p${id} > i.bookmark.icon`).trigger("click");
+    }
+  }
+
+});
+
+//add listener for prev paragraph button on annotation modal
+$("div.annotate-prev-paragraph.button").on("click", function(e) {
+  e.stopPropagation();
+  let form = $("#annotation-form");
+  let formValues = form.form("get values");
+
+  //get numeric paragraph number
+  let id;
+  let stillLooking = true;
+
+  while (stillLooking) {
+    id = parseInt(formValues.rangeStart.substr(1), 10);
+    id = id - 1;
+
+    //gone past the first paragraph
+    if (id < 0) {
+      return;
+    }
+
+    //see if this is a valid paragraph id
+    if ($(`#p${id}`).length === 1) {
+      stillLooking = false;
+
+      //hide modal
+      //$(".annotation.ui.modal").modal("hide");
+
+      //trigger click of previous bookmark
+      $(`#p${id} > i.bookmark.icon`).trigger("click");
+    }
+  }
+});
 
 //listen for user submit of annotation form
 $("#annotation-form").submit((e) => {
@@ -344,16 +446,24 @@ $("#annotation-form").submit((e) => {
   let newTopics = formatNewTopics(formValues);
 
   //hide modal and reset fields
-  $(".annotation.ui.modal").modal("hide");
+  //$(".annotation.ui.modal").modal("hide");
   $("#annotation-form").form("clear");
 
   //indicate paragraph has a bookmark
-  $(`#${formValues.rangeStart} > i.bkmark.bookmark`).removeClass("outline");
+  if (formValues.rangeStart) {
+    $(`#${formValues.rangeStart} > i.bkmark.bookmark`).removeClass("outline");
+  }
 
   //if no new topics post the bookmark and return
   if (!newTopics || newTopics.length === 0) {
     //post annotation to server
     createAnnotaion(formValues);
+  
+    //reset form values
+    form.form("set values", {
+      rangeStart: formValues.rangeStart,
+      rangeEnd: formValues.rangeEnd
+    });
     return;
   }
 
@@ -386,6 +496,12 @@ $("#annotation-form").submit((e) => {
 
       //post the bookmark
       createAnnotaion(formValues);
+  
+      //reset form values
+      form.form("set values", {
+        rangeStart: formValues.rangeStart,
+        rangeEnd: formValues.rangeEnd
+      });
     })
     .catch(() => {
       throw new Error("error in removing duplicate topics");
@@ -413,6 +529,10 @@ export default {
     //- add bookmark icons to each paragraph
     //- create bookmark toggle listener
     if ($(".transcript").length) {
+
+      //Used by annotation modal next button
+      gMaxId = parseInt($(".transcript p.cmiTranPara").length, 10) - 1;
+
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
       net.getBookmarks()
@@ -425,7 +545,8 @@ export default {
           }
         })
         .catch((error) => {
-
+          console.error(error);
+          notify.error("Unable to load bookmarks");
         });
     }
 
