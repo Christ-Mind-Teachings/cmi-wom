@@ -227,7 +227,7 @@ export default {
    *  src: url of audio file
    *  timingData: uri of timing data, pass it to focus.js
    */
-  initialize: function(src, timingData) {
+  initialize: function(src, timingData, bookmark) {
     //add source of audio file to player
     $("audio.mejs-player").attr("src", src);
 
@@ -243,11 +243,13 @@ export default {
         notify.error("Audio error: ", error);
       },
       success: function(media, node, player) {
-        //audio initialized, continue with setup for capture and focus
+        //setup for capture and focus
         setEventListeners(player, status, timingData);
+
+        //give bookmark the ability to control the audio player
+        bookmark.setAudioPlayer(player);
       }
     });
   }
-
 };
 

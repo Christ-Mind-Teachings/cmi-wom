@@ -7875,33 +7875,32 @@ function setAsSignedOut() {
      * if user already logged in, change icon to log out
      */
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("init", user => {
+      console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
-        console.log("user %s", userInfo.user_metadata.full_name);
         setAsSignedIn();
       }
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("login", login => {
+      console.log("user.on('login')");
       userInfo = login;
       setAsSignedIn();
 
       //reload page on sign in
-      location.reload();
+      //location.reload();
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("logout", () => {
+      console.log("user.logout()");
       setAsSignedOut();
-      //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
 
       //reload page on sign out
-      location.reload();
+      //location.reload();
     });
 
-    //user.on("error", () => console.error("Logged out"));
-    //user.on('open', () => console.log("Widget opened"));
-    //user.on('close', () => console.log("Widget closed"));
+    __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("error", err => console.error("user.on('error'): ", err));
 
     $(".login-menu-option").on("click", e => {
       e.preventDefault();
@@ -23524,6 +23523,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_hotkeys_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__audio_focus__ = __webpack_require__(334);
 /*
   Bookmarks --
 
@@ -23559,13 +23561,22 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 
 
 
+
+
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 const uiBookmarkToggle = ".bookmark-toggle";
 
+let audioPlayer = null;
+let focus = null;
+
 let gMaxId;
+
+function audioParagraphChange(pid) {
+  console.log("audioParagraphChange(%s)", pid);
+}
 
 function initBookmarkModal() {
   $(uiBookmarkModal).modal({
@@ -23644,7 +23655,7 @@ function makeAnnotationListItem(pid, annotation) {
   return `
     <div data-pid="${pid}" data-aid="${annotation.creationDate}" class="item">
       <div class="right floated content">
-        <div class="tiny ui button">Delete</div>
+        <div class="delete-annotation tiny ui button">Delete</div>
       </div>
       <i class="edit icon"></i>
       <div class="content">
@@ -23695,7 +23706,7 @@ function makeAnnotationList(pid) {
       $(".annotation.modal .annotation-list").html(list);
 
       //add listener to delete buttons
-      $(".annotation-list").on("click", "div.button", function () {
+      $(".annotation-list").on("click", "div.delete-annotation.button", function () {
         let el = $(this);
         let aid = el.parent().parent().data("aid");
         let pid = el.parent().parent().data("pid");
@@ -23853,11 +23864,31 @@ function addBookMarkers() {
     $("#topic-select").html(select);
 
     $(".annotation.ui.modal").modal({
+      autofocus: false,
       centered: true,
       duration: 400,
       inverted: true,
       observeChanges: true,
-      transition: "horizontal flip"
+      transition: "horizontal flip",
+      onVisible: function () {
+        __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default.a.setScope("annotation");
+        document.getElementById("rangeEnd").focus();
+
+        if (audioPlayer) {
+          if (audioPlayer.paused) {
+            //show play icon - this is default
+            $(".annotate-play").html("<i class='play icon'></i>Play");
+          } else {
+            //audio is playing, show pause icon
+            $(".annotate-play").html("<i class='pause icon'></i>Pause");
+          }
+        } else {
+          console.log("audioPlayer is null in Bookmark");
+        }
+      },
+      onHidden: function () {
+        __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default.a.deleteScope("annotation");
+      }
     });
 
     $("select.dropdown").dropdown();
@@ -23884,8 +23915,14 @@ function addBookMarkers() {
   });
 }
 
+__WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+n", "annotation", function (e, h) {
+  e.preventDefault();
+  console.log("triggering next");
+  $(".annotate-next-paragraph.button").trigger("click");
+});
+
 //add listener for next paragraph button on annotation modal
-$("div.annotate-next-paragraph.button").on("click", function (e) {
+$(".annotate-next-paragraph.button").on("click", function (e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -23898,6 +23935,11 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id + 1;
 
+    if (id >= gMaxId) {
+      //disable button
+      $(".annotate-next-paragraph.button").addClass("disabled");
+    }
+
     //gone past the last paragraph
     if (id > gMaxId) {
       return;
@@ -23907,8 +23949,8 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable prev button - it may or may not be disabled
+      $(".annotate-prev-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
@@ -23916,8 +23958,14 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
   }
 });
 
+__WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+p", "annotation", function (e, h) {
+  e.preventDefault();
+  console.log("triggering prev");
+  $(".annotate-prev-paragraph.button").trigger("click");
+});
+
 //add listener for prev paragraph button on annotation modal
-$("div.annotate-prev-paragraph.button").on("click", function (e) {
+$(".annotate-prev-paragraph.button").on("click", function (e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -23930,6 +23978,11 @@ $("div.annotate-prev-paragraph.button").on("click", function (e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id - 1;
 
+    if (id <= 0) {
+      //disable
+      $(".annotate-prev-paragraph.button").addClass("disabled");
+    }
+
     //gone past the first paragraph
     if (id < 0) {
       return;
@@ -23939,12 +23992,24 @@ $("div.annotate-prev-paragraph.button").on("click", function (e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable 'next' button, it may or may not be disabled
+      $(".annotate-next-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
     }
+  }
+});
+
+//setup audio play/pause listener
+$("button.annotate-play").on("click", function (e) {
+  e.preventDefault();
+  if (audioPlayer.paused) {
+    audioPlayer.play();
+    $(".annotate-play").html("<i class='pause icon'></i>Pause");
+  } else {
+    audioPlayer.pause();
+    $(".annotate-play").html("<i class='play icon'></i>Play");
   }
 });
 
@@ -23978,6 +24043,10 @@ $("#annotation-form").submit(e => {
       rangeStart: formValues.rangeStart,
       rangeEnd: formValues.rangeEnd
     });
+
+    //set focus on rangeEnd
+    document.getElementById("rangeEnd").focus();
+
     return;
   }
 
@@ -24010,11 +24079,14 @@ $("#annotation-form").submit(e => {
     //post the bookmark
     createAnnotaion(formValues);
 
-    //reset form values
+    //reset form values - so another annotation can be submitted
     form.form("set values", {
       rangeStart: formValues.rangeStart,
       rangeEnd: formValues.rangeEnd
     });
+
+    //set focus on rangeEnd
+    document.getElementById("rangeEnd").focus();
   }).catch(() => {
     throw new Error("error in removing duplicate topics");
   });
@@ -24061,8 +24133,19 @@ function createBookmarkToggle(selector) {
 
     //initialize bookmark list modal - available on all pages
     initBookmarkModal();
-  }
+  },
+  setAudioPlayer: function (player) {
+    //console.log("Bookmark.setAudioPlayer()");
+    audioPlayer = player;
 
+    //enable annotation modal play/pause button
+    $(".annotate-play").removeClass("disabled");
+
+    //ask to be notified for audio paragraph change
+    Object(__WEBPACK_IMPORTED_MODULE_5__audio_focus__["c" /* registerNotify */])(function (pid) {
+      console.log("audio paragraph change to: ", pid);
+    });
+  }
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
@@ -28429,8 +28512,9 @@ function getBookId() {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["c"] = switchToParagraph;
-/* harmony export (immutable) */ __webpack_exports__["d"] = togglePlayFromHere;
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["c"] = registerNotify;
+/* harmony export (immutable) */ __webpack_exports__["d"] = switchToParagraph;
+/* harmony export (immutable) */ __webpack_exports__["e"] = togglePlayFromHere;
 /* harmony export (immutable) */ __webpack_exports__["b"] = disableScroll;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
@@ -28455,6 +28539,7 @@ function getBookId() {
 
 //paragraph timing array assigned on module initialization
 let timingData = null;
+let notifyParagraphChange = null;
 
 //capture.js can disable scroll is timing is enabled
 let scrollEnabled = true;
@@ -28500,6 +28585,10 @@ const ptr = new Ptr(-1, -1);
 let seeking = false;
 let ended = false;
 let player;
+
+function registerNotify(fn) {
+  notifyParagraphChange = fn;
+}
 
 /*
  * init playFromHere
@@ -28640,6 +28729,10 @@ function showNscroll(idx) {
 
   $("#" + tinfo.id).addClass("hilight");
   ptr.pval = idx;
+
+  if (notifyParagraphChange) {
+    notifyParagraphChange(tinfo.id);
+  }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -28655,7 +28748,6 @@ function showNscroll(idx) {
 
     //load the timing data
     Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["a" /* fetchTimingData */])(timingDataUri).then(data => {
-      //console.log("timing data loaded");
 
       //round timing data to two decimal places
       timingData = __WEBPACK_IMPORTED_MODULE_3_lodash_map___default()(data.time, function (value) {
@@ -29425,7 +29517,7 @@ $(document).ready(() => {
   Object(__WEBPACK_IMPORTED_MODULE_2__modules_config_config__["e" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["b" /* getBookId */])()).then(source => {
     console.log(source);
     __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["a" /* default */].initialize();
-    __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize();
+    __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize(__WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__["a" /* default */]);
     Object(__WEBPACK_IMPORTED_MODULE_1__modules_util_url__["a" /* showParagraph */])();
   }).catch(error => {
     //report error to the user - somehow
@@ -29476,7 +29568,7 @@ function createAudioPlayerToggleListener() {
 /* harmony default export */ __webpack_exports__["a"] = ({
 
   //setup page to play audio if audio available
-  initialize: function () {
+  initialize: function (bookmark) {
     let info = Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["b" /* getAudioInfo */])(location.pathname);
 
     //add audio url to audio player toggle
@@ -29488,7 +29580,7 @@ function createAudioPlayerToggleListener() {
       createAudioPlayerToggleListener();
 
       //initialize audio player
-      __WEBPACK_IMPORTED_MODULE_1__mediaelement__["a" /* default */].initialize(`${info.audioBase}${info.audio}`, info.timing);
+      __WEBPACK_IMPORTED_MODULE_1__mediaelement__["a" /* default */].initialize(`${info.audioBase}${info.audio}`, info.timing, bookmark);
     }
   }
 });
@@ -29646,7 +29738,7 @@ function setEventListeners(player, userStatus, haveTimingData) {
 
   if (haveTimingData) {
     player.media.addEventListener("ptoggle", function () {
-      if (Object(__WEBPACK_IMPORTED_MODULE_17__focus__["d" /* togglePlayFromHere */])()) {
+      if (Object(__WEBPACK_IMPORTED_MODULE_17__focus__["e" /* togglePlayFromHere */])()) {
         $(".mejs__ptoggle").addClass("mejs-ptoggle-visible").removeClass("mejs-ptoggle-hidden");
       } else {
         $(".mejs__ptoggle").addClass("mejs-ptoggle-hidden").removeClass("mejs-ptoggle-visible");
@@ -29667,11 +29759,11 @@ function setEventListeners(player, userStatus, haveTimingData) {
     */
 
     player.media.addEventListener("prevp", function () {
-      Object(__WEBPACK_IMPORTED_MODULE_17__focus__["c" /* switchToParagraph */])("PREV");
+      Object(__WEBPACK_IMPORTED_MODULE_17__focus__["d" /* switchToParagraph */])("PREV");
     });
 
     player.media.addEventListener("nextp", function () {
-      Object(__WEBPACK_IMPORTED_MODULE_17__focus__["c" /* switchToParagraph */])("NEXT");
+      Object(__WEBPACK_IMPORTED_MODULE_17__focus__["d" /* switchToParagraph */])("NEXT");
     });
   }
 
@@ -29761,7 +29853,7 @@ function assignPlayerFeatures(timingData) {
    *  src: url of audio file
    *  timingData: uri of timing data, pass it to focus.js
    */
-  initialize: function (src, timingData) {
+  initialize: function (src, timingData, bookmark) {
     //add source of audio file to player
     $("audio.mejs-player").attr("src", src);
 
@@ -29777,12 +29869,14 @@ function assignPlayerFeatures(timingData) {
         __WEBPACK_IMPORTED_MODULE_16_toastr___default.a.error("Audio error: ", error);
       },
       success: function (media, node, player) {
-        //audio initialized, continue with setup for capture and focus
+        //setup for capture and focus
         setEventListeners(player, status, timingData);
+
+        //give bookmark the ability to control the audio player
+        bookmark.setAudioPlayer(player);
       }
     });
   }
-
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
@@ -39377,6 +39471,448 @@ class CaptureData {
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = CaptureData;
+
+
+/***/ }),
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(390);
+} else {
+  module.exports = __webpack_require__(391);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(81)))
+
+/***/ }),
+/* 390 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*! hotkeys-js v3.1.0 | MIT (c) 2018 kenny wong <wowohoo@qq.com> | https://github.com/jaywcjlove/hotkeys.git */
+var isff="undefined"!=typeof navigator&&0<navigator.userAgent.toLowerCase().indexOf("firefox");function addEvent(e,o,t){e.addEventListener?e.addEventListener(o,t,!1):e.attachEvent&&e.attachEvent("on"+o,function(){t(window.event)})}function getMods(e,o){for(var t=o.slice(0,o.length-1),n=0;n<t.length;n++)t[n]=e[t[n].toLowerCase()];return t}function getKeys(e){e||(e="");for(var o=(e=e.replace(/\s/g,"")).split(","),t=o.lastIndexOf("");0<=t;)o[t-1]+=",",o.splice(t,1),t=o.lastIndexOf("");return o}function compareArray(e,o){for(var t=e.length<o.length?o:e,n=e.length<o.length?e:o,r=!0,s=0;s<t.length;s++)-1===n.indexOf(t[s])&&(r=!1);return r}for(var _keyMap={backspace:8,tab:9,clear:12,enter:13,return:13,esc:27,escape:27,space:32,left:37,up:38,right:39,down:40,del:46,delete:46,ins:45,insert:45,home:36,end:35,pageup:33,pagedown:34,capslock:20,"\u21ea":20,",":188,".":190,"/":191,"`":192,"-":isff?173:189,"=":isff?61:187,";":isff?59:186,"'":222,"[":219,"]":221,"\\":220},_modifier={"\u21e7":16,shift:16,"\u2325":18,alt:18,option:18,"\u2303":17,ctrl:17,control:17,"\u2318":isff?224:91,cmd:isff?224:91,command:isff?224:91},_downKeys=[],modifierMap={16:"shiftKey",18:"altKey",17:"ctrlKey"},_mods={16:!1,18:!1,17:!1},_handlers={},k=1;k<20;k++)_keyMap["f"+k]=111+k;modifierMap[isff?224:91]="metaKey",_mods[isff?224:91]=!1;var _scope="all",code=function(e){return _keyMap[e.toLowerCase()]||e.toUpperCase().charCodeAt(0)};function setScope(e){_scope=e||"all"}function getScope(){return _scope||"all"}function getPressedKeyCodes(){return _downKeys.slice(0)}function filter(e){var o=e.target.tagName||e.srcElement.tagName;return!("INPUT"===o||"SELECT"===o||"TEXTAREA"===o)}function isPressed(e){return"string"==typeof e&&(e=code(e)),-1!==_downKeys.indexOf(e)}function deleteScope(e,o){var t=void 0,n=void 0;for(var r in e||(e=getScope()),_handlers)if(Object.prototype.hasOwnProperty.call(_handlers,r))for(t=_handlers[r],n=0;n<t.length;)t[n].scope===e?t.splice(n,1):n++;getScope()===e&&setScope(o||"all")}function clearModifier(e){var o=_downKeys.indexOf(t),t=e.keyCode||e.which||e.charCode;if(o<0||_downKeys.splice(o,1),93!==t&&224!==t||(t=91),t in _mods)for(var n in _mods[t]=!1,_modifier)_modifier[n]===t&&(hotkeys[n]=!1)}function unbind(e,o){for(var t=getKeys(e),n=void 0,r=[],s=void 0,d=0;d<t.length;d++){if(1<(n=t[d].split("+")).length&&(r=getMods(_modifier,n)),e="*"===(e=n[n.length-1])?"*":code(e),o||(o=getScope()),!_handlers[e])return;for(var i=0;i<_handlers[e].length;i++)(s=_handlers[e][i]).scope===o&&compareArray(s.mods,r)&&(_handlers[e][i]={})}}function eventHandler(e,o,t){var n=void 0;if(o.scope===t||"all"===o.scope){for(var r in n=0<o.mods.length,_mods)Object.prototype.hasOwnProperty.call(_mods,r)&&(!_mods[r]&&-1<o.mods.indexOf(+r)||_mods[r]&&-1===o.mods.indexOf(+r))&&(n=!1);(0!==o.mods.length||_mods[16]||_mods[18]||_mods[17]||_mods[91])&&!n&&"*"!==o.shortcut||!1===o.method(e,o)&&(e.preventDefault?e.preventDefault():e.returnValue=!1,e.stopPropagation&&e.stopPropagation(),e.cancelBubble&&(e.cancelBubble=!0))}}function dispatch(e){var o=_handlers["*"],t=e.keyCode||e.which||e.charCode;if(-1===_downKeys.indexOf(t)&&_downKeys.push(t),93!==t&&224!==t||(t=91),t in _mods){for(var n in _mods[t]=!0,_modifier)_modifier[n]===t&&(hotkeys[n]=!0);if(!o)return}for(var r in _mods)Object.prototype.hasOwnProperty.call(_mods,r)&&(_mods[r]=e[modifierMap[r]]);if(hotkeys.filter.call(this,e)){var s=getScope();if(o)for(var d=0;d<o.length;d++)o[d].scope===s&&eventHandler(e,o[d],s);if(t in _handlers)for(var i=0;i<_handlers[t].length;i++)eventHandler(e,_handlers[t][i],s)}}function hotkeys(e,o,t){var n=getKeys(e),r=[],s=0;for(void 0===t&&(t=o,o="all");s<n.length;s++)r=[],1<(e=n[s].split("+")).length&&(r=getMods(_modifier,e)),(e="*"===(e=e[e.length-1])?"*":code(e))in _handlers||(_handlers[e]=[]),_handlers[e].push({scope:o,mods:r,shortcut:n[s],method:t,key:n[s]})}"undefined"!=typeof document&&(addEvent(document,"keydown",function(e){dispatch(e)}),addEvent(document,"keyup",function(e){clearModifier(e)}));var _api={setScope:setScope,getScope:getScope,deleteScope:deleteScope,getPressedKeyCodes:getPressedKeyCodes,isPressed:isPressed,filter:filter,unbind:unbind};for(var a in _api)Object.prototype.hasOwnProperty.call(_api,a)&&(hotkeys[a]=_api[a]);if("undefined"!=typeof window){var _hotkeys=window.hotkeys;hotkeys.noConflict=function(e){return e&&window.hotkeys===hotkeys&&(window.hotkeys=_hotkeys),hotkeys},window.hotkeys=hotkeys}module.exports=hotkeys;
+
+/***/ }),
+/* 391 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * hotkeys-js v3.1.0
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies.
+ * 
+ * Copyright (c) 2018 kenny wong <wowohoo@qq.com>
+ * https://github.com/jaywcjlove/hotkeys.git
+ * 
+ * Licensed under the MIT license.
+ */
+
+
+
+var isff = typeof navigator !== 'undefined' ? navigator.userAgent.toLowerCase().indexOf('firefox') > 0 : false;
+
+// 绑定事件
+function addEvent(object, event, method) {
+  if (object.addEventListener) {
+    object.addEventListener(event, method, false);
+  } else if (object.attachEvent) {
+    object.attachEvent('on' + event, function () {
+      method(window.event);
+    });
+  }
+}
+
+// 修饰键转换成对应的键码
+function getMods(modifier, key) {
+  var mods = key.slice(0, key.length - 1);
+  for (var i = 0; i < mods.length; i++) {
+    mods[i] = modifier[mods[i].toLowerCase()];
+  }return mods;
+}
+
+// 处理传的key字符串转换成数组
+function getKeys(key) {
+  if (!key) key = '';
+
+  key = key.replace(/\s/g, ''); // 匹配任何空白字符,包括空格、制表符、换页符等等
+  var keys = key.split(','); // 同时设置多个快捷键，以','分割
+  var index = keys.lastIndexOf('');
+
+  // 快捷键可能包含','，需特殊处理
+  for (; index >= 0;) {
+    keys[index - 1] += ',';
+    keys.splice(index, 1);
+    index = keys.lastIndexOf('');
+  }
+
+  return keys;
+}
+
+// 比较修饰键的数组
+function compareArray(a1, a2) {
+  var arr1 = a1.length >= a2.length ? a1 : a2;
+  var arr2 = a1.length >= a2.length ? a2 : a1;
+  var isIndex = true;
+
+  for (var i = 0; i < arr1.length; i++) {
+    if (arr2.indexOf(arr1[i]) === -1) isIndex = false;
+  }
+  return isIndex;
+}
+
+var _keyMap = { // 特殊键
+  backspace: 8,
+  tab: 9,
+  clear: 12,
+  enter: 13,
+  return: 13,
+  esc: 27,
+  escape: 27,
+  space: 32,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+  del: 46,
+  delete: 46,
+  ins: 45,
+  insert: 45,
+  home: 36,
+  end: 35,
+  pageup: 33,
+  pagedown: 34,
+  capslock: 20,
+  '⇪': 20,
+  ',': 188,
+  '.': 190,
+  '/': 191,
+  '`': 192,
+  '-': isff ? 173 : 189,
+  '=': isff ? 61 : 187,
+  ';': isff ? 59 : 186,
+  '\'': 222,
+  '[': 219,
+  ']': 221,
+  '\\': 220
+};
+
+var _modifier = { // 修饰键
+  '⇧': 16,
+  shift: 16,
+  '⌥': 18,
+  alt: 18,
+  option: 18,
+  '⌃': 17,
+  ctrl: 17,
+  control: 17,
+  '⌘': isff ? 224 : 91,
+  cmd: isff ? 224 : 91,
+  command: isff ? 224 : 91
+};
+var _downKeys = []; // 记录摁下的绑定键
+var modifierMap = {
+  16: 'shiftKey',
+  18: 'altKey',
+  17: 'ctrlKey'
+};
+var _mods = { 16: false, 18: false, 17: false };
+var _handlers = {};
+
+// F1~F12 特殊键
+for (var k = 1; k < 20; k++) {
+  _keyMap['f' + k] = 111 + k;
+}
+
+// 兼容Firefox处理
+modifierMap[isff ? 224 : 91] = 'metaKey';
+_mods[isff ? 224 : 91] = false;
+
+var _scope = 'all'; // 默认热键范围
+// 返回键码
+var code = function code(x) {
+  return _keyMap[x.toLowerCase()] || x.toUpperCase().charCodeAt(0);
+};
+
+// 设置获取当前范围（默认为'所有'）
+function setScope(scope) {
+  _scope = scope || 'all';
+}
+// 获取当前范围
+function getScope() {
+  return _scope || 'all';
+}
+// 获取摁下绑定键的键值
+function getPressedKeyCodes() {
+  return _downKeys.slice(0);
+}
+
+// 表单控件控件判断 返回 Boolean
+function filter(event) {
+  var tagName = event.target.tagName || event.srcElement.tagName;
+  // 忽略这些标签情况下快捷键无效
+  return !(tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA');
+}
+
+// 判断摁下的键是否为某个键，返回true或者false
+function isPressed(keyCode) {
+  if (typeof keyCode === 'string') {
+    keyCode = code(keyCode); // 转换成键码
+  }
+
+  return _downKeys.indexOf(keyCode) !== -1;
+}
+
+// 循环删除handlers中的所有 scope(范围)
+function deleteScope(scope, newScope) {
+  var handlers = void 0;
+  var i = void 0;
+
+  // 没有指定scope，获取scope
+  if (!scope) scope = getScope();
+
+  for (var key in _handlers) {
+    if (Object.prototype.hasOwnProperty.call(_handlers, key)) {
+      handlers = _handlers[key];
+      for (i = 0; i < handlers.length;) {
+        if (handlers[i].scope === scope) handlers.splice(i, 1);else i++;
+      }
+    }
+  }
+
+  // 如果scope被删除，将scope重置为all
+  if (getScope() === scope) setScope(newScope || 'all');
+}
+
+// 清除修饰键
+function clearModifier(event) {
+  var i = _downKeys.indexOf(key);
+  var key = event.keyCode || event.which || event.charCode;
+
+  // 从列表中清除按压过的键
+  if (i >= 0) _downKeys.splice(i, 1);
+
+  // 修饰键 shiftKey altKey ctrlKey (command||metaKey) 清除
+  if (key === 93 || key === 224) key = 91;
+  if (key in _mods) {
+    _mods[key] = false;
+
+    // 将修饰键重置为false
+    for (var k in _modifier) {
+      if (_modifier[k] === key) hotkeys[k] = false;
+    }
+  }
+}
+
+// 解除绑定某个范围的快捷键
+function unbind(key, scope) {
+  var multipleKeys = getKeys(key);
+  var keys = void 0;
+  var mods = [];
+  var obj = void 0;
+
+  for (var i = 0; i < multipleKeys.length; i++) {
+    // 将组合快捷键拆分为数组
+    keys = multipleKeys[i].split('+');
+
+    // 记录每个组合键中的修饰键的键码 返回数组
+    if (keys.length > 1) mods = getMods(_modifier, keys);
+
+    // 获取除修饰键外的键值key
+    key = keys[keys.length - 1];
+    key = key === '*' ? '*' : code(key);
+
+    // 判断是否传入范围，没有就获取范围
+    if (!scope) scope = getScope();
+
+    // 如何key不在 _handlers 中返回不做处理
+    if (!_handlers[key]) return;
+
+    // 清空 handlers 中数据，
+    // 让触发快捷键键之后没有事件执行到达解除快捷键绑定的目的
+    for (var r = 0; r < _handlers[key].length; r++) {
+      obj = _handlers[key][r];
+      // 判断是否在范围内并且键值相同
+      if (obj.scope === scope && compareArray(obj.mods, mods)) {
+        _handlers[key][r] = {};
+      }
+    }
+  }
+}
+
+// 对监听对应快捷键的回调函数进行处理
+function eventHandler(event, handler, scope) {
+  var modifiersMatch = void 0;
+
+  // 看它是否在当前范围
+  if (handler.scope === scope || handler.scope === 'all') {
+    // 检查是否匹配修饰符（如果有返回true）
+    modifiersMatch = handler.mods.length > 0;
+
+    for (var y in _mods) {
+      if (Object.prototype.hasOwnProperty.call(_mods, y)) {
+        if (!_mods[y] && handler.mods.indexOf(+y) > -1 || _mods[y] && handler.mods.indexOf(+y) === -1) modifiersMatch = false;
+      }
+    }
+
+    // 调用处理程序，如果是修饰键不做处理
+    if (handler.mods.length === 0 && !_mods[16] && !_mods[18] && !_mods[17] && !_mods[91] || modifiersMatch || handler.shortcut === '*') {
+      if (handler.method(event, handler) === false) {
+        if (event.preventDefault) event.preventDefault();else event.returnValue = false;
+        if (event.stopPropagation) event.stopPropagation();
+        if (event.cancelBubble) event.cancelBubble = true;
+      }
+    }
+  }
+}
+
+// 处理keydown事件
+function dispatch(event) {
+  var asterisk = _handlers['*'];
+  var key = event.keyCode || event.which || event.charCode;
+
+  // 搜集绑定的键
+  if (_downKeys.indexOf(key) === -1) _downKeys.push(key);
+
+  // Gecko(Firefox)的command键值224，在Webkit(Chrome)中保持一致
+  // Webkit左右command键值不一样
+  if (key === 93 || key === 224) key = 91;
+
+  if (key in _mods) {
+    _mods[key] = true;
+
+    // 将特殊字符的key注册到 hotkeys 上
+    for (var k in _modifier) {
+      if (_modifier[k] === key) hotkeys[k] = true;
+    }
+
+    if (!asterisk) return;
+  }
+
+  // 将modifierMap里面的修饰键绑定到event中
+  for (var e in _mods) {
+    if (Object.prototype.hasOwnProperty.call(_mods, e)) {
+      _mods[e] = event[modifierMap[e]];
+    }
+  }
+
+  // 表单控件过滤 默认表单控件不触发快捷键
+  if (!hotkeys.filter.call(this, event)) return;
+
+  // 获取范围 默认为all
+  var scope = getScope();
+
+  // 对任何快捷键都需要做的处理
+  if (asterisk) {
+    for (var i = 0; i < asterisk.length; i++) {
+      if (asterisk[i].scope === scope) eventHandler(event, asterisk[i], scope);
+    }
+  }
+
+  // key 不在_handlers中返回
+  if (!(key in _handlers)) return;
+
+  for (var _i = 0; _i < _handlers[key].length; _i++) {
+    // 找到处理内容
+    eventHandler(event, _handlers[key][_i], scope);
+  }
+}
+
+function hotkeys(key, scope, method) {
+  var keys = getKeys(key); // 需要处理的快捷键列表
+  var mods = [];
+  var i = 0;
+
+  // 对为设定范围的判断
+  if (method === undefined) {
+    method = scope;
+    scope = 'all'; // scope默认为all，所有范围都有效
+  }
+
+  // 对于每个快捷键进行处理
+  for (; i < keys.length; i++) {
+    key = keys[i].split('+'); // 按键列表
+    mods = [];
+
+    // 如果是组合快捷键取得组合快捷键
+    if (key.length > 1) mods = getMods(_modifier, key);
+
+    // 将非修饰键转化为键码
+    key = key[key.length - 1];
+    key = key === '*' ? '*' : code(key); // *表示匹配所有快捷键
+
+    // 判断key是否在_handlers中，不在就赋一个空数组
+    if (!(key in _handlers)) _handlers[key] = [];
+
+    _handlers[key].push({
+      scope: scope,
+      mods: mods,
+      shortcut: keys[i],
+      method: method,
+      key: keys[i]
+    });
+  }
+}
+
+// 在全局document上设置快捷键
+if (typeof document !== 'undefined') {
+  addEvent(document, 'keydown', function (e) {
+    dispatch(e);
+  });
+  addEvent(document, 'keyup', function (e) {
+    clearModifier(e);
+  });
+}
+
+var _api = {
+  setScope: setScope,
+  getScope: getScope,
+  deleteScope: deleteScope,
+  getPressedKeyCodes: getPressedKeyCodes,
+  isPressed: isPressed,
+  filter: filter,
+  unbind: unbind
+};
+for (var a in _api) {
+  if (Object.prototype.hasOwnProperty.call(_api, a)) {
+    hotkeys[a] = _api[a];
+  }
+}
+
+if (typeof window !== 'undefined') {
+  var _hotkeys = window.hotkeys;
+  hotkeys.noConflict = function (deep) {
+    if (deep && window.hotkeys === hotkeys) {
+      window.hotkeys = _hotkeys;
+    }
+    return hotkeys;
+  };
+  window.hotkeys = hotkeys;
+}
+
+module.exports = hotkeys;
 
 
 /***/ })

@@ -7875,33 +7875,32 @@ function setAsSignedOut() {
      * if user already logged in, change icon to log out
      */
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("init", user => {
+      console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
-        console.log("user %s", userInfo.user_metadata.full_name);
         setAsSignedIn();
       }
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("login", login => {
+      console.log("user.on('login')");
       userInfo = login;
       setAsSignedIn();
 
       //reload page on sign in
-      location.reload();
+      //location.reload();
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("logout", () => {
+      console.log("user.logout()");
       setAsSignedOut();
-      //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
 
       //reload page on sign out
-      location.reload();
+      //location.reload();
     });
 
-    //user.on("error", () => console.error("Logged out"));
-    //user.on('open', () => console.log("Widget opened"));
-    //user.on('close', () => console.log("Widget closed"));
+    __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("error", err => console.error("user.on('error'): ", err));
 
     $(".login-menu-option").on("click", e => {
       e.preventDefault();
@@ -23524,6 +23523,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_hotkeys_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__audio_focus__ = __webpack_require__(334);
 /*
   Bookmarks --
 
@@ -23559,13 +23561,22 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 
 
 
+
+
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 const uiBookmarkToggle = ".bookmark-toggle";
 
+let audioPlayer = null;
+let focus = null;
+
 let gMaxId;
+
+function audioParagraphChange(pid) {
+  console.log("audioParagraphChange(%s)", pid);
+}
 
 function initBookmarkModal() {
   $(uiBookmarkModal).modal({
@@ -23644,7 +23655,7 @@ function makeAnnotationListItem(pid, annotation) {
   return `
     <div data-pid="${pid}" data-aid="${annotation.creationDate}" class="item">
       <div class="right floated content">
-        <div class="tiny ui button">Delete</div>
+        <div class="delete-annotation tiny ui button">Delete</div>
       </div>
       <i class="edit icon"></i>
       <div class="content">
@@ -23695,7 +23706,7 @@ function makeAnnotationList(pid) {
       $(".annotation.modal .annotation-list").html(list);
 
       //add listener to delete buttons
-      $(".annotation-list").on("click", "div.button", function () {
+      $(".annotation-list").on("click", "div.delete-annotation.button", function () {
         let el = $(this);
         let aid = el.parent().parent().data("aid");
         let pid = el.parent().parent().data("pid");
@@ -23853,11 +23864,31 @@ function addBookMarkers() {
     $("#topic-select").html(select);
 
     $(".annotation.ui.modal").modal({
+      autofocus: false,
       centered: true,
       duration: 400,
       inverted: true,
       observeChanges: true,
-      transition: "horizontal flip"
+      transition: "horizontal flip",
+      onVisible: function () {
+        __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default.a.setScope("annotation");
+        document.getElementById("rangeEnd").focus();
+
+        if (audioPlayer) {
+          if (audioPlayer.paused) {
+            //show play icon - this is default
+            $(".annotate-play").html("<i class='play icon'></i>Play");
+          } else {
+            //audio is playing, show pause icon
+            $(".annotate-play").html("<i class='pause icon'></i>Pause");
+          }
+        } else {
+          console.log("audioPlayer is null in Bookmark");
+        }
+      },
+      onHidden: function () {
+        __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default.a.deleteScope("annotation");
+      }
     });
 
     $("select.dropdown").dropdown();
@@ -23884,8 +23915,14 @@ function addBookMarkers() {
   });
 }
 
+__WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+n", "annotation", function (e, h) {
+  e.preventDefault();
+  console.log("triggering next");
+  $(".annotate-next-paragraph.button").trigger("click");
+});
+
 //add listener for next paragraph button on annotation modal
-$("div.annotate-next-paragraph.button").on("click", function (e) {
+$(".annotate-next-paragraph.button").on("click", function (e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -23898,6 +23935,11 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id + 1;
 
+    if (id >= gMaxId) {
+      //disable button
+      $(".annotate-next-paragraph.button").addClass("disabled");
+    }
+
     //gone past the last paragraph
     if (id > gMaxId) {
       return;
@@ -23907,8 +23949,8 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable prev button - it may or may not be disabled
+      $(".annotate-prev-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
@@ -23916,8 +23958,14 @@ $("div.annotate-next-paragraph.button").on("click", function (e) {
   }
 });
 
+__WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+p", "annotation", function (e, h) {
+  e.preventDefault();
+  console.log("triggering prev");
+  $(".annotate-prev-paragraph.button").trigger("click");
+});
+
 //add listener for prev paragraph button on annotation modal
-$("div.annotate-prev-paragraph.button").on("click", function (e) {
+$(".annotate-prev-paragraph.button").on("click", function (e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -23930,6 +23978,11 @@ $("div.annotate-prev-paragraph.button").on("click", function (e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id - 1;
 
+    if (id <= 0) {
+      //disable
+      $(".annotate-prev-paragraph.button").addClass("disabled");
+    }
+
     //gone past the first paragraph
     if (id < 0) {
       return;
@@ -23939,12 +23992,24 @@ $("div.annotate-prev-paragraph.button").on("click", function (e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable 'next' button, it may or may not be disabled
+      $(".annotate-next-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
     }
+  }
+});
+
+//setup audio play/pause listener
+$("button.annotate-play").on("click", function (e) {
+  e.preventDefault();
+  if (audioPlayer.paused) {
+    audioPlayer.play();
+    $(".annotate-play").html("<i class='pause icon'></i>Pause");
+  } else {
+    audioPlayer.pause();
+    $(".annotate-play").html("<i class='play icon'></i>Play");
   }
 });
 
@@ -23978,6 +24043,10 @@ $("#annotation-form").submit(e => {
       rangeStart: formValues.rangeStart,
       rangeEnd: formValues.rangeEnd
     });
+
+    //set focus on rangeEnd
+    document.getElementById("rangeEnd").focus();
+
     return;
   }
 
@@ -24010,11 +24079,14 @@ $("#annotation-form").submit(e => {
     //post the bookmark
     createAnnotaion(formValues);
 
-    //reset form values
+    //reset form values - so another annotation can be submitted
     form.form("set values", {
       rangeStart: formValues.rangeStart,
       rangeEnd: formValues.rangeEnd
     });
+
+    //set focus on rangeEnd
+    document.getElementById("rangeEnd").focus();
   }).catch(() => {
     throw new Error("error in removing duplicate topics");
   });
@@ -24061,8 +24133,19 @@ function createBookmarkToggle(selector) {
 
     //initialize bookmark list modal - available on all pages
     initBookmarkModal();
-  }
+  },
+  setAudioPlayer: function (player) {
+    //console.log("Bookmark.setAudioPlayer()");
+    audioPlayer = player;
 
+    //enable annotation modal play/pause button
+    $(".annotate-play").removeClass("disabled");
+
+    //ask to be notified for audio paragraph change
+    Object(__WEBPACK_IMPORTED_MODULE_5__audio_focus__["c" /* registerNotify */])(function (pid) {
+      console.log("audio paragraph change to: ", pid);
+    });
+  }
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
@@ -28425,9 +28508,892 @@ function getBookId() {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
 /***/ }),
-/* 334 */,
-/* 335 */,
-/* 336 */,
+/* 334 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["c"] = registerNotify;
+/* harmony export (immutable) */ __webpack_exports__["d"] = switchToParagraph;
+/* harmony export (immutable) */ __webpack_exports__["e"] = togglePlayFromHere;
+/* harmony export (immutable) */ __webpack_exports__["b"] = disableScroll;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex__ = __webpack_require__(335);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_map__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__capture__ = __webpack_require__(336);
+/*
+  highlight and scroll paragraph being spoken during audio playback
+
+  Supports:
+    play-from-here
+*/
+
+
+
+
+
+
+
+//paragraph timing array assigned on module initialization
+let timingData = null;
+let notifyParagraphChange = null;
+
+//capture.js can disable scroll is timing is enabled
+let scrollEnabled = true;
+
+class Ptr {
+  constructor(value = -1, pvalue = -1) {
+    this.val = value;
+    this.pval = pvalue; //previous ptr position
+  }
+
+  //get val
+  get ptrVal() {
+    return this.val;
+  }
+
+  //set val
+  set ptrVal(value) {
+    this.val = value;
+    //console.log("set ptr: %s", this.val);
+  }
+
+  //get previous val
+  get pVal() {
+    return this.pval;
+  }
+
+  //set previous val
+  set pVal(value) {
+    this.pval = value;
+    //console.log("set prevPtr: %s", this.pval);
+  }
+
+  //increment val
+  set inc(value = 1) {
+    this.val = this.val + value;
+    //console.log("inc ptr: %s", this.val);
+  }
+}
+
+//pointers to the current and previous paragraphs
+const ptr = new Ptr(-1, -1);
+
+let seeking = false;
+let ended = false;
+let player;
+
+function registerNotify(fn) {
+  notifyParagraphChange = fn;
+}
+
+/*
+ * init playFromHere
+ */
+function initializePlayFromHere() {
+  //initially hide playmark icon added next
+  $(".transcript.ui.text.container").addClass("hide-playmark");
+
+  // add 'play' markers to each paragraph
+  $("p.cmiTranPara").each(function () {
+    $(this).prepend("<i class='playmark play icon'></i>");
+  });
+
+  //create listener
+  $(".transcript.ui.text.container").on("click", "p.cmiTranPara > i.playmark.icon", function (e) {
+    e.preventDefault();
+    let el = $(this);
+    let id = el.parent().attr("id");
+
+    switchToParagraph(id);
+  });
+}
+
+/*
+  called by play-from-here event handlers
+*/
+function switchToParagraph(p) {
+  let time;
+  let idx;
+  //console.log("switchToParagraph: %s", p);
+  switch (p) {
+    case "NEXT":
+      if (ptr.val + 1 < timingData.length) {
+        time = getTime(ptr.val + 1);
+        adjustPlayPosition(ptr.val + 1);
+        player.setCurrentTime(time);
+      }
+      break;
+    case "PREV":
+      if (ptr.val - 1 >= 0) {
+        time = getTime(ptr.val - 1);
+        adjustPlayPosition(ptr.val - 1);
+        player.setCurrentTime(time);
+      }
+      break;
+    default:
+      idx = parseInt(p.substr(1), 10);
+      time = getTime(idx);
+
+      //set new playtime
+      if (time > -1) {
+        adjustPlayPosition(idx);
+        player.setCurrentTime(time);
+      }
+      break;
+  }
+}
+
+//remove highlighting from currently highlighted paragraph
+function removeCurrentHilight() {
+  if (ptr.pval > -1) {
+    $("#" + timingData[ptr.pval].id).removeClass("hilight");
+  }
+}
+
+/*
+ * Toggle display of play-from-here controls
+ */
+function togglePlayFromHere() {
+  let el = $(".transcript.ui.text.container");
+
+  if (el.hasClass("hide-playmark")) {
+    el.removeClass("hide-playmark");
+    return true;
+  } else {
+    el.addClass("hide-playmark");
+    return false;
+  }
+}
+
+//round audio timing data to two decimal places
+function round(time) {
+  return Math.round(time * 100) / 100;
+}
+
+function getIndex(time) {
+  let index = __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex___default()(timingData, o => {
+    //console.log(`findLastIndex: checking ${o.id}, ${o.seconds} <= ${time}`);
+    return o.seconds <= time;
+  });
+
+  //console.log("found: %s", index);
+  return index;
+}
+
+function getTime(idx) {
+  if (idx < 0 || idx >= timingData.length) {
+    return 60 * 60 * 24; //return a big number
+  } else {
+    //console.log("getTime(%s)", idx);
+    return timingData[idx].seconds;
+  }
+}
+
+function manageHiLight(current) {
+
+  //initial state of pointer is -1
+  if (ptr.val === -1 || current > getTime(ptr.val + 1)) {
+    ptr.inc = 1;
+    if (!seeking) {
+      showNscroll(ptr.val);
+    }
+  }
+}
+
+/*
+ * User seeked behind the current play position
+ * - adjust hilight accordingly
+ */
+function adjustPlayPosition(index) {
+  //console.log(`adjusting play position to: p${index}`)
+  ptr.val = index;
+  showNscroll(ptr.val);
+}
+
+function showNscroll(idx) {
+  var tinfo = timingData[idx];
+  //console.log("hilight transition at time %s to paragraph %s", current, tinfo.id);
+
+  //scroll into view
+  if (scrollEnabled) {
+    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(tinfo.id));
+  }
+
+  if (ptr.pval > -1) {
+    $("#" + timingData[ptr.pval].id).removeClass("hilight");
+  }
+
+  $("#" + tinfo.id).addClass("hilight");
+  ptr.pval = idx;
+
+  if (notifyParagraphChange) {
+    notifyParagraphChange(tinfo.id);
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+  /*
+    args:
+      timingDataUri: name of timing data to fetch
+      p: reference to the audio player
+      userStatus: when equal TIMER send timing data to capture.js
+  */
+  initialize: function (timingDataUri, p, userStatus) {
+    player = p;
+
+    //load the timing data
+    Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["a" /* fetchTimingData */])(timingDataUri).then(data => {
+
+      //round timing data to two decimal places
+      timingData = __WEBPACK_IMPORTED_MODULE_3_lodash_map___default()(data.time, function (value) {
+        value.seconds = round(value.seconds);
+        return value;
+      });
+
+      initializePlayFromHere();
+
+      if (userStatus === "TIMER") {
+        Object(__WEBPACK_IMPORTED_MODULE_4__capture__["b" /* setCaptureData */])(timingData);
+      }
+    }).catch(error => {
+      console.error("Failed to load timing data: %s, error: ", timingDataUri, error);
+    });
+  },
+
+  /*
+    This is called every 250ms from the audio player and used to adjust the
+    highlight whenever a new paragraph has started
+  */
+  setCurrentPlaybackTime: function (time) {
+    if (timingData) {
+      manageHiLight(round(time));
+    }
+  },
+
+  /*
+    called each time the play button is pressed
+  */
+  play: function () {
+
+    //if ended is true, the audio is being replayed
+    // - set pointers and flags to default values
+    if (ended) {
+      ptr.val = -1;
+      ptr.pval = -1;
+      seeking = false;
+      ended = false;
+      //console.log("audio restarting");
+    }
+  },
+
+  /* 
+    called each time the pause button is pressed
+  */
+  pause: function () {
+    //console.log("audio paused");
+  },
+
+  /*
+    When audio has ended we remove highlight from the last paragraph
+    and set the ended flag to true. We set the flag so the setSeeked() 
+    event, which is called when the audio ends, will exit the function
+    without action. If we don't do this, when the audio ends, the transcript
+    is scrolled to the top and the first paragraph highlighted.
+  */
+  ended: function () {
+    if (!timingData) {
+      return;
+    }
+    ended = true;
+    //console.log("play ended");
+
+    //remove hilight
+    removeCurrentHilight();
+  },
+
+  //seeking started
+  setSeeking: function () {
+    if (!timingData) {
+      return;
+    }
+    //disable hilight event handling
+    seeking = true;
+  },
+
+  /*
+    Seeking ended, adjust current paragraph and highlighting accordingly
+  */
+  setSeeked: function (time) {
+    if (!timingData) {
+      return;
+    }
+
+    seeking = false;
+
+    //setSeeked() is called when audio has ended. We don't want to 
+    //do anything in that case
+    if (ended) {
+      return;
+    }
+
+    var index = getIndex(round(time));
+
+    //console.log("seeked from %s to %s", ptr.val, index);
+    adjustPlayPosition(index);
+  }
+
+});
+
+/*
+  called by capture when capture of existing timing
+  is happening
+*/
+function disableScroll() {
+  scrollEnabled = false;
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
+
+/***/ }),
+/* 335 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseFindIndex = __webpack_require__(82),
+    baseIteratee = __webpack_require__(138),
+    toInteger = __webpack_require__(83);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * This method is like `_.findIndex` except that it iterates over elements
+ * of `collection` from right to left.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.0.0
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @param {Function} [predicate=_.identity] The function invoked per iteration.
+ * @param {number} [fromIndex=array.length-1] The index to search from.
+ * @returns {number} Returns the index of the found element, else `-1`.
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney',  'active': true },
+ *   { 'user': 'fred',    'active': false },
+ *   { 'user': 'pebbles', 'active': false }
+ * ];
+ *
+ * _.findLastIndex(users, function(o) { return o.user == 'pebbles'; });
+ * // => 2
+ *
+ * // The `_.matches` iteratee shorthand.
+ * _.findLastIndex(users, { 'user': 'barney', 'active': true });
+ * // => 0
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.findLastIndex(users, ['active', false]);
+ * // => 2
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.findLastIndex(users, 'active');
+ * // => 0
+ */
+function findLastIndex(array, predicate, fromIndex) {
+  var length = array == null ? 0 : array.length;
+  if (!length) {
+    return -1;
+  }
+  var index = length - 1;
+  if (fromIndex !== undefined) {
+    index = toInteger(fromIndex);
+    index = fromIndex < 0
+      ? nativeMax(length + index, 0)
+      : nativeMin(index, length - 1);
+  }
+  return baseFindIndex(array, baseIteratee(predicate, 3), index, true);
+}
+
+module.exports = findLastIndex;
+
+
+/***/ }),
+/* 336 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["b"] = setCaptureData;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__captureData__ = __webpack_require__(367);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_netlify__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_scroll_into_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__focus__ = __webpack_require__(334);
+/*
+ * 
+ * This allows the user to capture the audio playback time at the start of each
+ * paragraph. 
+ * 
+ * Each paragraph under .cmiTranPara, for transcripts containing audio and that have not yet
+ * been timed, have a bullseye icon inserted at the beginning. When audio is played, pressing
+ * the 'C' on the audio player displays the bullseye.
+ * 
+ * When clicked, the bullseye becomes a check mark indicating time has been captured. Whe clicked
+ * again the check mark becomes a bullseye. Data is stored in local storage while it is being 
+ * collected and can be restored if the timing session is interrupted before the data is submitted.
+ * 
+ * A bullseye is clicked when the audio is transitioning between paragrapsh - in the gap between
+ * the previous paragraph and before the current. When all paragraphs have been clicked and the audio
+ * ends, the timing submission form if displayed automatically. The user just submits the form and
+ * the timing data ends up being emailed to the recipient as configured with Netlify.
+ * 
+ * If the submit fails, the timing data is stored in local storage and the form is automatically
+ * displayed when the page is refreshed or returned to at a later time.
+ * 
+ * Requirements to capture
+ * 
+ * 1. be logged in with role of "timer"
+ * 2. the transcript is reserved for timing by the one logged in or not reserved
+ * 
+ */
+
+
+
+
+
+
+
+
+let captureData;
+let audioPlayer;
+
+let audioPlaying = false;
+let captureRequested = false;
+let captureId = "";
+let markerIcon = "bullseye";
+
+const uiTimeCaptureModal = ".timecapture.ui.modal";
+const uiModalOpacity = 0.5;
+
+let timingData = null;
+let haveTimingData = false;
+let editInitialized = false;
+
+/*
+  If we have timing data and we haven't initialized then
+  request confirmation from user they want to take timing.
+  If response is yes
+    initialize and
+    return true
+  if response is no
+    return false
+  
+  If we don't have timing data 
+    return true
+*/
+function initializeEdit() {
+  return new Promise((resolve, reject) => {
+    if (!haveTimingData) {
+      resolve(true);
+      return;
+    } else {
+      if (haveTimingData && editInitialized) {
+        resolve(true);
+        return;
+      }
+
+      //display modal
+      $(".time-edit-modal.ui.modal").modal({
+        dimmerSettings: { opacity: 0.5 },
+        closable: false,
+        onDeny: function () {
+          resolve(false);
+        },
+        onApprove: function () {
+          //check current timing has the correct number of data points
+          let noOfParagraphs = $("p.cmiTranPara").length;
+
+          if (noOfParagraphs !== timingData.length) {
+            __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.error("Unexpected number of data points in existing timing data, please inform Rick, Can't capture time until this is resolved.");
+            resolve(false);
+            return;
+          }
+
+          restoreState();
+
+          //disable scroll when timing enabled
+          Object(__WEBPACK_IMPORTED_MODULE_5__focus__["b" /* disableScroll */])();
+          editInitialized = true;
+          resolve(true);
+        }
+      }).modal("show");
+    }
+  });
+}
+
+/*
+  This function called from focus.js after timing data has been fetched and
+  the user is a TIMER. This allows user to modify existing timing data which
+  is sometimes needed due to previously inadequate job.
+*/
+function setCaptureData(data) {
+  //console.log("capture: timing data received");
+  timingData = data;
+}
+
+/*
+  save in-progress time capture data
+*/
+function captureProgress(operation) {
+  if (operation === "SAVE") {
+    __WEBPACK_IMPORTED_MODULE_2_store___default.a.set(`$captureData-${location.pathname}`, captureData.getData());
+  } else if (operation === "REMOVE") {
+    __WEBPACK_IMPORTED_MODULE_2_store___default.a.remove(`$captureData-${location.pathname}`);
+  }
+}
+
+/*
+ * Capture time for a given paragraph - programatically
+ */
+function autoCapture(o) {
+  captureRequested = true;
+  markParagraph(o);
+}
+
+/*
+  mark paragraphs during time collection. 
+
+  Initially the marker is a bullseye or clock, a clock is used when we have
+  timing data previously collected, otherwise we use a bullseye.
+
+  When a marker is clicked it becomes a 'check' to indicate time was collected. When
+  the 'check' is clicked the data point for that paragraph is deleted and the 
+  marker is set to a 'bullseye' to indicate we don't have a time point for the
+  paragraph. 
+*/
+function markParagraph(o) {
+  var pi = $("#" + o.id).children("i.timing");
+
+  //console.log("markParagraph: ");
+  if (!captureRequested) {
+    return;
+  }
+
+  //mark as captured
+  if (pi.hasClass(markerIcon)) {
+    pi.removeClass(markerIcon).addClass("check");
+    captureData.add(o);
+    captureProgress("SAVE");
+  } else if (pi.hasClass("bullseye")) {
+    pi.removeClass("bullseye").addClass("check");
+    captureData.add(o);
+    captureProgress("SAVE");
+  }
+  //user clicked a captured paragraph, mark for delete
+  else if (pi.hasClass("check")) {
+      pi.removeClass("check").addClass("bullseye");
+      captureData.remove(o);
+      captureProgress("SAVE");
+    }
+
+  captureRequested = false;
+}
+
+/*
+ * Time capture listener
+ * - listen for user click on bullseye or check mark and 
+ *   set captureRequested flag
+ */
+function createListener() {
+  //create listener
+  $(".transcript.ui.text.container").on("click", "p.cmiTranPara > i.timing.icon", function (e) {
+    e.preventDefault();
+
+    if (audioPlaying) {
+      captureRequested = true;
+      captureId = e.target.parentElement.id;
+    } else {
+      __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.info("Click is ignored when audio is not playing.");
+    }
+  });
+
+  //initialize time capture modal
+  $(uiTimeCaptureModal).modal({
+    dimmerSettings: { opacity: uiModalOpacity },
+    closable: false
+  });
+
+  //time submit form in modal window
+  $("#audio-data-form").submit(function (e) {
+    e.preventDefault();
+    //console.log("submit pressed");
+
+    let $form = $(this);
+    $.post($form.attr("action"), $form.serialize()).done(function () {
+      __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.success("Thank you! The data was submitted successfully.");
+      $(uiTimeCaptureModal).modal("hide");
+      toggleMarkers();
+    }).fail(function (e) {
+      __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.error("Sorry, submit failed.");
+      $("#audio-data-form .ui.message").addClass("negative").html(`<div class="header">Drat! Your submit failed.</div>
+           <p>To re-submit, try to refresh the page or return at a later time.
+           The data will not be lost. This form will be displayed the next
+           time you visit the page.</p>`);
+      $("#audio-form-submit").addClass("disabled");
+
+      //store data so we can submit later
+      __WEBPACK_IMPORTED_MODULE_2_store___default.a.set(`captureData-${location.pathname}`, captureData.getData());
+    });
+  });
+}
+
+/*
+ * if data submit previously failed it is stored in Application 
+ * local storage. If stored data is found try to submit the data
+ * again.
+ */
+function retrySubmit() {
+  let data = __WEBPACK_IMPORTED_MODULE_2_store___default.a.get(`captureData-${location.pathname}`);
+
+  if (data) {
+    //store.remove(`captureData-${location.pathname}`);
+
+    captureData.setData(data);
+    //console.log("timing data: ", data);
+    $("#captured-audio-data").html(JSON.stringify(data));
+
+    let userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
+
+    //if user logged in automatically fill in user info
+    if (userInfo) {
+      $("#captured-audio-name").val(userInfo.name);
+      $("#captured-audio-email").val(userInfo.email);
+    }
+    $(uiTimeCaptureModal).modal("show");
+
+    return true;
+  }
+
+  return false;
+}
+
+/*
+  Timing data is stored in local storage while timing is in progress. When
+  the page is initialized if partial data is found the timing session
+  is restored to where it left off.
+*/
+function recoverPartialSession() {
+  let data = __WEBPACK_IMPORTED_MODULE_2_store___default.a.get(`$captureData-${location.pathname}`);
+
+  if (data) {
+    __WEBPACK_IMPORTED_MODULE_2_store___default.a.remove(`$captureData-${location.pathname}`);
+
+    //record time and park paragraph as timed
+    for (let t in data.time) {
+      autoCapture(data.time[t]);
+    }
+
+    let lastParagraph = data.time[data.time.length - 1];
+    //console.log("last paragraph: ", lastParagraph);
+
+    //adjust audio play time to last timed paragraph
+    audioPlayer.setCurrentTime(lastParagraph.seconds);
+
+    __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.info("Partial audio capture data restored. You can continue timing where you left off.");
+
+    //scroll last timed paragraph into viewport
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(lastParagraph.id));
+
+    //indicate previous session was recovered
+    return true;
+  }
+
+  return false;
+}
+
+/*
+ * show or hide timing marker (bullseye) 
+ */
+function toggleMarkers() {
+  let el = $(".transcript.ui.text.container");
+  if (el.hasClass("hide-timing")) {
+    //do we need to initialize edit of existing timing data
+    //returns true if capture enabled
+    initializeEdit().then(response => {
+      if (response) {
+        el.removeClass("hide-timing");
+      }
+    });
+  } else {
+    el.addClass("hide-timing");
+  }
+}
+
+/*
+  recover from failed timing data submit or incomplete timing session
+  if present
+*/
+function restoreState() {
+  //no failed submit found check for partial timing session
+  if (!retrySubmit()) {
+
+    //if no partial session was found, just mark first paragraph as selected
+    if (!recoverPartialSession()) {
+      if (!haveTimingData) {
+        autoCapture({ id: "p0", seconds: 0 });
+      }
+    }
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+  /*
+    The timingData parameter is optional and used when the user is a TIMER and we have
+    timing data. In this case we load the timing data and allow the user to collect new
+    times
+  */
+  initialize: function (player, timingData) {
+
+    //if we support time capture and we already have timing data, mark paragraphs
+    //with a clock instead of the bullseye to indicate that we do have data
+    if (timingData) {
+      haveTimingData = true;
+      markerIcon = "clock";
+    }
+
+    captureData = new __WEBPACK_IMPORTED_MODULE_0__captureData__["a" /* default */](location.pathname);
+    captureData.setPlayer(player);
+
+    //save a local reference to the audio player
+    audioPlayer = player;
+
+    //initially hide capture (bullseye) icon
+    $(".transcript.ui.text.container").addClass("hide-timing");
+
+    //add bullseye or clock icon to each class without class 'omit'
+    $("p.cmiTranPara").each(function () {
+      $(this).prepend(`<i class='timing large circular red ${markerIcon} outline icon'></i>`);
+    });
+
+    //create time capture listeners
+    createListener();
+
+    //if we don't have timing data call restoreState() otherwise
+    //we receive timing data from setCaptureData() and call restoreState()
+    //from there after loading the data
+    if (!timingData) {
+      //check for failed submit or partial timing session
+      restoreState();
+    }
+  },
+
+  toggleMarkers: toggleMarkers,
+
+  play: function () {
+    audioPlaying = true;
+  },
+
+  pause: function () {
+    audioPlaying = false;
+  },
+
+  /*
+   * Audio playback ended. If times have been collected for all
+   * paragraphs (the bullseye clicked) then display the time capture
+   * modal dialog to send the data to Netlify
+   */
+  ended: function () {
+
+    audioPlaying = false;
+
+    //if data was not captured, return
+    if (haveTimingData && !editInitialized) {
+      return;
+    }
+    //if we don't have timingData and user, who is a TIMER, did not 
+    //capture time there will be one value in the timing array
+    else if (!haveTimingData && captureData.length() === 1) {
+        captureProgress("REMOVE");
+        return;
+      }
+
+    let newData = captureData.getData();
+
+    //we have previously collected timing data and the user
+    //has collected new data
+    //- merge the new into the old and submit that
+    if (editInitialized) {
+
+      //merge newData into existing timing data if the two arrays are different lengths
+      if (timingData.length !== newData.time.length) {
+        //assume newData.length < timingData.length
+        newData.time.forEach(o => {
+          //get paragraph id and convert it into number to index the timingData array
+          let idx = parseInt(o.id.substr(1), 10);
+
+          if (timingData[idx]) {
+            timingData[idx].prevTime = timingData[idx].seconds;
+            timingData[idx].seconds = o.seconds;
+          } else {
+            //don't expect this!!
+            o.somethingFunny = true;
+            timingData.push(o);
+          }
+        });
+
+        //assign merged data
+        newData.time = timingData;
+      } else {
+        //we just use the new data as is
+      }
+    }
+
+    //timing complete - remove capture in-progress data
+    captureProgress("REMOVE");
+
+    let pCount = $("p.cmiTranPara").length;
+    if (pCount !== newData.time.length) {
+      $("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+    }
+
+    //add timing data to form
+    $("#captured-audio-data").val(JSON.stringify(newData));
+    let userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
+
+    //if user logged in automatically fill in user info
+    if (userInfo) {
+      $("#captured-audio-name").val(userInfo.name);
+      $("#captured-audio-email").val(userInfo.email);
+      $(uiTimeCaptureModal).modal("show");
+    } else {
+      $(uiTimeCaptureModal).modal("show");
+    }
+  },
+
+  //the audio player calls this every 250ms with the
+  //current play time
+  setCurrentPlaybackTime: function (t) {
+    if (captureRequested) {
+      markParagraph({
+        id: captureId,
+        seconds: t
+      });
+    }
+  }
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
+
+/***/ }),
 /* 337 */,
 /* 338 */,
 /* 339 */,
@@ -28451,14 +29417,283 @@ function getBookId() {
 /* 357 */,
 /* 358 */,
 /* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */,
-/* 364 */,
-/* 365 */,
-/* 366 */,
-/* 367 */,
+/* 360 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayMap = __webpack_require__(84),
+    baseIteratee = __webpack_require__(138),
+    baseMap = __webpack_require__(361),
+    isArray = __webpack_require__(7);
+
+/**
+ * Creates an array of values by running each element in `collection` thru
+ * `iteratee`. The iteratee is invoked with three arguments:
+ * (value, index|key, collection).
+ *
+ * Many lodash methods are guarded to work as iteratees for methods like
+ * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
+ *
+ * The guarded methods are:
+ * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
+ * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
+ * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
+ * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ * @example
+ *
+ * function square(n) {
+ *   return n * n;
+ * }
+ *
+ * _.map([4, 8], square);
+ * // => [16, 64]
+ *
+ * _.map({ 'a': 4, 'b': 8 }, square);
+ * // => [16, 64] (iteration order is not guaranteed)
+ *
+ * var users = [
+ *   { 'user': 'barney' },
+ *   { 'user': 'fred' }
+ * ];
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.map(users, 'user');
+ * // => ['barney', 'fred']
+ */
+function map(collection, iteratee) {
+  var func = isArray(collection) ? arrayMap : baseMap;
+  return func(collection, baseIteratee(iteratee, 3));
+}
+
+module.exports = map;
+
+
+/***/ }),
+/* 361 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseEach = __webpack_require__(362),
+    isArrayLike = __webpack_require__(39);
+
+/**
+ * The base implementation of `_.map` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function baseMap(collection, iteratee) {
+  var index = -1,
+      result = isArrayLike(collection) ? Array(collection.length) : [];
+
+  baseEach(collection, function(value, key, collection) {
+    result[++index] = iteratee(value, key, collection);
+  });
+  return result;
+}
+
+module.exports = baseMap;
+
+
+/***/ }),
+/* 362 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseForOwn = __webpack_require__(363),
+    createBaseEach = __webpack_require__(366);
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
+
+
+/***/ }),
+/* 363 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseFor = __webpack_require__(364),
+    keys = __webpack_require__(29);
+
+/**
+ * The base implementation of `_.forOwn` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return object && baseFor(object, iteratee, keys);
+}
+
+module.exports = baseForOwn;
+
+
+/***/ }),
+/* 364 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var createBaseFor = __webpack_require__(365);
+
+/**
+ * The base implementation of `baseForOwn` which iterates over `object`
+ * properties returned by `keysFunc` and invokes `iteratee` for each property.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @returns {Object} Returns `object`.
+ */
+var baseFor = createBaseFor();
+
+module.exports = baseFor;
+
+
+/***/ }),
+/* 365 */
+/***/ (function(module, exports) {
+
+/**
+ * Creates a base function for methods like `_.forIn` and `_.forOwn`.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseFor(fromRight) {
+  return function(object, iteratee, keysFunc) {
+    var index = -1,
+        iterable = Object(object),
+        props = keysFunc(object),
+        length = props.length;
+
+    while (length--) {
+      var key = props[fromRight ? length : ++index];
+      if (iteratee(iterable[key], key, iterable) === false) {
+        break;
+      }
+    }
+    return object;
+  };
+}
+
+module.exports = createBaseFor;
+
+
+/***/ }),
+/* 366 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(39);
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    if (collection == null) {
+      return collection;
+    }
+    if (!isArrayLike(collection)) {
+      return eachFunc(collection, iteratee);
+    }
+    var length = collection.length,
+        index = fromRight ? length : -1,
+        iterable = Object(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+module.exports = createBaseEach;
+
+
+/***/ }),
+/* 367 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_findLastIndex__ = __webpack_require__(335);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_findLastIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_findLastIndex__);
+
+
+
+class CaptureData {
+
+  constructor(base) {
+    this.data = { base: base, time: [] };
+    this.player = null;
+  }
+
+  setPlayer(player) {
+    this.player = player;
+  }
+
+  setData(o) {
+    this.data = o;
+  }
+
+  //called when we already have timing data
+  setTimeArray(a) {
+    this.data.time = a;
+  }
+
+  add(o) {
+    this.data.time.push(o);
+    return this.data.time.length;
+  }
+
+  remove(o) {
+    let pos = __WEBPACK_IMPORTED_MODULE_0_lodash_findLastIndex___default()(this.data.time, { id: o.id });
+
+    if (pos === -1) {
+      return -1;
+    } else {
+      this.data.time.splice(pos, 1);
+      return this.data.time.length;
+    }
+  }
+
+  length() {
+    return this.data.time.length;
+  }
+
+  getData() {
+    return this.data;
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = CaptureData;
+
+
+/***/ }),
 /* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28512,6 +29747,446 @@ $(document).ready(() => {
   __WEBPACK_IMPORTED_MODULE_4__modules_contents_toc__["a" /* default */].initialize();
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
+
+/***/ }),
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(390);
+} else {
+  module.exports = __webpack_require__(391);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(81)))
+
+/***/ }),
+/* 390 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*! hotkeys-js v3.1.0 | MIT (c) 2018 kenny wong <wowohoo@qq.com> | https://github.com/jaywcjlove/hotkeys.git */
+var isff="undefined"!=typeof navigator&&0<navigator.userAgent.toLowerCase().indexOf("firefox");function addEvent(e,o,t){e.addEventListener?e.addEventListener(o,t,!1):e.attachEvent&&e.attachEvent("on"+o,function(){t(window.event)})}function getMods(e,o){for(var t=o.slice(0,o.length-1),n=0;n<t.length;n++)t[n]=e[t[n].toLowerCase()];return t}function getKeys(e){e||(e="");for(var o=(e=e.replace(/\s/g,"")).split(","),t=o.lastIndexOf("");0<=t;)o[t-1]+=",",o.splice(t,1),t=o.lastIndexOf("");return o}function compareArray(e,o){for(var t=e.length<o.length?o:e,n=e.length<o.length?e:o,r=!0,s=0;s<t.length;s++)-1===n.indexOf(t[s])&&(r=!1);return r}for(var _keyMap={backspace:8,tab:9,clear:12,enter:13,return:13,esc:27,escape:27,space:32,left:37,up:38,right:39,down:40,del:46,delete:46,ins:45,insert:45,home:36,end:35,pageup:33,pagedown:34,capslock:20,"\u21ea":20,",":188,".":190,"/":191,"`":192,"-":isff?173:189,"=":isff?61:187,";":isff?59:186,"'":222,"[":219,"]":221,"\\":220},_modifier={"\u21e7":16,shift:16,"\u2325":18,alt:18,option:18,"\u2303":17,ctrl:17,control:17,"\u2318":isff?224:91,cmd:isff?224:91,command:isff?224:91},_downKeys=[],modifierMap={16:"shiftKey",18:"altKey",17:"ctrlKey"},_mods={16:!1,18:!1,17:!1},_handlers={},k=1;k<20;k++)_keyMap["f"+k]=111+k;modifierMap[isff?224:91]="metaKey",_mods[isff?224:91]=!1;var _scope="all",code=function(e){return _keyMap[e.toLowerCase()]||e.toUpperCase().charCodeAt(0)};function setScope(e){_scope=e||"all"}function getScope(){return _scope||"all"}function getPressedKeyCodes(){return _downKeys.slice(0)}function filter(e){var o=e.target.tagName||e.srcElement.tagName;return!("INPUT"===o||"SELECT"===o||"TEXTAREA"===o)}function isPressed(e){return"string"==typeof e&&(e=code(e)),-1!==_downKeys.indexOf(e)}function deleteScope(e,o){var t=void 0,n=void 0;for(var r in e||(e=getScope()),_handlers)if(Object.prototype.hasOwnProperty.call(_handlers,r))for(t=_handlers[r],n=0;n<t.length;)t[n].scope===e?t.splice(n,1):n++;getScope()===e&&setScope(o||"all")}function clearModifier(e){var o=_downKeys.indexOf(t),t=e.keyCode||e.which||e.charCode;if(o<0||_downKeys.splice(o,1),93!==t&&224!==t||(t=91),t in _mods)for(var n in _mods[t]=!1,_modifier)_modifier[n]===t&&(hotkeys[n]=!1)}function unbind(e,o){for(var t=getKeys(e),n=void 0,r=[],s=void 0,d=0;d<t.length;d++){if(1<(n=t[d].split("+")).length&&(r=getMods(_modifier,n)),e="*"===(e=n[n.length-1])?"*":code(e),o||(o=getScope()),!_handlers[e])return;for(var i=0;i<_handlers[e].length;i++)(s=_handlers[e][i]).scope===o&&compareArray(s.mods,r)&&(_handlers[e][i]={})}}function eventHandler(e,o,t){var n=void 0;if(o.scope===t||"all"===o.scope){for(var r in n=0<o.mods.length,_mods)Object.prototype.hasOwnProperty.call(_mods,r)&&(!_mods[r]&&-1<o.mods.indexOf(+r)||_mods[r]&&-1===o.mods.indexOf(+r))&&(n=!1);(0!==o.mods.length||_mods[16]||_mods[18]||_mods[17]||_mods[91])&&!n&&"*"!==o.shortcut||!1===o.method(e,o)&&(e.preventDefault?e.preventDefault():e.returnValue=!1,e.stopPropagation&&e.stopPropagation(),e.cancelBubble&&(e.cancelBubble=!0))}}function dispatch(e){var o=_handlers["*"],t=e.keyCode||e.which||e.charCode;if(-1===_downKeys.indexOf(t)&&_downKeys.push(t),93!==t&&224!==t||(t=91),t in _mods){for(var n in _mods[t]=!0,_modifier)_modifier[n]===t&&(hotkeys[n]=!0);if(!o)return}for(var r in _mods)Object.prototype.hasOwnProperty.call(_mods,r)&&(_mods[r]=e[modifierMap[r]]);if(hotkeys.filter.call(this,e)){var s=getScope();if(o)for(var d=0;d<o.length;d++)o[d].scope===s&&eventHandler(e,o[d],s);if(t in _handlers)for(var i=0;i<_handlers[t].length;i++)eventHandler(e,_handlers[t][i],s)}}function hotkeys(e,o,t){var n=getKeys(e),r=[],s=0;for(void 0===t&&(t=o,o="all");s<n.length;s++)r=[],1<(e=n[s].split("+")).length&&(r=getMods(_modifier,e)),(e="*"===(e=e[e.length-1])?"*":code(e))in _handlers||(_handlers[e]=[]),_handlers[e].push({scope:o,mods:r,shortcut:n[s],method:t,key:n[s]})}"undefined"!=typeof document&&(addEvent(document,"keydown",function(e){dispatch(e)}),addEvent(document,"keyup",function(e){clearModifier(e)}));var _api={setScope:setScope,getScope:getScope,deleteScope:deleteScope,getPressedKeyCodes:getPressedKeyCodes,isPressed:isPressed,filter:filter,unbind:unbind};for(var a in _api)Object.prototype.hasOwnProperty.call(_api,a)&&(hotkeys[a]=_api[a]);if("undefined"!=typeof window){var _hotkeys=window.hotkeys;hotkeys.noConflict=function(e){return e&&window.hotkeys===hotkeys&&(window.hotkeys=_hotkeys),hotkeys},window.hotkeys=hotkeys}module.exports=hotkeys;
+
+/***/ }),
+/* 391 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * hotkeys-js v3.1.0
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies.
+ * 
+ * Copyright (c) 2018 kenny wong <wowohoo@qq.com>
+ * https://github.com/jaywcjlove/hotkeys.git
+ * 
+ * Licensed under the MIT license.
+ */
+
+
+
+var isff = typeof navigator !== 'undefined' ? navigator.userAgent.toLowerCase().indexOf('firefox') > 0 : false;
+
+// 绑定事件
+function addEvent(object, event, method) {
+  if (object.addEventListener) {
+    object.addEventListener(event, method, false);
+  } else if (object.attachEvent) {
+    object.attachEvent('on' + event, function () {
+      method(window.event);
+    });
+  }
+}
+
+// 修饰键转换成对应的键码
+function getMods(modifier, key) {
+  var mods = key.slice(0, key.length - 1);
+  for (var i = 0; i < mods.length; i++) {
+    mods[i] = modifier[mods[i].toLowerCase()];
+  }return mods;
+}
+
+// 处理传的key字符串转换成数组
+function getKeys(key) {
+  if (!key) key = '';
+
+  key = key.replace(/\s/g, ''); // 匹配任何空白字符,包括空格、制表符、换页符等等
+  var keys = key.split(','); // 同时设置多个快捷键，以','分割
+  var index = keys.lastIndexOf('');
+
+  // 快捷键可能包含','，需特殊处理
+  for (; index >= 0;) {
+    keys[index - 1] += ',';
+    keys.splice(index, 1);
+    index = keys.lastIndexOf('');
+  }
+
+  return keys;
+}
+
+// 比较修饰键的数组
+function compareArray(a1, a2) {
+  var arr1 = a1.length >= a2.length ? a1 : a2;
+  var arr2 = a1.length >= a2.length ? a2 : a1;
+  var isIndex = true;
+
+  for (var i = 0; i < arr1.length; i++) {
+    if (arr2.indexOf(arr1[i]) === -1) isIndex = false;
+  }
+  return isIndex;
+}
+
+var _keyMap = { // 特殊键
+  backspace: 8,
+  tab: 9,
+  clear: 12,
+  enter: 13,
+  return: 13,
+  esc: 27,
+  escape: 27,
+  space: 32,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+  del: 46,
+  delete: 46,
+  ins: 45,
+  insert: 45,
+  home: 36,
+  end: 35,
+  pageup: 33,
+  pagedown: 34,
+  capslock: 20,
+  '⇪': 20,
+  ',': 188,
+  '.': 190,
+  '/': 191,
+  '`': 192,
+  '-': isff ? 173 : 189,
+  '=': isff ? 61 : 187,
+  ';': isff ? 59 : 186,
+  '\'': 222,
+  '[': 219,
+  ']': 221,
+  '\\': 220
+};
+
+var _modifier = { // 修饰键
+  '⇧': 16,
+  shift: 16,
+  '⌥': 18,
+  alt: 18,
+  option: 18,
+  '⌃': 17,
+  ctrl: 17,
+  control: 17,
+  '⌘': isff ? 224 : 91,
+  cmd: isff ? 224 : 91,
+  command: isff ? 224 : 91
+};
+var _downKeys = []; // 记录摁下的绑定键
+var modifierMap = {
+  16: 'shiftKey',
+  18: 'altKey',
+  17: 'ctrlKey'
+};
+var _mods = { 16: false, 18: false, 17: false };
+var _handlers = {};
+
+// F1~F12 特殊键
+for (var k = 1; k < 20; k++) {
+  _keyMap['f' + k] = 111 + k;
+}
+
+// 兼容Firefox处理
+modifierMap[isff ? 224 : 91] = 'metaKey';
+_mods[isff ? 224 : 91] = false;
+
+var _scope = 'all'; // 默认热键范围
+// 返回键码
+var code = function code(x) {
+  return _keyMap[x.toLowerCase()] || x.toUpperCase().charCodeAt(0);
+};
+
+// 设置获取当前范围（默认为'所有'）
+function setScope(scope) {
+  _scope = scope || 'all';
+}
+// 获取当前范围
+function getScope() {
+  return _scope || 'all';
+}
+// 获取摁下绑定键的键值
+function getPressedKeyCodes() {
+  return _downKeys.slice(0);
+}
+
+// 表单控件控件判断 返回 Boolean
+function filter(event) {
+  var tagName = event.target.tagName || event.srcElement.tagName;
+  // 忽略这些标签情况下快捷键无效
+  return !(tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA');
+}
+
+// 判断摁下的键是否为某个键，返回true或者false
+function isPressed(keyCode) {
+  if (typeof keyCode === 'string') {
+    keyCode = code(keyCode); // 转换成键码
+  }
+
+  return _downKeys.indexOf(keyCode) !== -1;
+}
+
+// 循环删除handlers中的所有 scope(范围)
+function deleteScope(scope, newScope) {
+  var handlers = void 0;
+  var i = void 0;
+
+  // 没有指定scope，获取scope
+  if (!scope) scope = getScope();
+
+  for (var key in _handlers) {
+    if (Object.prototype.hasOwnProperty.call(_handlers, key)) {
+      handlers = _handlers[key];
+      for (i = 0; i < handlers.length;) {
+        if (handlers[i].scope === scope) handlers.splice(i, 1);else i++;
+      }
+    }
+  }
+
+  // 如果scope被删除，将scope重置为all
+  if (getScope() === scope) setScope(newScope || 'all');
+}
+
+// 清除修饰键
+function clearModifier(event) {
+  var i = _downKeys.indexOf(key);
+  var key = event.keyCode || event.which || event.charCode;
+
+  // 从列表中清除按压过的键
+  if (i >= 0) _downKeys.splice(i, 1);
+
+  // 修饰键 shiftKey altKey ctrlKey (command||metaKey) 清除
+  if (key === 93 || key === 224) key = 91;
+  if (key in _mods) {
+    _mods[key] = false;
+
+    // 将修饰键重置为false
+    for (var k in _modifier) {
+      if (_modifier[k] === key) hotkeys[k] = false;
+    }
+  }
+}
+
+// 解除绑定某个范围的快捷键
+function unbind(key, scope) {
+  var multipleKeys = getKeys(key);
+  var keys = void 0;
+  var mods = [];
+  var obj = void 0;
+
+  for (var i = 0; i < multipleKeys.length; i++) {
+    // 将组合快捷键拆分为数组
+    keys = multipleKeys[i].split('+');
+
+    // 记录每个组合键中的修饰键的键码 返回数组
+    if (keys.length > 1) mods = getMods(_modifier, keys);
+
+    // 获取除修饰键外的键值key
+    key = keys[keys.length - 1];
+    key = key === '*' ? '*' : code(key);
+
+    // 判断是否传入范围，没有就获取范围
+    if (!scope) scope = getScope();
+
+    // 如何key不在 _handlers 中返回不做处理
+    if (!_handlers[key]) return;
+
+    // 清空 handlers 中数据，
+    // 让触发快捷键键之后没有事件执行到达解除快捷键绑定的目的
+    for (var r = 0; r < _handlers[key].length; r++) {
+      obj = _handlers[key][r];
+      // 判断是否在范围内并且键值相同
+      if (obj.scope === scope && compareArray(obj.mods, mods)) {
+        _handlers[key][r] = {};
+      }
+    }
+  }
+}
+
+// 对监听对应快捷键的回调函数进行处理
+function eventHandler(event, handler, scope) {
+  var modifiersMatch = void 0;
+
+  // 看它是否在当前范围
+  if (handler.scope === scope || handler.scope === 'all') {
+    // 检查是否匹配修饰符（如果有返回true）
+    modifiersMatch = handler.mods.length > 0;
+
+    for (var y in _mods) {
+      if (Object.prototype.hasOwnProperty.call(_mods, y)) {
+        if (!_mods[y] && handler.mods.indexOf(+y) > -1 || _mods[y] && handler.mods.indexOf(+y) === -1) modifiersMatch = false;
+      }
+    }
+
+    // 调用处理程序，如果是修饰键不做处理
+    if (handler.mods.length === 0 && !_mods[16] && !_mods[18] && !_mods[17] && !_mods[91] || modifiersMatch || handler.shortcut === '*') {
+      if (handler.method(event, handler) === false) {
+        if (event.preventDefault) event.preventDefault();else event.returnValue = false;
+        if (event.stopPropagation) event.stopPropagation();
+        if (event.cancelBubble) event.cancelBubble = true;
+      }
+    }
+  }
+}
+
+// 处理keydown事件
+function dispatch(event) {
+  var asterisk = _handlers['*'];
+  var key = event.keyCode || event.which || event.charCode;
+
+  // 搜集绑定的键
+  if (_downKeys.indexOf(key) === -1) _downKeys.push(key);
+
+  // Gecko(Firefox)的command键值224，在Webkit(Chrome)中保持一致
+  // Webkit左右command键值不一样
+  if (key === 93 || key === 224) key = 91;
+
+  if (key in _mods) {
+    _mods[key] = true;
+
+    // 将特殊字符的key注册到 hotkeys 上
+    for (var k in _modifier) {
+      if (_modifier[k] === key) hotkeys[k] = true;
+    }
+
+    if (!asterisk) return;
+  }
+
+  // 将modifierMap里面的修饰键绑定到event中
+  for (var e in _mods) {
+    if (Object.prototype.hasOwnProperty.call(_mods, e)) {
+      _mods[e] = event[modifierMap[e]];
+    }
+  }
+
+  // 表单控件过滤 默认表单控件不触发快捷键
+  if (!hotkeys.filter.call(this, event)) return;
+
+  // 获取范围 默认为all
+  var scope = getScope();
+
+  // 对任何快捷键都需要做的处理
+  if (asterisk) {
+    for (var i = 0; i < asterisk.length; i++) {
+      if (asterisk[i].scope === scope) eventHandler(event, asterisk[i], scope);
+    }
+  }
+
+  // key 不在_handlers中返回
+  if (!(key in _handlers)) return;
+
+  for (var _i = 0; _i < _handlers[key].length; _i++) {
+    // 找到处理内容
+    eventHandler(event, _handlers[key][_i], scope);
+  }
+}
+
+function hotkeys(key, scope, method) {
+  var keys = getKeys(key); // 需要处理的快捷键列表
+  var mods = [];
+  var i = 0;
+
+  // 对为设定范围的判断
+  if (method === undefined) {
+    method = scope;
+    scope = 'all'; // scope默认为all，所有范围都有效
+  }
+
+  // 对于每个快捷键进行处理
+  for (; i < keys.length; i++) {
+    key = keys[i].split('+'); // 按键列表
+    mods = [];
+
+    // 如果是组合快捷键取得组合快捷键
+    if (key.length > 1) mods = getMods(_modifier, key);
+
+    // 将非修饰键转化为键码
+    key = key[key.length - 1];
+    key = key === '*' ? '*' : code(key); // *表示匹配所有快捷键
+
+    // 判断key是否在_handlers中，不在就赋一个空数组
+    if (!(key in _handlers)) _handlers[key] = [];
+
+    _handlers[key].push({
+      scope: scope,
+      mods: mods,
+      shortcut: keys[i],
+      method: method,
+      key: keys[i]
+    });
+  }
+}
+
+// 在全局document上设置快捷键
+if (typeof document !== 'undefined') {
+  addEvent(document, 'keydown', function (e) {
+    dispatch(e);
+  });
+  addEvent(document, 'keyup', function (e) {
+    clearModifier(e);
+  });
+}
+
+var _api = {
+  setScope: setScope,
+  getScope: getScope,
+  deleteScope: deleteScope,
+  getPressedKeyCodes: getPressedKeyCodes,
+  isPressed: isPressed,
+  filter: filter,
+  unbind: unbind
+};
+for (var a in _api) {
+  if (Object.prototype.hasOwnProperty.call(_api, a)) {
+    hotkeys[a] = _api[a];
+  }
+}
+
+if (typeof window !== 'undefined') {
+  var _hotkeys = window.hotkeys;
+  hotkeys.noConflict = function (deep) {
+    if (deep && window.hotkeys === hotkeys) {
+      window.hotkeys = _hotkeys;
+    }
+    return hotkeys;
+  };
+  window.hotkeys = hotkeys;
+}
+
+module.exports = hotkeys;
+
 
 /***/ })
 /******/ ]);

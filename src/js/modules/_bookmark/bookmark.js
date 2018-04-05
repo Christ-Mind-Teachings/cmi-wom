@@ -32,6 +32,8 @@ import net  from "./bmnet";
 import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
+import hotKeys from "hotkeys-js";
+import {registerNotify} from "../_audio/focus";
 
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -39,7 +41,14 @@ const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 const uiBookmarkToggle = ".bookmark-toggle";
 
+let audioPlayer = null;
+let focus = null;
+
 let gMaxId;
+
+function audioParagraphChange(pid) {
+  console.log("audioParagraphChange(%s)", pid);
+}
 
 function initBookmarkModal() {
   $(uiBookmarkModal).modal({
@@ -121,7 +130,7 @@ function makeAnnotationListItem(pid, annotation) {
   return `
     <div data-pid="${pid}" data-aid="${annotation.creationDate}" class="item">
       <div class="right floated content">
-        <div class="tiny ui button">Delete</div>
+        <div class="delete-annotation tiny ui button">Delete</div>
       </div>
       <i class="edit icon"></i>
       <div class="content">
@@ -173,7 +182,7 @@ function makeAnnotationList(pid) {
         $(".annotation.modal .annotation-list").html(list);
 
         //add listener to delete buttons
-        $(".annotation-list").on("click","div.button", function() {
+        $(".annotation-list").on("click","div.delete-annotation.button", function() {
           let el = $(this);
           let aid = el.parent().parent().data("aid");
           let pid = el.parent().parent().data("pid");
@@ -337,11 +346,33 @@ function addBookMarkers() {
 
       $(".annotation.ui.modal")
         .modal({
+          autofocus: false,
           centered: true,
           duration: 400,
           inverted: true,
           observeChanges: true,
-          transition: "horizontal flip"
+          transition: "horizontal flip",
+          onVisible: function() {
+            hotKeys.setScope("annotation");
+            document.getElementById("rangeEnd").focus();
+
+            if (audioPlayer) {
+              if (audioPlayer.paused) {
+                //show play icon - this is default
+                $(".annotate-play").html("<i class='play icon'></i>Play");
+              }
+              else {
+                //audio is playing, show pause icon
+                $(".annotate-play").html("<i class='pause icon'></i>Pause");
+              }
+            }
+            else {
+              console.log("audioPlayer is null in Bookmark");
+            }
+          },
+          onHidden: function() {
+            hotKeys.deleteScope("annotation");
+          }
         });
 
       $("select.dropdown").dropdown();
@@ -369,8 +400,14 @@ function addBookMarkers() {
     });
 }
 
+hotKeys("ctrl+n", "annotation", function(e, h) {
+  e.preventDefault();
+  console.log("triggering next");
+  $(".annotate-next-paragraph.button").trigger("click");
+});
+
 //add listener for next paragraph button on annotation modal
-$("div.annotate-next-paragraph.button").on("click", function(e) {
+$(".annotate-next-paragraph.button").on("click", function(e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -383,6 +420,11 @@ $("div.annotate-next-paragraph.button").on("click", function(e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id + 1;
 
+    if (id >= gMaxId) {
+      //disable button
+      $(".annotate-next-paragraph.button").addClass("disabled");
+    }
+
     //gone past the last paragraph
     if (id > gMaxId) {
       return;
@@ -392,18 +434,23 @@ $("div.annotate-next-paragraph.button").on("click", function(e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable prev button - it may or may not be disabled
+      $(".annotate-prev-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
     }
   }
+});
 
+hotKeys("ctrl+p", "annotation", function(e, h) {
+  e.preventDefault();
+  console.log("triggering prev");
+  $(".annotate-prev-paragraph.button").trigger("click");
 });
 
 //add listener for prev paragraph button on annotation modal
-$("div.annotate-prev-paragraph.button").on("click", function(e) {
+$(".annotate-prev-paragraph.button").on("click", function(e) {
   e.stopPropagation();
   let form = $("#annotation-form");
   let formValues = form.form("get values");
@@ -416,6 +463,11 @@ $("div.annotate-prev-paragraph.button").on("click", function(e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id - 1;
 
+    if (id <= 0) {
+      //disable
+      $(".annotate-prev-paragraph.button").addClass("disabled");
+    }
+
     //gone past the first paragraph
     if (id < 0) {
       return;
@@ -425,12 +477,25 @@ $("div.annotate-prev-paragraph.button").on("click", function(e) {
     if ($(`#p${id}`).length === 1) {
       stillLooking = false;
 
-      //hide modal
-      //$(".annotation.ui.modal").modal("hide");
+      //enable 'next' button, it may or may not be disabled
+      $(".annotate-next-paragraph.button").removeClass("disabled");
 
       //trigger click of previous bookmark
       $(`#p${id} > i.bookmark.icon`).trigger("click");
     }
+  }
+});
+
+//setup audio play/pause listener
+$("button.annotate-play").on("click", function(e) {
+  e.preventDefault();
+  if (audioPlayer.paused) {
+    audioPlayer.play();
+    $(".annotate-play").html("<i class='pause icon'></i>Pause");
+  }
+  else {
+    audioPlayer.pause();
+    $(".annotate-play").html("<i class='play icon'></i>Play");
   }
 });
 
@@ -464,6 +529,10 @@ $("#annotation-form").submit((e) => {
       rangeStart: formValues.rangeStart,
       rangeEnd: formValues.rangeEnd
     });
+
+    //set focus on rangeEnd
+    document.getElementById("rangeEnd").focus();
+
     return;
   }
 
@@ -497,11 +566,14 @@ $("#annotation-form").submit((e) => {
       //post the bookmark
       createAnnotaion(formValues);
   
-      //reset form values
+      //reset form values - so another annotation can be submitted
       form.form("set values", {
         rangeStart: formValues.rangeStart,
         rangeEnd: formValues.rangeEnd
       });
+
+      //set focus on rangeEnd
+      document.getElementById("rangeEnd").focus();
     })
     .catch(() => {
       throw new Error("error in removing duplicate topics");
@@ -552,6 +624,17 @@ export default {
 
     //initialize bookmark list modal - available on all pages
     initBookmarkModal();
-  }
+  },
+  setAudioPlayer: function(player) {
+    //console.log("Bookmark.setAudioPlayer()");
+    audioPlayer = player;
 
+    //enable annotation modal play/pause button
+    $(".annotate-play").removeClass("disabled");
+
+    //ask to be notified for audio paragraph change
+    registerNotify(function(pid) {
+      console.log("audio paragraph change to: ", pid);
+    });
+  }
 };

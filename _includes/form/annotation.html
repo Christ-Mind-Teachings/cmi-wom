@@ -6,11 +6,11 @@ usage: {% include form/annotation.html %}
   <div class="fields">
     <div class="three wide field">
       <label>Start</label>
-      <input type="text" readonly="" name="rangeStart" maxlength="4" placeholder="Start">
+      <input tabindex="-1" type="text" readonly="" name="rangeStart" maxlength="4" placeholder="Start">
     </div>
     <div class="three wide field">
       <label>End</label>
-      <input tabindex="0" type="text" name="rangeEnd" maxlength="4" placeholder="End">
+      <input id="rangeEnd" type="text" name="rangeEnd" maxlength="4" placeholder="End">
     </div>
     <div id="topic-select" class="ten wide field">
     </div>

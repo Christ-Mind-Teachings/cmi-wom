@@ -13,6 +13,7 @@ import {setCaptureData} from "./capture";
 
 //paragraph timing array assigned on module initialization
 let timingData = null;
+let notifyParagraphChange = null;
 
 //capture.js can disable scroll is timing is enabled
 let scrollEnabled = true;
@@ -58,6 +59,10 @@ const ptr = new Ptr(-1, -1);
 let seeking = false;
 let ended = false;
 let player;
+
+export function registerNotify(fn) {
+  notifyParagraphChange = fn;
+}
 
 /*
  * init playFromHere
@@ -200,6 +205,10 @@ function showNscroll(idx) {
 
   $("#" + tinfo.id).addClass("hilight");
   ptr.pval = idx;
+
+  if (notifyParagraphChange) {
+    notifyParagraphChange(tinfo.id);
+  }
 }
 
 export default {
@@ -216,7 +225,6 @@ export default {
     //load the timing data
     fetchTimingData(timingDataUri)
       .then((data) => {
-        //console.log("timing data loaded");
 
         //round timing data to two decimal places
         timingData = _map(data.time, function(value) {

@@ -106,7 +106,7 @@ $(document).ready(() => {
     .then((source) => {
       console.log(source);
       toc.initialize();
-      audio.initialize();
+      audio.initialize(bookmark);
       showParagraph();
     })
     .catch((error) => {

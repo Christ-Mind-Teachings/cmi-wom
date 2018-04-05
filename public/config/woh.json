@@ -7,7 +7,7 @@
       "title": "Lesson One",
       "url": "/woh/l01/",
       "audio": "/woh/L01.mp3",
-      "xtiming": "/woh/l01.json",
+      "timing": "/woh/l01.json",
       "timer": "julief8@me.com",
       "questions": [
         {
@@ -60,7 +60,7 @@
       "title": "Lesson Four",
       "url": "/woh/l04/",
       "audio": "/woh/L04.mp3",
-      "timing": "l04.json"
+      "timing": "/woh/l04.json"
     },
     {
       "title": "Lesson Five",

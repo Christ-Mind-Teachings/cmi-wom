@@ -106,33 +106,32 @@ export default {
      * if user already logged in, change icon to log out
      */
     user.on("init", user => {
+      console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
-        console.log("user %s", userInfo.user_metadata.full_name);
         setAsSignedIn();
       }
     });
 
     user.on("login", login => {
+      console.log("user.on('login')");
       userInfo = login;
       setAsSignedIn();
 
       //reload page on sign in
-      location.reload();
+      //location.reload();
     });
 
     user.on("logout", () => {
+      console.log("user.logout()");
       setAsSignedOut();
-      //console.log("logout: %s", userInfo.user_metadata.full_name );
       userInfo = null;
 
       //reload page on sign out
-      location.reload();
+      //location.reload();
     });
 
-    //user.on("error", () => console.error("Logged out"));
-    //user.on('open', () => console.log("Widget opened"));
-    //user.on('close', () => console.log("Widget closed"));
+    user.on("error", (err) => console.error("user.on('error'): ", err));
 
     $(".login-menu-option").on("click", (e) => {
       e.preventDefault();
