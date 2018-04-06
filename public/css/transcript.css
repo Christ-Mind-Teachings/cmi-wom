@@ -45,6 +45,11 @@
   display: none;
 }
 
+.progress-bar.hide-progress-bar,
+.annotation-form.hide-form {
+  display: none;
+}
+
 .mejs__ptoggle.mejs-ptoggle-visible > button {
   background-color: red; 
 }

@@ -33,7 +33,7 @@ import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
 import hotKeys from "hotkeys-js";
-import {registerNotify} from "../_audio/focus";
+import {registerNotifyPlaybackTime, getCurrentParagraph, registerNotify} from "../_audio/focus";
 
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -45,9 +45,62 @@ let audioPlayer = null;
 let focus = null;
 
 let gMaxId;
+let gMinId;
+let gFollowing = false;
+let gCurrentStartTime = 0;
+let gProgressState = 0;  //not initialized
 
-function audioParagraphChange(pid) {
-  console.log("audioParagraphChange(%s)", pid);
+function showAudioPlayer() {
+  if ($(".audio-player-wrapper").hasClass("hide")) {
+    $(".audio-player-wrapper").removeClass("hide");
+  }
+}
+
+/*
+  This updates the annotation modal dialog when it's visible to keep
+  up with audio as it is playing.
+
+  When there is a transition to a new paragraph the modal will reflect 
+  the change
+*/
+function autoFollow(info) {
+  if (!gFollowing) {
+    return;
+  }
+
+  $("button.annotate-follow").html(`Following: ${info.pid}`);
+
+  gCurrentStartTime = info.startTime;
+  const totalTime = info.nextStartTime - info.startTime;
+  console.log("progress total time: ", totalTime);
+
+  //setup progress indicator
+  $("#paragraph-progress").progress({total: totalTime});
+  gProgressState = 1; //initialized
+
+  //trigger paragraph change in annotation modal
+  $(`#${info.pid} > i.bookmark.icon`).trigger("click");
+}
+
+/*
+  update paragraph progress bar in annotation modal
+*/
+function updateProgress(time) {
+  if (!gFollowing) {
+    return;
+  }
+
+  //return if progress indicator hasn't been initialized
+  if (gProgressState === 0) {
+    return;
+  }
+
+  let current = time - gCurrentStartTime;
+
+  //setup progress indicator
+  $("#paragraph-progress").progress("set progress", current);
+
+  //let complete = $("#paragraph-progress").progress("is complete");
 }
 
 function initBookmarkModal() {
@@ -139,16 +192,11 @@ function makeAnnotationListItem(pid, annotation) {
       </div>
     </div>
   `;
-}
+}   
 
 //Divides annotation list from annotation form in bookmark modal
 function addAnnotationDivider() {
-  return `
-    <h4 class="ui horizontal divider header">
-      <i class="edit icon"></i>
-      Annotation
-    </h4>
-  `;
+  return ``;
 }
 
 /*
@@ -224,7 +272,7 @@ function makeAnnotationList(pid) {
       //add selected paragraph to modal dialog
       let paragraph = $(`#${pid}`).text();
       $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
-      $(".annotation.ui.modal") .modal("show"); 
+      $(".annotation.ui.modal").modal("show"); 
   
     })
     .catch((err) => {
@@ -271,22 +319,22 @@ function createAnnotaion(formValues) {
 
   //check if there is already a list of annotations 
   // -there will be if there is a h4 child
-  if (annotationList.children("h4").length === 0) {
-    $(annotationList.append(newAnnotationHTML));
-    $(annotationList).append(addAnnotationDivider());
-  }
-  else {
-    //check if the annotation already exists in the list, this will happen
-    //when an annotation has been modified
-    let aid = annotation.creationDate.toString(10);
-    $(".annotation-list").children("div").each(function() {
-      let listAid = $(this).attr("data-aid");
-      if (listAid === aid) {
-        $(this).remove();
-      }
-    });
-    $(annotationList.prepend(newAnnotationHTML));
-  }
+  // if (annotationList.children("h4").length === 0) {
+  //   $(annotationList.append(newAnnotationHTML));
+  //   $(annotationList).append(addAnnotationDivider());
+  // }
+  // else {
+  //check if the annotation already exists in the list, this will happen
+  //when an annotation has been modified
+  let aid = annotation.creationDate.toString(10);
+  $(".annotation-list").children("div").each(function() {
+    let listAid = $(this).attr("data-aid");
+    if (listAid === aid) {
+      $(this).remove();
+    }
+  });
+  $(annotationList.prepend(newAnnotationHTML));
+  // }
 }
 
 /*
@@ -366,12 +414,15 @@ function addBookMarkers() {
                 $(".annotate-play").html("<i class='pause icon'></i>Pause");
               }
             }
-            else {
-              console.log("audioPlayer is null in Bookmark");
-            }
           },
           onHidden: function() {
             hotKeys.deleteScope("annotation");
+
+            //make sure audio following is disabled when dialog is hidden
+            gFollowing = false;
+            $("button.annotate-follow").removeClass("following-audio red").addClass("green");
+            $("button.annotate-follow").html("Follow");
+            gProgressState = 0;
           }
         });
 
@@ -400,10 +451,41 @@ function addBookMarkers() {
     });
 }
 
+//Follow: Automatically follow audio 
+hotKeys("ctrl+f", "annotation", function(e) {
+  e.preventDefault();
+  console.log("triggering follow");
+  $("button.annotate-follow").trigger("click");
+});
+
+//Play: play/pause audio
+hotKeys("ctrl+p", "annotation", function(e) {
+  e.preventDefault();
+  console.log("triggering play");
+  if (!$(".annotate-play").hasClass("disabled")) {
+    $(".annotate-play.button").trigger("click");
+  }
+});
+
+//Hide: show/hide annotation form
+hotKeys("ctrl+h", "annotation", function(e) {
+  e.preventDefault();
+  console.log("triggering hide");
+  $(".hide-annotation-form-button.button").trigger("click");
+});
+
+//Next: go to next paragraph
 hotKeys("ctrl+n", "annotation", function(e, h) {
   e.preventDefault();
   console.log("triggering next");
   $(".annotate-next-paragraph.button").trigger("click");
+});
+
+//Back: go to previous paragraph
+hotKeys("ctrl+b", "annotation", function(e, h) {
+  e.preventDefault();
+  console.log("triggering prev");
+  $(".annotate-prev-paragraph.button").trigger("click");
 });
 
 //add listener for next paragraph button on annotation modal
@@ -443,12 +525,6 @@ $(".annotate-next-paragraph.button").on("click", function(e) {
   }
 });
 
-hotKeys("ctrl+p", "annotation", function(e, h) {
-  e.preventDefault();
-  console.log("triggering prev");
-  $(".annotate-prev-paragraph.button").trigger("click");
-});
-
 //add listener for prev paragraph button on annotation modal
 $(".annotate-prev-paragraph.button").on("click", function(e) {
   e.stopPropagation();
@@ -463,13 +539,13 @@ $(".annotate-prev-paragraph.button").on("click", function(e) {
     id = parseInt(formValues.rangeStart.substr(1), 10);
     id = id - 1;
 
-    if (id <= 0) {
+    if (id <= gMinId) {
       //disable
       $(".annotate-prev-paragraph.button").addClass("disabled");
     }
 
     //gone past the first paragraph
-    if (id < 0) {
+    if (id < gMinId) {
       return;
     }
 
@@ -486,12 +562,59 @@ $(".annotate-prev-paragraph.button").on("click", function(e) {
   }
 });
 
+//setup show/hide annotation form listener
+$(".hide-annotation-form-button").on("click", function(e) {
+  e.preventDefault();
+  let form = $("#new-annotation");
+
+  if (form.hasClass("hide-form")) {
+    form.removeClass("hide-form");
+    $(".hide-annotation-form-button").html("<i class='edit icon'></i>Hide Form");
+  }
+  else {
+    form.addClass("hide-form");
+    $(".hide-annotation-form-button").html("<i class='edit icon'></i>Show Form");
+  }
+});
+
+//setup audio follow listener
+$("button.annotate-follow").on("click", function(e) {
+  e.preventDefault();
+
+  if ($(this).hasClass("following-audio")) {
+    $(this).removeClass("following-audio red").addClass("green");
+    $(this).html("Follow");
+    $(".progress-bar").addClass("hide-progress-bar");
+    gFollowing = false;
+    gProgressState = 0;
+  }
+  else {
+    //start following by displaying bookmark for current audio paragraph
+    let info = getCurrentParagraph();
+    info.pid = `p${info.pid === -1 ? 0 : info.pid}`; 
+
+    $(this).removeClass("green").addClass("following-audio red");
+    //$(this).html(`Following: ${info.pid}`);
+    $(".progress-bar").removeClass("hide-progress-bar");
+    gFollowing = true;
+
+    //initiate auto follow
+    autoFollow(info);
+  }
+});
+
 //setup audio play/pause listener
 $("button.annotate-play").on("click", function(e) {
   e.preventDefault();
   if (audioPlayer.paused) {
     audioPlayer.play();
     $(".annotate-play").html("<i class='pause icon'></i>Pause");
+
+    //make sure the audio player is showing - it might not be if the user starts
+    //playing audio from the annotation modal. This will prevent the condition where
+    //audio is started from the modal and when the modal is closed there is no audio
+    //player displayed but audio is playing.
+    showAudioPlayer();
   }
   else {
     audioPlayer.pause();
@@ -602,8 +725,15 @@ export default {
     //- create bookmark toggle listener
     if ($(".transcript").length) {
 
-      //Used by annotation modal next button
-      gMaxId = parseInt($(".transcript p.cmiTranPara").length, 10) - 1;
+      //Used by annotation modal prev and next buttons
+      //gMaxId = parseInt($(".transcript p.cmiTranPara").length, 10) - 1;
+      gMinId = parseInt($(".transcript p.cmiTranPara").first().attr("id").substr(1), 10);
+      gMaxId = parseInt($(".transcript p.cmiTranPara").last().attr("id").substr(1), 10);
+
+      //get hotKeys to work when focus is input field
+      hotKeys.filter = function() {
+        return true;
+      };
 
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
@@ -631,10 +761,16 @@ export default {
 
     //enable annotation modal play/pause button
     $(".annotate-play").removeClass("disabled");
+    $(".annotate-follow").removeClass("disabled");
 
-    //ask to be notified for audio paragraph change
-    registerNotify(function(pid) {
-      console.log("audio paragraph change to: ", pid);
+    //be notified when audio paragraph change
+    registerNotify(function(info) {
+      autoFollow(info);
+    });
+
+    //get audio playback time
+    registerNotifyPlaybackTime(function(time) {
+      updateProgress(time);
     });
   }
 };

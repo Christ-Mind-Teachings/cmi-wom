@@ -14,6 +14,7 @@ import {setCaptureData} from "./capture";
 //paragraph timing array assigned on module initialization
 let timingData = null;
 let notifyParagraphChange = null;
+let notifyPlaybackTime = null;
 
 //capture.js can disable scroll is timing is enabled
 let scrollEnabled = true;
@@ -62,6 +63,18 @@ let player;
 
 export function registerNotify(fn) {
   notifyParagraphChange = fn;
+}
+
+export function registerNotifyPlaybackTime(fn) {
+  notifyPlaybackTime = fn;
+}
+
+export function getCurrentParagraph() {
+  return {
+    pid: ptr.val,
+    startTime: getTime(ptr.val),
+    nextStartTime: getTime(ptr.val + 1)
+  };
 }
 
 /*
@@ -207,7 +220,11 @@ function showNscroll(idx) {
   ptr.pval = idx;
 
   if (notifyParagraphChange) {
-    notifyParagraphChange(tinfo.id);
+    notifyParagraphChange({
+      pid: tinfo.id,
+      startTime: tinfo.seconds,
+      nextStartTime: idx < timingData.length ? timingData[idx + 1].seconds : player.duration
+    });
   }
 }
 
@@ -250,6 +267,10 @@ export default {
   setCurrentPlaybackTime: function(time) {
     if (timingData) {
       manageHiLight(round(time));
+    }
+
+    if (notifyPlaybackTime) {
+      notifyPlaybackTime(time);
     }
   },
 
