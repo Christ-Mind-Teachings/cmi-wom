@@ -1,7 +1,7 @@
 import store from "store";
 import axios from "axios";
 import indexOf from "lodash/indexOf";
-import {genKey} from "./key";
+import {decodeKey, parseKey, genKey} from "./key";
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
@@ -27,9 +27,7 @@ function refreshNeeded(bid, fetchDate) {
     early: EARLY_CONFIG
   };
 
-  console.log(`${bid} configuration: last changed: ${lastChanged[bid]}, fetch date: ${fetchDate}`);
   if (lastChanged[bid] > fetchDate) {
-    console.log("Requesting %s config file", bid);
     return true;
   }
 
@@ -61,15 +59,21 @@ export function fetchTimingData(url) {
   configuration data loaded from storage to determine if the data needs to
   be reloaded. This is indicated using Define-webpack-plugin to set the timestamp
   of configurations that have changed.
+
+  args:
+    book: the book identifier, woh, wot, etc
+    assign: when true, assign global variable 'config' to retrieved data
 */
-export function getConfig(book) {
+export function getConfig(book, assign = true) {
   return new Promise((resolve, reject) => {
     let cfg = store.get(`config-${book}`);
     let url;
 
     //if config in local storage check if we need to get a freash copy
     if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
-      config = cfg;
+      if (assign) {
+        config = cfg;
+      }
       resolve(cfg);
     }
 
@@ -80,7 +84,9 @@ export function getConfig(book) {
         //add fetch date before storing
         response.data.lastFetchDate = Date.now();
         store.set(`config-${book}`, response.data);
-        config = response.data;
+        if (assign) {
+          config = response.data;
+        }
         resolve(response.data);
       })
       .catch(() => {
@@ -191,5 +197,47 @@ export function getReservation(url) {
   }
 
   return null;
+}
+
+/*
+  Given a page key, return data from a config file
+
+  returns: book title, page title, url and optionally subtitle.
+
+  args:
+    pageKey: a key uniuely identifying a transcript page
+    data: optional, data that will be added to the result, used for convenience
+*/
+export function getPageInfo(pageKey, data = false) {
+  let decodedKey = decodeKey(pageKey);
+  let info = {pageKey: pageKey, bookId: decodedKey.bookId};
+
+  if (data) {
+    info.data = data;
+  }
+
+  return new Promise((resolve, reject) => {
+
+    //get configuration data specific to the bookId
+    getConfig(decodedKey.bookId, false)
+      .then((data) => {
+        info.bookTitle = data.title;
+        
+        if (decodedKey.hasQuestions) {
+          info.title = data.contents[decodedKey.uid].title;
+          info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
+          info.url = data.contents[decodedKey.uid].questions[decodedKey.qid].url;
+        }
+        else {
+          info.title = data.contents[decodedKey.uid].title;
+          info.url = data.contents[decodedKey.uid].url;
+        }
+        
+        resolve(info);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 
 }

@@ -5065,9 +5065,10 @@ module.exports = function(target, settings, callback){
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = fetchTimingData;
 /* harmony export (immutable) */ __webpack_exports__["c"] = getConfig;
-/* harmony export (immutable) */ __webpack_exports__["e"] = loadConfig;
+/* harmony export (immutable) */ __webpack_exports__["f"] = loadConfig;
 /* harmony export (immutable) */ __webpack_exports__["b"] = getAudioInfo;
-/* harmony export (immutable) */ __webpack_exports__["d"] = getReservation;
+/* harmony export (immutable) */ __webpack_exports__["e"] = getReservation;
+/* harmony export (immutable) */ __webpack_exports__["d"] = getPageInfo;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_store__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(115);
@@ -5104,9 +5105,7 @@ function refreshNeeded(bid, fetchDate) {
     early: 1522987434399
   };
 
-  console.log(`${bid} configuration: last changed: ${lastChanged[bid]}, fetch date: ${fetchDate}`);
   if (lastChanged[bid] > fetchDate) {
-    console.log("Requesting %s config file", bid);
     return true;
   }
 
@@ -5136,15 +5135,21 @@ function fetchTimingData(url) {
   configuration data loaded from storage to determine if the data needs to
   be reloaded. This is indicated using Define-webpack-plugin to set the timestamp
   of configurations that have changed.
+
+  args:
+    book: the book identifier, woh, wot, etc
+    assign: when true, assign global variable 'config' to retrieved data
 */
-function getConfig(book) {
+function getConfig(book, assign = true) {
   return new Promise((resolve, reject) => {
     let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`config-${book}`);
     let url;
 
     //if config in local storage check if we need to get a freash copy
     if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
-      config = cfg;
+      if (assign) {
+        config = cfg;
+      }
       resolve(cfg);
     }
 
@@ -5154,7 +5159,9 @@ function getConfig(book) {
       //add fetch date before storing
       response.data.lastFetchDate = Date.now();
       __WEBPACK_IMPORTED_MODULE_0_store___default.a.set(`config-${book}`, response.data);
-      config = response.data;
+      if (assign) {
+        config = response.data;
+      }
       resolve(response.data);
     }).catch(() => {
       config = null;
@@ -5261,6 +5268,45 @@ function getReservation(url) {
   }
 
   return null;
+}
+
+/*
+  Given a page key, return data from a config file
+
+  returns: book title, page title, url and optionally subtitle.
+
+  args:
+    pageKey: a key uniuely identifying a transcript page
+    data: optional, data that will be added to the result, used for convenience
+*/
+function getPageInfo(pageKey, data = false) {
+  let decodedKey = Object(__WEBPACK_IMPORTED_MODULE_3__key__["a" /* decodeKey */])(pageKey);
+  let info = { pageKey: pageKey, bookId: decodedKey.bookId };
+
+  if (data) {
+    info.data = data;
+  }
+
+  return new Promise((resolve, reject) => {
+
+    //get configuration data specific to the bookId
+    getConfig(decodedKey.bookId, false).then(data => {
+      info.bookTitle = data.title;
+
+      if (decodedKey.hasQuestions) {
+        info.title = data.contents[decodedKey.uid].title;
+        info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
+        info.url = data.contents[decodedKey.uid].questions[decodedKey.qid].url;
+      } else {
+        info.title = data.contents[decodedKey.uid].title;
+        info.url = data.contents[decodedKey.uid].url;
+      }
+
+      resolve(info);
+    }).catch(error => {
+      reject(error);
+    });
+  });
 }
 
 /***/ }),
@@ -10889,14 +10935,17 @@ module.exports = freeGlobal;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = getSourceId;
-/* harmony export (immutable) */ __webpack_exports__["a"] = genPageKey;
-/* harmony export (immutable) */ __webpack_exports__["b"] = genParagraphKey;
+/* unused harmony export getSourceId */
+/* harmony export (immutable) */ __webpack_exports__["d"] = getKeyInfo;
+/* harmony export (immutable) */ __webpack_exports__["e"] = parseKey;
+/* harmony export (immutable) */ __webpack_exports__["b"] = genPageKey;
+/* harmony export (immutable) */ __webpack_exports__["c"] = genParagraphKey;
+/* harmony export (immutable) */ __webpack_exports__["a"] = decodeKey;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_indexOf__);
 /*
   WOM: Transcript keys
-  - first item is 1
+  - first item starts with 1, not 0
   - a numeric value that represents a specific transcript and represents
     a specific logical ordering.
 
@@ -10904,12 +10953,25 @@ module.exports = freeGlobal;
     a paragraph within the transcript.
   - The paragraphId is increased by 1 and divided by 1000
 
+  key format: ssbuuIqq.ppp
+  where: ss: source Id
+          b: book Id
+         uu: unit Id
+          I: quesiton indicator, 0:no questions 1:questions
+         qq: question Id
+        ppp: paragraph number - not positional
+
 */
 
 
 const sprintf = __webpack_require__(227).sprintf;
 
+//source id: each source has a unique id
 const sourceId = 10;
+
+//length of pageKey excluding decimal portion
+const keyLength = 8;
+
 const bookIds = ["xxx", "tjl", "wos", "early", "woh", "wot", "wok"];
 const tjl = ["xxx", "ack", "foreword", "chap01", "chap02", "chap03", "chap04", "chap05", "chap06", "chap07", "chap08", "chap09", "chap10", "chap11", "chap12", "epilogue"];
 const wos = ["xxx", "foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilogue", "prayer"];
@@ -10946,6 +11008,37 @@ function getSourceId() {
   return sourceId;
 }
 
+function getKeyInfo() {
+  return {
+    sourceId: sourceId,
+    keyLength: keyLength
+  };
+}
+
+/*
+  parse bookmarkId into pageKey and paragraphId
+  - pid=0 indicates no paragraph id
+*/
+function parseKey(key) {
+  const keyInfo = getKeyInfo();
+  let keyString = key;
+  let pid = 0;
+
+  if (typeof keyString === "number") {
+    keyString = key.toString(10);
+  }
+
+  let decimalPos = keyString.indexOf(".");
+
+  //if no decimal key doesn't include paragraph id
+  if (decimalPos > -1) {
+    pid = parseInt(keyString.substr(decimalPos + 1), 10);
+  }
+  let pageKey = parseInt(keyString.substr(0, keyInfo.keyLength), 10);
+
+  return { pid, pageKey };
+}
+
 /*
   Convert url into key
   returns -1 for non-transcript url
@@ -10954,10 +11047,9 @@ function getSourceId() {
   where: ss: source Id
           b: book Id
          uu: unit Id
-          I: quesiton indicator, 0:no questions 1:questions
+          I: question indicator, 0:no questions 1:questions
          qq: question Id
         ppp: paragraph number - not positional
-
 */
 function genPageKey(url = location.pathname) {
   let key = {
@@ -11011,6 +11103,49 @@ function genParagraphKey(pid, key = location.pathname) {
   let paragraphKey = numericKey + pKey;
 
   return paragraphKey;
+}
+
+/*
+  key format: ssbuuIqq.ppp
+  where: ss: source Id
+          b: book Id
+         uu: unit Id
+          I: question indicator, 0:no questions 1:questions
+         qq: question Id
+        ppp: paragraph number - not positional
+*/
+function decodeKey(key) {
+  let { pid, pageKey } = parseKey(key);
+  let pageKeyString = pageKey.toString(10);
+  let decodedKey = {
+    error: 0,
+    message: "ok",
+    sid: sourceId,
+    bookId: "",
+    uid: 0,
+    hasQuestions: false,
+    qid: 0,
+    pid: pid - 1
+  };
+
+  //error, invalid key length
+  if (pageKeyString.length !== keyLength) {
+    decodedKey.error = true;
+    decodedKey.message = `Ingeger portion of key should have a length of ${keyLength}, key is: ${pageKeyString}`;
+    return decodedKey;
+  }
+
+  let bid = parseInt(pageKeyString.substr(2, 1), 10);
+  decodedKey.bookId = bookIds[bid];
+
+  //substract 1 from key value to get index
+  decodedKey.uid = parseInt(pageKeyString.substr(3, 2), 10) - 1;
+  decodedKey.hasQuestions = pageKeyString.substr(5, 1) === "1";
+
+  //subtract 1 from key value to get index
+  decodedKey.qid = parseInt(pageKeyString.substr(6, 2), 10) - 1;
+
+  return decodedKey;
 }
 
 /***/ }),
@@ -24434,7 +24569,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js__ = __webpack_require__(335);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_hotkeys_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__audio_focus__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__list__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__audio_focus__ = __webpack_require__(86);
 /*
   Bookmarks --
 
@@ -24472,6 +24608,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 
 
 
+
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
@@ -24487,9 +24624,20 @@ let gFollowing = false;
 let gCurrentStartTime = 0;
 let gProgressState = 0; //not initialized
 
+//show audio player - do nothing if its already visible
 function showAudioPlayer() {
   if ($(".audio-player-wrapper").hasClass("hide")) {
     $(".audio-player-wrapper").removeClass("hide");
+  }
+}
+
+/*
+  Display the current audio paragraph in the Play/Pause button of the annotation modal
+  dialog. Do noting if the dialog is not visible.
+*/
+function displayAudioParagraph(pid) {
+  if ($(".annotation.ui.modal").modal("is active")) {
+    $("button.annotate-play").html(`<i class="pause icon"></i>Pause: ${pid}`);
   }
 }
 
@@ -24501,11 +24649,14 @@ function showAudioPlayer() {
   the change
 */
 function autoFollow(info) {
+
+  displayAudioParagraph(info.pid);
+
   if (!gFollowing) {
     return;
   }
 
-  $("button.annotate-follow").html(`Following: ${info.pid}`);
+  //$("button.annotate-follow").html(`Following: ${info.pid}`);
 
   gCurrentStartTime = info.startTime;
   const totalTime = info.nextStartTime - info.startTime;
@@ -24538,19 +24689,6 @@ function updateProgress(time) {
   $("#paragraph-progress").progress("set progress", current);
 
   //let complete = $("#paragraph-progress").progress("is complete");
-}
-
-function initBookmarkModal() {
-  $(uiBookmarkModal).modal({
-    dimmerSettings: { opacity: uiModalOpacity }
-  });
-
-  $(uiOpenBookmarkModal).on("click", e => {
-    e.preventDefault();
-
-    //populateBookmarkModal(uiBookmarkModalDiv);
-    $(uiBookmarkModal).modal("show");
-  });
 }
 
 //generate the option element of a select statement
@@ -24877,6 +25015,12 @@ function addBookMarkers() {
   });
 }
 
+//print scope
+__WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+/", function (e) {
+  e.preventDefault();
+  console.log("hotKeys scope: %s", __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default.a.getScope());
+});
+
 //Follow: Automatically follow audio 
 __WEBPACK_IMPORTED_MODULE_4_hotkeys_js___default()("ctrl+f", "annotation", function (e) {
   e.preventDefault();
@@ -25014,7 +25158,7 @@ $("button.annotate-follow").on("click", function (e) {
     gProgressState = 0;
   } else {
     //start following by displaying bookmark for current audio paragraph
-    let info = Object(__WEBPACK_IMPORTED_MODULE_5__audio_focus__["c" /* getCurrentParagraph */])();
+    let info = Object(__WEBPACK_IMPORTED_MODULE_6__audio_focus__["c" /* getCurrentParagraph */])();
     info.pid = `p${info.pid === -1 ? 0 : info.pid}`;
 
     $(this).removeClass("green").addClass("following-audio red");
@@ -25031,8 +25175,19 @@ $("button.annotate-follow").on("click", function (e) {
 $("button.annotate-play").on("click", function (e) {
   e.preventDefault();
   if (audioPlayer.paused) {
+    let { pid } = Object(__WEBPACK_IMPORTED_MODULE_6__audio_focus__["c" /* getCurrentParagraph */])();
+    let rangeStart = $("#annotation-form").form("get value", "rangeStart");
+
+    pid = `p${pid === -1 ? 0 : pid}`;
+    //console.log("audio paragraph: %s, annotation paragraph: %s", pid, rangeStart);
+    if (pid !== rangeStart) {
+      //console.log("switching to paragraph: %s", rangeStart);
+      Object(__WEBPACK_IMPORTED_MODULE_6__audio_focus__["f" /* switchToParagraph */])(rangeStart);
+    }
+
     audioPlayer.play();
-    $(".annotate-play").html("<i class='pause icon'></i>Pause");
+    //$(".annotate-play").html("<i class='pause icon'></i>Pause");
+    displayAudioParagraph(rangeStart);
 
     //make sure the audio player is showing - it might not be if the user starts
     //playing audio from the annotation modal. This will prevent the condition where
@@ -25043,6 +25198,23 @@ $("button.annotate-play").on("click", function (e) {
     audioPlayer.pause();
     $(".annotate-play").html("<i class='play icon'></i>Play");
   }
+});
+
+//reset annotation form
+$(".annotation-reset").on("click", function (e) {
+  e.preventDefault();
+
+  let form = $("#annotation-form");
+  let rangeStart = form.form("get value", "rangeStart");
+
+  form.form("clear");
+  form.form("set values", {
+    rangeStart: rangeStart,
+    rangeEnd: rangeStart
+  });
+
+  //set focus on rangeEnd field
+  document.getElementById("rangeEnd").focus();
 });
 
 //listen for user submit of annotation form
@@ -25171,7 +25343,7 @@ function createBookmarkToggle(selector) {
     }
 
     //initialize bookmark list modal - available on all pages
-    initBookmarkModal();
+    __WEBPACK_IMPORTED_MODULE_5__list__["a" /* default */].initialize();
   },
   setAudioPlayer: function (player) {
     //console.log("Bookmark.setAudioPlayer()");
@@ -25182,12 +25354,12 @@ function createBookmarkToggle(selector) {
     $(".annotate-follow").removeClass("disabled");
 
     //be notified when audio paragraph change
-    Object(__WEBPACK_IMPORTED_MODULE_5__audio_focus__["d" /* registerNotify */])(function (info) {
+    Object(__WEBPACK_IMPORTED_MODULE_6__audio_focus__["d" /* registerNotify */])(function (info) {
       autoFollow(info);
     });
 
     //get audio playback time
-    Object(__WEBPACK_IMPORTED_MODULE_5__audio_focus__["e" /* registerNotifyPlaybackTime */])(function (time) {
+    Object(__WEBPACK_IMPORTED_MODULE_6__audio_focus__["e" /* registerNotifyPlaybackTime */])(function (time) {
       updateProgress(time);
     });
   }
@@ -25258,7 +25430,7 @@ const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/late
 */
 function getBookmark(pid) {
   return new Promise((resolve, reject) => {
-    const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+    const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
     //console.log("getBookmark(%s)", pid);
 
     const bookmarks = __WEBPACK_IMPORTED_MODULE_1_store___default.a.get(pageKey);
@@ -25281,8 +25453,9 @@ function getBookmark(pid) {
   otherwise get them from the server and store them locally
 */
 function getBookmarks() {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  let pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
+
   return new Promise((resolve, reject) => {
 
     //get bookmarks from server
@@ -25290,10 +25463,10 @@ function getBookmarks() {
       __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${bookmarkApi}/bookmark/query/${userInfo.userId}/${pageKey}`).then(response => {
 
         //convert to local data structure and store locally 
-        if (response.data.response.Items) {
+        if (response.data.response) {
           let bookmarks = {};
-          response.data.response.Items.forEach(b => {
-            let pid = parseInt(b.bookmarkId.toString(10).substr(-3), 10);
+          response.data.response.forEach(b => {
+            let pid = parseInt(b.id.toString(10).substr(-3), 10);
             bookmarks[pid] = b.bookmark;
           });
           __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(pageKey, bookmarks);
@@ -25311,6 +25484,72 @@ function getBookmarks() {
 }
 
 /*
+  if user not logged in get bookmarks from local storage
+  otherwise get them from the server and store them locally
+*/
+function queryBookmarks(key) {
+  const retentionTime = 1000 * 60 * 60 * 8; //eight hours of milliseconds
+  const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
+  const keyInfo = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["d" /* getKeyInfo */])();
+
+  return new Promise((resolve, reject) => {
+    //get bookmarks from server
+    if (userInfo) {
+      //set if bookmarks are already in local storage
+      let bookmarkList = __WEBPACK_IMPORTED_MODULE_1_store___default.a.get(`bmList_${keyInfo.sourceId}`);
+
+      //don't query database - just return from local storage
+      if (bookmarkList) {
+        let expireDate = bookmarkList.lastFetchDate + retentionTime;
+
+        if (Date.now() < expireDate) {
+          console.log("queryBookmarks: list from local store");
+          resolve(bookmarkList);
+          return;
+        }
+      }
+
+      //get from the server
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${bookmarkApi}/bookmark/query/${userInfo.userId}/${key}`).then(response => {
+        //convert to local data structure and store locally 
+        if (response.data.response) {
+          let bookmarks = {};
+          response.data.response.forEach(b => {
+            let keyParts = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["e" /* parseKey */])(b.id);
+            if (!bookmarks[keyParts.pageKey]) {
+              bookmarks[keyParts.pageKey] = {};
+            }
+            bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
+          });
+          bookmarks.lastFetchDate = Date.now();
+          __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(`bmList_${keyInfo.sourceId}`, bookmarks);
+          console.log("queryBookmarks: list from server");
+          resolve(bookmarks);
+        }
+      }).catch(err => {
+        reject(err);
+        return;
+      });
+    } else {
+      let sid = parseInt(keyInfo.sourceId, 10);
+      let bookmarks = [];
+
+      //build expected structure from local storage
+      __WEBPACK_IMPORTED_MODULE_1_store___default.a.each((value, key) => {
+        if (key.startsWith(sid)) {
+          if (!bookmarks[key]) {
+            bookmarks[key] = {};
+          }
+          bookmarks[key] = value;
+        }
+      });
+      console.log("queryBookmarks: list from local store, user not signed in");
+      resolve(bookmarks);
+    }
+  });
+}
+
+/*
   Persist annotation 
     - in local storage and to server if user is signed in
 
@@ -25318,7 +25557,7 @@ function getBookmarks() {
 */
 function postAnnotation(annotation) {
   //console.log("annotation: ", annotation);
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
 
   let now = Date.now();
@@ -25330,7 +25569,7 @@ function postAnnotation(annotation) {
 
     let postBody = {
       userId: userInfo.userId,
-      bookmarkId: Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genParagraphKey */])(serverAnnotation.rangeStart, pageKey),
+      bookmarkId: Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["c" /* genParagraphKey */])(serverAnnotation.rangeStart, pageKey),
       annotationId: serverAnnotation.creationDate ? serverAnnotation.creationDate : now,
       annotation: serverAnnotation
     };
@@ -25354,12 +25593,12 @@ function postAnnotation(annotation) {
   Delete the annotation 'aid' for bookmark 'pid'
 */
 function deleteAnnotation(pid, aid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
 
   //delete annotation from server
   if (userInfo) {
-    let bookmarkId = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genParagraphKey */])(pid, pageKey);
+    let bookmarkId = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["c" /* genParagraphKey */])(pid, pageKey);
 
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(`${bookmarkApi}/bookmark/annotation/${userInfo.userId}/${bookmarkId}/${aid}`).then(() => {
       console.log("deleted annotation: %s/%s/%s", userInfo.userId, bookmarkId, aid);
@@ -25379,7 +25618,7 @@ function deleteAnnotation(pid, aid) {
   We get the bookmark from local storage when the user is not signed in also.
 */
 function getAnnotation(pid, aid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
 
   let data;
   let annotation;
@@ -25438,7 +25677,7 @@ function fetchTopics() {
         return;
       }
 
-    let sourceId = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["c" /* getSourceId */])().toString(10);
+    let sourceId = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["d" /* getKeyInfo */])().sourceId.toString(10);
 
     //user signed in, we need to get topics from server
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`).then(topicInfo => {
@@ -25496,7 +25735,7 @@ function addToTopicList(newTopics) {
   if (userInfo) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(`${topicsEndPoint}/user/topics`, {
       userId: userInfo.userId,
-      sourceId: Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["c" /* getSourceId */])(),
+      sourceId: __WEBPACK_IMPORTED_MODULE_4__config_key__["d" /* getKeyInfo */].sourceId(),
       topicList: newTopics
     }).then(response => {
       console.log(`addToTopicList: ${response}`);
@@ -25512,7 +25751,7 @@ function addToTopicList(newTopics) {
   store annotation locally
 */
 function storeAnnotation(annotation, creationDate) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
 
   //make annotation key
   let pid = parseInt(annotation.rangeStart.substr(1), 10) + 1;
@@ -25570,7 +25809,7 @@ function storeAnnotation(annotation, creationDate) {
     aid: annotation id
 */
 function deleteLocalAnnotation(pid, aid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["a" /* genPageKey */])();
+  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["b" /* genPageKey */])();
 
   //make annotation id
   pid = parseInt(pid.substr(1), 10) + 1;
@@ -25600,7 +25839,8 @@ function deleteLocalAnnotation(pid, aid) {
   deleteAnnotation: deleteAnnotation,
   postAnnotation: postAnnotation,
   getBookmarks: getBookmarks,
-  getBookmark: getBookmark
+  getBookmark: getBookmark,
+  queryBookmarks: queryBookmarks
 });
 
 /***/ }),
@@ -30371,7 +30611,7 @@ $(document).ready(() => {
   __WEBPACK_IMPORTED_MODULE_5__modules_user_netlify__["a" /* default */].initialize();
 
   //load config file and do initializations that depend on a loaded config file
-  Object(__WEBPACK_IMPORTED_MODULE_2__modules_config_config__["e" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["b" /* getBookId */])()).then(source => {
+  Object(__WEBPACK_IMPORTED_MODULE_2__modules_config_config__["f" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["b" /* getBookId */])()).then(source => {
     console.log(source);
     __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["a" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize(__WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__["a" /* default */]);
@@ -30653,7 +30893,7 @@ function getUserStatus() {
   }
 
   //User is a timer, check there is a timing reservation on the page
-  let reservation = Object(__WEBPACK_IMPORTED_MODULE_19__config_config__["d" /* getReservation */])(location.pathname);
+  let reservation = Object(__WEBPACK_IMPORTED_MODULE_19__config_config__["e" /* getReservation */])(location.pathname);
 
   //no reservation, the user is a timer
   if (!reservation) {
@@ -40052,6 +40292,130 @@ var require;var require;
 			}
 		});
 	}, {}] }, {}, [1]);
+
+/***/ }),
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_key__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bmnet__ = __webpack_require__(229);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_netlify__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_toastr__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_toastr__);
+/*
+  Display list of bookmarks for user/source and allow for filtering by topic
+*/
+
+
+
+
+
+
+
+
+const uiBookmarkModal = ".bookmark.ui.modal";
+const uiOpenBookmarkModal = ".bookmark-modal-open";
+const uiModalOpacity = 0.5;
+
+let listInitialized = false;
+
+function populateModal(bookmarks) {
+  let html;
+
+  console.log("bookmarks: %o", bookmarks);
+
+  let info = [];
+  for (let pageKey in bookmarks) {
+    if (pageKey !== "lastFetchDate") {
+      info.push(Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["d" /* getPageInfo */])(pageKey, bookmarks[pageKey]));
+    }
+  }
+
+  Promise.all(info).then(responses => {
+    console.log("promis.all: ", responses);
+  }).catch(err => {
+    console.error(err);
+  });
+}
+
+/*
+  We query bookmarks just once per day then ask the user to manually
+  refresh if bookmarks have changed.
+*/
+function initList() {
+  if (listInitialized) {
+    return;
+  }
+
+  const { sourceId } = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["d" /* getKeyInfo */])();
+
+  __WEBPACK_IMPORTED_MODULE_2__bmnet__["a" /* default */].queryBookmarks(sourceId).then(response => {
+    //console.log("queryBookmarks(%s", sourceId, response);
+
+    populateModal(response);
+    listInitialized = true;
+  }).catch(err => {
+    __WEBPACK_IMPORTED_MODULE_5_toastr___default.a.error("Failed to get bookmarks");
+    console.error("Error getting bookmarks for: %s from server", sourceId, err);
+  });
+}
+
+function initBookmarkModal() {
+  $(uiBookmarkModal).modal({
+    dimmerSettings: { opacity: uiModalOpacity },
+    autofocus: false,
+    centered: true,
+    duration: 400,
+    inverted: true,
+    observeChanges: true,
+    transition: "horizontal flip",
+    onShow: function () {
+      initList();
+    },
+    onVisible: function () {},
+    onHidden: function () {}
+  });
+
+  $(uiOpenBookmarkModal).on("click", e => {
+    e.preventDefault();
+
+    //populateBookmarkModal(uiBookmarkModalDiv);
+    $(uiBookmarkModal).modal("show");
+  });
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  initialize: function () {
+    initBookmarkModal();
+  }
+
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ })
 /******/ ]);

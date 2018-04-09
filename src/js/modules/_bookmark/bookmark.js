@@ -33,7 +33,13 @@ import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
 import hotKeys from "hotkeys-js";
-import {registerNotifyPlaybackTime, getCurrentParagraph, registerNotify} from "../_audio/focus";
+import list from "./list";
+import {
+  switchToParagraph,
+  registerNotifyPlaybackTime, 
+  getCurrentParagraph, 
+  registerNotify
+} from "../_audio/focus";
 
 //bookmark modal
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -50,10 +56,21 @@ let gFollowing = false;
 let gCurrentStartTime = 0;
 let gProgressState = 0;  //not initialized
 
+//show audio player - do nothing if its already visible
 function showAudioPlayer() {
   if ($(".audio-player-wrapper").hasClass("hide")) {
     $(".audio-player-wrapper").removeClass("hide");
   }
+}
+
+/*
+  Display the current audio paragraph in the Play/Pause button of the annotation modal
+  dialog. Do noting if the dialog is not visible.
+*/
+function displayAudioParagraph(pid) {
+  if ($(".annotation.ui.modal").modal("is active")) {
+    $("button.annotate-play").html(`<i class="pause icon"></i>Pause: ${pid}`);
+  } 
 }
 
 /*
@@ -64,11 +81,14 @@ function showAudioPlayer() {
   the change
 */
 function autoFollow(info) {
+
+  displayAudioParagraph(info.pid);
+
   if (!gFollowing) {
     return;
   }
 
-  $("button.annotate-follow").html(`Following: ${info.pid}`);
+  //$("button.annotate-follow").html(`Following: ${info.pid}`);
 
   gCurrentStartTime = info.startTime;
   const totalTime = info.nextStartTime - info.startTime;
@@ -101,19 +121,6 @@ function updateProgress(time) {
   $("#paragraph-progress").progress("set progress", current);
 
   //let complete = $("#paragraph-progress").progress("is complete");
-}
-
-function initBookmarkModal() {
-  $(uiBookmarkModal).modal({
-    dimmerSettings: {opacity: uiModalOpacity}
-  });
-
-  $(uiOpenBookmarkModal).on("click", (e) => {
-    e.preventDefault();
-
-    //populateBookmarkModal(uiBookmarkModalDiv);
-    $(uiBookmarkModal).modal("show");
-  });
 }
 
 //generate the option element of a select statement
@@ -451,6 +458,12 @@ function addBookMarkers() {
     });
 }
 
+//print scope
+hotKeys("ctrl+/", function(e) {
+  e.preventDefault();
+  console.log("hotKeys scope: %s", hotKeys.getScope());
+});
+
 //Follow: Automatically follow audio 
 hotKeys("ctrl+f", "annotation", function(e) {
   e.preventDefault();
@@ -607,8 +620,19 @@ $("button.annotate-follow").on("click", function(e) {
 $("button.annotate-play").on("click", function(e) {
   e.preventDefault();
   if (audioPlayer.paused) {
+    let {pid} = getCurrentParagraph();
+    let rangeStart = $("#annotation-form").form("get value", "rangeStart");
+
+    pid = `p${pid === -1 ? 0 : pid}`;
+    //console.log("audio paragraph: %s, annotation paragraph: %s", pid, rangeStart);
+    if (pid !== rangeStart) {
+      //console.log("switching to paragraph: %s", rangeStart);
+      switchToParagraph(rangeStart);
+    }
+
     audioPlayer.play();
-    $(".annotate-play").html("<i class='pause icon'></i>Pause");
+    //$(".annotate-play").html("<i class='pause icon'></i>Pause");
+    displayAudioParagraph(rangeStart);
 
     //make sure the audio player is showing - it might not be if the user starts
     //playing audio from the annotation modal. This will prevent the condition where
@@ -620,6 +644,23 @@ $("button.annotate-play").on("click", function(e) {
     audioPlayer.pause();
     $(".annotate-play").html("<i class='play icon'></i>Play");
   }
+});
+
+//reset annotation form
+$(".annotation-reset").on("click", function(e) {
+  e.preventDefault();
+
+  let form = $("#annotation-form");
+  let rangeStart = form.form("get value", "rangeStart");
+
+  form.form("clear");
+  form.form("set values", {
+    rangeStart: rangeStart,
+    rangeEnd: rangeStart
+  });
+
+  //set focus on rangeEnd field
+  document.getElementById("rangeEnd").focus();
 });
 
 //listen for user submit of annotation form
@@ -753,7 +794,7 @@ export default {
     }
 
     //initialize bookmark list modal - available on all pages
-    initBookmarkModal();
+    list.initialize();
   },
   setAudioPlayer: function(player) {
     //console.log("Bookmark.setAudioPlayer()");

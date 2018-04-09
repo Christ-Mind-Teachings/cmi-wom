@@ -14,9 +14,9 @@
 import axios from "axios";
 import store from "store";
 import notify from "toastr";
-import { getUserInfo} from "../_user/netlify";
+import {getUserInfo} from "../_user/netlify";
 
-import {getSourceId, genPageKey, genParagraphKey } from "../_config/key";
+import {parseKey, getKeyInfo, genPageKey, genParagraphKey } from "../_config/key";
 import isEqual from "lodash/isEqual";
 import findIndex from "lodash/findIndex";
 import cloneDeep from "lodash/cloneDeep";
@@ -66,8 +66,9 @@ function getBookmark(pid) {
   otherwise get them from the server and store them locally
 */
 function getBookmarks() {
-  const pageKey = genPageKey();
+  let pageKey = genPageKey();
   const userInfo = getUserInfo();
+
   return new Promise((resolve, reject) => {
 
     //get bookmarks from server
@@ -76,10 +77,10 @@ function getBookmarks() {
         .then((response) => {
 
           //convert to local data structure and store locally 
-          if (response.data.response.Items) {
+          if (response.data.response) {
             let bookmarks = {};
-            response.data.response.Items.forEach((b) => {
-              let pid = parseInt(b.bookmarkId.toString(10).substr(-3), 10);
+            response.data.response.forEach((b) => {
+              let pid = parseInt(b.id.toString(10).substr(-3), 10);
               bookmarks[pid] = b.bookmark;
             });
             store.set(pageKey, bookmarks);
@@ -93,6 +94,75 @@ function getBookmarks() {
     else {
       //get from local storage
       const bookmarks = store.get(pageKey);
+      resolve(bookmarks);
+    }
+  });
+}
+
+/*
+  if user not logged in get bookmarks from local storage
+  otherwise get them from the server and store them locally
+*/
+function queryBookmarks(key) {
+  const retentionTime = 1000 * 60 * 60 * 8; //eight hours of milliseconds
+  const userInfo = getUserInfo();
+  const keyInfo = getKeyInfo();
+
+  return new Promise((resolve, reject) => {
+    //get bookmarks from server
+    if (userInfo) {
+      //set if bookmarks are already in local storage
+      let bookmarkList = store.get(`bmList_${keyInfo.sourceId}`);
+
+      //don't query database - just return from local storage
+      if (bookmarkList) {
+        let expireDate = bookmarkList.lastFetchDate + retentionTime;
+
+        if (Date.now() < expireDate) {
+          console.log("queryBookmarks: list from local store");
+          resolve(bookmarkList);
+          return;
+        }
+      }
+
+      //get from the server
+      axios.get(`${bookmarkApi}/bookmark/query/${userInfo.userId}/${key}`)
+        .then((response) => {
+          //convert to local data structure and store locally 
+          if (response.data.response) {
+            let bookmarks = {};
+            response.data.response.forEach((b) => {
+              let keyParts = parseKey(b.id);
+              if (!bookmarks[keyParts.pageKey]) {
+                bookmarks[keyParts.pageKey] = {};
+              }
+              bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
+            });
+            bookmarks.lastFetchDate = Date.now();
+            store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
+            console.log("queryBookmarks: list from server");
+            resolve(bookmarks);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+          return;
+        });
+    }
+    else {
+      let sid = parseInt(keyInfo.sourceId, 10);
+      let bookmarks = [];
+
+      //build expected structure from local storage
+      store.each((value, key) => {
+        if (key.startsWith(sid)) {
+          if (!bookmarks[key]) {
+            bookmarks[key] = {};
+          }
+          bookmarks[key] = value;
+        }
+      });
+      console.log("queryBookmarks: list from local store, user not signed in");
       resolve(bookmarks);
     }
   });
@@ -230,7 +300,7 @@ function fetchTopics() {
       return;
     }
 
-    let sourceId = getSourceId().toString(10);
+    let sourceId = getKeyInfo().sourceId.toString(10);
 
     //user signed in, we need to get topics from server
     axios.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`)
@@ -292,7 +362,7 @@ function addToTopicList(newTopics) {
   if (userInfo) {
     axios.post(`${topicsEndPoint}/user/topics`, {
       userId: userInfo.userId,
-      sourceId: getSourceId(),
+      sourceId: getKeyInfo.sourceId(),
       topicList: newTopics
     })
       .then((response) => {
@@ -401,5 +471,6 @@ export default {
   deleteAnnotation: deleteAnnotation,
   postAnnotation: postAnnotation,
   getBookmarks: getBookmarks,
-  getBookmark: getBookmark
+  getBookmark: getBookmark,
+  queryBookmarks: queryBookmarks
 };
