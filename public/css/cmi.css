@@ -19,8 +19,6 @@ body {
 .main.container {
   margin-top: 2em;
 }
--->
-
 
 /* masthead header */
 .cmi-header .ui.header {
@@ -83,4 +81,18 @@ body {
 .ui.footer.segment {
   margin: 5em 0em 0em;
   padding: 5em 0em;
+}
+
+/* bookmark list modal */
+.ui.list .list > .hide-bookmark-item.bookmark-item.item, 
+.ui.list .list.hide-bookmarks {
+  display: none
+}
+
+.ui.list.cmi-bookmark-list {
+  margin-left: 20px;
+}
+
+.cmi.right.floated.content {
+  float: right;
 }

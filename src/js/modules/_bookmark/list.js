@@ -6,15 +6,63 @@ import {getKeyInfo} from "../_config/key";
 import {getPageInfo} from "../_config/config";
 import net from "./bmnet";
 import notify from "toastr";
+import flatten from "lodash/flatten";
+import uniq from "lodash/uniq";
+import join from "lodash/join";
 
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 let listInitialized = false;
 
-function generateParagraphList(pid, bkmk, url) {
+//generate the option element of a select statement
+function generateOption(topic) {
+  return `<option value="${topic}">${topic}</option>`;
+}
+
+//generate select html for Topics
+function makeTopicSelect(topics) {
+  return (`
+    <label>Topics</label>
+    <select name="topicList" id="bookmark-topic-list" multiple="" class="search ui dropdown">
+      <option value="">Select Topic(s)</option>
+      ${topics.map(topic => `${generateOption(topic)}`).join("")}
+    </select>
+  `);
+}
+
+function generateHorizontalList(listArray) {
+  if (!listArray || listArray.length === 0) {
+    return "No Topics";
+  }
+
   return `
-    <div class="item"> <!-- ${pid} -->
+    <div class="ui horizontal bulleted list">
+      ${listArray.map((item) => `
+        <div class="item">
+          <em>${item}</em>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function generateParagraphList(pid, bkmk, url, pTopicList) {
+  if (bkmk.length === 0) {
+    return `
+      <div class="bookmark-item item"> <!-- ${pid} -->
+        <i class="bookmark icon"></i>
+        <div class="content">
+          <div class="header">
+            <a href="${url}#${pid}">Paragraph: ${pid}</a> 
+          </div>
+        </div>
+      </div> <!-- item: ${pid} -->
+    `;
+  }
+
+  return `
+    <div class="${join(pTopicList," ")} bookmark-item item"> <!-- ${pid} -->
       <i class="bookmark icon"></i>
       <div class="content">
         <div class="header">
@@ -26,7 +74,10 @@ function generateParagraphList(pid, bkmk, url) {
               <i class="right triangle icon"></i>
               <div class="content">
                 <div class="header">
-                  ${annotation.Comment}
+                  ${generateHorizontalList(annotation.topicList)}
+                </div>
+                <div class="description">
+                  ${annotation.Comment?annotation.Comment:"No Comment"}
                 </div>
               </div>
             </div> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
@@ -40,10 +91,13 @@ function generateParagraphList(pid, bkmk, url) {
 function generateBookmarksForPage(bookmarks, url) {
   let html = "";
 
-  //loop over all paragraphs containing bookmarks
+//loop over all paragraphs containing bookmarks
   for(let pid in bookmarks) {
-    let paragraphId = `p${(parseInt(pid, 10) - 1).toString(10)}`;
-    html += generateParagraphList(paragraphId, bookmarks[pid], url);
+    //omit topic list keys
+    if (!pid.startsWith("tpList")) {
+      let paragraphId = `p${(parseInt(pid, 10) - 1).toString(10)}`;
+      html += generateParagraphList(paragraphId, bookmarks[pid], url, bookmarks[`tpList${pid}`]);
+    }
   }
 
   return html;
@@ -80,17 +134,20 @@ function generateBookmarksForBookPages(pages) {
 function generateBookmarkList(books) {
   return `
     ${books.map((book) => `
-      <div class="item"> <!-- item: ${book.bookTitle} -->
+      <div class="item"> <!-- item: ${book.bookId} -->
+        <div class="right floated content">
+          <div data-book="${book.bookId}" class="green ui small button">Open</div>
+        </div>
         <i class="book icon"></i>
         <div class="content">
           <div class="header">
             ${book.bookTitle}
           </div>
-          <div class="list">
+          <div id="${book.bookId}-list" class="hide-bookmarks list">
             ${generateBookmarksForBookPages(book.pages)}
           </div>
         </div>
-      </div> <!-- item: ${book.bookTitle} -->
+      </div> <!-- item: ${book.bookId} -->
     `).join("")}
   `;
 }
@@ -127,8 +184,31 @@ function combinePages(pages) {
     }
   });
 
-  console.log("bookArray: %o", bookArray);
-  return bookArray;
+  let allTopics = [];
+
+  //add a list of all topics used for each bookmark
+  bookArray.forEach(( book ) => {
+    book.pages.forEach((page) => {
+      for(let pid in page.bookmarks) {
+        //console.log(page.bookmarks[pid]);
+        if (page.bookmarks[pid].length > 0) {
+          let tpl = page.bookmarks[pid].map((annotation) => {
+            if (annotation.topicList) {
+              return annotation.topicList;
+            }
+          });
+          //collect all topics used for modal dropdown select control
+          let uniqueArray = uniq(flatten(tpl));
+
+          page.bookmarks[`tpList${pid}`] = uniqueArray;
+          allTopics.push(uniqueArray);
+        }
+      }
+    });
+  });
+
+  let allUniqueTopics = uniq(flatten(allTopics)).sort();
+  return {bookArray, topics: allUniqueTopics};
 
 }
 
@@ -146,11 +226,32 @@ function populateModal(bookmarks) {
   //we have an array of bookmarks, each element represents a page
   Promise.all(info)
     .then((responses) => {
-      console.log("promise.all: ", responses);
-      let bookArray = combinePages(responses);
+      let {bookArray, topics} = combinePages(responses);
+      console.log("unique topics: %o", topics);
 
+      //generate html and attach to modal dialog
       html = generateBookmarkList(bookArray);
       $(".cmi-bookmark-list").html(html);
+
+      let select = makeTopicSelect(topics);
+      $("#bookmark-modal-topic-select").html(select);
+      $("#bookmark-topic-list").dropdown();
+
+      //set click listeners
+      $(".cmi-bookmark-list").on("click", "[data-book]", function(e) {
+        e.stopPropagation();
+        let bookId = $(this).attr("data-book");
+        let bookList = $(`#${bookId}-list`);
+
+        if (bookList.hasClass("hide-bookmarks")) {
+          bookList.removeClass("hide-bookmarks");
+          $(this).text("Close").removeClass("green").addClass("yellow");
+        }
+        else {
+          bookList.removeClass("yellow").addClass("green hide-bookmarks");
+          $(this).text("Open").removeClass("yellow").addClass("green");
+        }
+      });
 
     })
     .catch((err) => {
