@@ -62,7 +62,6 @@ function labelParagraphs() {
   console.log("page: number of paragraphs: %s", count + omit);
   //console.log("conf: number of paragraphs: %s", config.unit.pNum);
 }
-
 /*
   Fix main menu to top of page when scrolled
 */
@@ -97,7 +96,6 @@ $(document).ready(() => {
   initStickyMenu();
   labelParagraphs();
   createParagraphNumberToggleListener();
-  bookmark.initialize();
   search.initialize();
   auth.initialize();
 
@@ -106,6 +104,7 @@ $(document).ready(() => {
     .then((source) => {
       console.log(source);
       toc.initialize();
+      bookmark.initialize();
       audio.initialize(bookmark);
       showParagraph();
     })

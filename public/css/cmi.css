@@ -93,6 +93,7 @@ body {
   margin-left: 20px;
 }
 
-.cmi.right.floated.content {
-  float: right;
+.bookmark-filter-color {
+  color: green;
 }
+

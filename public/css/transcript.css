@@ -79,3 +79,19 @@
   box-shadow: 5px 5px 4px 0 #6f6f6d;
 }
 
+/* bookmark navigator */
+.bookmark-navigator-wrapper {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  width: 60%;
+}
+
+.bookmark-navigator {
+  position: relative;
+  left: -50%;
+}
+
+.hide-bookmark-navigator.bookmark-navigator-wrapper {
+  display: none;
+}

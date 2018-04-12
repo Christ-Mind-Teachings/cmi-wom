@@ -34,3 +34,13 @@ export function showParagraph() {
     scroll(document.getElementById(pId), {align: {top: 0.2}});
   }
 }
+
+export function bookmarkNavigatorRequested() {
+  let bmn = getQueryString("bmn");
+  let pid = getQueryString("v");
+
+  if (bmn === "1") {
+    return pid;
+  }
+  return null;
+}

@@ -34,6 +34,8 @@ import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
 import hotKeys from "hotkeys-js";
 import list from "./list";
+import {initNavigator} from "./navigator";
+import { bookmarkNavigatorRequested } from "../_util/url";
 import {
   switchToParagraph,
   registerNotifyPlaybackTime, 
@@ -324,13 +326,6 @@ function createAnnotaion(formValues) {
   let newAnnotationHTML = makeAnnotationListItem(annotation.rangeStart, annotation);
   let annotationList = $(".annotation-list");
 
-  //check if there is already a list of annotations 
-  // -there will be if there is a h4 child
-  // if (annotationList.children("h4").length === 0) {
-  //   $(annotationList.append(newAnnotationHTML));
-  //   $(annotationList).append(addAnnotationDivider());
-  // }
-  // else {
   //check if the annotation already exists in the list, this will happen
   //when an annotation has been modified
   let aid = annotation.creationDate.toString(10);
@@ -341,7 +336,6 @@ function createAnnotaion(formValues) {
     }
   });
   $(annotationList.prepend(newAnnotationHTML));
-  // }
 }
 
 /*
@@ -749,7 +743,8 @@ $("#annotation-form").submit((e) => {
  *
  */
 function createBookmarkToggle(selector) {
-  $(selector).on("click", function() {
+  $(selector).on("click", function(e) {
+    e.preventDefault();
     if ($(".transcript").hasClass("hide-bkmark")) {
       $(".transcript").removeClass("hide-bkmark");
     }
@@ -767,7 +762,6 @@ export default {
     if ($(".transcript").length) {
 
       //Used by annotation modal prev and next buttons
-      //gMaxId = parseInt($(".transcript p.cmiTranPara").length, 10) - 1;
       gMinId = parseInt($(".transcript p.cmiTranPara").first().attr("id").substr(1), 10);
       gMaxId = parseInt($(".transcript p.cmiTranPara").last().attr("id").substr(1), 10);
 
@@ -778,6 +772,11 @@ export default {
 
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
+
+      let pid = bookmarkNavigatorRequested();
+      if (pid) {
+        initNavigator(pid);
+      }
       net.getBookmarks()
         .then((response) => {
           if (response) {

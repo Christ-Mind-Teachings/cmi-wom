@@ -2,18 +2,44 @@
   Display list of bookmarks for user/source and allow for filtering by topic
 */
 
-import {getKeyInfo} from "../_config/key";
+import {getSourceId, getKeyInfo} from "../_config/key";
 import {getPageInfo} from "../_config/config";
 import net from "./bmnet";
 import notify from "toastr";
 import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
 import join from "lodash/join";
+import store from "store";
 
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
+
+//flag indicating if bookmark modal has been initialized
 let listInitialized = false;
+
+//bookmark info by book
+//let bookmarkModalInfo = {modal: {following: false, filter: false}};
+
+function bookmarkModalState(option, modalInfo) {
+  let sid = getSourceId();
+  let name = `bookmarkModal-${sid}`;
+  let info;
+
+  switch(option) {
+    case "get":
+      info = store.get(name);
+      if (!info) {
+        info = {modal: {following: false, filter: false}};
+      }
+      return info;
+    case "set":
+      store.set(name, modalInfo);
+      break;
+    default:
+      throw new Error("Invalid value for 'option' argument: use 'set' or 'get'");
+  }
+}
 
 //generate the option element of a select statement
 function generateOption(topic) {
@@ -23,7 +49,7 @@ function generateOption(topic) {
 //generate select html for Topics
 function makeTopicSelect(topics) {
   return (`
-    <label>Topics</label>
+    <label>Filter Topic(s)</label>
     <select name="topicList" id="bookmark-topic-list" multiple="" class="search ui dropdown">
       <option value="">Select Topic(s)</option>
       ${topics.map(topic => `${generateOption(topic)}`).join("")}
@@ -54,7 +80,7 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
         <i class="bookmark icon"></i>
         <div class="content">
           <div class="header">
-            <a href="${url}#${pid}">Paragraph: ${pid}</a> 
+            <a href="${url}?v=${pid}">Paragraph: ${pid}</a> 
           </div>
         </div>
       </div> <!-- item: ${pid} -->
@@ -66,7 +92,7 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
       <i class="bookmark icon"></i>
       <div class="content">
         <div class="header">
-          <a href="${url}#${pid}">Paragraph: ${pid}</a> 
+          <a href="${url}?v=${pid}">Paragraph: ${pid}</a> 
         </div>
         <div class="list">
           ${bkmk.map((annotation) => `
@@ -134,13 +160,13 @@ function generateBookmarksForBookPages(pages) {
 function generateBookmarkList(books) {
   return `
     ${books.map((book) => `
-      <div class="item"> <!-- item: ${book.bookId} -->
+      <div data-bid="${book.bookId}" class="item"> <!-- item: ${book.bookId} -->
         <div class="right floated content">
           <div data-book="${book.bookId}" class="green ui small button">Open</div>
         </div>
         <i class="book icon"></i>
         <div class="content">
-          <div class="header">
+          <div class="${book.bookId}-header header">
             ${book.bookTitle}
           </div>
           <div id="${book.bookId}-list" class="hide-bookmarks list">
@@ -212,6 +238,25 @@ function combinePages(pages) {
 
 }
 
+/*
+  set bookmark modal form to previous state
+*/
+function restoreModalState() {
+  let {modal} = bookmarkModalState("get");
+  let form = $("#bookmark-filter-form");
+
+  console.log("modal: ", modal);
+
+  if (modal.filter) {
+    form.form("set value", "topicList", modal.topics);
+    $(".bookmark-filter-submit").trigger("click", {init: true});
+  }
+
+  if (modal.following) {
+    $("button.bookmark-follow").trigger("click", {init: true});
+  }
+}
+
 function populateModal(bookmarks) {
   let html;
   let info = [];
@@ -237,7 +282,28 @@ function populateModal(bookmarks) {
       $("#bookmark-modal-topic-select").html(select);
       $("#bookmark-topic-list").dropdown();
 
-      //set click listeners
+      $("#bookmark-modal-loading").removeClass("active").addClass("disabled");
+
+      let bookmarkModalInfo = bookmarkModalState("get");
+
+      //get number of bookmarks for each book
+      $("[data-bid]").each(function() {
+        let info = {};
+        let bid = $(this).data("bid");
+
+        info.count = $(`[data-bid="${bid}"] .bookmark-item`).length;
+        info.header = $(`.${bid}-header`).text().trim();
+
+        //update title to reflect number of bookmarks
+        $(`.${bid}-header`).text(`${info.header} (${info.count})`);
+
+        bookmarkModalInfo[bid] = info;
+      });
+
+      //console.log("bookmarkModalInfo: %o", bookmarkModalInfo);
+      bookmarkModalState("set", bookmarkModalInfo);
+
+      //set click listener to open/close book level bookmarks
       $(".cmi-bookmark-list").on("click", "[data-book]", function(e) {
         e.stopPropagation();
         let bookId = $(this).attr("data-book");
@@ -252,6 +318,115 @@ function populateModal(bookmarks) {
           $(this).text("Open").removeClass("yellow").addClass("green");
         }
       });
+
+      //apply topic filter
+      $(".bookmark-filter-submit").on("click", function(e, data) {
+        e.preventDefault();
+        let form = $("#bookmark-filter-form");
+        let topics = form.form("get value", "topicList");
+        let topicRegExp = new RegExp(`\\b(${topics.join("|")})\\b`);
+
+        if (topics.length === 0) {
+          return;
+        }
+
+        console.log("data: ", data);
+
+        let bookmarkItems = $(".cmi-bookmark-list .bookmark-item");
+        bookmarkItems.each(function() {
+          let classList = $(this).attr("class");
+          if (classList.match(topicRegExp)) {
+            //the bookmark could be hidden from a previous filter, so just remove the class
+            //in case it's there
+            $(this).removeClass("hide-bookmark-item");
+          }
+          else {
+            $(this).addClass("hide-bookmark-item");
+          }
+        });
+
+        //keep track of the state of the bookmark Modal
+        let bookmarkModalInfo = bookmarkModalState("get");
+
+        //if we have data we're initializing and so we don't need to save state
+        if (!data) {
+          bookmarkModalInfo["modal"].filter = true;
+          bookmarkModalInfo["modal"].topics = topics;
+          bookmarkModalState("set", bookmarkModalInfo);
+        }
+
+        $("[data-bid]").each(function() {
+          let bid = $(this).data("bid");
+          let filtered = $(`[data-bid="${bid}"] .bookmark-item.hide-bookmark-item`).length;
+          let remaining = bookmarkModalInfo[bid].count - filtered;
+
+          //update title to reflect number of bookmarks shown after filter applied
+          $(`.${bid}-header`).html(`${bookmarkModalInfo[bid].header} (<span class="bookmark-filter-color">${remaining}</span>/${bookmarkModalInfo[bid].count})`);
+        });
+      });
+
+      //clear filter
+      $(".bookmark-filter-reset").on("click", function(e) {
+        e.preventDefault();
+        let form = $("#bookmark-filter-form");
+        form.form("clear");
+
+        let hiddenBookmarkItems = $(".cmi-bookmark-list .hide-bookmark-item.bookmark-item");
+        hiddenBookmarkItems.each(function() {
+          $(this).removeClass("hide-bookmark-item");
+        });
+
+        //keep track of the state of the bookmark Modal
+        let bookmarkModalInfo = bookmarkModalState("get");
+
+        //update book title to reflect number of bookmarks
+        $("[data-bid]").each(function() {
+          let bid = $(this).data("bid");
+
+          $(`.${bid}-header`).text(`${bookmarkModalInfo[bid].header} (${bookmarkModalInfo[bid].count})`);
+        });
+
+        bookmarkModalInfo["modal"].filter = false;
+        delete bookmarkModalInfo["modal"].topics;
+        bookmarkModalState("set", bookmarkModalInfo);
+      });
+
+
+      //setup bookmark follow listener
+      $("button.bookmark-follow").on("click", function(e, data) {
+        e.preventDefault();
+        let following = false;
+
+        if ($(this).hasClass("following-enabled")) {
+          $(this).removeClass("following-enabled red").addClass("green").html("Follow");
+
+          //keep track of the state of the bookmark Modal
+          following = false;
+        }
+        else {
+          $(this).removeClass("green").addClass("following-enabled red").html("Following");
+          following = true;
+        }
+      
+        //if we have data we're initializing and don't need to update the state
+        if (!data) {
+          let bookmarkModalInfo = bookmarkModalState("get");
+          bookmarkModalInfo["modal"].following = following;
+          bookmarkModalState("set", bookmarkModalInfo);
+        }
+
+      });
+
+      $(".cmi-bookmark-list a").on("click", function(e) {
+        if ($("button.bookmark-follow").hasClass("following-enabled")) {
+          let href = $(this).attr("href");
+          href = `${href}&bmn=1`;
+          $(this).attr("href", href);
+        }
+      });
+
+      //restore past state if needed
+      restoreModalState();
 
     })
     .catch((err) => {
