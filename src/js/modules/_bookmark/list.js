@@ -19,18 +19,18 @@ const uiModalOpacity = 0.5;
 let listInitialized = false;
 
 //bookmark info by book
-//let bookmarkModalInfo = {modal: {following: false, filter: false}};
+//let bookmarkModalInfo = {modal: {filter: false}};
 
 function bookmarkModalState(option, modalInfo) {
   let sid = getSourceId();
-  let name = `bookmarkModal-${sid}`;
+  let name = `bmModal_${sid}`;
   let info;
 
   switch(option) {
     case "get":
       info = store.get(name);
       if (!info) {
-        info = {modal: {following: false, filter: false}};
+        info = {modal: {filter: false}};
       }
       return info;
     case "set":
@@ -80,7 +80,7 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
         <i class="bookmark icon"></i>
         <div class="content">
           <div class="header">
-            <a href="${url}?v=${pid}">Paragraph: ${pid}</a> 
+            <a href="${url}?bkmk=${pid}">Paragraph: ${pid}</a> 
           </div>
         </div>
       </div> <!-- item: ${pid} -->
@@ -92,7 +92,7 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
       <i class="bookmark icon"></i>
       <div class="content">
         <div class="header">
-          <a href="${url}?v=${pid}">Paragraph: ${pid}</a> 
+          <a href="${url}?bkmk=${pid}">Paragraph: ${pid}</a> 
         </div>
         <div class="list">
           ${bkmk.map((annotation) => `
@@ -117,7 +117,7 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
 function generateBookmarksForPage(bookmarks, url) {
   let html = "";
 
-//loop over all paragraphs containing bookmarks
+  //loop over all paragraphs containing bookmarks
   for(let pid in bookmarks) {
     //omit topic list keys
     if (!pid.startsWith("tpList")) {
@@ -250,10 +250,6 @@ function restoreModalState() {
   if (modal.filter) {
     form.form("set value", "topicList", modal.topics);
     $(".bookmark-filter-submit").trigger("click", {init: true});
-  }
-
-  if (modal.following) {
-    $("button.bookmark-follow").trigger("click", {init: true});
   }
 }
 
@@ -389,40 +385,6 @@ function populateModal(bookmarks) {
         bookmarkModalInfo["modal"].filter = false;
         delete bookmarkModalInfo["modal"].topics;
         bookmarkModalState("set", bookmarkModalInfo);
-      });
-
-
-      //setup bookmark follow listener
-      $("button.bookmark-follow").on("click", function(e, data) {
-        e.preventDefault();
-        let following = false;
-
-        if ($(this).hasClass("following-enabled")) {
-          $(this).removeClass("following-enabled red").addClass("green").html("Follow");
-
-          //keep track of the state of the bookmark Modal
-          following = false;
-        }
-        else {
-          $(this).removeClass("green").addClass("following-enabled red").html("Following");
-          following = true;
-        }
-      
-        //if we have data we're initializing and don't need to update the state
-        if (!data) {
-          let bookmarkModalInfo = bookmarkModalState("get");
-          bookmarkModalInfo["modal"].following = following;
-          bookmarkModalState("set", bookmarkModalInfo);
-        }
-
-      });
-
-      $(".cmi-bookmark-list a").on("click", function(e) {
-        if ($("button.bookmark-follow").hasClass("following-enabled")) {
-          let href = $(this).attr("href");
-          href = `${href}&bmn=1`;
-          $(this).attr("href", href);
-        }
       });
 
       //restore past state if needed

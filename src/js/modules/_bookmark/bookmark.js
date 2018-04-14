@@ -35,7 +35,7 @@ import cloneDeep from "lodash/cloneDeep";
 import hotKeys from "hotkeys-js";
 import list from "./list";
 import {initNavigator} from "./navigator";
-import { bookmarkNavigatorRequested } from "../_util/url";
+import { showBookmark } from "../_util/url";
 import {
   switchToParagraph,
   registerNotifyPlaybackTime, 
@@ -773,7 +773,7 @@ export default {
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
 
-      let pid = bookmarkNavigatorRequested();
+      let pid = showBookmark();
       if (pid) {
         initNavigator(pid);
       }

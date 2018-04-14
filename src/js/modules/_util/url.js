@@ -35,12 +35,12 @@ export function showParagraph() {
   }
 }
 
-export function bookmarkNavigatorRequested() {
-  let bmn = getQueryString("bmn");
-  let pid = getQueryString("v");
+export function showBookmark() {
+  let pId = getQueryString("bkmk");
 
-  if (bmn === "1") {
-    return pid;
+  if (pId) {
+    scroll(document.getElementById(pId), {align: {top: 0.2}});
+    return pId;
   }
   return null;
 }

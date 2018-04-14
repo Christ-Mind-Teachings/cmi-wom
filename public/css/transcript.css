@@ -95,3 +95,9 @@
 .hide-bookmark-navigator.bookmark-navigator-wrapper {
   display: none;
 }
+
+.bookmark-navigator a.item.inactive,
+.bookmark-navigator a.item.inactive:hover {
+  cursor: default;
+  color: darkgray;
+}

@@ -202,4 +202,3 @@ export function decodeKey(key) {
 
   return decodedKey;
 }
-
