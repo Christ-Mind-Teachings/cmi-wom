@@ -75,11 +75,11 @@
 	__webpack_require__(26),
 	__webpack_require__(2),
 	__webpack_require__(162),
-	__webpack_require__(37),
+	__webpack_require__(38),
 	__webpack_require__(94),
 	__webpack_require__(95),
 	__webpack_require__(55),
-	__webpack_require__(36),
+	__webpack_require__(37),
 	__webpack_require__(96),
 	__webpack_require__(54),
 	__webpack_require__(97),
@@ -530,7 +530,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(176),
 	__webpack_require__(20),
 	__webpack_require__(180),
-	__webpack_require__(38),
+	__webpack_require__(39),
 	__webpack_require__(182),
 	__webpack_require__(185),
 	__webpack_require__(25),
@@ -1293,7 +1293,7 @@ module.exports = getNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(36),
+	__webpack_require__(37),
 	__webpack_require__(96)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type, toString ) {
 
@@ -1322,7 +1322,7 @@ return toType;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(1),
-	__webpack_require__(37),
+	__webpack_require__(38),
 	__webpack_require__(62)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction, slice ) {
 
@@ -1929,7 +1929,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(61),
 	__webpack_require__(1),
 	__webpack_require__(10),
-	__webpack_require__(37),
+	__webpack_require__(38),
 	__webpack_require__(8),
 	__webpack_require__(14),
 
@@ -3548,7 +3548,7 @@ return jQuery;
 /* harmony export (immutable) */ __webpack_exports__["b"] = getAudioInfo;
 /* harmony export (immutable) */ __webpack_exports__["e"] = getReservation;
 /* harmony export (immutable) */ __webpack_exports__["d"] = getPageInfo;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_store__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
@@ -3576,12 +3576,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1523675012244,
-    wot: 1523675012244,
-    wok: 1523675012244,
-    wos: 1523675012244,
-    tjl: 1523675012244,
-    early: 1523675012244
+    woh: 1523712150241,
+    wot: 1523712150241,
+    wok: 1523712150241,
+    wos: 1523712150241,
+    tjl: 1523712150241,
+    early: 1523712150241
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -4472,6 +4472,209 @@ return camelCase;
 
 /***/ }),
 /* 29 */
+/***/ (function(module, exports) {
+
+var COMPLETE = 'complete',
+    CANCELED = 'canceled';
+
+function raf(task){
+    if('requestAnimationFrame' in window){
+        return window.requestAnimationFrame(task);
+    }
+
+    setTimeout(task, 16);
+}
+
+function setElementScroll(element, x, y){
+    if(element.self === element){
+        element.scrollTo(x, y);
+    }else{
+        element.scrollLeft = x;
+        element.scrollTop = y;
+    }
+}
+
+function getTargetScrollLocation(target, parent, align){
+    var targetPosition = target.getBoundingClientRect(),
+        parentPosition,
+        x,
+        y,
+        differenceX,
+        differenceY,
+        targetWidth,
+        targetHeight,
+        leftAlign = align && align.left != null ? align.left : 0.5,
+        topAlign = align && align.top != null ? align.top : 0.5,
+        leftOffset = align && align.leftOffset != null ? align.leftOffset : 0,
+        topOffset = align && align.topOffset != null ? align.topOffset : 0,
+        leftScalar = leftAlign,
+        topScalar = topAlign;
+
+    if(parent.self === parent){
+        targetWidth = Math.min(targetPosition.width, parent.innerWidth);
+        targetHeight = Math.min(targetPosition.height, parent.innerHeight);
+        x = targetPosition.left + parent.pageXOffset - parent.innerWidth * leftScalar + targetWidth * leftScalar;
+        y = targetPosition.top + parent.pageYOffset - parent.innerHeight * topScalar + targetHeight * topScalar;
+        x -= leftOffset;
+        y -= topOffset;
+        differenceX = x - parent.pageXOffset;
+        differenceY = y - parent.pageYOffset;
+    }else{
+        targetWidth = targetPosition.width;
+        targetHeight = targetPosition.height;
+        parentPosition = parent.getBoundingClientRect();
+        var offsetLeft = targetPosition.left - (parentPosition.left - parent.scrollLeft);
+        var offsetTop = targetPosition.top - (parentPosition.top - parent.scrollTop);
+        x = offsetLeft + (targetWidth * leftScalar) - parent.clientWidth * leftScalar;
+        y = offsetTop + (targetHeight * topScalar) - parent.clientHeight * topScalar;
+        x = Math.max(Math.min(x, parent.scrollWidth - parent.clientWidth), 0);
+        y = Math.max(Math.min(y, parent.scrollHeight - parent.clientHeight), 0);
+        x -= leftOffset;
+        y -= topOffset;
+        differenceX = x - parent.scrollLeft;
+        differenceY = y - parent.scrollTop;
+    }
+
+    return {
+        x: x,
+        y: y,
+        differenceX: differenceX,
+        differenceY: differenceY
+    };
+}
+
+function animate(parent){
+    raf(function(){
+        var scrollSettings = parent._scrollSettings;
+        if(!scrollSettings){
+            return;
+        }
+
+        var location = getTargetScrollLocation(scrollSettings.target, parent, scrollSettings.align),
+            time = Date.now() - scrollSettings.startTime,
+            timeValue = Math.min(1 / scrollSettings.time * time, 1);
+
+        if(
+            time > scrollSettings.time + 20
+        ){
+            setElementScroll(parent, location.x, location.y);
+            parent._scrollSettings = null;
+            return scrollSettings.end(COMPLETE);
+        }
+
+        var easeValue = 1 - scrollSettings.ease(timeValue);
+
+        setElementScroll(parent,
+            location.x - location.differenceX * easeValue,
+            location.y - location.differenceY * easeValue
+        );
+
+        animate(parent);
+    });
+}
+function transitionScrollTo(target, parent, settings, callback){
+    var idle = !parent._scrollSettings,
+        lastSettings = parent._scrollSettings,
+        now = Date.now(),
+        endHandler;
+
+    if(lastSettings){
+        lastSettings.end(CANCELED);
+    }
+
+    function end(endType){
+        parent._scrollSettings = null;
+        if(parent.parentElement && parent.parentElement._scrollSettings){
+            parent.parentElement._scrollSettings.end(endType);
+        }
+        callback(endType);
+        parent.removeEventListener('touchstart', endHandler);
+    }
+
+    parent._scrollSettings = {
+        startTime: lastSettings ? lastSettings.startTime : Date.now(),
+        target: target,
+        time: settings.time + (lastSettings ? now - lastSettings.startTime : 0),
+        ease: settings.ease,
+        align: settings.align,
+        end: end
+    };
+
+    endHandler = end.bind(null, CANCELED);
+    parent.addEventListener('touchstart', endHandler);
+
+    if(idle){
+        animate(parent);
+    }
+}
+
+function defaultIsScrollable(element){
+    return (
+        'pageXOffset' in element ||
+        (
+            element.scrollHeight !== element.clientHeight ||
+            element.scrollWidth !== element.clientWidth
+        ) &&
+        getComputedStyle(element).overflow !== 'hidden'
+    );
+}
+
+function defaultValidTarget(){
+    return true;
+}
+
+module.exports = function(target, settings, callback){
+    if(!target){
+        return;
+    }
+
+    if(typeof settings === 'function'){
+        callback = settings;
+        settings = null;
+    }
+
+    if(!settings){
+        settings = {};
+    }
+
+    settings.time = isNaN(settings.time) ? 1000 : settings.time;
+    settings.ease = settings.ease || function(v){return 1 - Math.pow(1 - v, v / 2);};
+
+    var parent = target.parentElement,
+        parents = 0;
+
+    function done(endType){
+        parents--;
+        if(!parents){
+            callback && callback(endType);
+        }
+    }
+
+    var validTarget = settings.validTarget || defaultValidTarget;
+    var isScrollable = settings.isScrollable;
+
+    while(parent){
+        if(validTarget(parent, parents) && (isScrollable ? isScrollable(parent, defaultIsScrollable) : defaultIsScrollable(parent))){
+            parents++;
+            transitionScrollTo(target, parent, settings, done);
+        }
+
+        parent = parent.parentElement;
+
+        if(!parent){
+            return;
+        }
+
+        if(parent.tagName === 'BODY'){
+            parent = parent.ownerDocument;
+            parent = parent.defaultView || parent.ownerWindow;
+        }
+    }
+};
+
+
+/***/ }),
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var engine = __webpack_require__(202)
@@ -4483,7 +4686,7 @@ module.exports = engine.createStore(storages, plugins)
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(24),
@@ -4517,12 +4720,12 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayLikeKeys = __webpack_require__(141),
     baseKeys = __webpack_require__(280),
-    isArrayLike = __webpack_require__(33);
+    isArrayLike = __webpack_require__(34);
 
 /**
  * Creates an array of the own enumerable property names of `object`.
@@ -4560,7 +4763,7 @@ module.exports = keys;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /**
@@ -4580,7 +4783,7 @@ module.exports = baseUnary;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(134),
@@ -4619,7 +4822,7 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -4646,7 +4849,7 @@ module.exports = arrayMap;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -5123,7 +5326,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -5136,7 +5339,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5150,7 +5353,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5643,213 +5846,10 @@ return jQuery;
 
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports) {
-
-var COMPLETE = 'complete',
-    CANCELED = 'canceled';
-
-function raf(task){
-    if('requestAnimationFrame' in window){
-        return window.requestAnimationFrame(task);
-    }
-
-    setTimeout(task, 16);
-}
-
-function setElementScroll(element, x, y){
-    if(element.self === element){
-        element.scrollTo(x, y);
-    }else{
-        element.scrollLeft = x;
-        element.scrollTop = y;
-    }
-}
-
-function getTargetScrollLocation(target, parent, align){
-    var targetPosition = target.getBoundingClientRect(),
-        parentPosition,
-        x,
-        y,
-        differenceX,
-        differenceY,
-        targetWidth,
-        targetHeight,
-        leftAlign = align && align.left != null ? align.left : 0.5,
-        topAlign = align && align.top != null ? align.top : 0.5,
-        leftOffset = align && align.leftOffset != null ? align.leftOffset : 0,
-        topOffset = align && align.topOffset != null ? align.topOffset : 0,
-        leftScalar = leftAlign,
-        topScalar = topAlign;
-
-    if(parent.self === parent){
-        targetWidth = Math.min(targetPosition.width, parent.innerWidth);
-        targetHeight = Math.min(targetPosition.height, parent.innerHeight);
-        x = targetPosition.left + parent.pageXOffset - parent.innerWidth * leftScalar + targetWidth * leftScalar;
-        y = targetPosition.top + parent.pageYOffset - parent.innerHeight * topScalar + targetHeight * topScalar;
-        x -= leftOffset;
-        y -= topOffset;
-        differenceX = x - parent.pageXOffset;
-        differenceY = y - parent.pageYOffset;
-    }else{
-        targetWidth = targetPosition.width;
-        targetHeight = targetPosition.height;
-        parentPosition = parent.getBoundingClientRect();
-        var offsetLeft = targetPosition.left - (parentPosition.left - parent.scrollLeft);
-        var offsetTop = targetPosition.top - (parentPosition.top - parent.scrollTop);
-        x = offsetLeft + (targetWidth * leftScalar) - parent.clientWidth * leftScalar;
-        y = offsetTop + (targetHeight * topScalar) - parent.clientHeight * topScalar;
-        x = Math.max(Math.min(x, parent.scrollWidth - parent.clientWidth), 0);
-        y = Math.max(Math.min(y, parent.scrollHeight - parent.clientHeight), 0);
-        x -= leftOffset;
-        y -= topOffset;
-        differenceX = x - parent.scrollLeft;
-        differenceY = y - parent.scrollTop;
-    }
-
-    return {
-        x: x,
-        y: y,
-        differenceX: differenceX,
-        differenceY: differenceY
-    };
-}
-
-function animate(parent){
-    raf(function(){
-        var scrollSettings = parent._scrollSettings;
-        if(!scrollSettings){
-            return;
-        }
-
-        var location = getTargetScrollLocation(scrollSettings.target, parent, scrollSettings.align),
-            time = Date.now() - scrollSettings.startTime,
-            timeValue = Math.min(1 / scrollSettings.time * time, 1);
-
-        if(
-            time > scrollSettings.time + 20
-        ){
-            setElementScroll(parent, location.x, location.y);
-            parent._scrollSettings = null;
-            return scrollSettings.end(COMPLETE);
-        }
-
-        var easeValue = 1 - scrollSettings.ease(timeValue);
-
-        setElementScroll(parent,
-            location.x - location.differenceX * easeValue,
-            location.y - location.differenceY * easeValue
-        );
-
-        animate(parent);
-    });
-}
-function transitionScrollTo(target, parent, settings, callback){
-    var idle = !parent._scrollSettings,
-        lastSettings = parent._scrollSettings,
-        now = Date.now(),
-        endHandler;
-
-    if(lastSettings){
-        lastSettings.end(CANCELED);
-    }
-
-    function end(endType){
-        parent._scrollSettings = null;
-        if(parent.parentElement && parent.parentElement._scrollSettings){
-            parent.parentElement._scrollSettings.end(endType);
-        }
-        callback(endType);
-        parent.removeEventListener('touchstart', endHandler);
-    }
-
-    parent._scrollSettings = {
-        startTime: lastSettings ? lastSettings.startTime : Date.now(),
-        target: target,
-        time: settings.time + (lastSettings ? now - lastSettings.startTime : 0),
-        ease: settings.ease,
-        align: settings.align,
-        end: end
-    };
-
-    endHandler = end.bind(null, CANCELED);
-    parent.addEventListener('touchstart', endHandler);
-
-    if(idle){
-        animate(parent);
-    }
-}
-
-function defaultIsScrollable(element){
-    return (
-        'pageXOffset' in element ||
-        (
-            element.scrollHeight !== element.clientHeight ||
-            element.scrollWidth !== element.clientWidth
-        ) &&
-        getComputedStyle(element).overflow !== 'hidden'
-    );
-}
-
-function defaultValidTarget(){
-    return true;
-}
-
-module.exports = function(target, settings, callback){
-    if(!target){
-        return;
-    }
-
-    if(typeof settings === 'function'){
-        callback = settings;
-        settings = null;
-    }
-
-    if(!settings){
-        settings = {};
-    }
-
-    settings.time = isNaN(settings.time) ? 1000 : settings.time;
-    settings.ease = settings.ease || function(v){return 1 - Math.pow(1 - v, v / 2);};
-
-    var parent = target.parentElement,
-        parents = 0;
-
-    function done(endType){
-        parents--;
-        if(!parents){
-            callback && callback(endType);
-        }
-    }
-
-    var validTarget = settings.validTarget || defaultValidTarget;
-    var isScrollable = settings.isScrollable;
-
-    while(parent){
-        if(validTarget(parent, parents) && (isScrollable ? isScrollable(parent, defaultIsScrollable) : defaultIsScrollable(parent))){
-            parents++;
-            transitionScrollTo(target, parent, settings, done);
-        }
-
-        parent = parent.parentElement;
-
-        if(!parent){
-            return;
-        }
-
-        if(parent.tagName === 'BODY'){
-            parent = parent.ownerDocument;
-            parent = parent.defaultView || parent.ownerWindow;
-        }
-    }
-};
-
-
-/***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(30),
+var baseGetTag = __webpack_require__(31),
     isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
@@ -6260,7 +6260,7 @@ var DataView = __webpack_require__(282),
     Promise = __webpack_require__(283),
     Set = __webpack_require__(145),
     WeakMap = __webpack_require__(284),
-    baseGetTag = __webpack_require__(30),
+    baseGetTag = __webpack_require__(31),
     toSource = __webpack_require__(135);
 
 /** `Object#toString` result references. */
@@ -6764,7 +6764,7 @@ function setAsSignedOut() {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(36)
+	__webpack_require__(37)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type ) {
 	"use strict";
 
@@ -7407,7 +7407,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(64),
 	__webpack_require__(18),
 	__webpack_require__(19),
-	__webpack_require__(38),
+	__webpack_require__(39),
 	__webpack_require__(25),
 	__webpack_require__(175)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, camelCase, document, isFunction, rcssNum, rnothtmlwhite, cssExpand,
@@ -9176,7 +9176,7 @@ module.exports = arrayIncludesWith;
 /* harmony export (immutable) */ __webpack_exports__["f"] = switchToParagraph;
 /* harmony export (immutable) */ __webpack_exports__["g"] = togglePlayFromHere;
 /* harmony export (immutable) */ __webpack_exports__["b"] = disableScroll;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex__ = __webpack_require__(160);
@@ -9605,7 +9605,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(36)
+	__webpack_require__(37)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type ) {
 	"use strict";
 
@@ -10895,7 +10895,7 @@ return jQuery;
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = showParagraph;
 /* harmony export (immutable) */ __webpack_exports__["a"] = showBookmark;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 
 
@@ -11337,9 +11337,9 @@ module.exports = freeGlobal;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_store__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_netlify__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_key__ = __webpack_require__(41);
@@ -11850,7 +11850,7 @@ module.exports = charenc;
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(30),
+var baseGetTag = __webpack_require__(31),
     isObject = __webpack_require__(15);
 
 /** `Object#toString` result references. */
@@ -12028,7 +12028,7 @@ module.exports = Uint8Array;
 
 var baseGetAllKeys = __webpack_require__(139),
     getSymbols = __webpack_require__(79),
-    keys = __webpack_require__(31);
+    keys = __webpack_require__(32);
 
 /**
  * Creates an array of own enumerable property names and symbols of `object`.
@@ -12190,7 +12190,7 @@ module.exports = isIndex;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsTypedArray = __webpack_require__(279),
-    baseUnary = __webpack_require__(32),
+    baseUnary = __webpack_require__(33),
     nodeUtil = __webpack_require__(84);
 
 /* Node.js helper references. */
@@ -12479,7 +12479,7 @@ module.exports = defineProperty;
 
 var arrayLikeKeys = __webpack_require__(141),
     baseKeysIn = __webpack_require__(306),
-    isArrayLike = __webpack_require__(33);
+    isArrayLike = __webpack_require__(34);
 
 /**
  * Creates an array of the own and inherited enumerable property names of `object`.
@@ -12625,7 +12625,7 @@ module.exports = baseRest;
 /* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArrayLike = __webpack_require__(33),
+var isArrayLike = __webpack_require__(34),
     isObjectLike = __webpack_require__(11);
 
 /**
@@ -12732,12 +12732,12 @@ module.exports = findLastIndex;
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["b"] = setCaptureData;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__captureData__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_toastr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_store__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_netlify__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_scroll_into_view__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__focus__ = __webpack_require__(92);
 /*
@@ -16869,7 +16869,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(0),
 	__webpack_require__(1),
 	__webpack_require__(6),
-	__webpack_require__(38), // clone
+	__webpack_require__(39), // clone
 	__webpack_require__(19) // parent, contents
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction ) {
 
@@ -17350,7 +17350,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(191),
 	__webpack_require__(21),
 	__webpack_require__(19),
-	__webpack_require__(38),
+	__webpack_require__(39),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, stripAndCollapse, isFunction ) {
 
@@ -17888,7 +17888,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(17),
 	__webpack_require__(1),
 	__webpack_require__(27),
-	__webpack_require__(37),
+	__webpack_require__(38),
 
 	__webpack_require__(198)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, nodeName, camelCase, toType, isFunction, isWindow, slice ) {
@@ -25243,7 +25243,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bmnet__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__ = __webpack_require__(325);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__);
@@ -27529,7 +27529,7 @@ module.exports = baseTimes;
 /* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(30),
+var baseGetTag = __webpack_require__(31),
     isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
@@ -27577,7 +27577,7 @@ module.exports = stubFalse;
 /* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(30),
+var baseGetTag = __webpack_require__(31),
     isLength = __webpack_require__(83),
     isObjectLike = __webpack_require__(11);
 
@@ -27888,7 +27888,7 @@ module.exports = baseIsMatch;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isStrictComparable = __webpack_require__(146),
-    keys = __webpack_require__(31);
+    keys = __webpack_require__(32);
 
 /**
  * Gets the property names, values, and compare flags of `object`.
@@ -28174,7 +28174,7 @@ module.exports = toString;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(24),
-    arrayMap = __webpack_require__(34),
+    arrayMap = __webpack_require__(35),
     isArray = __webpack_require__(7),
     isSymbol = __webpack_require__(40);
 
@@ -28420,7 +28420,7 @@ var Stack = __webpack_require__(73),
     isMap = __webpack_require__(321),
     isObject = __webpack_require__(15),
     isSet = __webpack_require__(323),
-    keys = __webpack_require__(31);
+    keys = __webpack_require__(32);
 
 /** Used to compose bitmasks for cloning. */
 var CLONE_DEEP_FLAG = 1,
@@ -28606,7 +28606,7 @@ module.exports = arrayEach;
 /***/ (function(module, exports, __webpack_require__) {
 
 var copyObject = __webpack_require__(50),
-    keys = __webpack_require__(31);
+    keys = __webpack_require__(32);
 
 /**
  * The base implementation of `_.assign` without support for multiple sources
@@ -29118,7 +29118,7 @@ module.exports = baseCreate;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsMap = __webpack_require__(322),
-    baseUnary = __webpack_require__(32),
+    baseUnary = __webpack_require__(33),
     nodeUtil = __webpack_require__(84);
 
 /* Node.js helper references. */
@@ -29175,7 +29175,7 @@ module.exports = baseIsMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsSet = __webpack_require__(324),
-    baseUnary = __webpack_require__(32),
+    baseUnary = __webpack_require__(33),
     nodeUtil = __webpack_require__(84);
 
 /* Node.js helper references. */
@@ -29280,8 +29280,8 @@ module.exports = differenceWith;
 var SetCache = __webpack_require__(46),
     arrayIncludes = __webpack_require__(90),
     arrayIncludesWith = __webpack_require__(91),
-    arrayMap = __webpack_require__(34),
-    baseUnary = __webpack_require__(32),
+    arrayMap = __webpack_require__(35),
+    baseUnary = __webpack_require__(33),
     cacheHas = __webpack_require__(47);
 
 /** Used as the size to enable large array optimizations. */
@@ -30019,7 +30019,7 @@ module.exports = hotkeys;
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_key__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bmnet__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_flatten__ = __webpack_require__(339);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_flatten___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_flatten__);
@@ -30027,7 +30027,7 @@ module.exports = hotkeys;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_uniq___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_uniq__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_join__ = __webpack_require__(344);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_join__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_store__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_store__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_store__);
 /*
   Display list of bookmarks for user/source and allow for filtering by topic
@@ -30702,9 +30702,9 @@ module.exports = join;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_intersection__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_store__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_scroll_into_view__);
 
 
@@ -30731,28 +30731,54 @@ function generateHorizontalList(listArray) {
   `;
 }
 
-function generateBookmark(pid, bkmk) {
+/*
+  generate html for annotation
+  args: annotation - annotation object
+        topics - filter array
+
+  if topics.length > 0 then generate html only for
+  annotations that have topics found in the filter array
+*/
+function generateAnnotation(annotation, topics = []) {
+  let match;
+
+  console.log("generateAnnotation()");
+
+  if (topics.length > 0) {
+    match = __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(annotation.topicList, topics);
+  }
+
+  if (topics.length === 0 || match.length > 0) {
+    return `
+      <div class="item"> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
+        <i class="right triangle icon"></i>
+        <div class="content">
+          <div class="header">
+            ${generateHorizontalList(annotation.topicList)}
+          </div>
+          <div class="description">
+            ${annotation.Comment ? annotation.Comment : "No Comment"}
+          </div>
+        </div>
+      </div> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
+    `;
+  } else {
+    return `<!-- annotation filtered: ${topics.join(" ")} -->`;
+  }
+}
+
+function generateBookmark(actualPid, bkmk, topics) {
   return `
     <div class="ui list">
       <div class="item">
         <i class="bookmark icon"></i>
         <div class="content">
           <div class="header">
-            Paragraph: ${pid}
+            Paragraph: ${actualPid}
           </div>
           <div class="list">
             ${bkmk.map(annotation => `
-              <div class="item"> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
-                <i class="right triangle icon"></i>
-                <div class="content">
-                  <div class="header">
-                    ${generateHorizontalList(annotation.topicList)}
-                  </div>
-                  <div class="description">
-                    ${annotation.Comment ? annotation.Comment : "No Comment"}
-                  </div>
-                </div>
-              </div> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
+              ${generateAnnotation(annotation, topics)}
             `).join("")}
           </div>
         </div>
@@ -30766,17 +30792,13 @@ function getNextPageUrl(pos, pageList, filterList, bookmarks) {
     return Promise.resolve(null);
   }
 
-  console.log("getNextPageUrl() filter: %o", filterList);
-
   let found = false;
   let pagePos;
   let pid;
 
   outer: for (pagePos = pos; pagePos < pageList.length; pagePos++) {
     let pageMarks = bookmarks[pageList[pagePos]];
-    console.log("page: %s", pageList[pagePos]);
     for (pid in pageMarks) {
-      console.log("pid: %s", pid);
       for (let a = 0; a < pageMarks[pid].length; a++) {
         //no filter in effect
         if (!filterList || filterList.length === 0) {
@@ -30818,17 +30840,13 @@ function getPrevPageUrl(pos, pageList, filterList, bookmarks) {
     return Promise.resolve(null);
   }
 
-  console.log("getPrevPageUrl() filter: %o", filterList);
-
   let found = false;
   let pagePos;
   let pid;
 
   outer: for (pagePos = pos; pagePos >= 0; pagePos--) {
     let pageMarks = bookmarks[pageList[pagePos]];
-    console.log("page: %s", pageList[pagePos]);
     for (pid in pageMarks) {
-      console.log("pid: %s", pid);
       for (let a = 0; a < pageMarks[pid].length; a++) {
         //no filter in effect
         if (!filterList || filterList.length === 0) {
@@ -30865,8 +30883,7 @@ function getPrevPageUrl(pos, pageList, filterList, bookmarks) {
   });
 }
 
-function getNextPrevUrl(pageKey, bookmarks) {
-  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+function getNextPrevUrl(pageKey, bookmarks, bmModal) {
   let pages = Object.keys(bookmarks);
   let pos = pages.indexOf("lastFetchDate");
   let urls = { next: null, prev: null };
@@ -30888,57 +30905,175 @@ function getNextPrevUrl(pageKey, bookmarks) {
 }
 
 /*
+  Given the postion (currentPos) in pageMarks of the current pid, find the previous
+  one. Return the actualPid or null.
+
+  Omit bookmarks that don't have at least one topic found in topics[]. If topics[]
+  has no data then no filtering is done.
+
+  args:
+    currentPos - position in pageMarks of the current paragraph
+    pageMarks - an array of paragraph keys with bookmarks
+    pageBookmarks - bookmarks found on the page
+    topics - an array of topics by which to filter bookmarks
+*/
+function getPreviousPid(currentPos, pageMarks, pageBookmarks, topics) {
+
+  //there is no previous bookmark
+  if (currentPos < 1) {
+    return null;
+  }
+
+  //no filtering
+  if (topics.length === 0) {
+    return `p${(parseInt(pageMarks[currentPos - 1], 10) - 1).toString(10)}`;
+  } else {
+    //topic filtering - look through all previous paragraphs for the first one
+    //containing an annotation found in topics[]
+    for (let newPos = currentPos - 1; newPos >= 0; newPos--) {
+      let bookmark = pageBookmarks[pageMarks[newPos]];
+      for (let i = 0; i < bookmark.length; i++) {
+        if (bookmark[i].topicList && bookmark[i].topicList.length > 0) {
+          if (__WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
+            //we found a bookmark containing a topic in the topicList
+            return `p${(parseInt(pageMarks[newPos], 10) - 1).toString(10)}`;
+          }
+        }
+      }
+    }
+
+    //there are no remaining bookmarks with a topic in topics
+    return null;
+  }
+}
+
+/*
+  Given the postion (currentPos) in pageMarks of the current pid, find the next
+  one. Return the actualPid or null.
+
+  Omit bookmarks that don't have at least one topic found in topics[]. If topics[]
+  has no data then no filtering is done.
+
+  args:
+    currentPos - position in pageMarks of the current paragraph
+    pageMarks - an array of paragraph keys with bookmarks
+    pageBookmarks - bookmarks found on the page
+    topics - an array of topics by which to filter bookmarks
+*/
+function getNextPid(currentPos, pageMarks, pageBookmarks, topics) {
+
+  //there is "no" next bookmark
+  if (currentPos + 1 === pageMarks.length) {
+    return null;
+  }
+
+  //no filtering
+  if (topics.length === 0) {
+    return `p${(parseInt(pageMarks[currentPos + 1], 10) - 1).toString(10)}`;
+  } else {
+    //topic filtering - look through all previous paragraphs for the first one
+    //containing an annotation found in topics[]
+    for (let newPos = currentPos + 1; newPos <= pageBookmarks.length; newPos++) {
+      let bookmark = pageBookmarks[pageMarks[newPos]];
+      for (let i = 0; i < bookmark.length; i++) {
+        if (bookmark[i].topicList && bookmark[i].topicList.length > 0) {
+          if (__WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
+            //we found a bookmark containing a topic in the topicList
+            return `p${(parseInt(pageMarks[newPos], 10) - 1).toString(10)}`;
+          }
+        }
+      }
+    }
+
+    //there are no remaining bookmarks with a topic in topics
+    return null;
+  }
+}
+
+/*
   args: pageKey - identifies the current page
         pid - paragraph id
         allBookmarks - an array of all bookmarks
+        bmModal - contains topics for filtering
+        whoCalled - when the function is called by a click handler the value is
+                    either "previous" or "next". When "previous", a new value
+                    for previous bookmark needs to be determind, ditto for "next"
 
   Note: the value of pid is the actual paragraph id and not the key which is pid + 1.
   Bookmark info is stored according to key so we increment the pid to access the data
 */
-function getCurrentBookmark(pageKey, pid, allBookmarks) {
-  let paragraphId;
+function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled) {
+  let pidKey;
+  let topics = [];
+
+  if (bmModal["modal"].filter) {
+    topics = bmModal["modal"].topics;
+  }
 
   //convert pid to key in bookmark array
-  paragraphId = (parseInt(pid.substr(1), 10) + 1).toString(10);
+  pidKey = (parseInt(actualPid.substr(1), 10) + 1).toString(10);
 
-  let paragraphBookmarks = allBookmarks[pageKey][paragraphId];
-  //console.log("%s bookmark: %o", paragraphId, paragraphBookmarks);
+  let paragraphBookmarks = allBookmarks[pageKey][pidKey];
 
-  let html = generateBookmark(pid, paragraphBookmarks);
+  let html = generateBookmark(actualPid, paragraphBookmarks, topics);
   $("#bookmark-content").html(html);
-
-  //set current
-  $(".bookmark-navigator .current-bookmark").html(`<i class="asterisk icon"></i> Current (${pid})`);
-  $(".bookmark-navigator .current-bookmark").attr("data-pid", `p${paragraphId}`);
 
   //get links to next and previous bookmarks on the page
   let pageMarks = Object.keys(allBookmarks[pageKey]);
-  let pos = pageMarks.indexOf(paragraphId);
+  let pos = pageMarks.indexOf(pidKey);
+
+  //if topic filtering is enabled 
+  let prevActualPid;
+  let nextActualPid;
+
+  prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
+  nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
+  $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
+
+  /*
+  switch(whoCalled) {
+    case "both":
+      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
+      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
+      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
+      break;
+    case "previous":
+      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
+      nextActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
+      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
+      break;
+    case "next":
+      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
+      prevActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
+      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
+      break;
+    default:
+      throw new Error("unexpected value for whoCalled: %s", whoCalled);
+  }
+  */
+
+  console.log("prev: %s, next: %s", prevActualPid, nextActualPid);
 
   //set previous to inactive
-  if (pos === 0) {
+  if (!prevActualPid) {
     $(".bookmark-navigator .previous-bookmark").addClass("inactive");
     $(".bookmark-navigator .previous-bookmark").html("<i class='up arrow icon'></i> Previous");
   } else {
     //add data-pid attribute to link for previous bkmk
-    let prevId = (parseInt(pageMarks[pos - 1], 10) - 1).toString(10);
-    $(".bookmark-navigator .previous-bookmark").attr("data-pid", `p${prevId}`);
+    $(".bookmark-navigator .previous-bookmark").attr("data-pid", prevActualPid);
     $(".bookmark-navigator .previous-bookmark").removeClass("inactive");
-    $(".bookmark-navigator .previous-bookmark").html(`<i class="up arrow icon"></i> Previous (p${prevId})`);
+    $(".bookmark-navigator .previous-bookmark").html(`<i class="up arrow icon"></i> Previous (${prevActualPid})`);
   }
 
-  if (pos === pageMarks.length - 1) {
+  if (!nextActualPid) {
     $(".bookmark-navigator .next-bookmark").addClass("inactive");
     $(".bookmark-navigator .next-bookmark").html("<i class='down arrow icon'></i> Next");
   } else {
     //add data-pid attribute to link for next bkmk
-    let nextId = (parseInt(pageMarks[pos + 1], 10) - 1).toString(10);
-    $(".bookmark-navigator .next-bookmark").attr("data-pid", `p${nextId}`);
+    $(".bookmark-navigator .next-bookmark").attr("data-pid", nextActualPid);
     $(".bookmark-navigator .next-bookmark").removeClass("inactive");
-    $(".bookmark-navigator .next-bookmark").html(`<i class="down arrow icon"></i> Next (p${nextId})`);
+    $(".bookmark-navigator .next-bookmark").html(`<i class="down arrow icon"></i> Next (${nextActualPid})`);
   }
-
-  console.log("current: %s, all: %o", paragraphId, pageMarks);
 }
 
 /*
@@ -30946,16 +31081,17 @@ function getCurrentBookmark(pageKey, pid, allBookmarks) {
 
   arg: pid - paragraph id.
 */
-function bookmarkManager(pid) {
+function bookmarkManager(actualPid) {
   let pageKey = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["b" /* genPageKey */])().toString(10);
   let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
 
   if (bmList) {
     //store globally
     gPageKey = pageKey;
 
     //get previous and next url's
-    getNextPrevUrl(pageKey, bmList).then(responses => {
+    getNextPrevUrl(pageKey, bmList, bmModal).then(responses => {
       console.log("next url: ", responses);
 
       //set prev and next hrefs
@@ -30971,7 +31107,7 @@ function bookmarkManager(pid) {
       }
 
       //identify current bookmark in navigator
-      getCurrentBookmark(pageKey, pid, bmList);
+      getCurrentBookmark(pageKey, actualPid, bmList, bmModal, "both");
     }).catch(err => {
       console.error(err);
     });
@@ -30980,9 +31116,17 @@ function bookmarkManager(pid) {
   }
 }
 
-function updateNavigator(pid) {
+/*
+  Update previous and next bookmark links on navigator. 
+
+  args:
+    pid: the actual pid to display
+    update: either "previous", or "next" depending on what click handler called the function
+*/
+function updateNavigator(pid, update) {
   let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
-  getCurrentBookmark(gPageKey, pid, bmList);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  getCurrentBookmark(gPageKey, pid, bmList, bmModal, update);
 }
 
 function initClickListeners() {
@@ -30990,24 +31134,30 @@ function initClickListeners() {
   $(".bookmark-navigator .previous-bookmark").on("click", function (e) {
     e.preventDefault();
 
-    let pid = $(this).data("pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(pid), { align: { top: 0.2 } });
-    updateNavigator(pid);
+    let actualPid = $(this).attr("data-pid");
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    updateNavigator(actualPid, "previous");
   });
 
   $(".bookmark-navigator .next-bookmark").on("click", function (e) {
     e.preventDefault();
 
-    let pid = $(this).data("pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(pid), { align: { top: 0.2 } });
-    updateNavigator(pid);
+    let actualPid = $(this).attr("data-pid");
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    updateNavigator(actualPid, "next");
   });
 
   $(".bookmark-navigator .current-bookmark").on("click", function (e) {
     e.preventDefault();
 
-    let pid = $(this).data("pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(pid), { align: { top: 0.2 } });
+    let actualPid = $(this).attr("data-pid");
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+  });
+
+  $(".bookmark-navigator .close-window").on("click", function (e) {
+    e.preventDefault();
+
+    $(".bookmark-navigator-wrapper").addClass("hide-bookmark-navigator");
   });
 }
 
@@ -31017,11 +31167,10 @@ function initClickListeners() {
 
   Initialize the bookmark navigator so they can follow the list of bookmarks
 */
-function initNavigator(pid) {
+function initNavigator(actualPid) {
   //show the navigator
   $(".bookmark-navigator-wrapper").removeClass("hide-bookmark-navigator");
-  console.log("initNavigator: pid: %s", pid);
-  bookmarkManager(pid);
+  bookmarkManager(actualPid);
   initClickListeners();
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
@@ -31030,7 +31179,7 @@ function initNavigator(pid) {
 /* 346 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayMap = __webpack_require__(34),
+var arrayMap = __webpack_require__(35),
     baseIntersection = __webpack_require__(347),
     baseRest = __webpack_require__(158),
     castArrayLikeObject = __webpack_require__(348);
@@ -31069,8 +31218,8 @@ module.exports = intersection;
 var SetCache = __webpack_require__(46),
     arrayIncludes = __webpack_require__(90),
     arrayIncludesWith = __webpack_require__(91),
-    arrayMap = __webpack_require__(34),
-    baseUnary = __webpack_require__(32),
+    arrayMap = __webpack_require__(35),
+    baseUnary = __webpack_require__(33),
     cacheHas = __webpack_require__(47);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -31166,7 +31315,7 @@ module.exports = castArrayLikeObject;
 /* 349 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayMap = __webpack_require__(34),
+var arrayMap = __webpack_require__(35),
     baseIteratee = __webpack_require__(86),
     baseMap = __webpack_require__(350),
     isArray = __webpack_require__(7);
@@ -31226,7 +31375,7 @@ module.exports = map;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseEach = __webpack_require__(351),
-    isArrayLike = __webpack_require__(33);
+    isArrayLike = __webpack_require__(34);
 
 /**
  * The base implementation of `_.map` without support for iteratee shorthands.
@@ -31274,7 +31423,7 @@ module.exports = baseEach;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseFor = __webpack_require__(353),
-    keys = __webpack_require__(31);
+    keys = __webpack_require__(32);
 
 /**
  * The base implementation of `_.forOwn` without support for iteratee shorthands.
@@ -31348,7 +31497,7 @@ module.exports = createBaseFor;
 /* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArrayLike = __webpack_require__(33);
+var isArrayLike = __webpack_require__(34);
 
 /**
  * Creates a `baseEach` or `baseEachRight` function.
@@ -31556,7 +31705,7 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["b"] = getBookId;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(22);
 
@@ -31882,7 +32031,7 @@ function createAudioPlayerToggleListener() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_me_plugin_capture_capture_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_me_plugin_capture_capture_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_me_plugin_capture_capture__ = __webpack_require__(381);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_me_plugin_capture_capture___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_me_plugin_capture_capture__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_toastr__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_toastr__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__focus__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__user_netlify__ = __webpack_require__(53);

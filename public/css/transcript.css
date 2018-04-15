@@ -82,7 +82,7 @@
 /* bookmark navigator */
 .bookmark-navigator-wrapper {
   position: fixed;
-  bottom: 40px;
+  bottom: 55px;
   left: 50%;
   width: 60%;
 }
@@ -100,4 +100,40 @@
 .bookmark-navigator a.item.inactive:hover {
   cursor: default;
   color: darkgray;
+}
+
+.transcript {
+  --bookmark-highlite-color: red;
+  --bookmark-highlite-padding: 10px;
+  --bookmark-highlite-border-radius: 5px;
+  --bookmark-highlite-border: 1px solid var(--bookmark-highlite-color);
+}
+
+/* bookmark navigator - annotation hilight */
+.highlite-paragraph {
+  background-color: honeydew;
+  padding: var(--bookmark-highlite-padding);
+  border-radius: var(--bookmark-highlite-border-radius);
+}
+
+.highlite-top {
+  padding: var(--bookmark-highlite-padding);
+  border-top: var(--bookmark-highlite-border);
+  border-left: var(--bookmark-highlite-border);
+  border-right: var(--bookmark-highlite-border);
+  border-radius: var(--bookmark-highlite-border-radius);
+}
+
+.highlite-middle {
+  padding: var(--bookmark-highlite-padding);
+  border-left: var(--bookmark-highlite-border);
+  border-right: var(--bookmark-highlite-border);
+}
+
+.highlite-bottom {
+  padding: var(--bookmark-highlite-padding);
+  border-bottom: var(--bookmark-highlite-border);
+  border-left: var(--bookmark-highlite-border);
+  border-right: var(--bookmark-highlite-border);
+  border-radius: var(--bookmark-highlite-border-radius);
 }
