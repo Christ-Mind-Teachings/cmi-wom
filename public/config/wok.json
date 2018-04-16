@@ -18,13 +18,13 @@
         {
           "audio": "/questions/Q26.01.mp3",
           "timing": "/questions/k02q1.json",
-          "title": "Q. Please define knowledge or knowing",
+          "title": "Q1. Please define knowledge or knowing",
           "url": "/wok/l02/q1/"
         },
         {
           "audio": "/questions/Q26.02.mp3",
           "timing": "/questions/k02q2.json",
-          "title": "Q. How best to be with glee clubs and attack?",
+          "title": "Q2. How best to be with glee clubs and attack?",
           "url": "/wok/l02/q2/"
         }
       ]
@@ -38,13 +38,13 @@
         {
           "audio": "/questions/Q27.01.mp3",
           "timing": "/questions/k03q1.json",
-          "title": "Q. About love of self and others",
+          "title": "Q1. About love of self and others",
           "url": "/wok/l03/q1/"
         },
         {
           "audio": "/questions/Q27.02.mp3",
           "timing": "/questions/k03q2.json",
-          "title": "Q. About guidance of the Holy Spirit",
+          "title": "Q2. About guidance of the Holy Spirit",
           "url": "/wok/l03/q2/"
         }
       ]
@@ -58,13 +58,13 @@
         {
           "audio": "/questions/Q28.01.mp3",
           "timing": "/questions/k04q1.json",
-          "title": "Q. What are the Great Rays of Light mentioned in ACIM?",
+          "title": "Q1. What are the Great Rays of Light mentioned in ACIM?",
           "url": "/wok/l04/q1/"
         },
         {
           "audio": "/questions/Q28.02.mp3",
           "timing": "/questions/k04q2.json",
-          "title": "Q. Does everyone have a unique essence?",
+          "title": "Q2. Does everyone have a unique essence?",
           "url": "/wok/l04/q2/"
         }
       ]
@@ -84,13 +84,13 @@
         {
           "audio": "/questions/Q30.01.mp3",
           "timing": "/questions/k06q1.json",
-          "title": "Q. What is the difference between Joy and Pleasure?",
+          "title": "Q1. What is the difference between Joy and Pleasure?",
           "url": "/wok/l06/q1/"
         },
         {
           "audio": "/questions/Q30.02.mp3",
           "timing": "/questions/k06q2.json",
-          "title": "Q. About Shanti Christo",
+          "title": "Q2. About Shanti Christo",
           "url": "/wok/l06/q2/"
         }
       ]
@@ -122,13 +122,13 @@
         {
           "audio": "/questions/Q34.01.mp3",
           "timing": "/questions/k10q1.json",
-          "title": "Q. About Bible Codes",
+          "title": "Q1. About Bible Codes",
           "url": "/wok/l10/q1/"
         },
         {
           "audio": "/questions/Q34.02.mp3",
           "timing": "/questions/k10q2.json",
-          "title": "Q. Please talk about the free will of children",
+          "title": "Q2. Please talk about the free will of children",
           "url": "/wok/l10/q2/"
         }
       ]

@@ -133,7 +133,7 @@ function generatePageTitle(page) {
   let title = `${page.title}`;
 
   if (page.subTitle) {
-    title = `${title} / ${page.subTitle}`;
+    title = `${title}: ${page.subTitle}`;
   }
 
   return title;
@@ -192,14 +192,23 @@ function combinePages(pages) {
       books[page.bookId] = {};
       books[page.bookId].bookId = page.bookId;
       books[page.bookId].bookTitle = page.bookTitle;
+      if (page.subTitle) {
+        books[page.bookId].subTitle = page.subTitle;
+      }
       books[page.bookId].pages = [];
     }
-    books[page.bookId].pages.push({
+    let pageInfo = {
       pageKey: page.pageKey,
       title: page.title,
       url: page.url,
       bookmarks: page.data
-    });
+    };
+
+    if (page.subTitle) {
+      pageInfo.subTitle = page.subTitle;
+    }
+
+    books[page.bookId].pages.push(pageInfo);
   });
 
   //copy from books to bookArray keeping the original order
@@ -268,7 +277,7 @@ function populateModal(bookmarks) {
   Promise.all(info)
     .then((responses) => {
       let {bookArray, topics} = combinePages(responses);
-      console.log("unique topics: %o", topics);
+      //console.log("unique topics: %o", topics);
 
       //generate html and attach to modal dialog
       html = generateBookmarkList(bookArray);
@@ -410,7 +419,6 @@ function initList() {
   net.queryBookmarks(sourceId)
     .then((response) => {
       //console.log("queryBookmarks(%s", sourceId, response);
-
       populateModal(response);
       listInitialized = true;
     })

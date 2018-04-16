@@ -87,7 +87,18 @@ export function parseKey(key) {
 
   //if no decimal key doesn't include paragraph id
   if (decimalPos > -1) {
-    pid = parseInt(keyString.substr(decimalPos + 1), 10);
+    let decimalPart = keyString.substr(decimalPos + 1);
+
+    //append 0's if decimal part < 3
+    switch(decimalPart.length) {
+      case 1:
+        decimalPart = `${decimalPart}00`;
+        break;
+      case 2:
+        decimalPart = `${decimalPart}0`;
+        break;
+    }
+    pid = parseInt(decimalPart, 10);
   }
   let pageKey = parseInt(keyString.substr(0, keyInfo.keyLength), 10);
 

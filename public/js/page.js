@@ -3576,12 +3576,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1523712150241,
-    wot: 1523712150241,
-    wok: 1523712150241,
-    wos: 1523712150241,
-    tjl: 1523712150241,
-    early: 1523712150241
+    woh: 1523796042558,
+    wot: 1523796042558,
+    wok: 1523796042558,
+    wos: 1523796042558,
+    tjl: 1523796042558,
+    early: 1523796042558
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -5982,7 +5982,18 @@ function parseKey(key) {
 
   //if no decimal key doesn't include paragraph id
   if (decimalPos > -1) {
-    pid = parseInt(keyString.substr(decimalPos + 1), 10);
+    let decimalPart = keyString.substr(decimalPos + 1);
+
+    //append 0's if decimal part < 3
+    switch (decimalPart.length) {
+      case 1:
+        decimalPart = `${decimalPart}00`;
+        break;
+      case 2:
+        decimalPart = `${decimalPart}0`;
+        break;
+    }
+    pid = parseInt(decimalPart, 10);
   }
   let pageKey = parseInt(keyString.substr(0, keyInfo.keyLength), 10);
 
@@ -11430,8 +11441,8 @@ function getBookmarks() {
         if (response.data.response) {
           let bookmarks = {};
           response.data.response.forEach(b => {
-            let pid = parseInt(b.id.toString(10).substr(-3), 10);
-            bookmarks[pid] = b.bookmark;
+            let key = Object(__WEBPACK_IMPORTED_MODULE_4__config_key__["f" /* parseKey */])(b.id);
+            bookmarks[key.pid] = b.bookmark;
           });
           __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(pageKey, bookmarks);
           resolve(bookmarks);
@@ -11467,7 +11478,7 @@ function queryBookmarks(key) {
         let expireDate = bookmarkList.lastFetchDate + retentionTime;
 
         if (Date.now() < expireDate) {
-          console.log("queryBookmarks: list from local store");
+          //console.log("queryBookmarks: list from local store");
           resolve(bookmarkList);
           return;
         }
@@ -11487,7 +11498,7 @@ function queryBookmarks(key) {
           });
           bookmarks.lastFetchDate = Date.now();
           __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(`bmList_${keyInfo.sourceId}`, bookmarks);
-          console.log("queryBookmarks: list from server");
+          //console.log("queryBookmarks: list from server");
           resolve(bookmarks);
         }
       }).catch(err => {
@@ -30164,7 +30175,7 @@ function generatePageTitle(page) {
   let title = `${page.title}`;
 
   if (page.subTitle) {
-    title = `${title} / ${page.subTitle}`;
+    title = `${title}: ${page.subTitle}`;
   }
 
   return title;
@@ -30223,14 +30234,23 @@ function combinePages(pages) {
       books[page.bookId] = {};
       books[page.bookId].bookId = page.bookId;
       books[page.bookId].bookTitle = page.bookTitle;
+      if (page.subTitle) {
+        books[page.bookId].subTitle = page.subTitle;
+      }
       books[page.bookId].pages = [];
     }
-    books[page.bookId].pages.push({
+    let pageInfo = {
       pageKey: page.pageKey,
       title: page.title,
       url: page.url,
       bookmarks: page.data
-    });
+    };
+
+    if (page.subTitle) {
+      pageInfo.subTitle = page.subTitle;
+    }
+
+    books[page.bookId].pages.push(pageInfo);
   });
 
   //copy from books to bookArray keeping the original order
@@ -30297,7 +30317,7 @@ function populateModal(bookmarks) {
   //we have an array of bookmarks, each element represents a page
   Promise.all(info).then(responses => {
     let { bookArray, topics } = combinePages(responses);
-    console.log("unique topics: %o", topics);
+    //console.log("unique topics: %o", topics);
 
     //generate html and attach to modal dialog
     html = generateBookmarkList(bookArray);
@@ -30434,7 +30454,6 @@ function initList() {
 
   __WEBPACK_IMPORTED_MODULE_2__bmnet__["a" /* default */].queryBookmarks(sourceId).then(response => {
     //console.log("queryBookmarks(%s", sourceId, response);
-
     populateModal(response);
     listInitialized = true;
   }).catch(err => {
@@ -30702,10 +30721,13 @@ module.exports = join;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_intersection__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_store__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_scroll_into_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range__ = __webpack_require__(403);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_range__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_store__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_scroll_into_view__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_scroll_into_view__);
+
 
 
 
@@ -30742,8 +30764,6 @@ function generateHorizontalList(listArray) {
 function generateAnnotation(annotation, topics = []) {
   let match;
 
-  console.log("generateAnnotation()");
-
   if (topics.length > 0) {
     match = __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(annotation.topicList, topics);
   }
@@ -30757,7 +30777,9 @@ function generateAnnotation(annotation, topics = []) {
             ${generateHorizontalList(annotation.topicList)}
           </div>
           <div class="description">
-            ${annotation.Comment ? annotation.Comment : "No Comment"}
+            <a class="annotation-item" data-range="${annotation.rangeStart}/${annotation.rangeEnd}">   
+              ${annotation.Comment ? annotation.Comment : "No Comment"}
+            </a>
           </div>
         </div>
       </div> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
@@ -31030,29 +31052,7 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
   nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
   $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
 
-  /*
-  switch(whoCalled) {
-    case "both":
-      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    case "previous":
-      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      nextActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    case "next":
-      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      prevActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    default:
-      throw new Error("unexpected value for whoCalled: %s", whoCalled);
-  }
-  */
-
-  console.log("prev: %s, next: %s", prevActualPid, nextActualPid);
+  //console.log("prev: %s, next: %s", prevActualPid, nextActualPid);
 
   //set previous to inactive
   if (!prevActualPid) {
@@ -31083,8 +31083,8 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
 */
 function bookmarkManager(actualPid) {
   let pageKey = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["b" /* genPageKey */])().toString(10);
-  let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
-  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmList = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
 
   if (bmList) {
     //store globally
@@ -31124,26 +31124,34 @@ function bookmarkManager(actualPid) {
     update: either "previous", or "next" depending on what click handler called the function
 */
 function updateNavigator(pid, update) {
-  let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
-  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmList = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
   getCurrentBookmark(gPageKey, pid, bmList, bmModal, update);
+}
+
+function clearSelectedAnnotation() {
+  $(".selected-annotation-wrapper > .header").remove();
+  $(".selected-annotation").unwrap();
+  $(".selected-annotation").removeClass("selected-annotation");
 }
 
 function initClickListeners() {
   //previous bookmark
   $(".bookmark-navigator .previous-bookmark").on("click", function (e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
     updateNavigator(actualPid, "previous");
   });
 
   $(".bookmark-navigator .next-bookmark").on("click", function (e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
     updateNavigator(actualPid, "next");
   });
 
@@ -31151,13 +31159,31 @@ function initClickListeners() {
     e.preventDefault();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
   });
 
   $(".bookmark-navigator .close-window").on("click", function (e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     $(".bookmark-navigator-wrapper").addClass("hide-bookmark-navigator");
+  });
+
+  $(".bookmark-navigator").on("click", ".annotation-item", function (e) {
+    e.preventDefault();
+    clearSelectedAnnotation();
+
+    let dataRange = $(this).attr("data-range");
+    let rangeArray = dataRange.split("/");
+    let numericRange = rangeArray.map(r => parseInt(r.substr(1), 10));
+    let annotationRange = __WEBPACK_IMPORTED_MODULE_3_lodash_range___default()(numericRange[0], numericRange[1] + 1);
+
+    for (let i = 0; i < annotationRange.length; i++) {
+      $(`#p${annotationRange[i]}`).addClass("selected-annotation");
+    }
+
+    $(".selected-annotation").wrapAll("<div class='selected-annotation-wrapper ui raised segment'></div>");
+    $(".selected-annotation-wrapper").prepend(`<h4 class='ui header'>${$(this).text()}</h4>`);
   });
 }
 
@@ -31879,6 +31905,183 @@ $(document).ready(() => {
   __WEBPACK_IMPORTED_MODULE_4__modules_contents_toc__["a" /* default */].initialize();
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
+
+/***/ }),
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var createRange = __webpack_require__(404);
+
+/**
+ * Creates an array of numbers (positive and/or negative) progressing from
+ * `start` up to, but not including, `end`. A step of `-1` is used if a negative
+ * `start` is specified without an `end` or `step`. If `end` is not specified,
+ * it's set to `start` with `start` then set to `0`.
+ *
+ * **Note:** JavaScript follows the IEEE-754 standard for resolving
+ * floating-point values which can produce unexpected results.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {number} [start=0] The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} [step=1] The value to increment or decrement by.
+ * @returns {Array} Returns the range of numbers.
+ * @see _.inRange, _.rangeRight
+ * @example
+ *
+ * _.range(4);
+ * // => [0, 1, 2, 3]
+ *
+ * _.range(-4);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 5);
+ * // => [1, 2, 3, 4]
+ *
+ * _.range(0, 20, 5);
+ * // => [0, 5, 10, 15]
+ *
+ * _.range(0, -4, -1);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 4, 0);
+ * // => [1, 1, 1]
+ *
+ * _.range(0);
+ * // => []
+ */
+var range = createRange();
+
+module.exports = range;
+
+
+/***/ }),
+/* 404 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseRange = __webpack_require__(405),
+    isIterateeCall = __webpack_require__(406),
+    toFinite = __webpack_require__(231);
+
+/**
+ * Creates a `_.range` or `_.rangeRight` function.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new range function.
+ */
+function createRange(fromRight) {
+  return function(start, end, step) {
+    if (step && typeof step != 'number' && isIterateeCall(start, end, step)) {
+      end = step = undefined;
+    }
+    // Ensure the sign of `-0` is preserved.
+    start = toFinite(start);
+    if (end === undefined) {
+      end = start;
+      start = 0;
+    } else {
+      end = toFinite(end);
+    }
+    step = step === undefined ? (start < end ? 1 : -1) : toFinite(step);
+    return baseRange(start, end, step, fromRight);
+  };
+}
+
+module.exports = createRange;
+
+
+/***/ }),
+/* 405 */
+/***/ (function(module, exports) {
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeCeil = Math.ceil,
+    nativeMax = Math.max;
+
+/**
+ * The base implementation of `_.range` and `_.rangeRight` which doesn't
+ * coerce arguments.
+ *
+ * @private
+ * @param {number} start The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} step The value to increment or decrement by.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Array} Returns the range of numbers.
+ */
+function baseRange(start, end, step, fromRight) {
+  var index = -1,
+      length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
+      result = Array(length);
+
+  while (length--) {
+    result[fromRight ? length : ++index] = start;
+    start += step;
+  }
+  return result;
+}
+
+module.exports = baseRange;
+
+
+/***/ }),
+/* 406 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var eq = __webpack_require__(74),
+    isArrayLike = __webpack_require__(34),
+    isIndex = __webpack_require__(142),
+    isObject = __webpack_require__(15);
+
+/**
+ * Checks if the given arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+ *  else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+        ? (isArrayLike(object) && isIndex(index, object.length))
+        : (type == 'string' && index in object)
+      ) {
+    return eq(object[index], value);
+  }
+  return false;
+}
+
+module.exports = isIterateeCall;
+
 
 /***/ })
 /******/ ]);

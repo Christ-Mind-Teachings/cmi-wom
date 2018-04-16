@@ -2,6 +2,7 @@
 import {getSourceId, genPageKey} from "../_config/key";
 import {getPageInfo} from "../_config/config";
 import intersection from "lodash/intersection";
+import range from "lodash/range";
 import store from "store";
 import scroll from "scroll-into-view";
 
@@ -34,8 +35,6 @@ function generateHorizontalList(listArray) {
 function generateAnnotation(annotation, topics = []) {
   let match;
 
-  console.log("generateAnnotation()");
-
   if (topics.length > 0) {
     match = intersection(annotation.topicList, topics);
   }
@@ -49,7 +48,9 @@ function generateAnnotation(annotation, topics = []) {
             ${generateHorizontalList(annotation.topicList)}
           </div>
           <div class="description">
-            ${annotation.Comment?annotation.Comment:"No Comment"}
+            <a class="annotation-item" data-range="${annotation.rangeStart}/${annotation.rangeEnd}">   
+              ${annotation.Comment?annotation.Comment:"No Comment"}
+            </a>
           </div>
         </div>
       </div> <!-- item: ${annotation.rangeStart}/${annotation.rangeEnd} -->
@@ -333,29 +334,7 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
   nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
   $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
 
-  /*
-  switch(whoCalled) {
-    case "both":
-      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    case "previous":
-      prevActualPid = getPreviousPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      nextActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    case "next":
-      nextActualPid = getNextPid(pos, pageMarks, allBookmarks[pageKey], topics);
-      prevActualPid = $(".bookmark-navigator .current-bookmark").attr("data-pid");
-      $(".bookmark-navigator .current-bookmark").attr("data-pid", `${actualPid}`);
-      break;
-    default:
-      throw new Error("unexpected value for whoCalled: %s", whoCalled);
-  }
-  */
-
-  console.log("prev: %s, next: %s", prevActualPid, nextActualPid);
+  //console.log("prev: %s, next: %s", prevActualPid, nextActualPid);
 
   //set previous to inactive
   if (!prevActualPid) {
@@ -439,10 +418,17 @@ function updateNavigator(pid, update) {
   getCurrentBookmark(gPageKey, pid, bmList, bmModal, update);
 }
 
+function clearSelectedAnnotation() {
+  $(".selected-annotation-wrapper > .header").remove();
+  $(".selected-annotation").unwrap();
+  $(".selected-annotation").removeClass("selected-annotation");
+}
+
 function initClickListeners() {
   //previous bookmark
   $(".bookmark-navigator .previous-bookmark").on("click", function(e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
     scroll(document.getElementById(actualPid), {align: {top: 0.2}});
@@ -451,6 +437,7 @@ function initClickListeners() {
 
   $(".bookmark-navigator .next-bookmark").on("click", function(e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
     scroll(document.getElementById(actualPid), {align: {top: 0.2}});
@@ -466,8 +453,26 @@ function initClickListeners() {
 
   $(".bookmark-navigator .close-window").on("click", function(e) {
     e.preventDefault();
+    clearSelectedAnnotation();
 
     $(".bookmark-navigator-wrapper").addClass("hide-bookmark-navigator");
+  });
+
+  $(".bookmark-navigator").on("click", ".annotation-item", function(e) {
+    e.preventDefault();
+    clearSelectedAnnotation();
+
+    let dataRange = $(this).attr("data-range");
+    let rangeArray = dataRange.split("/");
+    let numericRange = rangeArray.map((r) => parseInt(r.substr(1),10));
+    let annotationRange = range(numericRange[0], numericRange[1] + 1);
+
+    for (let i = 0; i < annotationRange.length; i++) {
+      $(`#p${annotationRange[i]}`).addClass("selected-annotation");
+    }
+
+    $(".selected-annotation").wrapAll("<div class='selected-annotation-wrapper ui raised segment'></div>");
+    $(".selected-annotation-wrapper").prepend(`<h4 class='ui header'>${$(this).text()}</h4>`);
   });
 }
 

@@ -80,8 +80,8 @@ function getBookmarks() {
           if (response.data.response) {
             let bookmarks = {};
             response.data.response.forEach((b) => {
-              let pid = parseInt(b.id.toString(10).substr(-3), 10);
-              bookmarks[pid] = b.bookmark;
+              let key = parseKey(b.id);
+              bookmarks[key.pid] = b.bookmark;
             });
             store.set(pageKey, bookmarks);
             resolve(bookmarks);
@@ -119,7 +119,7 @@ function queryBookmarks(key) {
         let expireDate = bookmarkList.lastFetchDate + retentionTime;
 
         if (Date.now() < expireDate) {
-          console.log("queryBookmarks: list from local store");
+          //console.log("queryBookmarks: list from local store");
           resolve(bookmarkList);
           return;
         }
@@ -140,7 +140,7 @@ function queryBookmarks(key) {
             });
             bookmarks.lastFetchDate = Date.now();
             store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
-            console.log("queryBookmarks: list from server");
+            //console.log("queryBookmarks: list from server");
             resolve(bookmarks);
           }
         })

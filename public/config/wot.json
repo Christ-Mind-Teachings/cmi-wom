@@ -12,13 +12,13 @@
         {
           "audio": "/questions/Q13.01.mp3",
           "timing": "/questions/t01q1.json",
-          "title": "Q. Who are the other Masters occasionally mentioned?",
+          "title": "Q1. Who are the other Masters occasionally mentioned?",
           "url": "/wot/l01/q1/"
         },
         {
           "audio": "/questions/Q13.02.mp3",
           "timing": "/questions/t01q2.json",
-          "title": "Q. What is the difference between judgment and discernment?",
+          "title": "Q2. What is the difference between judgment and discernment?",
           "url": "/wot/l01/q2/"
         }
       ]
@@ -56,13 +56,13 @@
         {
           "audio": "/questions/Q18.01.mp3",
           "timing": "/questions/t06q1.json",
-          "title": "Q. About vulnerability",
+          "title": "Q1. About vulnerability",
           "url": "/wot/l06/q1/"
         },
         {
           "audio": "/questions/Q18.02.mp3",
           "timing": "/questions/t06q2.json",
-          "title": "Q. What was the message of the Cross?",
+          "title": "Q2. What was the message of the Cross?",
           "url": "/wot/l06/q2/"
         }
       ]
@@ -76,7 +76,7 @@
         {
           "audio": "/questions/Q19.01.mp3",
           "timing": "/questions/t07q1.json",
-          "title": "Q. Please talk about Enlightenment",
+          "title": "Q1. Please talk about Enlightenment",
           "url": "/wot/l07/q1/"
         }
       ]
@@ -96,25 +96,25 @@
         {
           "audio": "/questions/Q21.01.mp3",
           "timing": "/questions/t09q1.json",
-          "title": "Q. About guidance",
+          "title": "Q1. About guidance",
           "url": "/wot/l09/q1/"
         },
         {
           "audio": "/questions/Q21.02.mp3",
           "timing": "/questions/t09q2.json",
-          "title": "Q. All events are neutral",
+          "title": "Q2. All events are neutral",
           "url": "/wot/l09/q2/"
         },
         {
           "audio": "/questions/Q21.03.mp3",
           "timing": "/questions/t09q3.json",
-          "title": "Q. About Christ Consciousness and Individuality",
+          "title": "Q3. About Christ Consciousness and Individuality",
           "url": "/wot/l09/q3/"
         },
         {
           "audio": "/questions/Q21.04.mp3",
           "timing": "/questions/t09q4.json",
-          "title": "Q. About not being in denial of the shadow",
+          "title": "Q4. About not being in denial of the shadow",
           "url": "/wot/l09/q4/"
         }
       ]
@@ -134,19 +134,19 @@
         {
           "audio": "/questions/Q23.01.mp3",
           "timing": "/questions/t11q1.json",
-          "title": "Q. Do you have our own unique purpose?",
+          "title": "Q1. Do you have our own unique purpose?",
           "url": "/wot/l11/q1/"
         },
         {
           "audio": "/questions/Q23.02.mp3",
           "timing": "/questions/t11q2.json",
-          "title": "Q. About The Lineage",
+          "title": "Q2. About The Lineage",
           "url": "/wot/l11/q2/"
         },
         {
           "audio": "/questions/Q23.03.mp3",
           "timing": "/questions/t11q3.json",
-          "title": "Q. About specialness, holiness, and sexuality",
+          "title": "Q3. About specialness, holiness, and sexuality",
           "url": "/wot/l11/q3/"
         }
       ]
