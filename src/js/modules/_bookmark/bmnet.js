@@ -15,6 +15,7 @@ import axios from "axios";
 import store from "store";
 import notify from "toastr";
 import {getUserInfo} from "../_user/netlify";
+import {updateSelectedText} from "./selection";
 
 import {parseKey, getKeyInfo, genPageKey, genParagraphKey } from "../_config/key";
 import isEqual from "lodash/isEqual";
@@ -179,12 +180,17 @@ function postAnnotation(annotation) {
   const pageKey = genPageKey();
   const userInfo = getUserInfo();
 
+  //the annotation creation data; aka annotationId, aid
   let now = Date.now();
 
   //post to server
   if (userInfo) {
     //this is critical, things get messed up if we don't do this
     let serverAnnotation = cloneDeep(annotation);
+
+    if (serverAnnotation.selectedText && !serverAnnotation.selectedText.aid) {
+      serverAnnotation.selectedText.aid = now.toString(10);
+    }
 
     let postBody = {
       userId: userInfo.userId,
@@ -415,6 +421,14 @@ function storeAnnotation(annotation, creationDate) {
   //new annotation
   else {
     annotation.creationDate = creationDate;
+
+    //add creation date to the selectedText attribute of new annotations
+    if (annotation.selectedText) {
+      annotation.selectedText.aid = creationDate.toString(10);
+
+      //add data-aid to new highlite so that it can be edited with a click
+      updateSelectedText(annotation.selectedText.id, annotation.selectedText.aid);
+    }
 
     if (!data) {
       data = {

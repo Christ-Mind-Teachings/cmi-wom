@@ -3,6 +3,7 @@ usage: {% include form/annotation.html %}
 {% endcomment %}
 <form name="annotation" id="annotation-form" class="ui form">
   <input class="hidden-field" type="text" readonly="" name="creationDate">
+  <input class="hidden-field" type="text" name="textId" readonly>
   <div class="fields">
     <div class="three wide field">
       <label>Start</label>
@@ -26,6 +27,10 @@ usage: {% include form/annotation.html %}
   <div class="fields">
     <button class="ui button" type="submit">Submit</button>
     <button class="annotation-reset ui button">Reset</button>
+    <div class="highlite-toggle hidden-field ui toggle checkbox">
+      <input name="hasAnnotation" type="checkbox" tabindex="0" class="hidden">
+      <label>Toggle</label>
+    </div>
   </div>
 </form>
 

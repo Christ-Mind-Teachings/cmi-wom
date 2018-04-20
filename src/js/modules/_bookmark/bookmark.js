@@ -31,11 +31,13 @@
 import net  from "./bmnet";
 import notify from "toastr";
 import differenceWith from "lodash/differenceWith";
+import range from "lodash/range";
 import cloneDeep from "lodash/cloneDeep";
 import hotKeys from "hotkeys-js";
 import list from "./list";
 import {initNavigator} from "./navigator";
 import { showBookmark } from "../_util/url";
+import { markSelection, getSelection, deleteNewSelection, initialize as selectInit } from "./selection";
 import {
   switchToParagraph,
   registerNotifyPlaybackTime, 
@@ -213,13 +215,15 @@ function addAnnotationDivider() {
   bookmark dialog
 
   args: id: paragraph id
+        aid: optional, the annotationId to be edited after annotation list is complete
 */
-function makeAnnotationList(pid) {
+function makeAnnotationList(pid, aid) {
   net.getBookmark(pid)
     .then((bookmark) => {
+      let annotations;
 
       if (bookmark.bookmark && bookmark.bookmark.length > 0) {
-        let annotations = bookmark.bookmark;
+        annotations = bookmark.bookmark;
 
         //sort by rangeEnd
         annotations.sort((a,b) => {
@@ -251,6 +255,7 @@ function makeAnnotationList(pid) {
 
           if (remainingAnnotations === 0) {
             $(`#${pid} > i.bkmark.bookmark`).addClass("outline");
+            $(`#${pid} > span.pnum`).removeClass("has-bookmark");
           } 
         });
 
@@ -259,18 +264,37 @@ function makeAnnotationList(pid) {
           let el = $(this);
           let aid = el.parent().parent().parent().data("aid");
           let pid = el.parent().parent().parent().data("pid");
+          let textId;
 
           //this does not make a network call
           let annotation = net.getAnnotation(pid, aid);
+          console.log("edit annotation: %o", annotation);
 
-          let form = $("#annotation-form");
-          form.form("set values", {
+          let fieldData = {
             rangeStart: pid,
             creationDate: annotation.creationDate,
             rangeEnd: annotation.rangeEnd,
             Comment: annotation.Comment,
             topicList: annotation.topicList
-          });
+          };
+
+          if (annotation.selectedText) {
+            textId = annotation.selectedText.id;
+            fieldData.textId = textId;
+          }
+
+          //reset form
+          $(".annotation-reset").trigger("click");
+
+          let form = $("#annotation-form");
+          form.form("set values", fieldData);
+
+          //highlight selectedText in dialog
+          if (textId) {
+            $(".highlite-toggle.hidden-field.ui.checkbox").removeClass("hidden-field");
+            $("#annotation-form .ui.checkbox").checkbox("check");
+          }
+
         });
       }
       else {
@@ -279,15 +303,39 @@ function makeAnnotationList(pid) {
       }
 
       //add selected paragraph to modal dialog
-      let paragraph = $(`#${pid}`).text();
-      $("#bookmark-paragraph").html(`<p>${paragraph}</p>`);
+      $("#bookmark-paragraph").attr("data-pid", pid);
+      copyParagraph(pid, "#bookmark-paragraph");
       $(".annotation.ui.modal").modal("show"); 
-  
+
+      //if arg: aid then load annotation aid for editing
+      if (aid) {
+        console.log("edit annotation: %s", aid);
+        $(`.annotation-list [data-aid="${aid}"] a.edit-annotation`).trigger("click");
+      }
+
     })
     .catch((err) => {
       console.log("error: ", err);
       notify.error(err);
     });
+}
+
+function copyParagraph(pid, target) {
+  let paragraph = $(`#${pid}`).html();
+  
+  $(target).html(`<p id="bkmk-${pid}">${paragraph}</p>`);
+  $(`#bkmk-${pid} > i.playmark`).remove();
+  $(`#bkmk-${pid} > i.timing`).remove();
+  $(`#bkmk-${pid} > i.bookmark`).remove();
+}
+
+function appendParagraph(pid, target) {
+  let paragraph = $(`#${pid}`).html();
+  
+  $(target).append(`<p id="bkmk-${pid}">${paragraph}</p>`);
+  $(`#bkmk-${pid} > i.playmark`).remove();
+  $(`#bkmk-${pid} > i.timing`).remove();
+  $(`#bkmk-${pid} > i.bookmark`).remove();
 }
 
 /*
@@ -313,11 +361,27 @@ function createAnnotaion(formValues) {
     delete annotation.creationDate;
   }
 
+  if (annotation.textId === "") {
+    delete annotation.textId;
+  }
+  else {
+    annotation.selectedText = getSelection(annotation.textId);
+
+    if (annotation.creationDate) {
+      annotation.selectedText.aid = annotation.creationDate.toString(10);
+    }
+    delete annotation.selectedText.wrap;
+    delete annotation.textId;
+  }
+
   if (annotation.topicList.length === 0) {
     delete annotation.topicList;
   }
 
   delete annotation.newTopics;
+  delete annotation.hasAnnotation;
+
+  console.log("posting annotation: %o", annotation);
 
   //persist the bookmark
   net.postAnnotation(annotation);
@@ -405,6 +469,14 @@ function addBookMarkers() {
             hotKeys.setScope("annotation");
             document.getElementById("rangeEnd").focus();
 
+            //if there is highlighted text associated with the form, click and 
+            //checkbox and trigger display of the text
+            let textId = $("#annotation-form").form("get value", "textId");
+            if (textId) {
+              console.log("there is text selected so checking checkbox");
+              $("#annotation-form .ui.checkbox").checkbox("check");
+            }
+
             if (audioPlayer) {
               if (audioPlayer.paused) {
                 //show play icon - this is default
@@ -424,27 +496,94 @@ function addBookMarkers() {
             $("button.annotate-follow").removeClass("following-audio red").addClass("green");
             $("button.annotate-follow").html("Follow");
             gProgressState = 0;
+          },
+          onHide: function() {
+            let textId = $("#annotation-form").form("get value", "textId");
+
+            //discard highlight on new annotations if one exists
+            //new highlight doesn't have an 'aid' attribute
+            if (textId) {
+              deleteNewSelection(textId);
+            }
           }
         });
 
+      //init annotation form components
       $("select.dropdown").dropdown();
+      $("#annotation-form .ui.checkbox").checkbox("set unchecked").checkbox({
+        onChecked: function() {
+          //show highlight if one is associated with the form
+          let textId = $("#annotation-form").form("get value", "textId");
+          if (textId) {
+            $(`#bookmark-paragraph [data-annotation-id="${textId}"]`).addClass("show");
+          }
+        },
+        onUnchecked: function() {
+          console.log("onUnchecked fired");
+          //show highlight if one is associated with the form
+          let textId = $("#annotation-form").form("get value", "textId");
+          if (textId) {
+            console.log("hiding text: %s", textId);
+            $(`#bookmark-paragraph [data-annotation-id="${textId}"]`).removeClass("show");
+          }
+        }
+      });
 
-      //listen for user click of bookmark icon - then display dialog
-      $(".transcript.ui.text.container").on("click","p.cmiTranPara > i.bookmark.icon", function(e) {
+      /*
+        listen for user click of bookmark icon - then display dialog
+
+        The dialog is opened ... 
+          1. when user clicks the bookmark icon next to a paragraph
+          2. when user highlights text
+          3. when user clicks already highlighted text
+
+        Behavior depends on how dialog is opened
+          1. arg: textInfo is null, form initialized with no selectedText
+          2. arg: textInfo.status === "new", form init with textInfo.textId (selectedText id)
+          3. arg: textInfo.status === "edit", load existing annotation info into form (textInfo.textId is annotation id)
+        */
+      $(".transcript.ui.text.container").on("click","p.cmiTranPara > i.bookmark.icon", function(e, textInfo) {
         e.preventDefault();
         let el = $(this);
         let id = el.parent().attr("id");
+        let textId;
+        let aid;
+        let status = "new";
+
+        // textInfo.status = "new" | "edit"
+        // textInfo.textId = selectedText id
+        if (textInfo) {
+          if (textInfo.status === "new") {
+            textId = textInfo.textId;
+          }
+          //edit existing annotation
+          else {
+            status = textInfo.status;
+            aid = textInfo.textId;
+          }
+        }
+        console.log("bookmark dialog open: textInfo: %o", textInfo);
         
         //add start and end p's to form
         let form = $("#annotation-form");
         form.form("clear");
-        form.form("set values", {
-          rangeStart: id,
-          rangeEnd: id
-        });
+
+        if (status === "new") {
+          form.form("set values", {
+            rangeStart: id,
+            rangeEnd: id,
+            textId: textId
+          });
+        }
 
         //generate list of existing annotations for paragraph
-        makeAnnotationList(id);
+        //if arg "aid" not null then edit annotation aid
+        makeAnnotationList(id, aid);
+
+        //if there's highlighted text
+        if (textId) {
+          $(".highlite-toggle.hidden-field.ui.checkbox").removeClass("hidden-field");
+        }
       });
     })
     .catch(( error ) => {
@@ -646,15 +785,47 @@ $(".annotation-reset").on("click", function(e) {
 
   let form = $("#annotation-form");
   let rangeStart = form.form("get value", "rangeStart");
+  let textId = form.form("get value", "textId");
+
+  //uncheck checkbox, hide and deselect hilighted text
+  if (textId) {
+    $("#annotation-form .ui.checkbox").checkbox("uncheck");
+    $(".highlite-toggle.ui.checkbox").addClass("hidden-field");
+
+    //remove highlight and delete if select not associated with a bookmark annotation
+    deleteNewSelection(textId);
+  }
+
+  //set focus on rangeEnd field
+  document.getElementById("rangeEnd").focus();
 
   form.form("clear");
   form.form("set values", {
     rangeStart: rangeStart,
     rangeEnd: rangeStart
   });
+});
 
-  //set focus on rangeEnd field
-  document.getElementById("rangeEnd").focus();
+//listen for blur event on rangeEnd
+$("#rangeEnd").on("blur", function(e) {
+  let rangeValues = $("#annotation-form").form("get values");
+
+  let currentRangeEnd = parseInt($("#bookmark-paragraph").attr("data-pid").substr(1), 10);
+  let rangeStart = parseInt(rangeValues.rangeStart.substr(1), 10);
+  let newRangeEnd = parseInt(rangeValues.rangeEnd.substr(1), 10);
+
+  let diff = newRangeEnd - currentRangeEnd;
+
+  //add or substract paragraphs to annotation dialog display
+  if (diff !== 0) {
+    let annotationRange = range(rangeStart, newRangeEnd + 1);
+    $("#bookmark-paragraph").attr("data-pid", rangeValues.rangeEnd);
+    copyParagraph(rangeValues.rangeStart, "#bookmark-paragraph");
+
+    for (let i = 1; i < annotationRange.length; i++) {
+      appendParagraph(`p${annotationRange[i]}`, "#bookmark-paragraph");
+    }
+  }
 });
 
 //listen for user submit of annotation form
@@ -665,16 +836,26 @@ $("#annotation-form").submit((e) => {
   let form = $("#annotation-form");
   let formValues = form.form("get values");
 
+  console.log("form values: %o", formValues);
+
+  //uncheck and hide checkbox
+  if (formValues.textId) {
+    $("#annotation-form .ui.checkbox").checkbox("uncheck");
+    $(".highlite-toggle.ui.checkbox").addClass("hidden-field");
+
+    //hide highlights
+    $("#bookmark-paragraph .bookmark-selected-text").removeClass("show");
+  }
+
   //format new topics
   let newTopics = formatNewTopics(formValues);
 
-  //hide modal and reset fields
-  //$(".annotation.ui.modal").modal("hide");
   $("#annotation-form").form("clear");
 
   //indicate paragraph has a bookmark
   if (formValues.rangeStart) {
     $(`#${formValues.rangeStart} > i.bkmark.bookmark`).removeClass("outline");
+    $(`#${formValues.rangeStart} > span.pnum`).addClass("has-bookmark");
   }
 
   //if no new topics post the bookmark and return
@@ -773,16 +954,31 @@ export default {
       addBookMarkers();
       createBookmarkToggle(uiBookmarkToggle);
 
+      //add support for text selection
+      selectInit();
+
+      //setup bookmark navigator if requested
       let pid = showBookmark();
       if (pid) {
         initNavigator(pid);
       }
+
+      //identify paragraphs with bookmarks
       net.getBookmarks()
         .then((response) => {
           if (response) {
             //mark each paragraph containing bookmarks
             for (let id in response) {
-              $(`#p${--id} > i.bkmark.bookmark`).removeClass("outline");
+              let pid = id - 1;
+              $(`#p${pid} > i.bkmark.bookmark`).removeClass("outline");
+              $(`#p${pid} > span.pnum`).addClass("has-bookmark");
+
+              for (const bm of response[id]) {
+                if (bm.selectedText) {
+                  markSelection(bm.selectedText);
+                }
+              }
+              console.log("bookmark %s: %o", id, response[id]);
             }
           }
         })
