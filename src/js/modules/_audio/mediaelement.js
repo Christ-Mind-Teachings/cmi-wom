@@ -247,7 +247,7 @@ export default {
         setEventListeners(player, status, timingData);
 
         //give bookmark the ability to control the audio player
-        bookmark.setAudioPlayer(player);
+        //bookmark.setAudioPlayer(player);
       }
     });
   }

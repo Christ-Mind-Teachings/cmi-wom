@@ -6,4 +6,5 @@ node_modules/
 project/
 public/js
 *.map
+*.old
 

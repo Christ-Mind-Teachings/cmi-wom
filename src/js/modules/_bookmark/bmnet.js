@@ -38,28 +38,21 @@ const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/late
 
   Bookmarks are keyed by pageKey and paragraphId. Paragraph Id's start from zero
   but are incremented by one to form the key.
-
-  Note: the Promise is used here because I initially went to the server each time a bookmark
-  was requested. I don't do that anymore but haven't yet removed the Promise.
 */
-function getBookmark(pid) {
-  return new Promise((resolve, reject) => {
-    const pageKey = genPageKey();
-    //console.log("getBookmark(%s)", pid);
+export function getBookmark(pid) {
+  const pageKey = genPageKey();
+  const bookmarks = store.get(pageKey);
 
-    const bookmarks = store.get(pageKey);
+  if (bookmarks) {
+    //generate id
+    let id = parseInt(pid.substr(1), 10) + 1;
 
-    if (bookmarks) {
-      //generate id
-      let id = parseInt(pid.substr(1), 10) + 1;
-
-      if (bookmarks[id]) {
-        resolve({bookmark: bookmarks[id]});
-      }
+    if (bookmarks[id]) {
+      return {bookmark: bookmarks[id]};
     }
-    //no bookmark found
-    resolve({});
-  });
+  }
+  //no bookmark found
+  return {};
 }
 
 /*
@@ -217,9 +210,9 @@ function postAnnotation(annotation) {
 }
 
 /*
-  Delete the annotation 'aid' for bookmark 'pid'
+  Delete the annotation 'creationDate' for bookmark 'pid'
 */
-function deleteAnnotation(pid, aid) {
+function deleteAnnotation(pid, creationDate) {
   const pageKey = genPageKey();
   const userInfo = getUserInfo();
 
@@ -227,16 +220,16 @@ function deleteAnnotation(pid, aid) {
   if (userInfo) {
     let bookmarkId = genParagraphKey(pid, pageKey);
 
-    axios.delete(`${bookmarkApi}/bookmark/annotation/${userInfo.userId}/${bookmarkId}/${aid}`)
+    axios.delete(`${bookmarkApi}/bookmark/annotation/${userInfo.userId}/${bookmarkId}/${creationDate}`)
       .then(() => {
-        console.log("deleted annotation: %s/%s/%s", userInfo.userId, bookmarkId, aid);
+        console.log("deleted annotation: %s/%s/%s", userInfo.userId, bookmarkId, creationDate);
       })
       .catch((err) => {
         throw new Error(err);
       });
   }
 
-  return deleteLocalAnnotation(pid, aid);
+  return deleteLocalAnnotation(pid, creationDate);
 }
 
 /*
@@ -311,7 +304,7 @@ function fetchTopics() {
     //user signed in, we need to get topics from server
     axios.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`)
       .then((topicInfo) => {
-        //console.log("topicInfo.data: ", topicInfo.data);
+        console.log("topicInfo.data: ", topicInfo.data);
         topicInfo.data.lastFetchDate = Date.now();
         store.set("topic-list", topicInfo.data);
         resolve(topicInfo.data);
@@ -366,11 +359,12 @@ function addToTopicList(newTopics) {
   //add topics to server if user signed in
   let userInfo = getUserInfo();
   if (userInfo) {
-    axios.post(`${topicsEndPoint}/user/topics`, {
+    let postBody = {
       userId: userInfo.userId,
-      sourceId: getKeyInfo.sourceId(),
+      sourceId: getKeyInfo.sourceId,
       topicList: newTopics
-    })
+    };
+    axios.post(`${topicsEndPoint}/user/topics`, postBody)
       .then((response) => {
         console.log(`addToTopicList: ${response}`);
       })
@@ -485,6 +479,5 @@ export default {
   deleteAnnotation: deleteAnnotation,
   postAnnotation: postAnnotation,
   getBookmarks: getBookmarks,
-  getBookmark: getBookmark,
   queryBookmarks: queryBookmarks
 };
