@@ -59,9 +59,29 @@ export function getSelection(id) {
   return pageAnnotations[id];
 }
 
-export function markSelection(annotation) {
+export function updateHighlightColor(id, sequence) {
+  let colorClasses = [
+    "colorClass1", 
+    "colorClass2", 
+    "colorClass3", 
+    "colorClass4", 
+    "colorClass5", 
+    "colorClass6"
+  ];
+  $(`[data-annotation-id="${id}"]`).addClass(colorClasses[sequence % 6]);
+}
+
+/*
+  Highlight selected text
+  args:
+    annotation: a bookmark annotation with selected text
+    sequence: the sequence of this annotation within the paragraph
+*/
+export function markSelection(annotation, sequence = 0) {
   let node = document.getElementById(annotation.pid);
+
   highlight(annotation, node);
+  updateHighlightColor(annotation.id, sequence);
   pageAnnotations[annotation.id] = annotation;
 }
 

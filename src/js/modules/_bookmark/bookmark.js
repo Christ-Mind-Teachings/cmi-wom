@@ -1,5 +1,5 @@
 import notify from "toastr";
-import net  from "./bmnet";
+import net, {getBookmark}  from "./bmnet";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
 import startCase from "lodash/startCase";
@@ -11,7 +11,8 @@ import {
   getSelection, 
   deleteNewSelection, 
   deleteSelection, 
-  initialize as selectInit
+  initialize as selectInit,
+  updateHighlightColor
 } from "./selection";
 
 function getPageBookmarks() {
@@ -24,10 +25,12 @@ function getPageBookmarks() {
           let hasBookmark = false;
           let hasAnnotation = false;
           let pid = id - 1;
+          let count = 0;
 
           for (const bm of response[id]) {
             if (bm.selectedText) {
-              markSelection(bm.selectedText);
+              markSelection(bm.selectedText, count);
+              count++;
               hasBookmark = true;
             }
             else {
@@ -177,6 +180,23 @@ function addToTopicList(newTopics, formValues) {
     });
 } 
 
+//toggle selected text highlights
+function highlightHandler() {
+  $(".toggle-bookmark-highlight").on("click", function(e) {
+    e.preventDefault();
+    let el = $(".transcript");
+
+    if (el.hasClass("hide-bookmark-highlights")) {
+      el.removeClass("hide-bookmark-highlights");
+      $(".toggle-bookmark-highlight").text("Hide Highlighted Text");
+    }
+    else {
+      el.addClass("hide-bookmark-highlights");
+      $(".toggle-bookmark-highlight").text("Show Highlighted Text");
+    }
+  });
+}
+
 /*
   initialize transcript page
 */
@@ -187,6 +207,9 @@ function initTranscriptPage() {
 
   //add support for text selection
   selectInit();
+
+  //show/hide bookmark highlights
+  highlightHandler();
 
   //setup bookmark navigator if requested
   let pid = showBookmark();
@@ -220,6 +243,22 @@ export const annotation = {
     }
     else {
       $(`#${formData.rangeStart} > span.pnum`).addClass("has-bookmark");
+
+      //this is a new annotation
+      if (formData.creationDate === "") {
+        let bookmarks = getBookmark(formData.rangeStart);
+
+        let annotationCount = 0;
+        if (bookmarks.bookmark.length > 0) {
+          annotationCount = bookmarks.bookmark.reduce((count, annotation) => {
+            if (annotation.aid && annotation.aid !== formData.aid) {
+              count = count + 1;
+            }
+            return count;
+          }, 0);
+        }
+        updateHighlightColor(formData.aid, annotationCount);
+      }
     }
 
   },

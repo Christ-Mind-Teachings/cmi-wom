@@ -119,6 +119,7 @@
 }
 
 /* bookmark highlighted text */
+.hide-bookmark-highlights mark.bookmark-selected-text,
 .bookmark-navigator-active .selected-annotation mark.bookmark-selected-text,
 .annotation-edit mark.bookmark-selected-text {
   background-color: inherit;
@@ -127,6 +128,30 @@
 .bookmark-navigator-active .selected-annotation mark.bookmark-selected-text.show,
 .annotation-edit mark.bookmark-selected-text.show {
   background-color: #ff0;
+}
+
+.colorClass1 {
+  background-color: #e1f92f63;
+}
+
+.colorClass2 {
+  background-color: #68f3514f;
+}
+
+.colorClass3 {
+  background-color: #51c4f34f; 
+}
+
+.colorClass4 {
+  background-color: #d972f93b; 
+}
+
+.colorClass5 {
+  background-color: #f9728336;  
+}
+
+.colorClass6 {
+  background-color: #f9d07252; 
 }
 
 .transcript mark.bookmark-selected-text {
