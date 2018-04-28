@@ -3,6 +3,9 @@ import net  from "./bmnet";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
 import startCase from "lodash/startCase";
+import { showBookmark } from "../_util/url";
+import {initNavigator} from "./navigator";
+import list from "./list";
 import { 
   markSelection, 
   getSelection, 
@@ -18,14 +21,26 @@ function getPageBookmarks() {
       if (response) {
         //mark each paragraph containing bookmarks
         for (let id in response) {
+          let hasBookmark = false;
+          let hasAnnotation = false;
           let pid = id - 1;
-          //$(`#p${pid} > i.bkmark.bookmark`).removeClass("outline");
-          $(`#p${pid} > span.pnum`).addClass("has-bookmark");
 
           for (const bm of response[id]) {
             if (bm.selectedText) {
               markSelection(bm.selectedText);
+              hasBookmark = true;
             }
+            else {
+              hasAnnotation = true;
+            }
+          }
+
+          if (hasBookmark) {
+            $(`#p${pid} > span.pnum`).addClass("has-bookmark");
+          }
+
+          if (hasAnnotation) {
+            $(`#p${pid} > span.pnum`).addClass("has-annotation");
           }
         }
       }
@@ -79,7 +94,7 @@ function createAnnotaion(formValues) {
   delete annotation.newTopics;
   delete annotation.hasAnnotation;
 
-  console.log("posting annotation: %o", annotation);
+  //console.log("posting annotation: %o", annotation);
 
   //persist the bookmark
   net.postAnnotation(annotation);
@@ -174,10 +189,10 @@ function initTranscriptPage() {
   selectInit();
 
   //setup bookmark navigator if requested
-  // let pid = showBookmark();
-  // if (pid) {
-  //   initNavigator(pid);
-  // }
+  let pid = showBookmark();
+  if (pid) {
+    initNavigator(pid);
+  }
 }
 
 export const annotation = {
@@ -197,12 +212,22 @@ export const annotation = {
       //post the bookmark
       createAnnotaion(formData);
     }
+
+    //mark paragraph as having bookmark
+    if (!formData.aid) {
+      //bookmark has no selected text
+      $(`#${formData.rangeStart} > span.pnum`).addClass("has-annotation");
+    }
+    else {
+      $(`#${formData.rangeStart} > span.pnum`).addClass("has-bookmark");
+    }
+
   },
 
   //user pressed cancel on annotation form
   cancel(formData) {
     //no creationDate means a new annotation that hasn't been stored
-    if (!formData.creationDate) {
+    if (!formData.creationDate && formData.aid) {
       deleteNewSelection(formData.aid);
     }
   },
@@ -211,7 +236,15 @@ export const annotation = {
   delete(formData) {
     //mark as having no annotations if all have been deleted
     let remainingAnnotations = net.deleteAnnotation(formData.rangeStart, formData.creationDate);
-    deleteSelection(formData.aid);
+
+    //if annotation has selected text unwrap and delete it
+    if (formData.aid) {
+      deleteSelection(formData.aid);
+    }
+    else {
+      //remove mark from paragraph
+      $(`#${formData.rangeStart} > span.pnum`).removeClass("has-annotation");
+    }
 
     if (remainingAnnotations === 0) {
       $(`#${formData.rangeStart} > span.pnum`).removeClass("has-bookmark");
@@ -233,6 +266,6 @@ export default {
     }
 
     //initialize bookmark list modal - available on all pages
-    //list.initialize();
+    list.initialize();
   }
 };

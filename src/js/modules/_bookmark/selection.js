@@ -5,8 +5,8 @@ const textQuote = require("dom-anchor-text-quote");
 const wrapRange = require("wrap-range-text");
 const uuid = require("uuid/v4");
 
-import {getUserInput} from "./annotate";
-import {initialize as initAnnotation} from "./annotate";
+import {getUserInput, initialize as initAnnotation} from "./annotate";
+import isFinite from "lodash/isFinite";
 
 let pageAnnotations = {};
 
@@ -15,6 +15,11 @@ let pageAnnotations = {};
   delete from pageAnnotations
 */
 export function deleteNewSelection(id) {
+  //no id when annotation has no associated text
+  if (!id) {
+    return;
+  }
+
   let highlite = pageAnnotations[id];
 
   //new highlite is not associated with a bookmark annotation so it doesn't have an 'aid' attribute
@@ -29,7 +34,14 @@ export function deleteNewSelection(id) {
   delete pageAnnotations[id];
 }
 
+/*
+  unwrap selected text and delete
+*/
 export function deleteSelection(id) {
+  if (!id) {
+    return;
+  }
+
   let highlite = pageAnnotations[id];
 
   if (!highlite) {
@@ -151,6 +163,20 @@ function processSelection() {
 
   let rangeStart = range.startContainer.parentElement.id;
   let rangeEnd = range.endContainer.parentElement.id;
+
+  //the range must start with a transcript paragraph, one whose id = "p<number>"
+  if (!rangeStart) {
+    return;
+  }
+
+  if (!rangeStart.startsWith("p")) {
+    return;
+  }
+
+  let pid = parseInt(rangeStart.substr(1), 10);
+  if (!isFinite(pid)) {
+    return;
+  }
 
   //not sure how to handl text selected across paragraphs, so disallow it.
   if (rangeStart !== rangeEnd) {

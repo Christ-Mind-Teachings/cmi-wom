@@ -48,7 +48,7 @@ function generateAnnotation(annotation, topics = []) {
             ${generateHorizontalList(annotation.topicList)}
           </div>
           <div class="description">
-            <a class="annotation-item" data-range="${annotation.rangeStart}/${annotation.rangeEnd}">   
+            <a data-aid="${annotation.aid}" class="annotation-item" data-range="${annotation.rangeStart}/${annotation.rangeEnd}">   
               ${annotation.Comment?annotation.Comment:"No Comment"}
             </a>
           </div>
@@ -422,6 +422,7 @@ function clearSelectedAnnotation() {
   $(".selected-annotation-wrapper > .header").remove();
   $(".selected-annotation").unwrap();
   $(".selected-annotation").removeClass("selected-annotation");
+  $(".bookmark-selected-text.show").removeClass("show");
 }
 
 function initClickListeners() {
@@ -456,12 +457,14 @@ function initClickListeners() {
     clearSelectedAnnotation();
 
     $(".bookmark-navigator-wrapper").addClass("hide-bookmark-navigator");
+    $(".transcript").removeClass("bookmark-navigator-active");
   });
 
   $(".bookmark-navigator").on("click", ".annotation-item", function(e) {
     e.preventDefault();
     clearSelectedAnnotation();
 
+    let aid = $(this).attr("data-aid");
     let dataRange = $(this).attr("data-range");
     let rangeArray = dataRange.split("/");
     let numericRange = rangeArray.map((r) => parseInt(r.substr(1),10));
@@ -473,6 +476,10 @@ function initClickListeners() {
 
     $(".selected-annotation").wrapAll("<div class='selected-annotation-wrapper ui raised segment'></div>");
     $(".selected-annotation-wrapper").prepend(`<h4 class='ui header'>${$(this).text()}</h4>`);
+
+    if (aid !== "undefined") {
+      $(`[data-annotation-id="${aid}"]`).addClass("show");
+    }
   });
 }
 
@@ -487,4 +494,7 @@ export function initNavigator(actualPid) {
   $(".bookmark-navigator-wrapper").removeClass("hide-bookmark-navigator");
   bookmarkManager(actualPid);
   initClickListeners();
+
+  //indicate bookmark navigator is active by adding class to ./transcript
+  $(".transcript").addClass("bookmark-navigator-active");
 }

@@ -35,6 +35,13 @@ const form = `
 const wrapper = `
   <div class="annotate-wrapper ui raised segment"></div>`;
 
+/*
+  Populate form fields
+  args:
+    pid: the paragraph id of the annotation
+    aid: the id of associated highlighted text
+    annotation: user data for existing annotations
+  */
 function initializeForm(pid, aid, annotation) {
   let form = $("#annotation-form");
 
@@ -64,12 +71,85 @@ function getFormData() {
   return $("#annotation-form").form("get values");
 }
 
+//returns true if annotation form is open
+function annotationFormOpen() {
+  let selector = $(".transcript .annotation-edit");
+
+  if (selector.length > 0) {
+    let pid = selector.first(1).attr("id");
+    notify.info(`A bookmark is already being added at paragraph ${pid}. Please complete that first.`);
+    return true;
+  }
+  return false;
+}
+
+function bookmarkNavigatorActive() {
+  if ($(".transcript").hasClass("bookmark-navigator-active")) {
+    notify.info("Annotation is disabled when the bookmark navigator is active.");
+    return true;
+  }
+  return false;
+}
+
+function editAnnotation(pid, aid, annotation) {
+  let rangeStart = parseInt(annotation.rangeStart.substr(1), 10);
+  let rangeEnd = parseInt(annotation.rangeEnd.substr(1), 10);
+
+  //add class 'annotation-edit' to paragraphs so they can be wrapped
+  if (rangeStart !== rangeEnd) {
+    let annotationRange = range(rangeStart, rangeEnd + 1);
+    for (let i = 0; i < annotationRange.length; i++) {
+      $(`#p${annotationRange[i]}`).addClass("annotation-edit");
+    }
+  }
+  else {
+    $(`#${pid}`).addClass("annotation-edit");
+  }
+
+  $(".annotation-edit").wrapAll(wrapper);
+  $(".annotate-wrapper").prepend(form);
+  getTopicList(pid, aid, annotation);
+}
+
+/*
+  Support for creating annotations with no associated selected text
+*/
+function noteHandler() {
+  $(".transcript").on("click", "p.cmiTranPara > span.pnum", function(e) {
+    e.preventDefault();
+    let pid = $(this).parent("p").attr("id");
+
+    //we're already editing this annotation
+    if (annotationFormOpen() || bookmarkNavigatorActive()) {
+      return;
+    }
+
+    let bookmarkData = getBookmark(pid);
+
+    if (bookmarkData.bookmark) {
+      let annotation = bookmarkData.bookmark.find(value => typeof value.aid === "undefined");
+      
+      //we found a note - so edit it
+      if (annotation) {
+        editAnnotation(pid, undefined, annotation);
+        return;
+      }
+    }
+
+    //new note for paragraph
+    $(`#${pid}`).addClass("annotation-edit");
+    $(".annotation-edit").wrapAll(wrapper);
+    $(".annotate-wrapper").prepend(form);
+    getTopicList(pid);
+  });
+}
+
 function editHandler() {
   $(".transcript").on("click", "[data-annotation-id]", function(e) {
     e.preventDefault();
 
-    //we're already editing the annotation
-    if ($(this).parent("p").hasClass("annotation-edit")) {
+    //we're already editing this annotation
+    if (annotationFormOpen() || bookmarkNavigatorActive()) {
       return;
     }
 
@@ -81,23 +161,7 @@ function editHandler() {
     let bookmarkData = getBookmark(pid);
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
 
-    let rangeStart = parseInt(annotation.rangeStart.substr(1), 10);
-    let rangeEnd = parseInt(annotation.rangeEnd.substr(1), 10);
-
-    //add class 'annotation-edit' to paragraphs so they can be wrapped
-    if (rangeStart !== rangeEnd) {
-      let annotationRange = range(rangeStart, rangeEnd + 1);
-      for (let i = 0; i < annotationRange.length; i++) {
-        $(`#p${annotationRange[i]}`).addClass("annotation-edit");
-      }
-    }
-    else {
-      $(`#${pid}`).addClass("annotation-edit");
-    }
-
-    $(".annotation-edit").wrapAll(wrapper);
-    $(".annotate-wrapper").prepend(form);
-    getTopicList(pid, aid, annotation);
+    editAnnotation(pid, aid, annotation);
   });
 }
 
@@ -154,6 +218,7 @@ export function initialize() {
   cancelHandler();
   deleteHandler();
   editHandler();
+  noteHandler();
 }
 
 /*
@@ -162,6 +227,14 @@ export function initialize() {
     highlight - highlighted text object
   */
 export function getUserInput(highlight) {
+
+  //don't allow multiple annotation forms to be open at the same time
+  // - if open cancel the highlight
+  if (annotationFormOpen() || bookmarkNavigatorActive()) {
+    annotation.cancel({aid: highlight.id});
+    return;
+  }
+
   $(`#${highlight.pid}`).addClass("annotation-edit");
   $(".annotation-edit").wrapAll(wrapper);
   $(".annotate-wrapper").prepend(form);
@@ -210,7 +283,6 @@ function getTopicList(pid, aid, data) {
 
       //init form
       initializeForm(pid, aid, data);
-
     })
     .catch(( error ) => {
       console.error("topic fetch error: ", error);

@@ -14,9 +14,15 @@
 
 .pnum {
   font-size: small;
+  cursor: pointer;
 }
 
 .pnum.has-bookmark {
+  color: #ce2000;
+}
+
+.pnum.has-annotation::before {
+  content: "*";
   color: #ce2000;
 }
 
@@ -113,10 +119,12 @@
 }
 
 /* bookmark highlighted text */
+.bookmark-navigator-active .selected-annotation mark.bookmark-selected-text,
 .annotation-edit mark.bookmark-selected-text {
   background-color: inherit;
 }
 
+.bookmark-navigator-active .selected-annotation mark.bookmark-selected-text.show,
 .annotation-edit mark.bookmark-selected-text.show {
   background-color: #ff0;
 }
