@@ -67,6 +67,15 @@ function getFormData() {
 function editHandler() {
   $(".transcript").on("click", "[data-annotation-id]", function(e) {
     e.preventDefault();
+
+    //we're already editing the annotation
+    if ($(this).parent("p").hasClass("annotation-edit")) {
+      return;
+    }
+
+    //show this highlight, all others are hidden
+    $(this).addClass("show");
+
     let aid = $(this).attr("data-annotation-id");
     let pid = $(this).parent("p").attr("id");
     let bookmarkData = getBookmark(pid);
@@ -99,6 +108,9 @@ function submitHandler() {
     let formData = getFormData();
     unwrap();
 
+    //remove class "show" added when form was displayed
+    $(`[data-annotation-id="${formData.aid}"]`).removeClass("show");
+
     annotation.submit(formData);
     $(".transcript .annotation-edit").removeClass("annotation-edit");
   });
@@ -113,6 +125,9 @@ function cancelHandler() {
 
     let formData = getFormData();
     unwrap();
+
+    //remove class "show" added when form was displayed
+    $(`[data-annotation-id="${formData.aid}"]`).removeClass("show");
 
     annotation.cancel(formData);
     $(".transcript .annotation-edit").removeClass("annotation-edit");
@@ -151,6 +166,9 @@ export function getUserInput(highlight) {
   $(".annotation-edit").wrapAll(wrapper);
   $(".annotate-wrapper").prepend(form);
   getTopicList(highlight.pid, highlight.id);
+
+  //show this highlight, all others are hidden
+  $(`[data-annotation-id="${highlight.id}"]`).addClass("show");
 }
 
 /*

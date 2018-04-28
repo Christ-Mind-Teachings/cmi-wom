@@ -2,6 +2,7 @@ import notify from "toastr";
 import net  from "./bmnet";
 import differenceWith from "lodash/differenceWith";
 import cloneDeep from "lodash/cloneDeep";
+import startCase from "lodash/startCase";
 import { 
   markSelection, 
   getSelection, 
@@ -91,10 +92,16 @@ function createAnnotaion(formValues) {
 
   Topics are converted from string to array and first character is
   uppercased.
+
+  Multi word topics are supported. Each word is capitalized and the topic
+  is formatted as an object like so:
+
+    {value: "HolySpirit", topic: "Holy Spirit"}
 */
 function formatNewTopics({newTopics}) {
-  //only allow alpha chars and comma's
-  let topics = newTopics.replace(/[^a-zA-Z,]/g, "");
+
+  //only allow alpha chars and comma's and spaces
+  let topics = newTopics.replace(/[^a-zA-Z, ]/g, "");
 
   if (!topics || topics === "" ) {
     return [];
@@ -105,9 +112,15 @@ function formatNewTopics({newTopics}) {
   topics = topics.replace(/,*$/, "");
 
   let newTopicArray = topics.split(",");
+  newTopicArray = newTopicArray.map(t => t.trim());
+  newTopicArray = newTopicArray.map(t => startCase(t));
 
-  //uppercase first char of each topic
-  newTopicArray = newTopicArray.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+  newTopicArray = newTopicArray.map(t => {
+    if (/ /.test(t)) {
+      return {value: t.replace(/ /g, ""), topic: t};
+    }
+    return t;
+  });
 
   return newTopicArray;
 }

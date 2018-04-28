@@ -113,14 +113,18 @@
 }
 
 /* bookmark highlighted text */
-#bookmark-paragraph mark.bookmark-selected-text {
+.annotation-edit mark.bookmark-selected-text {
   background-color: inherit;
 }
 
-#bookmark-paragraph mark.bookmark-selected-text.show {
+.annotation-edit mark.bookmark-selected-text.show {
   background-color: #ff0;
 }
 
 .transcript mark.bookmark-selected-text {
   cursor: pointer;
+}
+
+.annotation-edit mark.bookmark-selected-text {
+  cursor: inherit;
 }
