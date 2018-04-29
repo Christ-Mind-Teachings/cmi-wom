@@ -106,16 +106,19 @@ function queryBookmarks(key) {
     //get bookmarks from server
     if (userInfo) {
       //set if bookmarks are already in local storage
-      let bookmarkList = store.get(`bmList_${keyInfo.sourceId}`);
+      let bookmarkList = getBookmarkList(keyInfo);
 
       //don't query database - just return from local storage
       if (bookmarkList) {
         let expireDate = bookmarkList.lastFetchDate + retentionTime;
 
+        //if list has not expired or been invalidated resolve and return
+        //otherwise query the server
         if (Date.now() < expireDate) {
-          //console.log("queryBookmarks: list from local store");
-          resolve(bookmarkList);
-          return;
+          if (bookmarkList.lastBuildDate > 0) {
+            resolve(bookmarkList);
+            return;
+          }
         }
       }
 
@@ -124,6 +127,7 @@ function queryBookmarks(key) {
         .then((response) => {
           //convert to local data structure and store locally 
           if (response.data.response) {
+            /*
             let bookmarks = {};
             response.data.response.forEach((b) => {
               let keyParts = parseKey(b.id);
@@ -133,8 +137,12 @@ function queryBookmarks(key) {
               bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
             });
             bookmarks.lastFetchDate = Date.now();
+            bookmarks.lastBuildDate = Date.now();
             store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
             //console.log("queryBookmarks: list from server");
+            */
+
+            let bookmarks = buildBookmarkListFromServer(response, keyInfo);
             resolve(bookmarks);
           }
         })
@@ -144,6 +152,7 @@ function queryBookmarks(key) {
         });
     }
     else {
+      /*
       let sid = parseInt(keyInfo.sourceId, 10);
       let bookmarks = [];
 
@@ -157,9 +166,73 @@ function queryBookmarks(key) {
         }
       });
       console.log("queryBookmarks: list from local store, user not signed in");
+      */
+      let bookmarks = buildBookmarkListFromLocalStore(keyInfo);
       resolve(bookmarks);
     }
   });
+}
+
+function storeBookmarkList(bookmarks, keyInfo) {
+  store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
+}
+
+function getBookmarkList(keyInfo) {
+  return store.get(`bmList_${keyInfo.sourceId}`);
+}
+
+/*
+  This is for users not signed in
+  Build BookmarkList from locally stored bookmarks. Once built, we only
+  rebuild it if it has been invalidated by the modification or creation of
+  a bookmark
+*/
+function buildBookmarkListFromLocalStore(keyInfo) {
+
+  //check if the list needs to be rebuilt
+  const list = getBookmarkList(keyInfo);
+  if (list) {
+    if (list.lastBuildDate > 0) {
+      return list;
+    }
+  }
+
+  let sid = parseInt(keyInfo.sourceId, 10);
+  let bookmarks = [];
+
+  //build expected structure from local storage
+  store.each((value, key) => {
+    if (key.startsWith(sid)) {
+      if (!bookmarks[key]) {
+        bookmarks[key] = {};
+      }
+      bookmarks[key] = value;
+    }
+  });
+  bookmarks.lastBuildDate = Date.now();
+  storeBookmarkList(bookmarks, keyInfo);
+
+  return bookmarks;
+}
+
+/*
+  Build Bookmark list from data returned from server
+  - this is for users signed in
+*/
+function buildBookmarkListFromServer(response, keyInfo) {
+  let bookmarks = {};
+  response.data.response.forEach((b) => {
+    let keyParts = parseKey(b.id);
+    if (!bookmarks[keyParts.pageKey]) {
+      bookmarks[keyParts.pageKey] = {};
+    }
+    bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
+  });
+  bookmarks.lastFetchDate = Date.now();
+  bookmarks.lastBuildDate = Date.now();
+
+  storeBookmarkList(bookmarks, keyInfo);
+  return bookmarks;
 }
 
 /*
@@ -377,7 +450,26 @@ function addToTopicList(newTopics) {
 }
 
 /*
+  Called when a bookmark has been created, modified or deleted. We check if the bookmark
+  list exists and if it was created before a bookmark was modified. If so, the list needs
+  to be rebuilt.
+*/
+function inValidateBookmarkList() {
+  const keyInfo = getKeyInfo();
+
+  let bmList = getBookmarkList(keyInfo);
+
+  if (bmList) {
+    console.log("invalidating bmList");
+    bmList.lastBuildDate = 0;
+    storeBookmarkList(bmList, keyInfo);
+  }
+}
+
+/*
   store annotation locally
+  - if bmList_<source> exists in local store set lastBuildDate = 0 to indicate
+    it needs to be recreated.
 */
 function storeAnnotation(annotation, creationDate) {
   const pageKey = genPageKey();
@@ -439,6 +531,7 @@ function storeAnnotation(annotation, creationDate) {
     }
   }
   store.set(pageKey, data);
+  inValidateBookmarkList();
 }
 
 /*
@@ -467,6 +560,9 @@ function deleteLocalAnnotation(pid, aid) {
   //filter deleted annotation from array
   data[pid] = annotations.filter(a => a.creationDate !== aid);
   store.set(pageKey, data);
+
+  //bookmark has been deleted invalidate bookmark list so it is rebuilt
+  inValidateBookmarkList();
 
   //return number of annotations remaining for paragraph
   return data[pid].length;

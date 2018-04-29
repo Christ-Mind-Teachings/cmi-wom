@@ -15,12 +15,6 @@ const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 
-//flag indicating if bookmark modal has been initialized
-let listInitialized = false;
-
-//bookmark info by book
-//let bookmarkModalInfo = {modal: {filter: false}};
-
 function bookmarkModalState(option, modalInfo) {
   let sid = getSourceId();
   let name = `bmModal_${sid}`;
@@ -158,6 +152,26 @@ function generateBookmarksForBookPages(pages) {
 }
 
 function generateBookmarkList(books) {
+  if (books.length === 0) {
+    return `
+      <h2 class="ui center aligned icon header">
+        <i class="circular bookmark icon"></i>
+        You Don't Have Any Bookmarks Yet
+      </h2>
+      <p>
+        Bookmarks are expressive and powerful and you can assign them to categories to easily
+        view only the categories you want. There are two way to create bookmarks.
+      </p>
+      <ul>
+        <li>Selecting text of interest or</li>
+        <li>Clicking on the paragraph number, eg: (p21)</li>
+      </ul>
+      <p>
+        See <a href="">the Bookmark documentation</a> for more information.
+      </p>
+    `;
+  }
+
   return `
     ${books.map((book) => `
       <div data-bid="${book.bookId}" class="item"> <!-- item: ${book.bookId} -->
@@ -262,13 +276,136 @@ function restoreModalState() {
   }
 }
 
+function filterResetHandler() {
+  //clear filter
+  $(".bookmark-filter-reset").on("click", function(e) {
+    e.preventDefault();
+    let form = $("#bookmark-filter-form");
+    form.form("clear");
+
+    let hiddenBookmarkItems = $(".cmi-bookmark-list .hide-bookmark-item.bookmark-item");
+    hiddenBookmarkItems.each(function() {
+      $(this).removeClass("hide-bookmark-item");
+    });
+
+    //keep track of the state of the bookmark Modal
+    let bookmarkModalInfo = bookmarkModalState("get");
+
+    //update book title to reflect number of bookmarks
+    $("[data-bid]").each(function() {
+      let bid = $(this).data("bid");
+
+      $(`.${bid}-header`).text(`${bookmarkModalInfo[bid].header} (${bookmarkModalInfo[bid].count})`);
+    });
+
+    bookmarkModalInfo["modal"].filter = false;
+    delete bookmarkModalInfo["modal"].topics;
+    bookmarkModalState("set", bookmarkModalInfo);
+  });
+}
+
+function filterSubmitHandler() {
+  //apply topic filter
+  $(".bookmark-filter-submit").on("click", function(e, data) {
+    e.preventDefault();
+    let form = $("#bookmark-filter-form");
+    let topics = form.form("get value", "topicList");
+    let topicRegExp = new RegExp(`\\b(${topics.join("|")})\\b`);
+
+    if (topics.length === 0) {
+      return;
+    }
+
+    console.log("data: ", data);
+
+    let bookmarkItems = $(".cmi-bookmark-list .bookmark-item");
+    bookmarkItems.each(function() {
+      let classList = $(this).attr("class");
+      if (classList.match(topicRegExp)) {
+        //the bookmark could be hidden from a previous filter, so just remove the class
+        //in case it's there
+        $(this).removeClass("hide-bookmark-item");
+      }
+      else {
+        $(this).addClass("hide-bookmark-item");
+      }
+    });
+
+    //keep track of the state of the bookmark Modal
+    let bookmarkModalInfo = bookmarkModalState("get");
+
+    //if we have data we're initializing and so we don't need to save state
+    if (!data) {
+      bookmarkModalInfo["modal"].filter = true;
+      bookmarkModalInfo["modal"].topics = topics;
+      bookmarkModalState("set", bookmarkModalInfo);
+    }
+
+    $("[data-bid]").each(function() {
+      let bid = $(this).data("bid");
+      let filtered = $(`[data-bid="${bid}"] .bookmark-item.hide-bookmark-item`).length;
+      let remaining = bookmarkModalInfo[bid].count - filtered;
+
+      //update title to reflect number of bookmarks shown after filter applied
+      $(`.${bid}-header`).html(`${bookmarkModalInfo[bid].header} (<span class="bookmark-filter-color">${remaining}</span>/${bookmarkModalInfo[bid].count})`);
+    });
+  });
+}
+
+//set click listener to open/close book level bookmarks
+function openCloseHandler() {
+  $(".cmi-bookmark-list").on("click", "[data-book]", function(e) {
+    e.stopPropagation();
+    let bookId = $(this).attr("data-book");
+    let bookList = $(`#${bookId}-list`);
+
+    if (bookList.hasClass("hide-bookmarks")) {
+      bookList.removeClass("hide-bookmarks");
+      $(this).text("Close").removeClass("green").addClass("yellow");
+    }
+    else {
+      bookList.removeClass("yellow").addClass("green hide-bookmarks");
+      $(this).text("Open").removeClass("yellow").addClass("green");
+    }
+  });
+}
+
+/*
+  This is called each time the user displays the bookmark list
+  - the first time it's call we need to generate html for all bookmarks
+  - subsequent calls will regenerate html only if bookmarks have been added
+    or deleted since the last time html was generated.
+*/
 function populateModal(bookmarks) {
+  let initialCall = true;
   let html;
   let info = [];
 
+  /*
+    We need to populate the modal html if it hasn't been done yet or
+    if a bookmark has been added or changed since we last did it.
+    - check if we need to do it.
+  */
+
+  let lbd = $(".cmi-bookmark-list").attr("data-lbd");
+  if (lbd) {
+    //check if it is different from that found in booimarks
+    lbd = parseInt(lbd, 10);
+    if (lbd === bookmarks.lastBuildDate) {
+      //don't need to update
+      return;
+    }
+    else {
+      initialCall = false;
+    }
+  }
+
+  //record time bookmark was last generated
+  $(".cmi-bookmark-list").attr("data-lbd", bookmarks.lastBuildDate);
+
   //get page info for each page with bookmarks
   for (let pageKey in bookmarks) {
-    if (pageKey !== "lastFetchDate") {
+    if (pageKey !== "lastFetchDate" && pageKey !== "lastBuildDate") {
       info.push(getPageInfo(pageKey, bookmarks[pageKey]));
     }
   }
@@ -305,99 +442,17 @@ function populateModal(bookmarks) {
         bookmarkModalInfo[bid] = info;
       });
 
-      //console.log("bookmarkModalInfo: %o", bookmarkModalInfo);
-      bookmarkModalState("set", bookmarkModalInfo);
-
-      //set click listener to open/close book level bookmarks
-      $(".cmi-bookmark-list").on("click", "[data-book]", function(e) {
-        e.stopPropagation();
-        let bookId = $(this).attr("data-book");
-        let bookList = $(`#${bookId}-list`);
-
-        if (bookList.hasClass("hide-bookmarks")) {
-          bookList.removeClass("hide-bookmarks");
-          $(this).text("Close").removeClass("green").addClass("yellow");
-        }
-        else {
-          bookList.removeClass("yellow").addClass("green hide-bookmarks");
-          $(this).text("Open").removeClass("yellow").addClass("green");
-        }
-      });
-
-      //apply topic filter
-      $(".bookmark-filter-submit").on("click", function(e, data) {
-        e.preventDefault();
-        let form = $("#bookmark-filter-form");
-        let topics = form.form("get value", "topicList");
-        let topicRegExp = new RegExp(`\\b(${topics.join("|")})\\b`);
-
-        if (topics.length === 0) {
-          return;
-        }
-
-        console.log("data: ", data);
-
-        let bookmarkItems = $(".cmi-bookmark-list .bookmark-item");
-        bookmarkItems.each(function() {
-          let classList = $(this).attr("class");
-          if (classList.match(topicRegExp)) {
-            //the bookmark could be hidden from a previous filter, so just remove the class
-            //in case it's there
-            $(this).removeClass("hide-bookmark-item");
-          }
-          else {
-            $(this).addClass("hide-bookmark-item");
-          }
-        });
-
-        //keep track of the state of the bookmark Modal
-        let bookmarkModalInfo = bookmarkModalState("get");
-
-        //if we have data we're initializing and so we don't need to save state
-        if (!data) {
-          bookmarkModalInfo["modal"].filter = true;
-          bookmarkModalInfo["modal"].topics = topics;
-          bookmarkModalState("set", bookmarkModalInfo);
-        }
-
-        $("[data-bid]").each(function() {
-          let bid = $(this).data("bid");
-          let filtered = $(`[data-bid="${bid}"] .bookmark-item.hide-bookmark-item`).length;
-          let remaining = bookmarkModalInfo[bid].count - filtered;
-
-          //update title to reflect number of bookmarks shown after filter applied
-          $(`.${bid}-header`).html(`${bookmarkModalInfo[bid].header} (<span class="bookmark-filter-color">${remaining}</span>/${bookmarkModalInfo[bid].count})`);
-        });
-      });
-
-      //clear filter
-      $(".bookmark-filter-reset").on("click", function(e) {
-        e.preventDefault();
-        let form = $("#bookmark-filter-form");
-        form.form("clear");
-
-        let hiddenBookmarkItems = $(".cmi-bookmark-list .hide-bookmark-item.bookmark-item");
-        hiddenBookmarkItems.each(function() {
-          $(this).removeClass("hide-bookmark-item");
-        });
-
-        //keep track of the state of the bookmark Modal
-        let bookmarkModalInfo = bookmarkModalState("get");
-
-        //update book title to reflect number of bookmarks
-        $("[data-bid]").each(function() {
-          let bid = $(this).data("bid");
-
-          $(`.${bid}-header`).text(`${bookmarkModalInfo[bid].header} (${bookmarkModalInfo[bid].count})`);
-        });
-
-        bookmarkModalInfo["modal"].filter = false;
-        delete bookmarkModalInfo["modal"].topics;
+      //only do this the first time 
+      if (initialCall) {
         bookmarkModalState("set", bookmarkModalInfo);
-      });
 
-      //restore past state if needed
-      restoreModalState();
+        openCloseHandler();
+        filterSubmitHandler();
+        filterResetHandler();
+
+        //restore past state if needed
+        restoreModalState();
+      }
 
     })
     .catch((err) => {
@@ -406,21 +461,15 @@ function populateModal(bookmarks) {
 }
 
 /*
-  We query bookmarks just once per day then ask the user to manually
-  refresh if bookmarks have changed.
+  We query bookmarks just once per day and whenever bookmarks have changed
 */
 function initList() {
-  if (listInitialized) {
-    return;
-  }
-
   const {sourceId} = getKeyInfo();
 
   net.queryBookmarks(sourceId)
     .then((response) => {
-      //console.log("queryBookmarks(%s", sourceId, response);
+      console.log("calling populateModal()");
       populateModal(response);
-      listInitialized = true;
     })
     .catch((err) => {
       notify.error("Failed to get bookmarks");
@@ -439,6 +488,7 @@ function initBookmarkModal() {
       observeChanges: true,
       transition: "horizontal flip",
       onShow: function() {
+        console.log("calling initList()");
         initList();
       },
       onVisible: function() {
@@ -459,5 +509,4 @@ export default {
   initialize: function() {
     initBookmarkModal();
   }
-
 };
