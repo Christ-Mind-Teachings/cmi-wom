@@ -154,7 +154,7 @@
   background-color: #f9d07252; 
 }
 
-.transcript mark.bookmark-selected-text {
+.transcript:not(.hide-bookmark-highlights) mark.bookmark-selected-text {
   cursor: pointer;
 }
 

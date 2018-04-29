@@ -35,6 +35,33 @@ const form = `
 const wrapper = `
   <div class="annotate-wrapper ui raised segment"></div>`;
 
+function generateHorizontalList(listArray) {
+  if (!listArray || listArray.length === 0) {
+    return `
+      <div class="item">
+        <em>Annotation has no topics</em>
+      </div>
+    `;
+  }
+
+  return `
+    ${listArray.map((item) => `
+      <div class="item">
+        <em>${item}</em>
+      </div>
+    `).join("")}
+  `;
+}
+
+function generateComment(comment) {
+  if (!comment) {
+    return "No comment";
+  }
+  else {
+    return comment;
+  }
+}
+
 /*
   Populate form fields
   args:
@@ -144,12 +171,42 @@ function noteHandler() {
   });
 }
 
+function hoverHandler() {
+  $(".transcript").on("mouseenter", "[data-annotation-id]", function(e) {
+    e.preventDefault();
+
+    //disable hover if highlights are hidden
+    if ($(".transcript").hasClass("hide-bookmark-highlights")) {
+      $(this).popup("hide").popup("destroy");
+      return;
+    }
+
+    let aid = $(this).attr("data-annotation-id");
+    let pid = $(this).parent("p").attr("id");
+    let bookmarkData = getBookmark(pid);
+    let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
+
+    let topicList = generateHorizontalList(annotation.topicList);
+    let comment = generateComment(annotation.Comment);
+    $(".annotation-information > .topic-list").html(topicList);
+    $(".annotation-information > .description").html(comment);
+    $(this)
+      .popup({popup: ".annotation-information.popup"})
+      .popup("show");
+  });
+}
+
 function editHandler() {
   $(".transcript").on("click", "[data-annotation-id]", function(e) {
     e.preventDefault();
 
     //we're already editing this annotation
     if (annotationFormOpen() || bookmarkNavigatorActive()) {
+      return;
+    }
+
+    //disable edit if highlights are hidden
+    if ($(".transcript").hasClass("hide-bookmark-highlights")) {
       return;
     }
 
@@ -219,6 +276,7 @@ export function initialize() {
   deleteHandler();
   editHandler();
   noteHandler();
+  hoverHandler();
 }
 
 /*

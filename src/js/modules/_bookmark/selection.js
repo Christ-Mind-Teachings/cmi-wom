@@ -177,7 +177,22 @@ function processSelection() {
   let selObj = document.getSelection(); 
   let range = selObj.getRangeAt(0);
 
+  console.log("processSelection()");
   if (range.collapsed) {
+    return;
+  }
+
+  //check for overlap with other highlighted text
+  let startParent = range.startContainer.parentElement.localName;
+  let endParent = range.endContainer.parentElement.localName;
+
+  if (startParent === "span") {
+    notify.info("Don't include the paragraph number in your selection, please try again.");
+    return;
+  }
+
+  if (startParent === "mark" || endParent === "mark") {
+    notify.info("Your selection is overlapping with another; overlapping is not supported.");
     return;
   }
 
@@ -213,21 +228,6 @@ function processSelection() {
 
     //persist annotation
     pageAnnotations[selectedText.id] = selectedText;
-
-  //   //ask user if they want to create a bookmark from selection
-  //   $(`[data-annotation-id='${selectedText.id}']`).popup({
-  //     popup: ".annotation-question.popup",
-  //     closable: false,
-  //     on: "click"
-  //   }); //.popup("show");
-
-  //   //set current annotation-id
-  //   $(".ui.annotation-question").attr("data-id", selectedText.id);
-
-  //   //trigger display of popup
-  //   $(`[data-annotation-id="${selectedText.id}"]`).trigger("click");
-
     getUserInput(selectedText);
   }
-  
 }
