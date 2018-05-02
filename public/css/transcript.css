@@ -120,6 +120,7 @@
 
 /* bookmark highlighted text */
 .hide-bookmark-highlights mark.bookmark-selected-text,
+.topic-filter-active mark.bookmark-selected-text,
 .bookmark-navigator-active .selected-annotation mark.bookmark-selected-text,
 .annotation-edit mark.bookmark-selected-text {
   background-color: inherit;
@@ -130,34 +131,47 @@
   background-color: #ff0;
 }
 
-.colorClass1 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass1,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass1.show {
   background-color: #e1f92f63;
 }
 
-.colorClass2 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass2,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass2.show {
   background-color: #68f3514f;
 }
 
-.colorClass3 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass3,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass3.show {
   background-color: #51c4f34f; 
 }
 
-.colorClass4 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass4,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass4.show {
   background-color: #d972f93b; 
 }
 
-.colorClass5 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass5,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass5.show {
   background-color: #f9728336;  
 }
 
-.colorClass6 {
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.colorClass6,
+.transcript:not(.hide-bookmark-highlights) mark.colorClass6.show {
   background-color: #f9d07252; 
 }
 
-.transcript:not(.hide-bookmark-highlights) mark.bookmark-selected-text {
+.transcript.topic-filter-active mark.bookmark-selected-text.show,
+.transcript:not(.hide-bookmark-highlights):not(.topic-filter-active) mark.bookmark-selected-text {
   cursor: pointer;
 }
 
-.annotation-edit mark.bookmark-selected-text {
+.transcript .annotation-edit mark.bookmark-selected-text {
   cursor: inherit;
+}
+
+/* this is not working and I don't know why */
+#topic-menu-select > .item.active.selected,
+.menu.transition.hidden > .header > span.red {
+  color: red;
 }

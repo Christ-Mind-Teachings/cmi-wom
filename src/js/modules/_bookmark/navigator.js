@@ -17,7 +17,7 @@ function generateHorizontalList(listArray) {
     <div class="ui horizontal bulleted list">
       ${listArray.map((item) => `
         <div class="item">
-          <em>${item}</em>
+          <em>${typeof item === "object"? item.topic: item}</em>
         </div>
       `).join("")}
     </div>
@@ -35,8 +35,16 @@ function generateHorizontalList(listArray) {
 function generateAnnotation(annotation, topics = []) {
   let match;
 
+  //convert annotation topics list into string array
+  let topicList = annotation.topicList.map((topic) => {
+    if (typeof topic === "object") {
+      return topic.value;
+    }
+    return topic;
+  });
+
   if (topics.length > 0) {
-    match = intersection(annotation.topicList, topics);
+    match = intersection(topicList, topics);
   }
 
   if (topics.length === 0 || match.length > 0) {
@@ -119,8 +127,6 @@ function getNextPageUrl(pos, pageList, filterList, bookmarks) {
           //convert from key to paragraph id
           let paragraphId = (parseInt(pid, 10) - 1).toString(10);
           let url = `${info.url}?bkmk=p${paragraphId}`;
-          //console.log("getNextPageUrl() found: %o", bookmarks[pageList[pagePos]][pid]);
-          //console.log("url next: %s", url);
           resolve(url);
         })
         .catch((err) => {

@@ -8,7 +8,6 @@ import net from "./bmnet";
 import notify from "toastr";
 import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
-import join from "lodash/join";
 import store from "store";
 
 const uiBookmarkModal = ".bookmark.ui.modal";
@@ -37,6 +36,9 @@ function bookmarkModalState(option, modalInfo) {
 
 //generate the option element of a select statement
 function generateOption(topic) {
+  if (typeof topic === "object") {
+    return `<option value="${topic.value}">${topic.topic}</option>`;
+  }
   return `<option value="${topic}">${topic}</option>`;
 }
 
@@ -60,7 +62,7 @@ function generateHorizontalList(listArray) {
     <div class="ui horizontal bulleted list">
       ${listArray.map((item) => `
         <div class="item">
-          <em>${item}</em>
+          <em>${typeof item === "object"? item.topic: item}</em>
         </div>
       `).join("")}
     </div>
@@ -81,8 +83,15 @@ function generateParagraphList(pid, bkmk, url, pTopicList) {
     `;
   }
 
+  let topicString = pTopicList.reduce((result, item) => {
+    if (typeof item === "object") {
+      return `${result} ${item.value}`;
+    }
+    return `${result} ${item}`;
+  }, "");
+
   return `
-    <div class="${join(pTopicList," ")} bookmark-item item"> <!-- ${pid} -->
+    <div class="${topicString} bookmark-item item"> <!-- ${pid} -->
       <i class="bookmark icon"></i>
       <div class="content">
         <div class="header">
@@ -316,8 +325,6 @@ function filterSubmitHandler() {
       return;
     }
 
-    console.log("data: ", data);
-
     let bookmarkItems = $(".cmi-bookmark-list .bookmark-item");
     bookmarkItems.each(function() {
       let classList = $(this).attr("class");
@@ -372,7 +379,7 @@ function openCloseHandler() {
 
 /*
   This is called each time the user displays the bookmark list
-  - the first time it's call we need to generate html for all bookmarks
+  - the first time it's called we need to generate html for all bookmarks
   - subsequent calls will regenerate html only if bookmarks have been added
     or deleted since the last time html was generated.
 */

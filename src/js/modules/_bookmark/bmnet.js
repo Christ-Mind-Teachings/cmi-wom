@@ -254,6 +254,10 @@ function postAnnotation(annotation) {
     //this is critical, things get messed up if we don't do this
     let serverAnnotation = cloneDeep(annotation);
 
+    if (serverAnnotation.selectedText) {
+      delete serverAnnotation.selectedText.wrap;
+    }
+
     if (serverAnnotation.selectedText && !serverAnnotation.selectedText.aid) {
       serverAnnotation.selectedText.aid = now.toString(10);
     }
@@ -434,9 +438,10 @@ function addToTopicList(newTopics) {
   if (userInfo) {
     let postBody = {
       userId: userInfo.userId,
-      sourceId: getKeyInfo.sourceId,
+      sourceId: getKeyInfo().sourceId,
       topicList: newTopics
     };
+    console.log("newTopics: %o", newTopics);
     axios.post(`${topicsEndPoint}/user/topics`, postBody)
       .then((response) => {
         console.log(`addToTopicList: ${response}`);
@@ -517,9 +522,7 @@ function storeAnnotation(annotation, creationDate) {
     }
 
     if (!data) {
-      data = {
-        [pid]: [annotation]
-      };
+      data = { [pid]: [annotation] };
     }
     else {
       if (data[pid]) {
@@ -558,7 +561,7 @@ function deleteLocalAnnotation(pid, aid) {
   }
 
   //filter deleted annotation from array
-  data[pid] = annotations.filter(a => a.creationDate !== aid);
+  data[pid] = annotations.filter(a => a.creationDate !== parseInt(aid,10));
   store.set(pageKey, data);
 
   //bookmark has been deleted invalidate bookmark list so it is rebuilt

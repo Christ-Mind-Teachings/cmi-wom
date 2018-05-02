@@ -7,8 +7,76 @@ const uuid = require("uuid/v4");
 
 import {getUserInput, initialize as initAnnotation} from "./annotate";
 import isFinite from "lodash/isFinite";
+import difference from "lodash/difference";
+
+import topics from "./topics";
 
 let pageAnnotations = {};
+
+/*
+  add or update selected text class list with topics
+*/
+export function updateSelectionTopicList(annotation) {
+  let topicList;
+
+  //if annotation.topicList exists convert it to a string
+  if (annotation.topicList && annotation.topicList.length > 0) {
+    topicList = annotation.topicList.reduce((result, topic) => {
+      if (typeof topic == "object") {
+        return `${result} ${topic.value}`;
+      }
+      return `${result} ${topic}`;
+    }, "");
+  }
+
+  let topicListArray = [];
+  if (topicList) {
+    topicList = topicList.trim();
+    topicListArray = topicList.split(" ");
+  }
+
+  //get existing classes and convert to an array
+  let existingClasses = $(`[data-annotation-id="${annotation.aid}"]`).attr("class");
+  let classArray = existingClasses.split(" ");
+
+  //remove bookmmark-selected-text
+  let bstIndex = classArray.findIndex((item) => item === "bookmark-selected-text");
+  if (bstIndex > -1) {
+    classArray.splice(bstIndex, 1);
+  }
+
+  //remove colorClass
+  let ccIndex = classArray.findIndex((item) => item.startsWith("colorClass"));
+  if (ccIndex > -1) {
+    classArray.splice(ccIndex, 1);
+  }
+
+  //classes have been added or deleted
+  let deletedTopics = difference(classArray, topicListArray);
+  let addedTopics = difference(topicListArray, classArray);
+  //console.log("deletedTopics: %o", deletedTopics);
+  //console.log("addedTopics: %o", addedTopics);
+
+  //remove deleted topics
+  if (deletedTopics.length > 0) {
+    let dt = deletedTopics.join(" ");
+    $(`[data-annotation-id="${annotation.aid}"]`).removeClass(dt);
+
+    //track page topics
+    topics.deleteTopics(deletedTopics);
+  }
+
+  //add added topics
+  if (addedTopics.length > 0) {
+    let at = addedTopics.join(" ");
+    $(`[data-annotation-id="${annotation.aid}"]`).addClass(at);
+
+    //track page topics
+    topics.addTopics(addedTopics);
+  }
+
+  topics.report();
+}
 
 /*
   if the annotation is new then remove the highlight and

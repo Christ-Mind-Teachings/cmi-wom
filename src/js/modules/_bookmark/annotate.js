@@ -47,7 +47,7 @@ function generateHorizontalList(listArray) {
   return `
     ${listArray.map((item) => `
       <div class="item">
-        <em>${item}</em>
+        <em>${typeof item === "object"? item.topic: item}</em>
       </div>
     `).join("")}
   `;
@@ -99,12 +99,16 @@ function getFormData() {
 }
 
 //returns true if annotation form is open
-function annotationFormOpen() {
+function annotationFormOpen(currentPid) {
   let selector = $(".transcript .annotation-edit");
 
   if (selector.length > 0) {
     let pid = selector.first(1).attr("id");
-    notify.info(`A bookmark is already being added at paragraph ${pid}. Please complete that first.`);
+
+    //if currentPid === pid user clicked hidden link in editor, we just exit w/o notice
+    if (currentPid !== pid) {
+      notify.info(`A bookmark is already being added at paragraph ${pid}. Please complete that first.`);
+    }
     return true;
   }
   return false;
@@ -175,21 +179,41 @@ function hoverHandler() {
   $(".transcript").on("mouseenter", "[data-annotation-id]", function(e) {
     e.preventDefault();
 
+    let aid = $(this).attr("data-annotation-id");
+    let pid = $(this).parent("p").attr("id");
+
     //disable hover if highlights are hidden
     if ($(".transcript").hasClass("hide-bookmark-highlights")) {
       $(this).popup("hide").popup("destroy");
       return;
     }
 
-    let aid = $(this).attr("data-annotation-id");
-    let pid = $(this).parent("p").attr("id");
+    //disable hover if highlights are selectively hidden, filtered
+    if ($(".transcript").hasClass("topic-filter-active")) {
+      if (!$(this).hasClass("show")) {
+        $(this).popup("hide").popup("destroy");
+        return;
+      }
+    }
+
+    console.log("hoverHandler");
+
+    //disable popup for paragraphs being edited
+    if ($(`#${pid}`).hasClass("annotation-edit")) {
+      $(`#${pid} [data-annotation-id]`).each(function() {
+        $(this).popup("hide").popup("destroy");
+      });
+      return;
+    }
+
     let bookmarkData = getBookmark(pid);
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
 
     let topicList = generateHorizontalList(annotation.topicList);
     let comment = generateComment(annotation.Comment);
     $(".annotation-information > .topic-list").html(topicList);
-    $(".annotation-information > .description").html(comment);
+    $(".annotation-information > .range").html(`Range: ${annotation.rangeStart}/${annotation.rangeEnd}`);
+    $(".annotation-information > .description").html(`Comment: ${comment}`);
     $(this)
       .popup({popup: ".annotation-information.popup"})
       .popup("show");
@@ -200,8 +224,11 @@ function editHandler() {
   $(".transcript").on("click", "[data-annotation-id]", function(e) {
     e.preventDefault();
 
+    let aid = $(this).attr("data-annotation-id");
+    let pid = $(this).parent("p").attr("id");
+
     //we're already editing this annotation
-    if (annotationFormOpen() || bookmarkNavigatorActive()) {
+    if (annotationFormOpen(pid) || bookmarkNavigatorActive()) {
       return;
     }
 
@@ -210,11 +237,19 @@ function editHandler() {
       return;
     }
 
+    //disable edit if highlights are selectively hidden, filtered
+    if ($(".transcript").hasClass("topic-filter-active")) {
+      if (!$(this).hasClass("show")) {
+        return;
+      }
+    }
+
+    //hide this popup
+    $(this).popup("hide");
+
     //show this highlight, all others are hidden
     $(this).addClass("show");
 
-    let aid = $(this).attr("data-annotation-id");
-    let pid = $(this).parent("p").attr("id");
     let bookmarkData = getBookmark(pid);
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
 
@@ -288,7 +323,7 @@ export function getUserInput(highlight) {
 
   //don't allow multiple annotation forms to be open at the same time
   // - if open cancel the highlight
-  if (annotationFormOpen() || bookmarkNavigatorActive()) {
+  if (annotationFormOpen(highlight.pid) || bookmarkNavigatorActive()) {
     annotation.cancel({aid: highlight.id});
     return;
   }

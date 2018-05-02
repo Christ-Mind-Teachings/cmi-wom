@@ -6,14 +6,31 @@ import startCase from "lodash/startCase";
 import { showBookmark } from "../_util/url";
 import {initNavigator} from "./navigator";
 import list from "./list";
+import topics from "./topics";
 import { 
   markSelection, 
   getSelection, 
   deleteNewSelection, 
   deleteSelection, 
   initialize as selectInit,
-  updateHighlightColor
+  updateHighlightColor,
+  updateSelectionTopicList
 } from "./selection";
+
+//add bookmark topics to bookmark selected text to support 
+//selective display of hightlight based on topic
+function addTopicsAsClasses(bookmark) {
+  if (bookmark.topicList && bookmark.topicList.length > 0) {
+    let topicList = bookmark.topicList.reduce((result, topic) => {
+      if (typeof topic === "object") {
+        return `${result} ${topic.value}`;
+      }
+      return `${result} ${topic}`;
+    }, "");
+
+    $(`[data-annotation-id="${bookmark.aid}"]`).addClass(topicList);
+  }
+}
 
 function getPageBookmarks() {
   //identify paragraphs with bookmarks
@@ -30,6 +47,8 @@ function getPageBookmarks() {
           for (const bm of response[id]) {
             if (bm.selectedText) {
               markSelection(bm.selectedText, count);
+              addTopicsAsClasses(bm);
+              topics.add(bm);
               count++;
               hasBookmark = true;
             }
@@ -46,6 +65,7 @@ function getPageBookmarks() {
             $(`#p${pid} > span.pnum`).addClass("has-annotation");
           }
         }
+        topics.bookmarksLoaded();
       }
     })
     .catch((error) => {
@@ -86,7 +106,6 @@ function createAnnotaion(formValues) {
     if (annotation.creationDate) {
       annotation.selectedText.aid = annotation.creationDate.toString(10);
     }
-    delete annotation.selectedText.wrap;
     delete annotation.textId;
   }
 
@@ -94,10 +113,11 @@ function createAnnotaion(formValues) {
     delete annotation.topicList;
   }
 
+  //keep track of topics added or deleted
+  updateSelectionTopicList(annotation);
+
   delete annotation.newTopics;
   delete annotation.hasAnnotation;
-
-  //console.log("posting annotation: %o", annotation);
 
   //persist the bookmark
   net.postAnnotation(annotation);
@@ -273,9 +293,6 @@ export const annotation = {
 
   //delete annotation
   delete(formData) {
-    //mark as having no annotations if all have been deleted
-    let remainingAnnotations = net.deleteAnnotation(formData.rangeStart, formData.creationDate);
-
     //if annotation has selected text unwrap and delete it
     if (formData.aid) {
       deleteSelection(formData.aid);
@@ -285,11 +302,15 @@ export const annotation = {
       $(`#${formData.rangeStart} > span.pnum`).removeClass("has-annotation");
     }
 
+    //mark as having no annotations if all have been deleted
+    let remainingAnnotations = net.deleteAnnotation(formData.rangeStart, formData.creationDate);
+
     if (remainingAnnotations === 0) {
       $(`#${formData.rangeStart} > span.pnum`).removeClass("has-bookmark");
     } 
-  }
 
+    topics.delete(formData);
+  }
 };
 
 /*
