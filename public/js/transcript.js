@@ -72,7 +72,7 @@
 // unguarded in another place, it seems safer to define global only for this module
 
 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(27),
+	__webpack_require__(26),
 	__webpack_require__(2),
 	__webpack_require__(172),
 	__webpack_require__(37),
@@ -86,7 +86,7 @@
 	__webpack_require__(173),
 	__webpack_require__(13),
 	__webpack_require__(1),
-	__webpack_require__(28),
+	__webpack_require__(27),
 	__webpack_require__(104),
 	__webpack_require__(17)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr, document, getProto, slice, concat, push, indexOf,
@@ -523,7 +523,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(38),
 	__webpack_require__(192),
 	__webpack_require__(195),
-	__webpack_require__(26),
+	__webpack_require__(25),
 	__webpack_require__(196),
 	__webpack_require__(126),
 	__webpack_require__(21),
@@ -566,8 +566,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 "use strict";
 
 
-var bind = __webpack_require__(129);
-var isBuffer = __webpack_require__(130);
+var bind = __webpack_require__(128);
+var isBuffer = __webpack_require__(129);
 
 /*global toString:true*/
 
@@ -1009,7 +1009,7 @@ return init;
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(138);
+var freeGlobal = __webpack_require__(137);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -4153,264 +4153,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ }),
 /* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = fetchTimingData;
-/* harmony export (immutable) */ __webpack_exports__["c"] = getConfig;
-/* harmony export (immutable) */ __webpack_exports__["f"] = loadConfig;
-/* harmony export (immutable) */ __webpack_exports__["b"] = getAudioInfo;
-/* harmony export (immutable) */ __webpack_exports__["e"] = getReservation;
-/* harmony export (immutable) */ __webpack_exports__["d"] = getPageInfo;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_store__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(128);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_indexOf__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__key__ = __webpack_require__(41);
-
-
-
-
-
-//mp3 and audio timing base directories
-const audioBase = "https://s3.amazonaws.com/assets.christmind.info/wom/audio";
-const timingBase = "/public/timing";
-
-//location of configuration files
-const configUrl = "/public/config";
-
-//the current configuration, initially null, assigned by getConfig()
-let config;
-
-/* 
-  check if config has changed since we last stored it
-*/
-function refreshNeeded(bid, fetchDate) {
-  //values of lastChanged are loaded from webpack
-  const lastChanged = {
-    woh: 1525227766791,
-    wot: 1525227766791,
-    wok: 1525227766791,
-    wos: 1525227766791,
-    tjl: 1525227766791,
-    early: 1525227766791
-  };
-
-  if (lastChanged[bid] > fetchDate) {
-    return true;
-  }
-
-  return false;
-}
-
-function requestConfiguration(url) {
-  return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(url);
-}
-
-/*
-  Fetch audio timing data
-*/
-function fetchTimingData(url) {
-  return new Promise((resolve, reject) => {
-    __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(`${timingBase}${url}`).then(response => {
-      resolve(response.data);
-    }).catch(error => {
-      reject(error);
-    });
-  });
-}
-
-/*
-  We use book level configuration that is loaded by request via AJAX. Once
-  loaded the config is persisted in local storage. A check is made for
-  configuration data loaded from storage to determine if the data needs to
-  be reloaded. This is indicated using Define-webpack-plugin to set the timestamp
-  of configurations that have changed.
-
-  args:
-    book: the book identifier, woh, wot, etc
-    assign: when true, assign global variable 'config' to retrieved data
-*/
-function getConfig(book, assign = true) {
-  return new Promise((resolve, reject) => {
-    let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`config-${book}`);
-    let url;
-
-    //if config in local storage check if we need to get a freash copy
-    if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
-      if (assign) {
-        config = cfg;
-      }
-      resolve(cfg);
-    }
-
-    //get config from server
-    url = `${configUrl}/${book}.json`;
-    requestConfiguration(url).then(response => {
-      //add fetch date before storing
-      response.data.lastFetchDate = Date.now();
-      __WEBPACK_IMPORTED_MODULE_0_store___default.a.set(`config-${book}`, response.data);
-      if (assign) {
-        config = response.data;
-      }
-      resolve(response.data);
-    }).catch(() => {
-      config = null;
-      reject(`Config file: ${url} is not valid JSON`);
-    });
-  });
-}
-
-/*
-  For transcript pages; load the configuration file.
-  For non-transcript pages; configuration is loaded by getConfig()
-
-  This is the same as getConfig() except it doesn't resolve passing the data
-  but a message indicating source of the configuration file
-*/
-function loadConfig(book) {
-  return new Promise((resolve, reject) => {
-    let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`config-${book}`);
-    let url;
-
-    //if config in local storage check if we need to get a freash copy
-    if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
-      config = cfg;
-      resolve("config read from cache");
-    }
-
-    //get config from server
-    url = `${configUrl}/${book}.json`;
-    requestConfiguration(url).then(response => {
-      //add fetch date before storing
-      response.data.lastFetchDate = Date.now();
-      __WEBPACK_IMPORTED_MODULE_0_store___default.a.set(`config-${book}`, response.data);
-      config = response.data;
-      resolve("config fetched from server");
-    }).catch(error => {
-      config = null;
-      reject(`Config file: ${url} is not valid JSON`);
-    });
-  });
-}
-
-/*
-  get audio info from config file
-*/
-function _getAudioInfo(idx, cIdx) {
-  let audioInfo;
-
-  if (idx.length === 3) {
-    let qIdx = parseInt(idx[2].substr(1), 10) - 1;
-    audioInfo = config.contents[cIdx].questions[qIdx];
-  } else {
-    audioInfo = config.contents[cIdx];
-  }
-  return audioInfo ? audioInfo : {};
-}
-
-function getAudioInfo(url) {
-  //check that config has been initialized
-  if (!config) {
-    throw new Error("Configuration has not been initialized");
-  }
-
-  //remove leading and trailing "/"
-  url = url.substr(1);
-  url = url.substr(0, url.length - 1);
-
-  let idx = url.split("/");
-
-  //check the correct configuration file is loaded
-  if (config.bid !== idx[0]) {
-    throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[0], config.bid);
-  }
-
-  let audioInfo = {};
-  let cIdx;
-  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
-
-  switch (idx[0]) {
-    case "tjl":
-    case "wos":
-      break;
-    case "early":
-      cIdx = __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default()(lookup, idx[1]);
-      audioInfo = _getAudioInfo(idx, cIdx);
-      break;
-    default:
-      cIdx = parseInt(idx[1].substr(1), 10) - 1;
-      audioInfo = _getAudioInfo(idx, cIdx);
-      break;
-  }
-
-  audioInfo.audioBase = audioBase;
-  return audioInfo;
-}
-
-/*
- * get timer info for the current page
- */
-function getReservation(url) {
-  let audioInfo = getAudioInfo(url);
-
-  if (audioInfo.timer) {
-    return audioInfo.timer;
-  }
-
-  return null;
-}
-
-/*
-  Given a page key, return data from a config file
-
-  returns: book title, page title, url and optionally subtitle.
-
-  args:
-    pageKey: a key uniuely identifying a transcript page
-    data: optional, data that will be added to the result, used for convenience
-*/
-function getPageInfo(pageKey, data = false) {
-  let decodedKey = Object(__WEBPACK_IMPORTED_MODULE_3__key__["a" /* decodeKey */])(pageKey);
-  let info = { pageKey: pageKey, bookId: decodedKey.bookId };
-
-  if (data) {
-    info.data = data;
-  }
-
-  return new Promise((resolve, reject) => {
-
-    //get configuration data specific to the bookId
-    getConfig(decodedKey.bookId, false).then(data => {
-      info.bookTitle = data.title;
-
-      if (decodedKey.hasQuestions) {
-        info.title = data.contents[decodedKey.uid].title;
-        info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
-        info.url = data.contents[decodedKey.uid].questions[decodedKey.qid].url;
-      } else {
-        info.title = data.contents[decodedKey.uid].title;
-        info.url = data.contents[decodedKey.uid].url;
-      }
-
-      resolve(info);
-    }).catch(error => {
-      reject(error);
-    });
-  });
-}
-
-/***/ }),
-/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(58),
 	__webpack_require__(14),
-	__webpack_require__(29),
+	__webpack_require__(28),
 	__webpack_require__(2),
 	__webpack_require__(57),
 	__webpack_require__(59),
@@ -4891,7 +4640,7 @@ return jQuery;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -4903,7 +4652,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -4918,7 +4667,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -4946,6 +4695,258 @@ return camelCase;
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = fetchTimingData;
+/* harmony export (immutable) */ __webpack_exports__["c"] = getConfig;
+/* harmony export (immutable) */ __webpack_exports__["f"] = loadConfig;
+/* harmony export (immutable) */ __webpack_exports__["b"] = getAudioInfo;
+/* harmony export (immutable) */ __webpack_exports__["e"] = getReservation;
+/* harmony export (immutable) */ __webpack_exports__["d"] = getPageInfo;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_indexOf__);
+
+
+
+
+//import {decodeKey, parseKey, genKey} from "./key";
+const transcript = __webpack_require__(41);
+
+//mp3 and audio timing base directories
+const audioBase = "https://s3.amazonaws.com/assets.christmind.info/wom/audio";
+const timingBase = "/public/timing";
+
+//location of configuration files
+const configUrl = "/public/config";
+
+//the current configuration, initially null, assigned by getConfig()
+let config;
+
+/* 
+  check if config has changed since we last stored it
+*/
+function refreshNeeded(bid, fetchDate) {
+  //values of lastChanged are loaded from webpack
+  const lastChanged = {
+    woh: 1525316882352,
+    wot: 1525316882352,
+    wok: 1525316882352,
+    wos: 1525316882352,
+    tjl: 1525316882352,
+    early: 1525316882352
+  };
+
+  if (lastChanged[bid] > fetchDate) {
+    return true;
+  }
+
+  return false;
+}
+
+function requestConfiguration(url) {
+  return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(url);
+}
+
+/*
+  Fetch audio timing data
+*/
+function fetchTimingData(url) {
+  return new Promise((resolve, reject) => {
+    __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(`${timingBase}${url}`).then(response => {
+      resolve(response.data);
+    }).catch(error => {
+      reject(error);
+    });
+  });
+}
+
+/*
+  We use book level configuration that is loaded by request via AJAX. Once
+  loaded the config is persisted in local storage. A check is made for
+  configuration data loaded from storage to determine if the data needs to
+  be reloaded. This is indicated using Define-webpack-plugin to set the timestamp
+  of configurations that have changed.
+
+  args:
+    book: the book identifier, woh, wot, etc
+    assign: when true, assign global variable 'config' to retrieved data
+*/
+function getConfig(book, assign = true) {
+  return new Promise((resolve, reject) => {
+    let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`config-${book}`);
+    let url;
+
+    //if config in local storage check if we need to get a freash copy
+    if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
+      if (assign) {
+        config = cfg;
+      }
+      resolve(cfg);
+    }
+
+    //get config from server
+    url = `${configUrl}/${book}.json`;
+    requestConfiguration(url).then(response => {
+      //add fetch date before storing
+      response.data.lastFetchDate = Date.now();
+      __WEBPACK_IMPORTED_MODULE_0_store___default.a.set(`config-${book}`, response.data);
+      if (assign) {
+        config = response.data;
+      }
+      resolve(response.data);
+    }).catch(() => {
+      config = null;
+      reject(`Config file: ${url} is not valid JSON`);
+    });
+  });
+}
+
+/*
+  For transcript pages; load the configuration file.
+  For non-transcript pages; configuration is loaded by getConfig()
+
+  This is the same as getConfig() except it doesn't resolve passing the data
+  but a message indicating source of the configuration file
+*/
+function loadConfig(book) {
+  return new Promise((resolve, reject) => {
+    let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`config-${book}`);
+    let url;
+
+    //if config in local storage check if we need to get a freash copy
+    if (cfg && !refreshNeeded(cfg.bid, cfg.lastFetchDate)) {
+      config = cfg;
+      resolve("config read from cache");
+    }
+
+    //get config from server
+    url = `${configUrl}/${book}.json`;
+    requestConfiguration(url).then(response => {
+      //add fetch date before storing
+      response.data.lastFetchDate = Date.now();
+      __WEBPACK_IMPORTED_MODULE_0_store___default.a.set(`config-${book}`, response.data);
+      config = response.data;
+      resolve("config fetched from server");
+    }).catch(error => {
+      config = null;
+      reject(`Config file: ${url} is not valid JSON`);
+    });
+  });
+}
+
+/*
+  get audio info from config file
+*/
+function _getAudioInfo(idx, cIdx) {
+  let audioInfo;
+
+  if (idx.length === 3) {
+    let qIdx = parseInt(idx[2].substr(1), 10) - 1;
+    audioInfo = config.contents[cIdx].questions[qIdx];
+  } else {
+    audioInfo = config.contents[cIdx];
+  }
+  return audioInfo ? audioInfo : {};
+}
+
+function getAudioInfo(url) {
+  //check that config has been initialized
+  if (!config) {
+    throw new Error("Configuration has not been initialized");
+  }
+
+  //remove leading and trailing "/"
+  url = url.substr(1);
+  url = url.substr(0, url.length - 1);
+
+  let idx = url.split("/");
+
+  //check the correct configuration file is loaded
+  if (config.bid !== idx[0]) {
+    throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[0], config.bid);
+  }
+
+  let audioInfo = {};
+  let cIdx;
+  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
+
+  switch (idx[0]) {
+    case "tjl":
+    case "wos":
+      break;
+    case "early":
+      cIdx = __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default()(lookup, idx[1]);
+      audioInfo = _getAudioInfo(idx, cIdx);
+      break;
+    default:
+      cIdx = parseInt(idx[1].substr(1), 10) - 1;
+      audioInfo = _getAudioInfo(idx, cIdx);
+      break;
+  }
+
+  audioInfo.audioBase = audioBase;
+  return audioInfo;
+}
+
+/*
+ * get timer info for the current page
+ */
+function getReservation(url) {
+  let audioInfo = getAudioInfo(url);
+
+  if (audioInfo.timer) {
+    return audioInfo.timer;
+  }
+
+  return null;
+}
+
+/*
+  Given a page key, return data from a config file
+
+  returns: book title, page title, url and optionally subtitle.
+
+  args:
+    pageKey: a key uniuely identifying a transcript page
+    data: optional, data that will be added to the result, used for convenience
+*/
+function getPageInfo(pageKey, data = false) {
+  let decodedKey = transcript.decodeKey(pageKey);
+  let info = { pageKey: pageKey, bookId: decodedKey.bookId };
+
+  if (data) {
+    info.data = data;
+  }
+
+  return new Promise((resolve, reject) => {
+
+    //get configuration data specific to the bookId
+    getConfig(decodedKey.bookId, false).then(data => {
+      info.bookTitle = data.title;
+
+      if (decodedKey.hasQuestions) {
+        info.title = data.contents[decodedKey.uid].title;
+        info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
+        info.url = data.contents[decodedKey.uid].questions[decodedKey.qid].url;
+      } else {
+        info.title = data.contents[decodedKey.uid].title;
+        info.url = data.contents[decodedKey.uid].url;
+      }
+
+      resolve(info);
+    }).catch(error => {
+      reject(error);
+    });
+  });
+}
 
 /***/ }),
 /* 30 */
@@ -4985,7 +4986,7 @@ module.exports = baseGetTag;
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(146),
+var isFunction = __webpack_require__(145),
     isLength = __webpack_require__(74);
 
 /**
@@ -5083,7 +5084,7 @@ module.exports = arrayMap;
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeKeys = __webpack_require__(156),
+var arrayLikeKeys = __webpack_require__(155),
     baseKeys = __webpack_require__(320),
     isArrayLike = __webpack_require__(31);
 
@@ -5140,7 +5141,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(27)
+	__webpack_require__(26)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
 	"use strict";
 
@@ -5882,17 +5883,8 @@ module.exports = isSymbol;
 
 /***/ }),
 /* 41 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["e"] = getSourceId;
-/* harmony export (immutable) */ __webpack_exports__["d"] = getKeyInfo;
-/* harmony export (immutable) */ __webpack_exports__["f"] = parseKey;
-/* harmony export (immutable) */ __webpack_exports__["b"] = genPageKey;
-/* harmony export (immutable) */ __webpack_exports__["c"] = genParagraphKey;
-/* harmony export (immutable) */ __webpack_exports__["a"] = decodeKey;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_indexOf__);
 /*
   WOM: Transcript keys
   - first item starts with 1, not 0
@@ -5911,9 +5903,11 @@ module.exports = isSymbol;
          qq: question Id
         ppp: paragraph number - not positional
 
+  NOTE: This module is used by code running in the browser and Node so the 
+        common.js module system is used
 */
 
-
+//import indexOf from "lodash/indexOf";
 const sprintf = __webpack_require__(244).sprintf;
 
 //source id: each source has a unique id
@@ -5940,15 +5934,18 @@ function splitUrl(url) {
 function getUnitId(bid, unit) {
   switch (bid) {
     case "tjl":
-      return __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default()(tjl, unit);
+      //return indexOf(tjl, unit);
+      return tjl.indexOf(unit);
     case "wos":
-      return __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default()(wos, unit);
+      //return indexOf(wos, unit);
+      return wos.indexOf(unit);
     case "woh":
     case "wot":
     case "wok":
       return parseInt(unit.substr(1), 10);
     case "early":
-      return __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default()(early, unit);
+      //return indexOf(early, unit);
+      return early.indexOf(unit);
     default:
       throw new Error(`unexpected bookId: ${bid}`);
   }
@@ -6023,7 +6020,8 @@ function genPageKey(url = location.pathname) {
 
   let parts = splitUrl(url);
 
-  key.bid = __WEBPACK_IMPORTED_MODULE_0_lodash_indexOf___default()(bookIds, parts[0]);
+  //key.bid = indexOf(bookIds, parts[0]);
+  key.bid = bookIds.indexOf(parts[0]);
   if (key.bid === -1) {
     return -1;
   }
@@ -6109,27 +6107,35 @@ function decodeKey(key) {
   return decodedKey;
 }
 
+module.exports = {
+  getSourceId: getSourceId,
+  getKeyInfo: getKeyInfo,
+  parseKey: parseKey,
+  genPageKey: genPageKey,
+  genParagraphKey: genParagraphKey,
+  decodeKey: decodeKey
+};
+
 /***/ }),
 /* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = getBookmark;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_store__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_netlify__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__selection__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_key__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_isEqual__ = __webpack_require__(305);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_isEqual___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_isEqual__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_findIndex__ = __webpack_require__(325);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_findIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash_findIndex__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_cloneDeep__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash_cloneDeep__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__selection__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEqual__ = __webpack_require__(305);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEqual___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_isEqual__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_findIndex__ = __webpack_require__(325);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_findIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_findIndex__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_cloneDeep__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash_cloneDeep__);
 /*
   Bookmark data implementation
 
@@ -6153,6 +6159,8 @@ function decodeKey(key) {
 
 
 
+//import {parseKey, getKeyInfo, genPageKey, genParagraphKey } from "../_config/key";
+const transcript = __webpack_require__(41);
 
 //Index topics
 //const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
@@ -6172,7 +6180,7 @@ const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/late
   but are incremented by one to form the key.
 */
 function getBookmark(pid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
   const bookmarks = __WEBPACK_IMPORTED_MODULE_1_store___default.a.get(pageKey);
 
   if (bookmarks) {
@@ -6192,7 +6200,7 @@ function getBookmark(pid) {
   otherwise get them from the server and store them locally
 */
 function getBookmarks() {
-  let pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  let pageKey = transcript.genPageKey();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
 
   return new Promise((resolve, reject) => {
@@ -6205,7 +6213,7 @@ function getBookmarks() {
         if (response.data.response) {
           let bookmarks = {};
           response.data.response.forEach(b => {
-            let key = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["f" /* parseKey */])(b.id);
+            let key = transcript.parseKey(b.id);
             bookmarks[key.pid] = b.bookmark;
           });
           __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(pageKey, bookmarks);
@@ -6229,7 +6237,7 @@ function getBookmarks() {
 function queryBookmarks(key) {
   const retentionTime = 1000 * 60 * 60 * 8; //eight hours of milliseconds
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
-  const keyInfo = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["d" /* getKeyInfo */])();
+  const keyInfo = transcript.getKeyInfo();
 
   return new Promise((resolve, reject) => {
     //get bookmarks from server
@@ -6255,21 +6263,6 @@ function queryBookmarks(key) {
       __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${bookmarkApi}/bookmark/query/${userInfo.userId}/${key}`).then(response => {
         //convert to local data structure and store locally 
         if (response.data.response) {
-          /*
-          let bookmarks = {};
-          response.data.response.forEach((b) => {
-            let keyParts = parseKey(b.id);
-            if (!bookmarks[keyParts.pageKey]) {
-              bookmarks[keyParts.pageKey] = {};
-            }
-            bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
-          });
-          bookmarks.lastFetchDate = Date.now();
-          bookmarks.lastBuildDate = Date.now();
-          store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
-          //console.log("queryBookmarks: list from server");
-          */
-
           let bookmarks = buildBookmarkListFromServer(response, keyInfo);
           resolve(bookmarks);
         }
@@ -6347,7 +6340,7 @@ function buildBookmarkListFromLocalStore(keyInfo) {
 function buildBookmarkListFromServer(response, keyInfo) {
   let bookmarks = {};
   response.data.response.forEach(b => {
-    let keyParts = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["f" /* parseKey */])(b.id);
+    let keyParts = transcript.parseKey(b.id);
     if (!bookmarks[keyParts.pageKey]) {
       bookmarks[keyParts.pageKey] = {};
     }
@@ -6368,7 +6361,7 @@ function buildBookmarkListFromServer(response, keyInfo) {
 */
 function postAnnotation(annotation) {
   //console.log("annotation: ", annotation);
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
 
   //the annotation creation data; aka annotationId, aid
@@ -6377,7 +6370,7 @@ function postAnnotation(annotation) {
   //post to server
   if (userInfo) {
     //this is critical, things get messed up if we don't do this
-    let serverAnnotation = __WEBPACK_IMPORTED_MODULE_8_lodash_cloneDeep___default()(annotation);
+    let serverAnnotation = __WEBPACK_IMPORTED_MODULE_7_lodash_cloneDeep___default()(annotation);
 
     if (serverAnnotation.selectedText) {
       delete serverAnnotation.selectedText.wrap;
@@ -6389,7 +6382,7 @@ function postAnnotation(annotation) {
 
     let postBody = {
       userId: userInfo.userId,
-      bookmarkId: Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["c" /* genParagraphKey */])(serverAnnotation.rangeStart, pageKey),
+      bookmarkId: transcript.genParagraphKey(serverAnnotation.rangeStart, pageKey),
       annotationId: serverAnnotation.creationDate ? serverAnnotation.creationDate : now,
       annotation: serverAnnotation
     };
@@ -6413,12 +6406,12 @@ function postAnnotation(annotation) {
   Delete the annotation 'creationDate' for bookmark 'pid'
 */
 function deleteAnnotation(pid, creationDate) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
   const userInfo = Object(__WEBPACK_IMPORTED_MODULE_3__user_netlify__["b" /* getUserInfo */])();
 
   //delete annotation from server
   if (userInfo) {
-    let bookmarkId = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["c" /* genParagraphKey */])(pid, pageKey);
+    let bookmarkId = transcript.genParagraphKey(pid, pageKey);
 
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(`${bookmarkApi}/bookmark/annotation/${userInfo.userId}/${bookmarkId}/${creationDate}`).then(() => {
       console.log("deleted annotation: %s/%s/%s", userInfo.userId, bookmarkId, creationDate);
@@ -6438,7 +6431,7 @@ function deleteAnnotation(pid, creationDate) {
   We get the bookmark from local storage when the user is not signed in also.
 */
 function getAnnotation(pid, aid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
 
   let data;
   let annotation;
@@ -6497,7 +6490,7 @@ function fetchTopics() {
         return;
       }
 
-    let sourceId = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["d" /* getKeyInfo */])().sourceId.toString(10);
+    let sourceId = transcript.getKeyInfo().sourceId.toString(10);
 
     //user signed in, we need to get topics from server
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`).then(topicInfo => {
@@ -6555,7 +6548,7 @@ function addToTopicList(newTopics) {
   if (userInfo) {
     let postBody = {
       userId: userInfo.userId,
-      sourceId: Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["d" /* getKeyInfo */])().sourceId,
+      sourceId: transcript.getKeyInfo().sourceId,
       topicList: newTopics
     };
     console.log("newTopics: %o", newTopics);
@@ -6575,7 +6568,7 @@ function addToTopicList(newTopics) {
   to be rebuilt.
 */
 function inValidateBookmarkList() {
-  const keyInfo = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["d" /* getKeyInfo */])();
+  const keyInfo = transcript.getKeyInfo();
 
   let bmList = getBookmarkList(keyInfo);
 
@@ -6592,7 +6585,7 @@ function inValidateBookmarkList() {
     it needs to be recreated.
 */
 function storeAnnotation(annotation, creationDate) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
 
   //make annotation key
   let pid = parseInt(annotation.rangeStart.substr(1), 10) + 1;
@@ -6611,13 +6604,13 @@ function storeAnnotation(annotation, creationDate) {
     }
 
     //find the index of the annotation in the bookmark
-    let index = __WEBPACK_IMPORTED_MODULE_7_lodash_findIndex___default()(data[pid], a => a.creationDate === annotation.creationDate);
+    let index = __WEBPACK_IMPORTED_MODULE_6_lodash_findIndex___default()(data[pid], a => a.creationDate === annotation.creationDate);
     if (index === -1) {
       throw new Error(`Did not find annotation ${annotation.creationDate} for pid ${pid}`);
     }
 
     //annotation was not modified so return
-    if (__WEBPACK_IMPORTED_MODULE_6_lodash_isEqual___default()(data[pid][index], annotation)) {
+    if (__WEBPACK_IMPORTED_MODULE_5_lodash_isEqual___default()(data[pid][index], annotation)) {
       return;
     } else {
       data[pid][index] = annotation;
@@ -6657,7 +6650,7 @@ function storeAnnotation(annotation, creationDate) {
     aid: annotation id
 */
 function deleteLocalAnnotation(pid, aid) {
-  const pageKey = Object(__WEBPACK_IMPORTED_MODULE_5__config_key__["b" /* genPageKey */])();
+  const pageKey = transcript.genPageKey();
 
   //make annotation id
   pid = parseInt(pid.substr(1), 10) + 1;
@@ -6896,10 +6889,10 @@ module.exports = cacheHas;
 var DataView = __webpack_require__(322),
     Map = __webpack_require__(77),
     Promise = __webpack_require__(323),
-    Set = __webpack_require__(159),
+    Set = __webpack_require__(158),
     WeakMap = __webpack_require__(324),
     baseGetTag = __webpack_require__(30),
-    toSource = __webpack_require__(148);
+    toSource = __webpack_require__(147);
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -7018,8 +7011,8 @@ module.exports = toKey;
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assignValue = __webpack_require__(166),
-    baseAssignValue = __webpack_require__(167);
+var assignValue = __webpack_require__(165),
+    baseAssignValue = __webpack_require__(166);
 
 /**
  * Copies properties of `source` to `object`.
@@ -7106,7 +7099,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(27)
+	__webpack_require__(26)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
 	"use strict";
 
@@ -7719,7 +7712,7 @@ return jQuery;
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(29),
+	__webpack_require__(28),
 	__webpack_require__(2),
 	__webpack_require__(1),
 	__webpack_require__(57),
@@ -7736,7 +7729,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(18),
 	__webpack_require__(19),
 	__webpack_require__(38),
-	__webpack_require__(26),
+	__webpack_require__(25),
 	__webpack_require__(185)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, camelCase, document, isFunction, rcssNum, rnothtmlwhite, cssExpand,
 	isHiddenWithinTree, swap, adjustCSS, dataPriv, showHide ) {
@@ -8494,7 +8487,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(64),
 	__webpack_require__(55),
 	__webpack_require__(1),
-	__webpack_require__(28),
+	__webpack_require__(27),
 	__webpack_require__(20)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document, dataPriv, acceptData, hasOwn, isFunction, isWindow ) {
 
@@ -8713,10 +8706,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(131);
+    adapter = __webpack_require__(130);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(131);
+    adapter = __webpack_require__(130);
   }
   return adapter;
 }
@@ -8961,7 +8954,7 @@ var _adapter = __webpack_require__(252);
 
 var _adapter2 = _interopRequireDefault(_adapter);
 
-var _builtin = __webpack_require__(143);
+var _builtin = __webpack_require__(142);
 
 var _builtin2 = _interopRequireDefault(_builtin);
 
@@ -9208,7 +9201,7 @@ module.exports = Map;
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(136);
+var baseIndexOf = __webpack_require__(135);
 
 /**
  * A specialized version of `_.includes` for arrays without support for
@@ -9552,7 +9545,7 @@ module.exports = setToArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayFilter = __webpack_require__(316),
-    stubArray = __webpack_require__(155);
+    stubArray = __webpack_require__(154);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -9660,7 +9653,7 @@ module.exports = function(module) {
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(138);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(137);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -9748,7 +9741,7 @@ module.exports = isKey;
 /* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Uint8Array = __webpack_require__(152);
+var Uint8Array = __webpack_require__(151);
 
 /**
  * Creates a clone of `arrayBuffer`.
@@ -9990,7 +9983,7 @@ module.exports = baseFindIndex;
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toFinite = __webpack_require__(137);
+var toFinite = __webpack_require__(136);
 
 /**
  * Converts `value` to an integer.
@@ -10066,7 +10059,7 @@ return function( elem, options, callback, args ) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(27)
+	__webpack_require__(26)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
 	"use strict";
 
@@ -10080,7 +10073,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(27)
+	__webpack_require__(26)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
 	"use strict";
 
@@ -10594,7 +10587,7 @@ if ( document.readyState === "complete" ||
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(29),
+	__webpack_require__(28),
 	__webpack_require__(10),
 	__webpack_require__(64)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, camelCase, rnothtmlwhite, acceptData ) {
@@ -11379,67 +11372,12 @@ return jQuery;
 
 /***/ }),
 /* 127 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = showParagraph;
-/* harmony export (immutable) */ __webpack_exports__["a"] = showBookmark;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
-
-
-// get query string from window.location unless the arg 'qString' is not
-// null, in that case it represents the query string
-function getQueryString(key, qString) {
-  let queryString;
-
-  if (qString) {
-    queryString = qString.substring(1);
-  } else {
-    queryString = window.location.search.substring(1);
-  }
-  let vars = queryString.split("&");
-
-  for (let i = 0; i < vars.length; i++) {
-    let getValue = vars[i].split("=");
-    if (getValue[0] === key) {
-      return getValue[1];
-    }
-  }
-  return null;
-}
-
-/*
-  Check for url query string requesting to scroll given paragraph into view
-  Syntax: ?v=pid, example: ?v=p20
-
-  Scroll paragraph 20 into view on page load
-*/
-function showParagraph() {
-  let pId = getQueryString("v");
-  if (pId) {
-    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
-  }
-}
-
-function showBookmark() {
-  let pId = getQueryString("bkmk");
-
-  if (pId) {
-    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
-    return pId;
-  }
-  return null;
-}
-
-/***/ }),
-/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(222);
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11457,7 +11395,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, exports) {
 
 /*!
@@ -11484,7 +11422,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11495,7 +11433,7 @@ var settle = __webpack_require__(225);
 var buildURL = __webpack_require__(227);
 var parseHeaders = __webpack_require__(228);
 var isURLSameOrigin = __webpack_require__(229);
-var createError = __webpack_require__(132);
+var createError = __webpack_require__(131);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(230);
 
 module.exports = function xhrAdapter(config) {
@@ -11672,7 +11610,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(96)))
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11697,7 +11635,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11709,7 +11647,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11735,10 +11673,10 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(136),
+var baseIndexOf = __webpack_require__(135),
     toInteger = __webpack_require__(98);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -11783,7 +11721,7 @@ module.exports = indexOf;
 
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseFindIndex = __webpack_require__(97),
@@ -11809,7 +11747,7 @@ module.exports = baseIndexOf;
 
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toNumber = __webpack_require__(241);
@@ -11857,7 +11795,7 @@ module.exports = toFinite;
 
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -11868,7 +11806,7 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(54)))
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11877,15 +11815,15 @@ module.exports = freeGlobal;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bmnet__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__ = __webpack_require__(364);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_differenceWith__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_cloneDeep__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_startCase__ = __webpack_require__(366);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_startCase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_startCase__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_url__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_url__ = __webpack_require__(171);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__navigator__ = __webpack_require__(383);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__list__ = __webpack_require__(387);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__topics__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__selection__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__topics__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__selection__ = __webpack_require__(140);
 
 
 
@@ -12203,7 +12141,7 @@ const annotation = {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, exports) {
 
 var charenc = {
@@ -12242,7 +12180,7 @@ module.exports = charenc;
 
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12261,10 +12199,10 @@ module.exports = charenc;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_isFinite___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_isFinite__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_difference__ = __webpack_require__(273);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_difference___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_difference__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__topics__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__topics__ = __webpack_require__(149);
 
 
-const textPosition = __webpack_require__(142);
+const textPosition = __webpack_require__(141);
 const textQuote = __webpack_require__(261);
 const wrapRange = __webpack_require__(264);
 const uuid = __webpack_require__(265);
@@ -12555,14 +12493,14 @@ function processSelection() {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(249)
 
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12582,7 +12520,7 @@ function createNodeIterator(root) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9idWlsdGluLmpzIl0sIm5hbWVzIjpbImNyZWF0ZU5vZGVJdGVyYXRvciIsInJvb3QiLCJ3aGF0VG9TaG93IiwiZmlsdGVyIiwiZG9jIiwib3duZXJEb2N1bWVudCIsImNhbGwiXSwibWFwcGluZ3MiOiI7OztxQkFBZUEsa0I7OztBQUdmLFNBQVNBLGtCQUFULENBQTRCQyxJQUE1QixFQUEwRTtBQUFBLE1BQXhDQyxVQUF3Qyx5REFBM0IsVUFBMkI7QUFBQSxNQUFmQyxNQUFlLHlEQUFOLElBQU07O0FBQ3hFLE1BQU1DLE1BQU1ILEtBQUtJLGFBQWpCO0FBQ0EsU0FBT0QsSUFBSUosa0JBQUosQ0FBdUJNLElBQXZCLENBQTRCRixHQUE1QixFQUFpQ0gsSUFBakMsRUFBdUNDLFVBQXZDLEVBQW1EQyxNQUFuRCxDQUFQO0FBQ0QiLCJmaWxlIjoiYnVpbHRpbi5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IGNyZWF0ZU5vZGVJdGVyYXRvclxuXG5cbmZ1bmN0aW9uIGNyZWF0ZU5vZGVJdGVyYXRvcihyb290LCB3aGF0VG9TaG93ID0gMHhGRkZGRkZGRiwgZmlsdGVyID0gbnVsbCkge1xuICBjb25zdCBkb2MgPSByb290Lm93bmVyRG9jdW1lbnRcbiAgcmV0dXJuIGRvYy5jcmVhdGVOb2RlSXRlcmF0b3IuY2FsbChkb2MsIHJvb3QsIHdoYXRUb1Nob3csIGZpbHRlcilcbn1cbiJdfQ==
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12591,7 +12529,7 @@ function createNodeIterator(root) {
 exports.__esModule = true;
 exports['default'] = shim;
 
-var _builtin = __webpack_require__(143);
+var _builtin = __webpack_require__(142);
 
 var _builtin2 = _interopRequireDefault(_builtin);
 
@@ -12611,7 +12549,7 @@ function shim() {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9zaGltLmpzIl0sIm5hbWVzIjpbInNoaW0iLCJkb2MiLCJkb2N1bWVudCIsInBvbHlmaWxsIiwiY3JlYXRlTm9kZUl0ZXJhdG9yIl0sIm1hcHBpbmdzIjoiOzs7cUJBS3dCQSxJOztBQUp4Qjs7OztBQUNBOzs7Ozs7QUFGQTtBQUtlLFNBQVNBLElBQVQsR0FBZ0I7QUFDN0IsTUFBTUMsTUFBTSxPQUFPQyxRQUFQLEtBQXFCLFdBQXJCLEdBQW1DLEVBQW5DLEdBQXdDQSxRQUFwRDtBQUNBLE1BQU1DLFdBQVcsNEJBQWpCO0FBQ0EsTUFBSUEsaUNBQUosRUFBMEJGLElBQUlHLGtCQUFKLEdBQXlCRCxRQUF6QjtBQUMxQixTQUFPQSxRQUFQO0FBQ0QiLCJmaWxlIjoic2hpbS5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8qZ2xvYmFsIGRvY3VtZW50Ki9cbmltcG9ydCBidWlsdGluIGZyb20gJy4vYnVpbHRpbidcbmltcG9ydCBnZXRQb2x5ZmlsbCBmcm9tICcuL3BvbHlmaWxsJ1xuXG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIHNoaW0oKSB7XG4gIGNvbnN0IGRvYyA9IHR5cGVvZihkb2N1bWVudCkgPT09ICd1bmRlZmluZWQnID8ge30gOiBkb2N1bWVudFxuICBjb25zdCBwb2x5ZmlsbCA9IGdldFBvbHlmaWxsKClcbiAgaWYgKHBvbHlmaWxsICE9PSBidWlsdGluKSBkb2MuY3JlYXRlTm9kZUl0ZXJhdG9yID0gcG9seWZpbGxcbiAgcmV0dXJuIHBvbHlmaWxsXG59XG4iXX0=
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var createRange = __webpack_require__(269);
@@ -12663,7 +12601,7 @@ module.exports = range;
 
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(30),
@@ -12706,7 +12644,7 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var SetCache = __webpack_require__(44),
@@ -12779,7 +12717,7 @@ module.exports = baseDifference;
 
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -12811,7 +12749,7 @@ module.exports = toSource;
 
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16);
@@ -12828,7 +12766,7 @@ module.exports = defineProperty;
 
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13004,7 +12942,7 @@ function decrement(key) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var SetCache = __webpack_require__(44),
@@ -13093,7 +13031,7 @@ module.exports = equalArrays;
 
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(7);
@@ -13105,10 +13043,10 @@ module.exports = Uint8Array;
 
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetAllKeys = __webpack_require__(154),
+var baseGetAllKeys = __webpack_require__(153),
     getSymbols = __webpack_require__(89),
     keys = __webpack_require__(35);
 
@@ -13127,7 +13065,7 @@ module.exports = getAllKeys;
 
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayPush = __webpack_require__(81),
@@ -13153,7 +13091,7 @@ module.exports = baseGetAllKeys;
 
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, exports) {
 
 /**
@@ -13182,7 +13120,7 @@ module.exports = stubArray;
 
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseTimes = __webpack_require__(317),
@@ -13190,7 +13128,7 @@ var baseTimes = __webpack_require__(317),
     isArray = __webpack_require__(8),
     isBuffer = __webpack_require__(90),
     isIndex = __webpack_require__(75),
-    isTypedArray = __webpack_require__(157);
+    isTypedArray = __webpack_require__(156);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -13237,7 +13175,7 @@ module.exports = arrayLikeKeys;
 
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsTypedArray = __webpack_require__(319),
@@ -13270,7 +13208,7 @@ module.exports = isTypedArray;
 
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, exports) {
 
 /**
@@ -13291,7 +13229,7 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
@@ -13304,7 +13242,7 @@ module.exports = Set;
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseMatches = __webpack_require__(326),
@@ -13341,7 +13279,7 @@ module.exports = baseIteratee;
 
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(11);
@@ -13362,7 +13300,7 @@ module.exports = isStrictComparable;
 
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, exports) {
 
 /**
@@ -13388,10 +13326,10 @@ module.exports = matchesStrictComparable;
 
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(164),
+var castPath = __webpack_require__(163),
     toKey = __webpack_require__(52);
 
 /**
@@ -13418,7 +13356,7 @@ module.exports = baseGet;
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(8),
@@ -13445,7 +13383,7 @@ module.exports = castPath;
 
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseClone = __webpack_require__(341);
@@ -13480,10 +13418,10 @@ module.exports = cloneDeep;
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseAssignValue = __webpack_require__(167),
+var baseAssignValue = __webpack_require__(166),
     eq = __webpack_require__(43);
 
 /** Used for built-in method references. */
@@ -13514,10 +13452,10 @@ module.exports = assignValue;
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(149);
+var defineProperty = __webpack_require__(148);
 
 /**
  * The base implementation of `assignValue` and `assignMergeValue` without
@@ -13545,10 +13483,10 @@ module.exports = baseAssignValue;
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeKeys = __webpack_require__(156),
+var arrayLikeKeys = __webpack_require__(155),
     baseKeysIn = __webpack_require__(345),
     isArrayLike = __webpack_require__(31);
 
@@ -13583,13 +13521,13 @@ module.exports = keysIn;
 
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayPush = __webpack_require__(81),
-    getPrototype = __webpack_require__(170),
+    getPrototype = __webpack_require__(169),
     getSymbols = __webpack_require__(89),
-    stubArray = __webpack_require__(155);
+    stubArray = __webpack_require__(154);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeGetSymbols = Object.getOwnPropertySymbols;
@@ -13614,10 +13552,10 @@ module.exports = getSymbolsIn;
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(158);
+var overArg = __webpack_require__(157);
 
 /** Built-in value references. */
 var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -13626,7 +13564,7 @@ module.exports = getPrototype;
 
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, exports) {
 
 /** Used to compose unicode character classes. */
@@ -13656,6 +13594,61 @@ function hasUnicode(string) {
 
 module.exports = hasUnicode;
 
+
+/***/ }),
+/* 171 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = showParagraph;
+/* harmony export (immutable) */ __webpack_exports__["a"] = showBookmark;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
+
+
+// get query string from window.location unless the arg 'qString' is not
+// null, in that case it represents the query string
+function getQueryString(key, qString) {
+  let queryString;
+
+  if (qString) {
+    queryString = qString.substring(1);
+  } else {
+    queryString = window.location.search.substring(1);
+  }
+  let vars = queryString.split("&");
+
+  for (let i = 0; i < vars.length; i++) {
+    let getValue = vars[i].split("=");
+    if (getValue[0] === key) {
+      return getValue[1];
+    }
+  }
+  return null;
+}
+
+/*
+  Check for url query string requesting to scroll given paragraph into view
+  Syntax: ?v=pid, example: ?v=p20
+
+  Scroll paragraph 20 into view on page load
+*/
+function showParagraph() {
+  let pId = getQueryString("v");
+  if (pId) {
+    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
+  }
+}
+
+function showBookmark() {
+  let pId = getQueryString("bkmk");
+
+  if (pId) {
+    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
+    return pId;
+  }
+  return null;
+}
 
 /***/ }),
 /* 172 */
@@ -16110,7 +16103,7 @@ jQuery.Deferred.exceptionHook = function( error, stack ) {
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(14),
-	__webpack_require__(29),
+	__webpack_require__(28),
 	__webpack_require__(9),
 	__webpack_require__(114)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, access, camelCase, dataPriv, dataUser ) {
@@ -16481,7 +16474,7 @@ return support;
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(26)
+	__webpack_require__(25)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -18049,9 +18042,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(106),
 	__webpack_require__(108),
 	__webpack_require__(61),
-	__webpack_require__(28),
+	__webpack_require__(27),
 	__webpack_require__(6),
-	__webpack_require__(26),
+	__webpack_require__(25),
 	__webpack_require__(4) // contains
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, access, document, documentElement, isFunction, rnumnonpx,
              curCSS, addGetHookIf, support, isWindow ) {
@@ -18282,8 +18275,8 @@ return jQuery;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(14),
-	__webpack_require__(28),
-	__webpack_require__(26)
+	__webpack_require__(27),
+	__webpack_require__(25)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, access, isWindow ) {
 
 "use strict";
@@ -18346,10 +18339,10 @@ return jQuery;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(15),
-	__webpack_require__(29),
+	__webpack_require__(28),
 	__webpack_require__(17),
 	__webpack_require__(1),
-	__webpack_require__(28),
+	__webpack_require__(27),
 	__webpack_require__(37),
 
 	__webpack_require__(208)
@@ -24380,7 +24373,7 @@ if (typeof JSON !== "object") {
 
 
 var utils = __webpack_require__(5);
-var bind = __webpack_require__(129);
+var bind = __webpack_require__(128);
 var Axios = __webpack_require__(223);
 var defaults = __webpack_require__(70);
 
@@ -24415,9 +24408,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(134);
+axios.Cancel = __webpack_require__(133);
 axios.CancelToken = __webpack_require__(237);
-axios.isCancel = __webpack_require__(133);
+axios.isCancel = __webpack_require__(132);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -24543,7 +24536,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(132);
+var createError = __webpack_require__(131);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -24976,7 +24969,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(5);
 var transformData = __webpack_require__(234);
-var isCancel = __webpack_require__(133);
+var isCancel = __webpack_require__(132);
 var defaults = __webpack_require__(70);
 var isAbsoluteURL = __webpack_require__(235);
 var combineURLs = __webpack_require__(236);
@@ -25136,7 +25129,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(134);
+var Cancel = __webpack_require__(133);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -25673,9 +25666,9 @@ module.exports = function() {
 
 (function(){
   var crypt = __webpack_require__(248),
-      utf8 = __webpack_require__(140).utf8,
-      isBuffer = __webpack_require__(130),
-      bin = __webpack_require__(140).bin,
+      utf8 = __webpack_require__(139).utf8,
+      isBuffer = __webpack_require__(129),
+      bin = __webpack_require__(139).bin,
 
   // The core
   md5 = function (message, options) {
@@ -26054,7 +26047,7 @@ var _implementation = __webpack_require__(73);
 
 var _implementation2 = _interopRequireDefault(_implementation);
 
-var _shim = __webpack_require__(144);
+var _shim = __webpack_require__(143);
 
 var _shim2 = _interopRequireDefault(_shim);
 
@@ -26144,7 +26137,7 @@ module.exports = __webpack_require__(73)['default'];
 /* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(144)['default'];
+module.exports = __webpack_require__(143)['default'];
 
 
 /***/ }),
@@ -26422,7 +26415,7 @@ var _diffMatchPatch = __webpack_require__(263);
 
 var _diffMatchPatch2 = _interopRequireDefault(_diffMatchPatch);
 
-var _domAnchorTextPosition = __webpack_require__(142);
+var _domAnchorTextPosition = __webpack_require__(141);
 
 var textPosition = _interopRequireWildcard(_domAnchorTextPosition);
 
@@ -29067,8 +29060,8 @@ module.exports = bytesToUuid;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bmnet__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_toastr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bookmark__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bookmark__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_range__);
 
 
@@ -29454,7 +29447,7 @@ function getTopicList(pid, aid, data) {
 
 var baseRange = __webpack_require__(270),
     isIterateeCall = __webpack_require__(271),
-    toFinite = __webpack_require__(137);
+    toFinite = __webpack_require__(136);
 
 /**
  * Creates a `_.range` or `_.rangeRight` function.
@@ -29600,7 +29593,7 @@ module.exports = isFinite;
 /* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseDifference = __webpack_require__(147),
+var baseDifference = __webpack_require__(146),
     baseFlatten = __webpack_require__(80),
     baseRest = __webpack_require__(83),
     isArrayLikeObject = __webpack_require__(85);
@@ -29725,10 +29718,10 @@ module.exports = hashClear;
 /* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(146),
+var isFunction = __webpack_require__(145),
     isMasked = __webpack_require__(278),
     isObject = __webpack_require__(11),
-    toSource = __webpack_require__(148);
+    toSource = __webpack_require__(147);
 
 /**
  * Used to match `RegExp`
@@ -30393,7 +30386,7 @@ module.exports = setToString;
 /***/ (function(module, exports, __webpack_require__) {
 
 var constant = __webpack_require__(303),
-    defineProperty = __webpack_require__(149),
+    defineProperty = __webpack_require__(148),
     identity = __webpack_require__(84);
 
 /**
@@ -30537,13 +30530,13 @@ module.exports = isEqual;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Stack = __webpack_require__(87),
-    equalArrays = __webpack_require__(151),
+    equalArrays = __webpack_require__(150),
     equalByTag = __webpack_require__(313),
     equalObjects = __webpack_require__(315),
     getTag = __webpack_require__(50),
     isArray = __webpack_require__(8),
     isBuffer = __webpack_require__(90),
-    isTypedArray = __webpack_require__(157);
+    isTypedArray = __webpack_require__(156);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1;
@@ -30780,9 +30773,9 @@ module.exports = arraySome;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(23),
-    Uint8Array = __webpack_require__(152),
+    Uint8Array = __webpack_require__(151),
     eq = __webpack_require__(43),
-    equalArrays = __webpack_require__(151),
+    equalArrays = __webpack_require__(150),
     mapToArray = __webpack_require__(314),
     setToArray = __webpack_require__(88);
 
@@ -30921,7 +30914,7 @@ module.exports = mapToArray;
 /* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getAllKeys = __webpack_require__(153);
+var getAllKeys = __webpack_require__(152);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1;
@@ -31199,7 +31192,7 @@ module.exports = baseKeys;
 /* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(158);
+var overArg = __webpack_require__(157);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = overArg(Object.keys, Object);
@@ -31251,7 +31244,7 @@ module.exports = WeakMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseFindIndex = __webpack_require__(97),
-    baseIteratee = __webpack_require__(160),
+    baseIteratee = __webpack_require__(159),
     toInteger = __webpack_require__(98);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -31313,7 +31306,7 @@ module.exports = findIndex;
 
 var baseIsMatch = __webpack_require__(327),
     getMatchData = __webpack_require__(328),
-    matchesStrictComparable = __webpack_require__(162);
+    matchesStrictComparable = __webpack_require__(161);
 
 /**
  * The base implementation of `_.matches` which doesn't clone `source`.
@@ -31407,7 +31400,7 @@ module.exports = baseIsMatch;
 /* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isStrictComparable = __webpack_require__(161),
+var isStrictComparable = __webpack_require__(160),
     keys = __webpack_require__(35);
 
 /**
@@ -31441,8 +31434,8 @@ var baseIsEqual = __webpack_require__(86),
     get = __webpack_require__(330),
     hasIn = __webpack_require__(335),
     isKey = __webpack_require__(94),
-    isStrictComparable = __webpack_require__(161),
-    matchesStrictComparable = __webpack_require__(162),
+    isStrictComparable = __webpack_require__(160),
+    matchesStrictComparable = __webpack_require__(161),
     toKey = __webpack_require__(52);
 
 /** Used to compose bitmasks for value comparisons. */
@@ -31476,7 +31469,7 @@ module.exports = baseMatchesProperty;
 /* 330 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGet = __webpack_require__(163);
+var baseGet = __webpack_require__(162);
 
 /**
  * Gets the value at `path` of `object`. If the resolved value is
@@ -31761,7 +31754,7 @@ module.exports = baseHasIn;
 /* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(164),
+var castPath = __webpack_require__(163),
     isArguments = __webpack_require__(82),
     isArray = __webpack_require__(8),
     isIndex = __webpack_require__(75),
@@ -31864,7 +31857,7 @@ module.exports = baseProperty;
 /* 340 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGet = __webpack_require__(163);
+var baseGet = __webpack_require__(162);
 
 /**
  * A specialized version of `baseProperty` which supports deep paths.
@@ -31888,14 +31881,14 @@ module.exports = basePropertyDeep;
 
 var Stack = __webpack_require__(87),
     arrayEach = __webpack_require__(342),
-    assignValue = __webpack_require__(166),
+    assignValue = __webpack_require__(165),
     baseAssign = __webpack_require__(343),
     baseAssignIn = __webpack_require__(344),
     cloneBuffer = __webpack_require__(347),
     copyArray = __webpack_require__(348),
     copySymbols = __webpack_require__(349),
     copySymbolsIn = __webpack_require__(350),
-    getAllKeys = __webpack_require__(153),
+    getAllKeys = __webpack_require__(152),
     getAllKeysIn = __webpack_require__(351),
     getTag = __webpack_require__(50),
     initCloneArray = __webpack_require__(352),
@@ -32115,7 +32108,7 @@ module.exports = baseAssign;
 /***/ (function(module, exports, __webpack_require__) {
 
 var copyObject = __webpack_require__(53),
-    keysIn = __webpack_require__(168);
+    keysIn = __webpack_require__(167);
 
 /**
  * The base implementation of `_.assignIn` without support for multiple sources
@@ -32293,7 +32286,7 @@ module.exports = copySymbols;
 /***/ (function(module, exports, __webpack_require__) {
 
 var copyObject = __webpack_require__(53),
-    getSymbolsIn = __webpack_require__(169);
+    getSymbolsIn = __webpack_require__(168);
 
 /**
  * Copies own and inherited symbols of `source` to `object`.
@@ -32314,9 +32307,9 @@ module.exports = copySymbolsIn;
 /* 351 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetAllKeys = __webpack_require__(154),
-    getSymbolsIn = __webpack_require__(169),
-    keysIn = __webpack_require__(168);
+var baseGetAllKeys = __webpack_require__(153),
+    getSymbolsIn = __webpack_require__(168),
+    keysIn = __webpack_require__(167);
 
 /**
  * Creates an array of own and inherited enumerable property names and
@@ -32544,7 +32537,7 @@ module.exports = cloneTypedArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseCreate = __webpack_require__(359),
-    getPrototype = __webpack_require__(170),
+    getPrototype = __webpack_require__(169),
     isPrototype = __webpack_require__(93);
 
 /**
@@ -32717,7 +32710,7 @@ module.exports = baseIsSet;
 /* 364 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseDifference = __webpack_require__(147),
+var baseDifference = __webpack_require__(146),
     baseFlatten = __webpack_require__(80),
     baseRest = __webpack_require__(83),
     isArrayLikeObject = __webpack_require__(85),
@@ -33221,7 +33214,7 @@ module.exports = upperFirst;
 /***/ (function(module, exports, __webpack_require__) {
 
 var castSlice = __webpack_require__(378),
-    hasUnicode = __webpack_require__(171),
+    hasUnicode = __webpack_require__(170),
     stringToArray = __webpack_require__(380),
     toString = __webpack_require__(51);
 
@@ -33321,7 +33314,7 @@ module.exports = baseSlice;
 /***/ (function(module, exports, __webpack_require__) {
 
 var asciiToArray = __webpack_require__(381),
-    hasUnicode = __webpack_require__(171),
+    hasUnicode = __webpack_require__(170),
     unicodeToArray = __webpack_require__(382);
 
 /**
@@ -33410,16 +33403,15 @@ module.exports = unicodeToArray;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = initNavigator;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_key__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection__ = __webpack_require__(384);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_intersection__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range__ = __webpack_require__(145);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_range___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_range__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_store__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_store__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_scroll_into_view__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_scroll_into_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_config__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_intersection__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_intersection__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_range__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_range___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_range__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_scroll_into_view__);
 
 
 
@@ -33427,6 +33419,8 @@ module.exports = unicodeToArray;
 
 
 
+//import {getSourceId, genPageKey} from "../_config/key";
+const transcript = __webpack_require__(41);
 
 let gPageKey;
 
@@ -33466,7 +33460,7 @@ function generateAnnotation(annotation, topics = []) {
   });
 
   if (topics.length > 0) {
-    match = __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(topicList, topics);
+    match = __WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default()(topicList, topics);
   }
 
   if (topics.length === 0 || match.length > 0) {
@@ -33528,7 +33522,7 @@ function getNextPageUrl(pos, pageList, filterList, bookmarks) {
           found = true;
           break outer;
         } else {
-          let match = __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(filterList, pageMarks[pid][a].topicList || []);
+          let match = __WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default()(filterList, pageMarks[pid][a].topicList || []);
           if (match.length > 0) {
             found = true;
             break outer;
@@ -33542,7 +33536,7 @@ function getNextPageUrl(pos, pageList, filterList, bookmarks) {
     //we found a bookmark
     if (found) {
       let pageKey = pageList[pagePos];
-      Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["d" /* getPageInfo */])(pageKey).then(info => {
+      Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["d" /* getPageInfo */])(pageKey).then(info => {
         //convert from key to paragraph id
         let paragraphId = (parseInt(pid, 10) - 1).toString(10);
         let url = `${info.url}?bkmk=p${paragraphId}`;
@@ -33574,7 +33568,7 @@ function getPrevPageUrl(pos, pageList, filterList, bookmarks) {
           found = true;
           break outer;
         } else {
-          let match = __WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(filterList, pageMarks[pid][a].topicList || []);
+          let match = __WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default()(filterList, pageMarks[pid][a].topicList || []);
           if (match.length > 0) {
             found = true;
             break outer;
@@ -33588,7 +33582,7 @@ function getPrevPageUrl(pos, pageList, filterList, bookmarks) {
     //we found a bookmark
     if (found) {
       let pageKey = pageList[pagePos];
-      Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["d" /* getPageInfo */])(pageKey).then(info => {
+      Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["d" /* getPageInfo */])(pageKey).then(info => {
         //convert from key to paragraph id
         let paragraphId = (parseInt(pid, 10) - 1).toString(10);
         let url = `${info.url}?bkmk=p${paragraphId}`;
@@ -33655,7 +33649,7 @@ function getPreviousPid(currentPos, pageMarks, pageBookmarks, topics) {
       let bookmark = pageBookmarks[pageMarks[newPos]];
       for (let i = 0; i < bookmark.length; i++) {
         if (bookmark[i].topicList && bookmark[i].topicList.length > 0) {
-          if (__WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
+          if (__WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
             //we found a bookmark containing a topic in the topicList
             return `p${(parseInt(pageMarks[newPos], 10) - 1).toString(10)}`;
           }
@@ -33698,7 +33692,7 @@ function getNextPid(currentPos, pageMarks, pageBookmarks, topics) {
       let bookmark = pageBookmarks[pageMarks[newPos]];
       for (let i = 0; i < bookmark.length; i++) {
         if (bookmark[i].topicList && bookmark[i].topicList.length > 0) {
-          if (__WEBPACK_IMPORTED_MODULE_2_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
+          if (__WEBPACK_IMPORTED_MODULE_1_lodash_intersection___default()(bookmark[i].topicList, topics).length > 0) {
             //we found a bookmark containing a topic in the topicList
             return `p${(parseInt(pageMarks[newPos], 10) - 1).toString(10)}`;
           }
@@ -33781,9 +33775,9 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
   arg: pid - paragraph id.
 */
 function bookmarkManager(actualPid) {
-  let pageKey = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["b" /* genPageKey */])().toString(10);
-  let bmList = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
-  let bmModal = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let pageKey = transcript.genPageKey().toString(10);
+  let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${transcript.getSourceId()}`);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${transcript.getSourceId()}`);
 
   if (bmList) {
     //store globally
@@ -33823,8 +33817,8 @@ function bookmarkManager(actualPid) {
     update: either "previous", or "next" depending on what click handler called the function
 */
 function updateNavigator(pid, update) {
-  let bmList = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmList_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
-  let bmModal = __WEBPACK_IMPORTED_MODULE_4_store___default.a.get(`bmModal_${Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])()}`);
+  let bmList = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmList_${transcript.getSourceId()}`);
+  let bmModal = __WEBPACK_IMPORTED_MODULE_3_store___default.a.get(`bmModal_${transcript.getSourceId()}`);
   getCurrentBookmark(gPageKey, pid, bmList, bmModal, update);
 }
 
@@ -33842,7 +33836,7 @@ function initClickListeners() {
     clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
     updateNavigator(actualPid, "previous");
   });
 
@@ -33851,7 +33845,7 @@ function initClickListeners() {
     clearSelectedAnnotation();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
     updateNavigator(actualPid, "next");
   });
 
@@ -33859,7 +33853,7 @@ function initClickListeners() {
     e.preventDefault();
 
     let actualPid = $(this).attr("data-pid");
-    __WEBPACK_IMPORTED_MODULE_5_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
+    __WEBPACK_IMPORTED_MODULE_4_scroll_into_view___default()(document.getElementById(actualPid), { align: { top: 0.2 } });
   });
 
   $(".bookmark-navigator .close-window").on("click", function (e) {
@@ -33878,7 +33872,7 @@ function initClickListeners() {
     let dataRange = $(this).attr("data-range");
     let rangeArray = dataRange.split("/");
     let numericRange = rangeArray.map(r => parseInt(r.substr(1), 10));
-    let annotationRange = __WEBPACK_IMPORTED_MODULE_3_lodash_range___default()(numericRange[0], numericRange[1] + 1);
+    let annotationRange = __WEBPACK_IMPORTED_MODULE_2_lodash_range___default()(numericRange[0], numericRange[1] + 1);
 
     for (let i = 0; i < annotationRange.length; i++) {
       $(`#p${annotationRange[i]}`).addClass("selected-annotation");
@@ -34051,17 +34045,16 @@ module.exports = castArrayLikeObject;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_key__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bmnet__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_toastr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_flatten__ = __webpack_require__(388);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_flatten___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_flatten__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_uniq__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_uniq___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_uniq__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_store__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_store__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_config__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bmnet__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_flatten__ = __webpack_require__(388);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_flatten___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_flatten__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_uniq__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_uniq___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_uniq__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_store__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_store__);
 /*
   Display list of bookmarks for user/source and allow for filtering by topic
 */
@@ -34073,25 +34066,27 @@ module.exports = castArrayLikeObject;
 
 
 
+//import {getSourceId, getKeyInfo} from "../_config/key";
+const transcript = __webpack_require__(41);
 
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 
 function bookmarkModalState(option, modalInfo) {
-  let sid = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["e" /* getSourceId */])();
+  let sid = transcript.getSourceId();
   let name = `bmModal_${sid}`;
   let info;
 
   switch (option) {
     case "get":
-      info = __WEBPACK_IMPORTED_MODULE_6_store___default.a.get(name);
+      info = __WEBPACK_IMPORTED_MODULE_5_store___default.a.get(name);
       if (!info) {
         info = { modal: { filter: false } };
       }
       return info;
     case "set":
-      __WEBPACK_IMPORTED_MODULE_6_store___default.a.set(name, modalInfo);
+      __WEBPACK_IMPORTED_MODULE_5_store___default.a.set(name, modalInfo);
       break;
     default:
       throw new Error("Invalid value for 'option' argument: use 'set' or 'get'");
@@ -34320,7 +34315,7 @@ function combinePages(pages) {
             }
           });
           //collect all topics used for modal dropdown select control
-          let uniqueArray = __WEBPACK_IMPORTED_MODULE_5_lodash_uniq___default()(__WEBPACK_IMPORTED_MODULE_4_lodash_flatten___default()(tpl));
+          let uniqueArray = __WEBPACK_IMPORTED_MODULE_4_lodash_uniq___default()(__WEBPACK_IMPORTED_MODULE_3_lodash_flatten___default()(tpl));
 
           page.bookmarks[`tpList${pid}`] = uniqueArray;
           allTopics.push(uniqueArray);
@@ -34329,7 +34324,7 @@ function combinePages(pages) {
     });
   });
 
-  let allUniqueTopics = __WEBPACK_IMPORTED_MODULE_5_lodash_uniq___default()(__WEBPACK_IMPORTED_MODULE_4_lodash_flatten___default()(allTopics)).sort();
+  let allUniqueTopics = __WEBPACK_IMPORTED_MODULE_4_lodash_uniq___default()(__WEBPACK_IMPORTED_MODULE_3_lodash_flatten___default()(allTopics)).sort();
   return { bookArray, topics: allUniqueTopics };
 }
 
@@ -34473,7 +34468,7 @@ function populateModal(bookmarks) {
   //get page info for each page with bookmarks
   for (let pageKey in bookmarks) {
     if (pageKey !== "lastFetchDate" && pageKey !== "lastBuildDate") {
-      info.push(Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["d" /* getPageInfo */])(pageKey, bookmarks[pageKey]));
+      info.push(Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["d" /* getPageInfo */])(pageKey, bookmarks[pageKey]));
     }
   }
 
@@ -34528,13 +34523,13 @@ function populateModal(bookmarks) {
   We query bookmarks just once per day and whenever bookmarks have changed
 */
 function initList() {
-  const { sourceId } = Object(__WEBPACK_IMPORTED_MODULE_0__config_key__["d" /* getKeyInfo */])();
+  const { sourceId } = transcript.getKeyInfo();
 
-  __WEBPACK_IMPORTED_MODULE_2__bmnet__["a" /* default */].queryBookmarks(sourceId).then(response => {
+  __WEBPACK_IMPORTED_MODULE_1__bmnet__["a" /* default */].queryBookmarks(sourceId).then(response => {
     console.log("calling populateModal()");
     populateModal(response);
   }).catch(err => {
-    __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.error("Failed to get bookmarks");
+    __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.error("Failed to get bookmarks");
     console.error("Error getting bookmarks for: %s from server", sourceId, err);
   });
 }
@@ -34712,7 +34707,7 @@ module.exports = baseUniq;
 /* 391 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Set = __webpack_require__(159),
+var Set = __webpack_require__(158),
     noop = __webpack_require__(392),
     setToArray = __webpack_require__(88);
 
@@ -34875,7 +34870,7 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["b"] = getBookId;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(29);
 
 
 
@@ -34983,7 +34978,7 @@ function getBookId() {
 /* harmony export (immutable) */ __webpack_exports__["b"] = disableScroll;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex__ = __webpack_require__(396);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_findLastIndex__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_map__ = __webpack_require__(421);
@@ -35349,7 +35344,7 @@ function disableScroll() {
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseFindIndex = __webpack_require__(97),
-    baseIteratee = __webpack_require__(160),
+    baseIteratee = __webpack_require__(159),
     toInteger = __webpack_require__(98);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -35894,9 +35889,9 @@ module.exports = __webpack_require__(399);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vendor_semantic_semantic_min_js__ = __webpack_require__(211);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vendor_semantic_semantic_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vendor_semantic_semantic_min_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_util_url__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_config_config__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_util_url__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_config_config__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__ = __webpack_require__(138);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_search_search__ = __webpack_require__(393);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_user_netlify__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__ = __webpack_require__(394);
@@ -36002,7 +35997,7 @@ $(document).ready(() => {
     console.log(source);
     __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["a" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__["b" /* default */].initialize();
-    __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize(__WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__["b" /* default */]);
+    __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize();
     Object(__WEBPACK_IMPORTED_MODULE_1__modules_util_url__["b" /* showParagraph */])();
   }).catch(error => {
     //report error to the user - somehow
@@ -36016,7 +36011,7 @@ $(document).ready(() => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_config__ = __webpack_require__(25);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_config__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediaelement__ = __webpack_require__(401);
 
 
@@ -36053,7 +36048,7 @@ function createAudioPlayerToggleListener() {
 /* harmony default export */ __webpack_exports__["a"] = ({
 
   //setup page to play audio if audio available
-  initialize: function (bookmark) {
+  initialize: function () {
     let info = Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["b" /* getAudioInfo */])(location.pathname);
 
     //add audio url to audio player toggle
@@ -36065,7 +36060,7 @@ function createAudioPlayerToggleListener() {
       createAudioPlayerToggleListener();
 
       //initialize audio player
-      __WEBPACK_IMPORTED_MODULE_1__mediaelement__["a" /* default */].initialize(`${info.audioBase}${info.audio}`, info.timing, bookmark);
+      __WEBPACK_IMPORTED_MODULE_1__mediaelement__["a" /* default */].initialize(`${info.audioBase}${info.audio}`, info.timing);
     }
   }
 });
@@ -36112,7 +36107,7 @@ function createAudioPlayerToggleListener() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__focus__ = __webpack_require__(395);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__user_netlify__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__config_config__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__config_config__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__capture__ = __webpack_require__(397);
 
 //media elements plugin and css
@@ -36338,7 +36333,7 @@ function assignPlayerFeatures(timingData) {
    *  src: url of audio file
    *  timingData: uri of timing data, pass it to focus.js
    */
-  initialize: function (src, timingData, bookmark) {
+  initialize: function (src, timingData) {
     //add source of audio file to player
     $("audio.mejs-player").attr("src", src);
 
@@ -36356,9 +36351,6 @@ function assignPlayerFeatures(timingData) {
       success: function (media, node, player) {
         //setup for capture and focus
         setEventListeners(player, status, timingData);
-
-        //give bookmark the ability to control the audio player
-        //bookmark.setAudioPlayer(player);
       }
     });
   }
@@ -45686,7 +45678,7 @@ var require;var require;
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayMap = __webpack_require__(34),
-    baseIteratee = __webpack_require__(160),
+    baseIteratee = __webpack_require__(159),
     baseMap = __webpack_require__(422),
     isArray = __webpack_require__(8);
 

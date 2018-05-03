@@ -2,7 +2,6 @@
   Display list of bookmarks for user/source and allow for filtering by topic
 */
 
-import {getSourceId, getKeyInfo} from "../_config/key";
 import {getPageInfo} from "../_config/config";
 import net from "./bmnet";
 import notify from "toastr";
@@ -10,12 +9,15 @@ import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
 import store from "store";
 
+//import {getSourceId, getKeyInfo} from "../_config/key";
+const transcript = require("../_config/key");
+
 const uiBookmarkModal = ".bookmark.ui.modal";
 const uiOpenBookmarkModal = ".bookmark-modal-open";
 const uiModalOpacity = 0.5;
 
 function bookmarkModalState(option, modalInfo) {
-  let sid = getSourceId();
+  let sid = transcript.getSourceId();
   let name = `bmModal_${sid}`;
   let info;
 
@@ -471,7 +473,7 @@ function populateModal(bookmarks) {
   We query bookmarks just once per day and whenever bookmarks have changed
 */
 function initList() {
-  const {sourceId} = getKeyInfo();
+  const {sourceId} = transcript.getKeyInfo();
 
   net.queryBookmarks(sourceId)
     .then((response) => {

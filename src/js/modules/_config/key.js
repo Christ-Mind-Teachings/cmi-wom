@@ -16,9 +16,11 @@
          qq: question Id
         ppp: paragraph number - not positional
 
+  NOTE: This module is used by code running in the browser and Node so the 
+        common.js module system is used
 */
 
-import indexOf from "lodash/indexOf";
+//import indexOf from "lodash/indexOf";
 const sprintf = require("sprintf-js").sprintf;
 
 //source id: each source has a unique id
@@ -45,25 +47,28 @@ function splitUrl(url) {
 function getUnitId(bid, unit) {
   switch(bid) {
     case "tjl":
-      return indexOf(tjl, unit);
+      //return indexOf(tjl, unit);
+      return tjl.indexOf(unit);
     case "wos":
-      return indexOf(wos, unit);
+      //return indexOf(wos, unit);
+      return wos.indexOf(unit);
     case "woh":
     case "wot":
     case "wok":
       return parseInt(unit.substr(1), 10);
     case "early":
-      return indexOf(early, unit);
+      //return indexOf(early, unit);
+      return early.indexOf(unit);
     default:
       throw new Error(`unexpected bookId: ${bid}`);
   }
 }
 
-export function getSourceId() {
+function getSourceId() {
   return sourceId;
 }
 
-export function getKeyInfo() {
+function getKeyInfo() {
   return {
     sourceId: sourceId,
     keyLength: keyLength
@@ -74,7 +79,7 @@ export function getKeyInfo() {
   parse bookmarkId into pageKey and paragraphId
   - pid=0 indicates no paragraph id
 */
-export function parseKey(key) {
+function parseKey(key) {
   const keyInfo = getKeyInfo();
   let keyString = key;
   let pid = 0;
@@ -117,7 +122,7 @@ export function parseKey(key) {
          qq: question Id
         ppp: paragraph number - not positional
 */
-export function genPageKey(url = location.pathname) {
+function genPageKey(url = location.pathname) {
   let key = {
     sid: sourceId,
     bid: 0,
@@ -128,7 +133,8 @@ export function genPageKey(url = location.pathname) {
 
   let parts = splitUrl(url);
 
-  key.bid = indexOf(bookIds, parts[0]);
+  //key.bid = indexOf(bookIds, parts[0]);
+  key.bid = bookIds.indexOf(parts[0]);
   if (key.bid === -1) {
     return -1;
   }
@@ -157,7 +163,7 @@ export function genPageKey(url = location.pathname) {
 
     key: either a url or pageKey returned from genKey()
 */
-export function genParagraphKey(pid, key = location.pathname) {
+function genParagraphKey(pid, key = location.pathname) {
   let numericKey = key;
   const pKey = (parseInt(pid.substr(1), 10) + 1) / 1000;
 
@@ -180,7 +186,7 @@ export function genParagraphKey(pid, key = location.pathname) {
          qq: question Id
         ppp: paragraph number - not positional
 */
-export function decodeKey(key) {
+function decodeKey(key) {
   let {pid, pageKey} = parseKey(key);
   let pageKeyString = pageKey.toString(10);
   let decodedKey = {
@@ -213,3 +219,12 @@ export function decodeKey(key) {
 
   return decodedKey;
 }
+
+module.exports = {
+  getSourceId: getSourceId,
+  getKeyInfo: getKeyInfo,
+  parseKey: parseKey,
+  genPageKey: genPageKey,
+  genParagraphKey: genParagraphKey,
+  decodeKey: decodeKey
+};

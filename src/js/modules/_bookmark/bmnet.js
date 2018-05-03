@@ -17,10 +17,12 @@ import notify from "toastr";
 import {getUserInfo} from "../_user/netlify";
 import {updateSelectedText} from "./selection";
 
-import {parseKey, getKeyInfo, genPageKey, genParagraphKey } from "../_config/key";
 import isEqual from "lodash/isEqual";
 import findIndex from "lodash/findIndex";
 import cloneDeep from "lodash/cloneDeep";
+
+//import {parseKey, getKeyInfo, genPageKey, genParagraphKey } from "../_config/key";
+const transcript = require("../_config/key");
 
 //Index topics
 //const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
@@ -40,7 +42,7 @@ const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/late
   but are incremented by one to form the key.
 */
 export function getBookmark(pid) {
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
   const bookmarks = store.get(pageKey);
 
   if (bookmarks) {
@@ -60,7 +62,7 @@ export function getBookmark(pid) {
   otherwise get them from the server and store them locally
 */
 function getBookmarks() {
-  let pageKey = genPageKey();
+  let pageKey = transcript.genPageKey();
   const userInfo = getUserInfo();
 
   return new Promise((resolve, reject) => {
@@ -74,7 +76,7 @@ function getBookmarks() {
           if (response.data.response) {
             let bookmarks = {};
             response.data.response.forEach((b) => {
-              let key = parseKey(b.id);
+              let key = transcript.parseKey(b.id);
               bookmarks[key.pid] = b.bookmark;
             });
             store.set(pageKey, bookmarks);
@@ -100,7 +102,7 @@ function getBookmarks() {
 function queryBookmarks(key) {
   const retentionTime = 1000 * 60 * 60 * 8; //eight hours of milliseconds
   const userInfo = getUserInfo();
-  const keyInfo = getKeyInfo();
+  const keyInfo = transcript.getKeyInfo();
 
   return new Promise((resolve, reject) => {
     //get bookmarks from server
@@ -127,21 +129,6 @@ function queryBookmarks(key) {
         .then((response) => {
           //convert to local data structure and store locally 
           if (response.data.response) {
-            /*
-            let bookmarks = {};
-            response.data.response.forEach((b) => {
-              let keyParts = parseKey(b.id);
-              if (!bookmarks[keyParts.pageKey]) {
-                bookmarks[keyParts.pageKey] = {};
-              }
-              bookmarks[keyParts.pageKey][keyParts.pid] = b.bookmark;
-            });
-            bookmarks.lastFetchDate = Date.now();
-            bookmarks.lastBuildDate = Date.now();
-            store.set(`bmList_${keyInfo.sourceId}`, bookmarks);
-            //console.log("queryBookmarks: list from server");
-            */
-
             let bookmarks = buildBookmarkListFromServer(response, keyInfo);
             resolve(bookmarks);
           }
@@ -222,7 +209,7 @@ function buildBookmarkListFromLocalStore(keyInfo) {
 function buildBookmarkListFromServer(response, keyInfo) {
   let bookmarks = {};
   response.data.response.forEach((b) => {
-    let keyParts = parseKey(b.id);
+    let keyParts = transcript.parseKey(b.id);
     if (!bookmarks[keyParts.pageKey]) {
       bookmarks[keyParts.pageKey] = {};
     }
@@ -243,7 +230,7 @@ function buildBookmarkListFromServer(response, keyInfo) {
 */
 function postAnnotation(annotation) {
   //console.log("annotation: ", annotation);
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
   const userInfo = getUserInfo();
 
   //the annotation creation data; aka annotationId, aid
@@ -264,7 +251,7 @@ function postAnnotation(annotation) {
 
     let postBody = {
       userId: userInfo.userId,
-      bookmarkId: genParagraphKey(serverAnnotation.rangeStart, pageKey),
+      bookmarkId: transcript.genParagraphKey(serverAnnotation.rangeStart, pageKey),
       annotationId: serverAnnotation.creationDate ? serverAnnotation.creationDate : now,
       annotation: serverAnnotation
     };
@@ -290,12 +277,12 @@ function postAnnotation(annotation) {
   Delete the annotation 'creationDate' for bookmark 'pid'
 */
 function deleteAnnotation(pid, creationDate) {
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
   const userInfo = getUserInfo();
 
   //delete annotation from server
   if (userInfo) {
-    let bookmarkId = genParagraphKey(pid, pageKey);
+    let bookmarkId = transcript.genParagraphKey(pid, pageKey);
 
     axios.delete(`${bookmarkApi}/bookmark/annotation/${userInfo.userId}/${bookmarkId}/${creationDate}`)
       .then(() => {
@@ -317,7 +304,7 @@ function deleteAnnotation(pid, creationDate) {
   We get the bookmark from local storage when the user is not signed in also.
 */
 function getAnnotation(pid, aid) {
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
 
   let data;
   let annotation;
@@ -376,7 +363,7 @@ function fetchTopics() {
       return;
     }
 
-    let sourceId = getKeyInfo().sourceId.toString(10);
+    let sourceId = transcript.getKeyInfo().sourceId.toString(10);
 
     //user signed in, we need to get topics from server
     axios.get(`${topicsEndPoint}/user/${userInfo.userId}/topics/${sourceId}`)
@@ -438,7 +425,7 @@ function addToTopicList(newTopics) {
   if (userInfo) {
     let postBody = {
       userId: userInfo.userId,
-      sourceId: getKeyInfo().sourceId,
+      sourceId: transcript.getKeyInfo().sourceId,
       topicList: newTopics
     };
     console.log("newTopics: %o", newTopics);
@@ -460,7 +447,7 @@ function addToTopicList(newTopics) {
   to be rebuilt.
 */
 function inValidateBookmarkList() {
-  const keyInfo = getKeyInfo();
+  const keyInfo = transcript.getKeyInfo();
 
   let bmList = getBookmarkList(keyInfo);
 
@@ -477,7 +464,7 @@ function inValidateBookmarkList() {
     it needs to be recreated.
 */
 function storeAnnotation(annotation, creationDate) {
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
 
   //make annotation key
   let pid = parseInt(annotation.rangeStart.substr(1), 10) + 1;
@@ -545,7 +532,7 @@ function storeAnnotation(annotation, creationDate) {
     aid: annotation id
 */
 function deleteLocalAnnotation(pid, aid) {
-  const pageKey = genPageKey();
+  const pageKey = transcript.genPageKey();
 
   //make annotation id
   pid = parseInt(pid.substr(1), 10) + 1;

@@ -1,10 +1,12 @@
 
-import {getSourceId, genPageKey} from "../_config/key";
 import {getPageInfo} from "../_config/config";
 import intersection from "lodash/intersection";
 import range from "lodash/range";
 import store from "store";
 import scroll from "scroll-into-view";
+
+//import {getSourceId, genPageKey} from "../_config/key";
+const transcript = require("../_config/key");
 
 let gPageKey;
 
@@ -372,9 +374,9 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
   arg: pid - paragraph id.
 */
 function bookmarkManager(actualPid) {
-  let pageKey = genPageKey().toString(10);
-  let bmList = store.get(`bmList_${getSourceId()}`);
-  let bmModal = store.get(`bmModal_${getSourceId()}`);
+  let pageKey = transcript.genPageKey().toString(10);
+  let bmList = store.get(`bmList_${transcript.getSourceId()}`);
+  let bmModal = store.get(`bmModal_${transcript.getSourceId()}`);
 
   if (bmList) {
     //store globally
@@ -419,8 +421,8 @@ function bookmarkManager(actualPid) {
     update: either "previous", or "next" depending on what click handler called the function
 */
 function updateNavigator(pid, update) {
-  let bmList = store.get(`bmList_${getSourceId()}`);
-  let bmModal = store.get(`bmModal_${getSourceId()}`);
+  let bmList = store.get(`bmList_${transcript.getSourceId()}`);
+  let bmModal = store.get(`bmModal_${transcript.getSourceId()}`);
   getCurrentBookmark(gPageKey, pid, bmList, bmModal, update);
 }
 

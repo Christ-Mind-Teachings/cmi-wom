@@ -35,7 +35,7 @@ function createAudioPlayerToggleListener() {
 export default {
 
   //setup page to play audio if audio available
-  initialize: function(bookmark) {
+  initialize: function() {
     let info = getAudioInfo(location.pathname);
 
     //add audio url to audio player toggle
@@ -47,7 +47,7 @@ export default {
       createAudioPlayerToggleListener();
 
       //initialize audio player
-      player.initialize(`${info.audioBase}${info.audio}`, info.timing, bookmark);
+      player.initialize(`${info.audioBase}${info.audio}`, info.timing);
     }
   }
 };

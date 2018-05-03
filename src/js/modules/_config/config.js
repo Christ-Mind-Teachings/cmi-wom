@@ -1,7 +1,9 @@
 import store from "store";
 import axios from "axios";
 import indexOf from "lodash/indexOf";
-import {decodeKey, parseKey, genKey} from "./key";
+
+//import {decodeKey, parseKey, genKey} from "./key";
+const transcript = require("./key");
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
@@ -209,7 +211,7 @@ export function getReservation(url) {
     data: optional, data that will be added to the result, used for convenience
 */
 export function getPageInfo(pageKey, data = false) {
-  let decodedKey = decodeKey(pageKey);
+  let decodedKey = transcript.decodeKey(pageKey);
   let info = {pageKey: pageKey, bookId: decodedKey.bookId};
 
   if (data) {

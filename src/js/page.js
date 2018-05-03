@@ -1,12 +1,12 @@
 /* eslint no-console: off */
 
 import "../vendor/semantic/semantic.min.js";
-import {showParagraph} from "./modules/_util/url";
 import bookmark from "./modules/_bookmark/bookmark";
 import search from "./modules/_search/search";
-import toc, {getBookId} from "./modules/_contents/toc";
+//import toc, {getBookId} from "./modules/_contents/toc";
+import toc from "./modules/_contents/toc";
 import auth from "./modules/_user/netlify";
-import {loadConfig} from "./modules/_config/config";
+//import {loadConfig} from "./modules/_config/config";
 
 /*
   Fix main menu to top of page when scrolled
