@@ -12,18 +12,6 @@ var awsConfig = {
   region: "us-east-1"
 };
 
-function genKey(keySourceId, keyBookId, keySectionId, keyUnitId) {
-  const SOURCE  = 10000000000; //    10 billion
-  const BOOK    =   100000000; //   100 million
-  const SECTION =     1000000; //     1 million
-  const UNIT    =        1000; //     1 thousand
-
-  return (SOURCE * Number.parseInt(keySourceId, 10))
-       + (BOOK * Number.parseInt(keyBookId, 10))
-       + (SECTION * Number.parseInt(keySectionId, 10))
-       + (UNIT * Number.parseInt(keyUnitId, 10));
-}
-
 program
   .version('0.0.1')
   .usage('[options] <file ...>')
@@ -64,60 +52,56 @@ function load(table, fileName, verify) {
   if (verify) {
     console.log("Verifying: %s", fileName);
   }
-  else {
-    console.log("Loading table: %s from %s", table, fileName);
-  }
 
-  var lesson = JSON.parse(fs.readFileSync(fileName, 'utf8'));
+  let data = JSON.parse(fs.readFileSync(fileName, 'utf8'));
 
   if (verify) {
     return;
   }
 
-  console.log("lesson: %o", lesson);
-  program.exit(1);
+  let url = `/${data.book}/${data.unit}/`;
+  let pageKey = key.genPageKey(url);
 
-  let unitKey_partial = genKey(lesson.keySourceId, lesson.keyBookId, lesson.keySectionId, lesson.keyUnitId);
-
-  lesson.paragraph.forEach((p) => {
-    let discard = p.discard ? p.discard : 0;
-    let params = {
-        TableName: table,
-        Item: {
-            "unitkey": unitKey_partial + Number.parseInt(p.pid, 10),
-            "book": lesson.book,
-            "unit": lesson.unit,
-            "pid":  p.pid,
-            "text": p.text
-        }
-    };
-
-    //we discard one line paragraphs for acim transcripts because most
-    //of them are conversational; Continue, Yes, Indeed, You are correct, etc
-    if (discard === 1 && lesson.book.startsWith("acim")) {
-      discarded++;
-      return;
-    }
-
-    //console.log(`unitKey_partial: ${unitKey_partial}, p: ${p.pid}, unitkey: ${params.Item.unitkey}`);
-
-    var errorFileName = "";
-    docClient.put(params, function(err, data) {
-      if (err) {
-        //if there are multiple errors for a file, log only the first one
-        if (errorFileName !== fileName) {
-          console.log("error:%s:%s", params.Item.unitkey, fileName);
-          errorFileName = fileName;
-        }
-      }
-      else {
-        console.log("ok: %s", params.Item.unitkey);
-      }
-    });
+  data.paragraph.forEach((p) => {
+    discarded += loadParagraph(pageKey, p, data.book, data.unit, fileName);
   });
 
   let fne = fileName.substr(fileName.lastIndexOf("/") + 1);
   let fn = fne.substr(0, fne.length - 5);
-  console.log("+%s:%s:%s:%s", fn, unitKey_partial, lesson.paragraph.length, discarded);
+  console.log("+%s:%s:%s:%s", fn, pageKey, data.paragraph.length, discarded);
 }
+
+function loadParagraph(pageKey, p, book, unit, fn) {
+  let discard = p.discard ? p.discard : 0;
+  let paraKey = key.genParagraphKey(p.pid, pageKey);
+
+  let params = {
+      TableName: table,
+      Item: {
+          "parakey": paraKey.toString(10),
+          "book": book,
+          "unit": unit,
+          "pid":  p.pid,
+          "text": p.text
+      }
+  };
+
+  //we discard one line paragraphs that are often repeated
+  if (discard === 1) {
+    return 1;
+  }
+  else {
+    docClient.put(params, function(err) {
+      if (err) {
+        console.log("error:%s:%s", params.Item.parakey, fn);
+      }
+      else {
+        console.log("ok: %s", params.Item.parakey);
+      }
+    });
+
+    return 0;
+  }
+}
+
 

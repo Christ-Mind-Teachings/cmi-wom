@@ -385,7 +385,6 @@ function bookmarkManager(actualPid) {
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal)
       .then((responses) => {
-        console.log("next url: ", responses);
 
         //set prev and next hrefs
         if (responses[0] !== null) {

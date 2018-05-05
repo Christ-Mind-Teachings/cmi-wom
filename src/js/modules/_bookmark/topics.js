@@ -36,7 +36,6 @@ function makeTopicList(topicMap) {
 function topicSelectHandler() {
   $("#topic-menu-item").on("click", "#topic-menu-select > .item", function(e) {
     e.preventDefault();
-    console.log("Topic clicked: %s", $(this).text());
 
     //class .ntf indicates there are no topics, so just return
     if ($(this).hasClass("ntf")) {

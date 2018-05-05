@@ -1,4 +1,8 @@
 
+const searchEndpoint = "https://d9lsdwxpfg.execute-api.us-east-1.amazonaws.com/latest/wom";
+import axios from "axios";
+import { showSavedQuery, showSearchResults } from "./show";
+
 //search modal
 const uiSearchModal = ".search.ui.modal";
 const uiOpenSearchModal = ".search-modal-open";
@@ -71,14 +75,38 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
   }
 }
 
+function search(query) {
+  let searchBody = {
+    query: query,
+    width: 30
+  };
+
+  axios.post(searchEndpoint, searchBody)
+    .then((response) => {
+      console.log("search results: %o", response.data);
+      displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
+      showSearchResults(response.data, searchBody.query);
+    })
+    .catch((error) => {
+      console.error("search error: %o", error);
+      displaySearchMessage(SEARCH_ERROR, error.message);
+    });
+}
+
 export default {
   initialize: function() {
 
-    //init sidebar search modal toggle and configure sidebar
-    //to close automatically when modal is displayed
     $(uiSearchModal).modal({
       dimmerSettings: {opacity: uiModalOpacity},
-      observeChanges: true
+      observeChanges: true,
+      onShow: function() {
+        //load modal with prior query results
+
+        //check if modal already has query results loaded
+        if ($(".cmi-search-list > h3").length === 0) {
+          showSavedQuery();
+        }
+      }
     });
 
     $(uiOpenSearchModal).on("click", (e) => {
@@ -100,6 +128,8 @@ export default {
       //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
       displaySearchMessage(SEARCHING, searchSource, searchString);
 
+      //run search
+      search(searchString);
     });
   }
 };

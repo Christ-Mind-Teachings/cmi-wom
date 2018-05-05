@@ -196,8 +196,6 @@ function hoverHandler() {
       }
     }
 
-    console.log("hoverHandler");
-
     //disable popup for paragraphs being edited
     if ($(`#${pid}`).hasClass("annotation-edit")) {
       $(`#${pid} [data-annotation-id]`).each(function() {

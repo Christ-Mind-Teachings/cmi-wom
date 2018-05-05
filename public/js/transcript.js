@@ -5916,10 +5916,11 @@ const sourceId = 10;
 //length of pageKey excluding decimal portion
 const keyLength = 8;
 
-const bookIds = ["xxx", "tjl", "wos", "early", "woh", "wot", "wok"];
+const books = ["tjl", "wos", "early", "woh", "wot", "wok"];
+const bookIds = ["xxx", ...books];
 const tjl = ["xxx", "ack", "foreword", "chap01", "chap02", "chap03", "chap04", "chap05", "chap06", "chap07", "chap08", "chap09", "chap10", "chap11", "chap12", "epilogue"];
 const wos = ["xxx", "foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilogue", "prayer"];
-const early = ["xxx", "ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
+const early = ["xxx", "ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoi", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
 
 function splitUrl(url) {
   let u = url;
@@ -6047,12 +6048,20 @@ function genPageKey(url = location.pathname) {
   args:
     pid: a string representing a transcript paragraph, starts as "p0"..."pnnn"
          - it's converted to number and incremented by 1 then divided by 1000
+        pid can also be a number so then we just increment it and divide by 1000
 
-    key: either a url or pageKey returned from genKey()
+    key: either a url or pageKey returned from genPageKey(), if key
+   is a string it is assumed to be a url
 */
 function genParagraphKey(pid, key = location.pathname) {
   let numericKey = key;
-  const pKey = (parseInt(pid.substr(1), 10) + 1) / 1000;
+  let pKey;
+
+  if (typeof pid === "string") {
+    pKey = (parseInt(pid.substr(1), 10) + 1) / 1000;
+  } else {
+    pKey = (pid + 1) / 1000;
+  }
 
   //if key is a string it represents a url
   if (typeof key === "string") {
@@ -6090,7 +6099,7 @@ function decodeKey(key) {
   //error, invalid key length
   if (pageKeyString.length !== keyLength) {
     decodedKey.error = true;
-    decodedKey.message = `Ingeger portion of key should have a length of ${keyLength}, key is: ${pageKeyString}`;
+    decodedKey.message = `Integer portion of key should have a length of ${keyLength}, key is: ${pageKeyString}`;
     return decodedKey;
   }
 
@@ -6107,7 +6116,12 @@ function decodeKey(key) {
   return decodedKey;
 }
 
+function getBooks() {
+  return books;
+}
+
 module.exports = {
+  getBooks: getBooks,
   getSourceId: getSourceId,
   getKeyInfo: getKeyInfo,
   parseKey: parseKey,
@@ -12808,7 +12822,6 @@ function makeTopicList(topicMap) {
 function topicSelectHandler() {
   $("#topic-menu-item").on("click", "#topic-menu-select > .item", function (e) {
     e.preventDefault();
-    console.log("Topic clicked: %s", $(this).text());
 
     //class .ntf indicates there are no topics, so just return
     if ($(this).hasClass("ntf")) {
@@ -29258,8 +29271,6 @@ function hoverHandler() {
       }
     }
 
-    console.log("hoverHandler");
-
     //disable popup for paragraphs being edited
     if ($(`#${pid}`).hasClass("annotation-edit")) {
       $(`#${pid} [data-annotation-id]`).each(function () {
@@ -33785,7 +33796,6 @@ function bookmarkManager(actualPid) {
 
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal).then(responses => {
-      console.log("next url: ", responses);
 
       //set prev and next hrefs
       if (responses[0] !== null) {
@@ -34756,7 +34766,14 @@ module.exports = noop;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__show__ = __webpack_require__(450);
+
+const searchEndpoint = "https://d9lsdwxpfg.execute-api.us-east-1.amazonaws.com/latest/wom";
+
+
+
 //search modal
 const uiSearchModal = ".search.ui.modal";
 const uiOpenSearchModal = ".search-modal-open";
@@ -34829,14 +34846,36 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
   }
 }
 
+function search(query) {
+  let searchBody = {
+    query: query,
+    width: 30
+  };
+
+  __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(searchEndpoint, searchBody).then(response => {
+    console.log("search results: %o", response.data);
+    displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
+    Object(__WEBPACK_IMPORTED_MODULE_1__show__["b" /* showSearchResults */])(response.data, searchBody.query);
+  }).catch(error => {
+    console.error("search error: %o", error);
+    displaySearchMessage(SEARCH_ERROR, error.message);
+  });
+}
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   initialize: function () {
 
-    //init sidebar search modal toggle and configure sidebar
-    //to close automatically when modal is displayed
     $(uiSearchModal).modal({
       dimmerSettings: { opacity: uiModalOpacity },
-      observeChanges: true
+      observeChanges: true,
+      onShow: function () {
+        //load modal with prior query results
+
+        //check if modal already has query results loaded
+        if ($(".cmi-search-list > h3").length === 0) {
+          Object(__WEBPACK_IMPORTED_MODULE_1__show__["a" /* showSavedQuery */])();
+        }
+      }
     });
 
     $(uiOpenSearchModal).on("click", e => {
@@ -34857,6 +34896,9 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
 
       //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
       displaySearchMessage(SEARCHING, searchSource, searchString);
+
+      //run search
+      search(searchString);
     });
   }
 });
@@ -45949,6 +45991,199 @@ class CaptureData {
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = CaptureData;
 
+
+/***/ }),
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["b"] = showSearchResults;
+/* harmony export (immutable) */ __webpack_exports__["a"] = showSavedQuery;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_config__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_uniq__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_uniq___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_uniq__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_store__);
+
+//import config from "../_config/config";
+
+
+
+
+//this needs to use require because it is also used by a node app and node doesn't support import
+const womInfo = __webpack_require__(41);
+const queryResultName = "query-result-wom";
+
+function getUnitName(pageInfo, unitInfo) {
+  return pageInfo[unitInfo.pageKey].title;
+}
+
+function makeList(bid, title, pageInfo, matchArray) {
+  return `
+    <h3>${title[bid]} (${matchArray.length})</h3>
+    <div class="ui list">
+      ${matchArray.map(m => `
+        <div class="item">
+          <i class="book icon"></i>
+          <div class="content">
+            <div class="header">
+              ${getUnitName(pageInfo, m)} (${m.m.length})
+            </div>
+            <div class="list">
+              ${m.m.map(h => `
+                <div class="item">
+                  <i class="search icon"></i>
+                  <div class="content">
+                    <div class="header">
+                      <a href="${pageInfo[m.pageKey].url}?s=show${h.location}">Paragraph ${h.location.substr(2)}</a>
+                    </div>
+                    <div class="description">
+                      ${h.context}
+                    </div>
+                  </div>
+                  </div> <!-- item -->
+              `).join("")}
+            </div> <!-- list -->
+          </div>
+        </div>
+      `).join("")}
+    </div> <!-- ui list -->
+  `;
+}
+
+/*
+  for a given page, combine all matches into an array
+*/
+function munge(bookMatches) {
+  let keyLength = womInfo.getKeyInfo().keyLength;
+  let combined = [];
+  let count = 0;
+
+  for (const match of bookMatches) {
+    if (!combined[count]) {
+      combined[count] = {
+        unit: match.unit,
+        book: match.book,
+        pageKey: match.key.substr(0, keyLength),
+        m: [{ location: match.location, context: match.context }]
+      };
+    } else if (combined[count].unit !== match.unit) {
+      count++;
+      combined[count] = {
+        unit: match.unit,
+        book: match.book,
+        pageKey: match.key.substr(0, keyLength),
+        m: [{ location: match.location, context: match.context }]
+      };
+    } else {
+      combined[count].m.push({ location: match.location, context: match.context });
+    }
+  }
+  return combined;
+}
+
+//get unique pageKeys from query results and 
+function getPageKeys(data) {
+  let keyLength = womInfo.getKeyInfo().keyLength;
+  let keys = data.map(m => m.key.substr(0, keyLength));
+  return __WEBPACK_IMPORTED_MODULE_1_lodash_uniq___default()(keys);
+}
+
+function showSearchResults(data, query) {
+  const books = womInfo.getBooks();
+  let pageInfoPromises = [];
+
+  //get array of all unique page info - promises
+  for (let b = 0; b < books.length; b++) {
+    let bid = books[b];
+    if (data[bid]) {
+      let pageKeys = getPageKeys(data[bid]);
+      for (const pageKey of pageKeys) {
+        pageInfoPromises.push(Object(__WEBPACK_IMPORTED_MODULE_0__config_config__["d" /* getPageInfo */])(pageKey));
+      }
+    }
+  }
+
+  Promise.all(pageInfoPromises).then(responses => {
+    let html = "";
+    let pageInfo = {};
+    let titleArray = {};
+
+    //organize pageInfo
+    for (const page of responses) {
+      const { bookTitle, title, url } = page;
+      pageInfo[page.pageKey] = { title, url };
+
+      if (!titleArray[page.bookId]) {
+        titleArray[page.bookId] = bookTitle;
+      }
+    }
+
+    let matches = {};
+
+    //generate html for search hits
+    for (let bid of books) {
+      if (data[bid]) {
+        matches[bid] = munge(data[bid]);
+        html += makeList(bid, titleArray, pageInfo, matches[bid]);
+      }
+    }
+    $(".cmi-search-list").html(html);
+    saveQueryResults(query, data.count, titleArray, pageInfo, matches);
+  }).catch(error => {
+    console.error("Error: %s", error.message);
+  });
+}
+
+//save the query result
+function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data) {
+  __WEBPACK_IMPORTED_MODULE_2_store___default.a.set(queryResultName, { query: queryString, count: matchCount, titleArray: titleArray, pageInfo: pageInfo, data: data });
+}
+
+//show saved query result in modal
+function showSavedQuery() {
+  const queryResult = __WEBPACK_IMPORTED_MODULE_2_store___default.a.get(queryResultName);
+
+  if (!queryResult) {
+    return;
+  }
+
+  const books = womInfo.getBooks();
+  let html = "";
+
+  //generate html for search hits
+  for (let bid of books) {
+    if (queryResult.data[bid]) {
+      html += makeList(bid, queryResult.titleArray, queryResult.pageInfo, queryResult.data[bid]);
+    }
+  }
+  $(".cmi-search-list").html(html);
+
+  $(".search-message.header").text("Last Search Result");
+  $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ })
 /******/ ]);
