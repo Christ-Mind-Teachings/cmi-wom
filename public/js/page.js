@@ -13615,6 +13615,7 @@ module.exports = hasUnicode;
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = showParagraph;
 /* harmony export (immutable) */ __webpack_exports__["a"] = showBookmark;
+/* harmony export (immutable) */ __webpack_exports__["c"] = showSearchMatch;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 
@@ -13658,6 +13659,15 @@ function showBookmark() {
 
   if (pId) {
     __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
+    return pId;
+  }
+  return null;
+}
+
+function showSearchMatch() {
+  let pId = getQueryString("srch");
+
+  if (pId) {
     return pId;
   }
   return null;
@@ -33796,6 +33806,7 @@ function bookmarkManager(actualPid) {
 
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal).then(responses => {
+      console.log("next url: ", responses);
 
       //set prev and next hrefs
       if (responses[0] !== null) {
@@ -33898,8 +33909,7 @@ function initClickListeners() {
 }
 
 /*
-  User clicked a bookmark link in the bookmark list modal and had "following" option 
-  enabled.
+  User clicked a bookmark link in the bookmark list modal.
 
   Initialize the bookmark navigator so they can follow the list of bookmarks
 */
@@ -34769,8 +34779,12 @@ module.exports = noop;
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__show__ = __webpack_require__(450);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_url__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__navigator__ = __webpack_require__(451);
 
 const searchEndpoint = "https://d9lsdwxpfg.execute-api.us-east-1.amazonaws.com/latest/wom";
+
+
 
 
 
@@ -34846,6 +34860,7 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
   }
 }
 
+//run query
 function search(query) {
   let searchBody = {
     query: query,
@@ -34862,44 +34877,65 @@ function search(query) {
   });
 }
 
+function initTranscriptPage() {
+  let displayPid = Object(__WEBPACK_IMPORTED_MODULE_2__util_url__["c" /* showSearchMatch */])();
+  if (displayPid) {
+    Object(__WEBPACK_IMPORTED_MODULE_3__navigator__["a" /* initNavigator */])(displayPid);
+  }
+}
+
+/*
+  Initialize support for search modal window available
+  on all pages
+*/
+function initSearchModal() {
+
+  $(uiSearchModal).modal({
+    dimmerSettings: { opacity: uiModalOpacity },
+    observeChanges: true,
+    onShow: function () {
+      //load modal with prior query results
+
+      //check if modal already has query results loaded
+      if ($(".cmi-search-list > h3").length === 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__show__["a" /* showSavedQuery */])();
+      }
+    }
+  });
+
+  $(uiOpenSearchModal).on("click", e => {
+    e.preventDefault();
+    $(uiSearchModal).modal("show");
+  });
+
+  //Search Submit
+  $(uiSearchForm).submit(function (e) {
+    e.preventDefault();
+    var searchSource = $(uiSearchSource).text();
+    var searchString = $(uiSearchString).val();
+
+    //ignore and return if search string is empty
+    if (searchString.length === 0) {
+      return;
+    }
+
+    //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
+    displaySearchMessage(SEARCHING, searchSource, searchString);
+
+    //run search
+    search(searchString);
+  });
+}
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   initialize: function () {
 
-    $(uiSearchModal).modal({
-      dimmerSettings: { opacity: uiModalOpacity },
-      observeChanges: true,
-      onShow: function () {
-        //load modal with prior query results
+    if ($(".transcript").length) {
+      //this is a transcript page
+      initTranscriptPage();
+    }
 
-        //check if modal already has query results loaded
-        if ($(".cmi-search-list > h3").length === 0) {
-          Object(__WEBPACK_IMPORTED_MODULE_1__show__["a" /* showSavedQuery */])();
-        }
-      }
-    });
-
-    $(uiOpenSearchModal).on("click", e => {
-      e.preventDefault();
-      $(uiSearchModal).modal("show");
-    });
-
-    //Search Submit
-    $(uiSearchForm).submit(function (e) {
-      e.preventDefault();
-      var searchSource = $(uiSearchSource).text();
-      var searchString = $(uiSearchString).val();
-
-      //ignore and return if search string is empty
-      if (searchString.length === 0) {
-        return;
-      }
-
-      //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
-      displaySearchMessage(SEARCHING, searchSource, searchString);
-
-      //run search
-      search(searchString);
-    });
+    initSearchModal();
   }
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
@@ -35126,7 +35162,6 @@ $(document).ready(() => {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_store__);
 
-//import config from "../_config/config";
 
 
 
@@ -35156,7 +35191,7 @@ function makeList(bid, title, pageInfo, matchArray) {
                   <i class="search icon"></i>
                   <div class="content">
                     <div class="header">
-                      <a href="${pageInfo[m.pageKey].url}?s=show${h.location}">Paragraph ${h.location.substr(2)}</a>
+                      <a href="${pageInfo[m.pageKey].url}?srch=${h.location}">Paragraph ${h.location.substr(1)}</a>
                     </div>
                     <div class="description">
                       ${h.context}
@@ -35250,15 +35285,42 @@ function showSearchResults(data, query) {
       }
     }
     $(".cmi-search-list").html(html);
-    saveQueryResults(query, data.count, titleArray, pageInfo, matches);
+    saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
   }).catch(error => {
     console.error("Error: %s", error.message);
   });
 }
 
-//save the query result
-function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data) {
-  __WEBPACK_IMPORTED_MODULE_2_store___default.a.set(queryResultName, { query: queryString, count: matchCount, titleArray: titleArray, pageInfo: pageInfo, data: data });
+//save the query result so it can be available until replaced by another query
+function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data, originalResult) {
+  const books = womInfo.getBooks();
+  let keyLength = womInfo.getKeyInfo().keyLength;
+
+  //don't save if there were no matches
+  if (matchCount === 0) {
+    return;
+  }
+
+  //flatten the query result to simplify access by query navigator on transcript pages
+  let flatMatches = [];
+  for (const bid of books) {
+    if (originalResult[bid]) {
+      for (const match of originalResult[bid]) {
+        let pageKey = match.key.substr(0, keyLength);
+        let m = { key: pageKey, url: `/${match.book}/${match.unit}/`, location: match.location };
+        flatMatches.push(m);
+      }
+    }
+  }
+
+  __WEBPACK_IMPORTED_MODULE_2_store___default.a.set(queryResultName, {
+    query: queryString,
+    count: matchCount,
+    titleArray: titleArray,
+    pageInfo: pageInfo,
+    data: data,
+    flat: flatMatches
+  });
 }
 
 //show saved query result in modal
@@ -35282,6 +35344,261 @@ function showSavedQuery() {
 
   $(".search-message.header").text("Last Search Result");
   $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+
+/***/ }),
+/* 451 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = initNavigator;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_store___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_store__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_toastr__);
+/*
+  search results query navigator
+*/
+
+
+
+
+const page = __webpack_require__(41);
+
+const queryResultName = "query-result-wom";
+
+class PageMatches {
+  constructor(query, start, end, hits) {
+    this.query = query;
+    this.start = start;
+    this.end = end;
+    this.count = end - start + 1;
+    this.hits = hits;
+  }
+
+  setStart(current) {
+    this.current = current;
+    let pid = this.hits[current].location;
+
+    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pid), { align: { top: 0.2 } });
+    this.setTitle();
+  }
+
+  setTitle() {
+    let pos = this.current - this.start + 1;
+    let title = `Search for <em>${this.query}</em> (${pos} of ${this.count})`;
+
+    $(".search-navigator-header-query").html(title);
+  }
+
+  /*
+    Move to previous match or last match if we're on the first one
+  */
+  setPrevious() {
+    //no where to go if there's only one match on the page
+    if (this.start === this.end) {
+      return;
+    }
+    let pos = this.current - 1;
+
+    if (pos < this.start) {
+      pos = this.end;
+    }
+
+    this.setStart(pos);
+  }
+
+  /*
+    Move to next match position or the first if we're on the last
+  */
+  setNext() {
+    //no where to go if there's only one match on the page
+    if (this.start === this.end) {
+      return;
+    }
+    let pos = this.current + 1;
+
+    if (pos > this.end) {
+      pos = this.start;
+    }
+
+    this.setStart(pos);
+  }
+
+  showCurrent() {
+    let pid = this.hits[this.current].location;
+    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pid), { align: { top: 0.2 } });
+  }
+}
+
+//hilight terms on page for current search
+function markSearchHits(searchHits, start, end, query, state) {
+  let markFailure = 0;
+
+  //Note: this regex wont find a string within a string - only finds
+  //matches that begin on a word boundary
+  //var regex = new RegExp("(?:^|\\b)(" + searchData.query + ")(?:$|\\b)", "gim");
+  let regex = new RegExp("(?:^|\\b)(" + query + ")(?:$|\\b|)", "gim");
+  for (let i = start; i <= end; i++) {
+    let id = searchHits[i].location;
+    let el = document.getElementById(id);
+
+    // a data error is indicated by el == null
+    if (!el) {
+      markFailure++;
+      continue;
+    }
+    let content = el.innerHTML;
+
+    //remove newline chars in content - they can prevent the
+    //query string from being highlighted
+    content = content.replace(/[\r\n]/gm, " ");
+    if (state === "show") {
+      el.innerHTML = content.replace(regex, "<mark class='show-mark'>$1</mark>");
+    } else {
+      el.innerHTML = content.replace(regex, "<mark class='hide-mark'>$1</mark>");
+    }
+
+    //test if query was highlighted
+    if (el.innerHTML === content) {
+      console.log("Regex did not match: \"%s\" for %s", query, id);
+      markFailure++;
+    }
+  }
+
+  return markFailure;
+}
+
+/*
+  Set up listeners for search navigator links
+  args: matches - keeps track of page specific search hits
+*/
+function initClickListeners(matches) {
+
+  //previous search
+  $(".search-navigator .previous-match").on("click", function (e) {
+    e.preventDefault();
+    matches.setPrevious();
+  });
+
+  $(".search-navigator .next-match").on("click", function (e) {
+    e.preventDefault();
+    matches.setNext();
+  });
+
+  $(".search-navigator .current-match").on("click", function (e) {
+    e.preventDefault();
+    matches.showCurrent();
+  });
+
+  $(".search-navigator .close-window").on("click", function (e) {
+    e.preventDefault();
+
+    $(".search-navigator-wrapper").addClass("hide-search-navigator");
+    $(".transcript").removeClass("search-navigator-active");
+  });
+}
+
+/*
+  first and last positions for this pages search hits and
+  the next and previous pages.
+*/
+function findPositions(pid, pageKey, flat) {
+  let positions = {
+    current: -1,
+    prev: -1,
+    start: -1,
+    end: -1,
+    next: -1
+  };
+
+  let found = false;
+
+  for (let i = 0; i < flat.length; i++) {
+    if (flat[i].key === pageKey) {
+      if (flat[i].location === pid) {
+        positions.current = i;
+      }
+      if (!found) {
+        positions.start = i;
+        positions.end = i;
+        found = true;
+
+        if (i > 0) {
+          positions.prev = i - 1;
+        }
+      }
+    } else if (found) {
+      positions.end = i - 1;
+      positions.next = i;
+      break;
+    }
+  }
+
+  //console.log("positions: %o", positions);
+  return positions;
+}
+
+function initControls(pid) {
+  let lastSearch = __WEBPACK_IMPORTED_MODULE_1_store___default.a.get(queryResultName);
+
+  if (!lastSearch) {
+    __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.error("Show search result requested but can't find search results.");
+    return;
+  }
+
+  //console.log("lastSearch: %o", lastSearch);
+
+  let pageKey = page.genPageKey();
+  let pageKeyString = pageKey.toString(10);
+  let bid = page.decodeKey(pageKey).bookId;
+  let title = lastSearch.titleArray[bid];
+
+  let hitPositions = findPositions(pid, pageKeyString, lastSearch.flat);
+  let url;
+
+  if (hitPositions.prev > -1) {
+    url = `${lastSearch.flat[hitPositions.prev].url}?srch=${lastSearch.flat[hitPositions.prev].location}`;
+    $(".search-navigator .previous-page").attr("href", url);
+  } else {
+    $(".search-navigator .previous-page").addClass("inactive");
+  }
+
+  if (hitPositions.next > -1) {
+    url = `${lastSearch.flat[hitPositions.next].url}?srch=${lastSearch.flat[hitPositions.next].location}`;
+    $(".search-navigator .next-page").attr("href", url);
+  } else {
+    $(".search-navigator .next-page").addClass("inactive");
+  }
+
+  if (hitPositions.start === hitPositions.end) {
+    $(".search-navigator .previous-match").addClass("inactive");
+    $(".search-navigator .next-match").addClass("inactive");
+  }
+
+  //set search navigator title
+  $(".search-navigator-header-book").text(`${title} - ${lastSearch.pageInfo[pageKey].title}`);
+
+  let matches = new PageMatches(lastSearch.query, hitPositions.start, hitPositions.end, lastSearch.flat);
+  matches.setStart(hitPositions.current);
+
+  let markFail = markSearchHits(lastSearch.flat, hitPositions.start, hitPositions.end, lastSearch.query, "show");
+  if (markFail) {
+    __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.info(`Failed to hilight ${markFail} search results`);
+  }
+  initClickListeners(matches);
+}
+
+function initNavigator(requestedPid) {
+  //console.log("init search navigator pid: %s", requestedPid);
+  initControls(requestedPid);
+
+  //indicate search navigator is active by adding class to ./transcript
+  $(".transcript").addClass("search-navigator-active");
+  $(".search-navigator-wrapper").removeClass("hide-search-navigator");
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 

@@ -44,3 +44,12 @@ export function showBookmark() {
   }
   return null;
 }
+
+export function showSearchMatch() {
+  let pId = getQueryString("srch");
+
+  if (pId) {
+    return pId;
+  }
+  return null;
+}

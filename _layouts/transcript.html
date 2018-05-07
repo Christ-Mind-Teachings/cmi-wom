@@ -23,7 +23,6 @@
   {% include common/masthead.html %}
   {% include common/transcript-menu.html %}
 
-  <!-- class: {{page.class}}, bid: {{page.bid}} -->
   {% if page.bid %}
   <div class="{{page.bid | downcase }} transcript ui text container">
   {% else %}
@@ -45,6 +44,7 @@
   {% include components/time-edit-modal.html %}
   {% include components/bookmark-navigator.html %}
   {% include components/annotation-popup.html %}
+  {% include components/search-navigator.html %}
   <div class="fixed" id="netlify-modal"></div>
 
   {% include common/javascript.html %}

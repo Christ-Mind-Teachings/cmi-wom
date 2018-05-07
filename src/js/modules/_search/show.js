@@ -1,5 +1,4 @@
 
-//import config from "../_config/config";
 import {getPageInfo} from "../_config/config";
 import uniq from "lodash/uniq";
 import store from "store";
@@ -29,7 +28,7 @@ function makeList(bid, title, pageInfo, matchArray) {
                   <i class="search icon"></i>
                   <div class="content">
                     <div class="header">
-                      <a href="${pageInfo[m.pageKey].url}?s=show${h.location}">Paragraph ${h.location.substr(2)}</a>
+                      <a href="${pageInfo[m.pageKey].url}?srch=${h.location}">Paragraph ${h.location.substr(1)}</a>
                     </div>
                     <div class="description">
                       ${h.context}
@@ -126,7 +125,7 @@ export function showSearchResults(data, query) {
         }
       }
       $(".cmi-search-list").html(html);
-      saveQueryResults(query, data.count, titleArray, pageInfo, matches);
+      saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
 
     })
     .catch((error) => {
@@ -134,9 +133,36 @@ export function showSearchResults(data, query) {
     });
 }
 
-//save the query result
-function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data) {
-  store.set(queryResultName, {query: queryString, count: matchCount, titleArray: titleArray, pageInfo: pageInfo, data: data});
+//save the query result so it can be available until replaced by another query
+function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data, originalResult) {
+  const books = womInfo.getBooks();
+  let keyLength = womInfo.getKeyInfo().keyLength;
+
+  //don't save if there were no matches
+  if (matchCount === 0) {
+    return;
+  }
+
+  //flatten the query result to simplify access by query navigator on transcript pages
+  let flatMatches = [];
+  for (const bid of books) {
+    if (originalResult[bid]) {
+      for (const match of originalResult[bid]) {
+        let pageKey = match.key.substr(0, keyLength);
+        let m = { key: pageKey, url: `/${match.book}/${match.unit}/`, location: match.location};
+        flatMatches.push(m);
+      }
+    }
+  }
+
+  store.set(queryResultName, {
+    query: queryString, 
+    count: matchCount, 
+    titleArray: titleArray, 
+    pageInfo: pageInfo, 
+    data: data,
+    flat: flatMatches
+  });
 }
 
 //show saved query result in modal

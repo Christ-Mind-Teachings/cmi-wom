@@ -385,6 +385,7 @@ function bookmarkManager(actualPid) {
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal)
       .then((responses) => {
+        console.log("next url: ", responses);
 
         //set prev and next hrefs
         if (responses[0] !== null) {
@@ -491,8 +492,7 @@ function initClickListeners() {
 }
 
 /*
-  User clicked a bookmark link in the bookmark list modal and had "following" option 
-  enabled.
+  User clicked a bookmark link in the bookmark list modal.
 
   Initialize the bookmark navigator so they can follow the list of bookmarks
 */

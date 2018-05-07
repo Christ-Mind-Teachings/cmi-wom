@@ -2,6 +2,8 @@
 const searchEndpoint = "https://d9lsdwxpfg.execute-api.us-east-1.amazonaws.com/latest/wom";
 import axios from "axios";
 import { showSavedQuery, showSearchResults } from "./show";
+import {showSearchMatch} from "../_util/url"; 
+import { initNavigator } from "./navigator";
 
 //search modal
 const uiSearchModal = ".search.ui.modal";
@@ -75,6 +77,7 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
   }
 }
 
+//run query
 function search(query) {
   let searchBody = {
     query: query,
@@ -93,44 +96,66 @@ function search(query) {
     });
 }
 
+function initTranscriptPage() {
+  let displayPid = showSearchMatch();
+  if (displayPid) {
+    initNavigator(displayPid);
+  }
+}
+
+/*
+  Initialize support for search modal window available
+  on all pages
+*/
+function initSearchModal() {
+
+  $(uiSearchModal).modal({
+    dimmerSettings: {opacity: uiModalOpacity},
+    observeChanges: true,
+    onShow: function() {
+      //load modal with prior query results
+
+      //check if modal already has query results loaded
+      if ($(".cmi-search-list > h3").length === 0) {
+        showSavedQuery();
+      }
+    }
+  });
+
+  $(uiOpenSearchModal).on("click", (e) => {
+    e.preventDefault();
+    $(uiSearchModal).modal("show");
+  });
+
+  //Search Submit
+  $(uiSearchForm).submit(function(e) {
+    e.preventDefault();
+    var searchSource = $(uiSearchSource).text();
+    var searchString = $(uiSearchString).val();
+
+    //ignore and return if search string is empty
+    if (searchString.length === 0) {
+      return;
+    }
+
+    //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
+    displaySearchMessage(SEARCHING, searchSource, searchString);
+
+    //run search
+    search(searchString);
+  });
+
+}
+
 export default {
   initialize: function() {
 
-    $(uiSearchModal).modal({
-      dimmerSettings: {opacity: uiModalOpacity},
-      observeChanges: true,
-      onShow: function() {
-        //load modal with prior query results
+    if ($(".transcript").length) {
+      //this is a transcript page
+      initTranscriptPage();
+    }
 
-        //check if modal already has query results loaded
-        if ($(".cmi-search-list > h3").length === 0) {
-          showSavedQuery();
-        }
-      }
-    });
-
-    $(uiOpenSearchModal).on("click", (e) => {
-      e.preventDefault();
-      $(uiSearchModal).modal("show");
-    });
-
-    //Search Submit
-    $(uiSearchForm).submit(function(e) {
-      e.preventDefault();
-      var searchSource = $(uiSearchSource).text();
-      var searchString = $(uiSearchString).val();
-
-      //ignore and return if search string is empty
-      if (searchString.length === 0) {
-        return;
-      }
-
-      //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
-      displaySearchMessage(SEARCHING, searchSource, searchString);
-
-      //run search
-      search(searchString);
-    });
+    initSearchModal();
   }
 };
 

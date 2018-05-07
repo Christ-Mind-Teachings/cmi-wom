@@ -96,14 +96,13 @@ $(document).ready(() => {
   initStickyMenu();
   labelParagraphs();
   createParagraphNumberToggleListener();
-  search.initialize();
   auth.initialize();
 
   //load config file and do initializations that depend on a loaded config file
   loadConfig(getBookId())
     .then((source) => {
-      console.log(source);
       toc.initialize();
+      search.initialize();
       bookmark.initialize();
       audio.initialize();
       showParagraph();

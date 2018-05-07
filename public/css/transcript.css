@@ -95,7 +95,8 @@
   box-shadow: 5px 5px 4px 0 #6f6f6d;
 }
 
-/* bookmark navigator */
+/* bookmark and search navigator */
+.search-navigator-wrapper,
 .bookmark-navigator-wrapper {
   position: fixed;
   bottom: 55px;
@@ -103,15 +104,19 @@
   width: 60%;
 }
 
+.search-navigator,
 .bookmark-navigator {
   position: relative;
   left: -50%;
 }
 
+.hide-search-navigator.search-navigator-wrapper,
 .hide-bookmark-navigator.bookmark-navigator-wrapper {
   display: none;
 }
 
+.search-navigator a.item.inactive,
+.search-navigator a.item.inactive:hover,
 .bookmark-navigator a.item.inactive,
 .bookmark-navigator a.item.inactive:hover {
   cursor: default;
