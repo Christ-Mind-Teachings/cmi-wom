@@ -129,6 +129,9 @@ export function switchToParagraph(p) {
       if (time > -1) {
         adjustPlayPosition(idx);
         player.setCurrentTime(time);
+        if (player.paused) {
+          player.play();
+        }
       }
       break;
   }

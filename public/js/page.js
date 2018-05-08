@@ -6230,7 +6230,11 @@ function getBookmarks() {
             let key = transcript.parseKey(b.id);
             bookmarks[key.pid] = b.bookmark;
           });
-          __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(pageKey, bookmarks);
+
+          //store bookmarks in local storage
+          if (Object.keys(bookmarks).length > 0) {
+            __WEBPACK_IMPORTED_MODULE_1_store___default.a.set(pageKey, bookmarks);
+          }
           resolve(bookmarks);
         }
       }).catch(err => {
@@ -8909,7 +8913,7 @@ function setAsSignedOut() {
      * if user already logged in, change icon to log out
      */
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("init", user => {
-      console.log("user.on('init')");
+      //console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
         setAsSignedIn();
@@ -8917,21 +8921,15 @@ function setAsSignedOut() {
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("login", login => {
-      console.log("user.on('login')");
+      //console.log("user.on('login')");
       userInfo = login;
       setAsSignedIn();
-
-      //reload page on sign in
-      //location.reload();
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("logout", () => {
-      console.log("user.logout()");
+      //console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
-
-      //reload page on sign out
-      //location.reload();
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("error", err => console.error("user.on('error'): ", err));
@@ -34868,7 +34866,6 @@ function search(query) {
   };
 
   __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(searchEndpoint, searchBody).then(response => {
-    console.log("search results: %o", response.data);
     displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
     Object(__WEBPACK_IMPORTED_MODULE_1__show__["b" /* showSearchResults */])(response.data, searchBody.query);
   }).catch(error => {
@@ -35265,9 +35262,16 @@ function showSearchResults(data, query) {
     let pageInfo = {};
     let titleArray = {};
 
+    //console.log("responses: %o", responses);
+
     //organize pageInfo
     for (const page of responses) {
-      const { bookTitle, title, url } = page;
+      let { bookTitle, title, subTitle, url } = page;
+
+      if (subTitle) {
+        title = `${title}: ${subTitle}`;
+      }
+
       pageInfo[page.pageKey] = { title, url };
 
       if (!titleArray[page.bookId]) {

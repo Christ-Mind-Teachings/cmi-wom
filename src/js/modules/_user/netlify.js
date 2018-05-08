@@ -106,7 +106,7 @@ export default {
      * if user already logged in, change icon to log out
      */
     user.on("init", user => {
-      console.log("user.on('init')");
+      //console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
         setAsSignedIn();
@@ -114,21 +114,15 @@ export default {
     });
 
     user.on("login", login => {
-      console.log("user.on('login')");
+      //console.log("user.on('login')");
       userInfo = login;
       setAsSignedIn();
-
-      //reload page on sign in
-      //location.reload();
     });
 
     user.on("logout", () => {
-      console.log("user.logout()");
+      //console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
-
-      //reload page on sign out
-      //location.reload();
     });
 
     user.on("error", (err) => console.error("user.on('error'): ", err));

@@ -317,6 +317,7 @@ function toggleMarkers() {
 */
 function restoreState() {
   //no failed submit found check for partial timing session
+  //console.log("restoreState");
   if (!retrySubmit()) {
 
     //if no partial session was found, just mark first paragraph as selected
@@ -368,7 +369,12 @@ export default {
       //check for failed submit or partial timing session
       restoreState();
     }
-
+    else {
+      //notify user if there is a partial timing session
+      if (store.get(`$captureData-${location.pathname}`)) {
+        notify.info("You have an incomplete timing session. Start time capture to begin where you left off.");
+      }
+    }
   },
 
   toggleMarkers: toggleMarkers,

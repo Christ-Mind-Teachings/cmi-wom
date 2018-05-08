@@ -105,9 +105,16 @@ export function showSearchResults(data, query) {
       let pageInfo = {};
       let titleArray = {};
 
+      //console.log("responses: %o", responses);
+
       //organize pageInfo
       for (const page of responses) {
-        const {bookTitle, title, url} = page;
+        let {bookTitle, title, subTitle, url} = page;
+
+        if (subTitle) {
+          title = `${title}: ${subTitle}`;
+        }
+
         pageInfo[page.pageKey] = {title, url}; 
 
         if (!titleArray[page.bookId]) {

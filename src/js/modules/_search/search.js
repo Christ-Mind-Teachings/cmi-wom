@@ -86,7 +86,6 @@ function search(query) {
 
   axios.post(searchEndpoint, searchBody)
     .then((response) => {
-      console.log("search results: %o", response.data);
       displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
       showSearchResults(response.data, searchBody.query);
     })

@@ -8,7 +8,7 @@
 /* bookmarks: */
 
 /* show pointer cursor for bookmark icon */
-.transcript .cmiTranPara > i.bkmark.bookmark.icon {
+.transcript .cmiTranPara > i.timing.large.circular.icon {
   cursor: pointer;
 }
 
@@ -26,8 +26,7 @@
   color: #ce2000;
 }
 
-.cmiTranPara > i.playmark.play.icon,
-.cmiTranPara > i.bkmark.bookmark.icon {
+.cmiTranPara > i.playmark.play.icon {
   font-size: small;
 }
 

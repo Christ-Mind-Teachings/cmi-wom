@@ -79,7 +79,11 @@ function getBookmarks() {
               let key = transcript.parseKey(b.id);
               bookmarks[key.pid] = b.bookmark;
             });
-            store.set(pageKey, bookmarks);
+
+            //store bookmarks in local storage
+            if (Object.keys(bookmarks).length > 0) {
+              store.set(pageKey, bookmarks);
+            }
             resolve(bookmarks);
           }
         })
