@@ -6,6 +6,7 @@ import startCase from "lodash/startCase";
 import { showBookmark } from "../_util/url";
 import {initNavigator} from "./navigator";
 import list from "./list";
+//const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
 import topics from "./topics";
 import { 
   markSelection, 
@@ -269,7 +270,7 @@ export const annotation = {
         let bookmarks = getBookmark(formData.rangeStart);
 
         let annotationCount = 0;
-        if (bookmarks.bookmark.length > 0) {
+        if (bookmarks.bookmark && bookmarks.bookmark.length > 0) {
           annotationCount = bookmarks.bookmark.reduce((count, annotation) => {
             if (annotation.aid && annotation.aid !== formData.aid) {
               count = count + 1;
@@ -309,6 +310,7 @@ export const annotation = {
       $(`#${formData.rangeStart} > span.pnum`).removeClass("has-bookmark");
     } 
 
+    //delete topics from the page topic list
     topics.delete(formData);
   }
 };

@@ -243,9 +243,14 @@ export function initialize() {
 */
 function processSelection() {
   let selObj = document.getSelection(); 
-  let range = selObj.getRangeAt(0);
 
-  console.log("processSelection()");
+  //Safari calls this function twice for each selection, the second time
+  //rangeCount === 0 and type == "None"
+  if (selObj.rangeCount === 0) {
+    return;
+  }
+
+  let range = selObj.getRangeAt(0);
   if (range.collapsed) {
     return;
   }

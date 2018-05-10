@@ -11,6 +11,8 @@
 */
 
 let topics = new Map();
+let listRefreshNeeded;
+let deletedKeys = [];
 
 function formatTopic(topic) {
   if (topic === "__reset__") {
@@ -19,10 +21,15 @@ function formatTopic(topic) {
   return `<div class="item">${topic}</div>`;
 }
 
+/*
+  Generate html for page topic list and reset listRefreshNeeded indicator
+*/
 function makeTopicList(topicMap) {
   let topics = Array.from(topicMap.keys());
+  listRefreshNeeded = false;
+
   if (topics.length === 0) {
-    return "<div class='ntf item'>No Topics Found</div>"
+    return "<div class='ntf item'>No Topics Found</div>";
   }
   topics.sort();
   topics.unshift("__reset__");
@@ -47,7 +54,17 @@ function topicSelectHandler() {
     //clear the topic filter
     if ($(this).hasClass("reset-filter")) {
       active = $("#topic-menu-select > .active.item");
+
+      //check for unexpected condition
+      if (active.length === 0) {
+        return;
+      }
       let activeTopic = active.text();
+
+      if (activeTopic === "Clear Filter") {
+        //there is not active filter so return
+        return;
+      }
 
       active.removeClass("active");
 
@@ -59,6 +76,7 @@ function topicSelectHandler() {
 
       //reset header text
       $("#topic-menu-item").prev(".header").text("Topic Filter: None");
+      $("#topic-menu-item").prev(".header").attr("data-filter", "none");
 
       return;
     }
@@ -90,14 +108,55 @@ function topicSelectHandler() {
 
     //mark menu option as having an active filter
     $("#topic-menu-item").prev(".header").html(`Topic Filter: <span class="red">${topic}</span>`);
+    $("#topic-menu-item").prev(".header").attr("data-filter", topic);
   });
+}
+
+/*
+  If topics have been added or deleted from the topic list then
+  the dropdown menu option needs to be updated
+*/
+function updateTopicList() {
+  if (listRefreshNeeded) {
+    let html = makeTopicList(topics);
+    $("#topic-menu-select").html(html);
+  }
+
+  //check if there is a topic filter on a deleted key, if so, clear
+  //the filter
+  if (deletedKeys.length > 0) {
+    let activeFilter = $("#topic-menu-item").prev(".header").attr("data-filter");
+
+    //no active filter
+    if (activeFilter === "none") {
+      return;
+    }
+    let found = deletedKeys.reduce((fnd, item) => {
+      if (item === activeFilter) {
+        return fnd + 1;
+      }
+      return fnd;
+    }, 0);
+
+    //reset the filter
+    if (found > 0) {
+      //console.log("active filter topic has been deleted: %o", deletedKeys);
+
+      //remove filter indication from .transcript
+      $(".transcript").removeClass("topic-filter-active");
+
+      //reset header text to indicate filter has cleared
+      $("#topic-menu-item").prev(".header").text("Topic Filter: None");
+      $("#topic-menu-item").prev(".header").attr("data-filter", "none");
+    }
+
+  }
 }
 
 function increment(key) {
   if (!topics.has(key)) {
     topics.set(key, 1);
-
-    //topic added, rebuild topic select control
+    listRefreshNeeded = true;
   }
   else {
     let count = topics.get(key);
@@ -113,8 +172,8 @@ function decrement(key) {
     let count = topics.get(key);
     if (count === 1) {
       topics.delete(key);
-
-      //topic deleted, rebuild topic select control
+      listRefreshNeeded = true;
+      deletedKeys.push(key);
     }
     else {
       topics.set(key, count - 1);
@@ -123,7 +182,8 @@ function decrement(key) {
 }
 
 export default {
-  //add topics from an annotation
+  //add topics from an annotation - this happens when bookmarks are loaded
+  //and before the topicList is rendered
   add(annotation) {
     if (!annotation.selectedText) {
       return;
@@ -134,6 +194,7 @@ export default {
       });
     }
   },
+
   delete(formData) {
     if (!formData.topicList) {
       return;
@@ -142,17 +203,22 @@ export default {
       formData.topicList.forEach((topic) => {
         decrement(topic);
       });
+
+      updateTopicList();
     }
   },
   addTopics(topicArray) {
+    //console.log("addTopics()");
     topicArray.forEach((topic) => {
       increment(topic);
     });
+    updateTopicList();
   },
   deleteTopics(topicArray) {
     topicArray.forEach((topic) => {
       decrement(topic);
     });
+    updateTopicList();
   },
 
   //generate topic select list and setup listeners
@@ -163,6 +229,7 @@ export default {
     //init click handler
     topicSelectHandler();
   },
+
   report() {
     for (var [key, value] of topics) {
       console.log("%s: %s", key, value);

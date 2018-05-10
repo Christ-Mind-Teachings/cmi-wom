@@ -176,6 +176,6 @@
 
 /* this is not working and I don't know why */
 #topic-menu-select > .item.active.selected,
-.menu.transition.hidden > .header > span.red {
+.menu.transition.visible > .header > span.red {
   color: red;
 }

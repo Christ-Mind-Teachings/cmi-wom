@@ -25,11 +25,10 @@ import cloneDeep from "lodash/cloneDeep";
 const transcript = require("../_config/key");
 
 //Index topics
-//const topicsEndPoint = "https://s3.amazonaws.com/assets.christmind.info/wom/topics.json";
 const topicsEndPoint = "https://93e93isn03.execute-api.us-east-1.amazonaws.com/latest";
 
 //Bookmark API
-const bookmarkApi = "https://g2xugf4tl7.execute-api.us-east-1.amazonaws.com/latest";
+const bookmarkApi = "https://rcd7l4adth.execute-api.us-east-1.amazonaws.com/latest";
 
 /*
   Get bookmark for paragraph pid from local storage. All bookmarks for the page
@@ -435,10 +434,10 @@ function addToTopicList(newTopics) {
     console.log("newTopics: %o", newTopics);
     axios.post(`${topicsEndPoint}/user/topics`, postBody)
       .then((response) => {
-        console.log(`addToTopicList: ${response}`);
+        console.log("addToTopicList: %o", response.data);
       })
       .catch((err) => {
-        console.error(`addToTopicList error: ${err}`);
+        console.error("addToTopicList error: %o", err);
       });
   }
 

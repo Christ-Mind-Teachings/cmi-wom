@@ -100,7 +100,7 @@ $(document).ready(() => {
 
   //load config file and do initializations that depend on a loaded config file
   loadConfig(getBookId())
-    .then((source) => {
+    .then(() => {
       toc.initialize();
       search.initialize();
       bookmark.initialize();
