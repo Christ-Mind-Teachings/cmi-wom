@@ -2,6 +2,8 @@
 
 import user from "netlify-identity-widget";
 import md5 from "md5";
+import {getUser} from "../_util/url";
+
 let userInfo;
 
 let testUsers = {
@@ -31,18 +33,17 @@ let testUsers = {
   }
 };
 
-function devUserInfo(name) {
-  //console.log("devUserInfo()");
-  name = "rick";
-  if (testUsers[name]) {
-    return testUsers[name];
+function devUserInfo() {
+  let user = getUser();
+
+  if (user && testUsers[user]) {
+    return testUsers[user];
   }
 
   return null;
 }
 
 function prodUserInfo() {
-  //console.log("prodUserInfo()");
   if (userInfo) {
     return {
       email: userInfo.email,
@@ -57,7 +58,7 @@ function prodUserInfo() {
 }
 
 export function getUserInfo(name) {
-  if (location.hostname === "wom.christmind.info") {
+  if (location.hostname !== "localhost") {
     return prodUserInfo();
   }
   else {

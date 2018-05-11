@@ -209,6 +209,9 @@ function createListener() {
         notify.success("Thank you! The data was submitted successfully.");
         $(uiTimeCaptureModal).modal("hide");
         toggleMarkers();
+
+        //if there was a previously failed submit - remove it
+        store.remove(`captureData-${location.pathname}`);
       })
       .fail(function(e) {
         notify.error("Sorry, submit failed.");
@@ -373,6 +376,10 @@ export default {
       //notify user if there is a partial timing session
       if (store.get(`$captureData-${location.pathname}`)) {
         notify.info("You have an incomplete timing session. Start time capture to begin where you left off.");
+      }
+      else if (store.get(`captureData-${location.pathname}`)) {
+        notify.info("You have a complete but unsubmited timing session. Please send us the data.");
+        retrySubmit();
       }
     }
   },

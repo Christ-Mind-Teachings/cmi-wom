@@ -4066,12 +4066,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1525919027531,
-    wot: 1525919027531,
-    wok: 1525919027531,
-    wos: 1525919027531,
-    tjl: 1525919027531,
-    early: 1525919027531
+    woh: 1526042003513,
+    wot: 1526042003513,
+    wok: 1526042003513,
+    wos: 1526042003513,
+    tjl: 1526042003513,
+    early: 1526042003513
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -8819,7 +8819,10 @@ module.exports = defaults;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_md5__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_md5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_md5__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_url__ = __webpack_require__(97);
 /*eslint no-console: "off" */
+
+
 
 
 
@@ -8852,18 +8855,17 @@ let testUsers = {
   }
 };
 
-function devUserInfo(name) {
-  //console.log("devUserInfo()");
-  name = "rick";
-  if (testUsers[name]) {
-    return testUsers[name];
+function devUserInfo() {
+  let user = Object(__WEBPACK_IMPORTED_MODULE_2__util_url__["a" /* getUser */])();
+
+  if (user && testUsers[user]) {
+    return testUsers[user];
   }
 
   return null;
 }
 
 function prodUserInfo() {
-  //console.log("prodUserInfo()");
   if (userInfo) {
     return {
       email: userInfo.email,
@@ -8878,7 +8880,7 @@ function prodUserInfo() {
 }
 
 function getUserInfo(name) {
-  if (location.hostname === "wom.christmind.info") {
+  if (location.hostname !== "localhost") {
     return prodUserInfo();
   } else {
     return devUserInfo(name);
@@ -9781,9 +9783,10 @@ module.exports = cloneArrayBuffer;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = showParagraph;
-/* harmony export (immutable) */ __webpack_exports__["a"] = showBookmark;
-/* harmony export (immutable) */ __webpack_exports__["c"] = showSearchMatch;
+/* harmony export (immutable) */ __webpack_exports__["c"] = showParagraph;
+/* harmony export (immutable) */ __webpack_exports__["b"] = showBookmark;
+/* harmony export (immutable) */ __webpack_exports__["d"] = showSearchMatch;
+/* harmony export (immutable) */ __webpack_exports__["a"] = getUser;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 
@@ -9838,6 +9841,19 @@ function showSearchMatch() {
   if (pId) {
     return pId;
   }
+  return null;
+}
+
+/*
+  used for testing
+*/
+function getUser() {
+  let user = getQueryString("user");
+
+  if (user) {
+    return user;
+  }
+
   return null;
 }
 
@@ -12072,7 +12088,7 @@ function initTranscriptPage() {
   highlightHandler();
 
   //setup bookmark navigator if requested
-  let pid = Object(__WEBPACK_IMPORTED_MODULE_5__util_url__["a" /* showBookmark */])();
+  let pid = Object(__WEBPACK_IMPORTED_MODULE_5__util_url__["b" /* showBookmark */])();
   if (pid) {
     Object(__WEBPACK_IMPORTED_MODULE_6__navigator__["a" /* initNavigator */])(pid);
   }
@@ -34947,7 +34963,7 @@ function search(query) {
 }
 
 function initTranscriptPage() {
-  let displayPid = Object(__WEBPACK_IMPORTED_MODULE_2__util_url__["c" /* showSearchMatch */])();
+  let displayPid = Object(__WEBPACK_IMPORTED_MODULE_2__util_url__["d" /* showSearchMatch */])();
   if (displayPid) {
     Object(__WEBPACK_IMPORTED_MODULE_3__navigator__["a" /* initNavigator */])(displayPid);
   }
@@ -36233,6 +36249,9 @@ function createListener() {
       __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.success("Thank you! The data was submitted successfully.");
       $(uiTimeCaptureModal).modal("hide");
       toggleMarkers();
+
+      //if there was a previously failed submit - remove it
+      __WEBPACK_IMPORTED_MODULE_2_store___default.a.remove(`captureData-${location.pathname}`);
     }).fail(function (e) {
       __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.error("Sorry, submit failed.");
       $("#audio-data-form .ui.message").addClass("negative").html(`<div class="header">Drat! Your submit failed.</div>
@@ -36390,6 +36409,9 @@ function restoreState() {
       //notify user if there is a partial timing session
       if (__WEBPACK_IMPORTED_MODULE_2_store___default.a.get(`$captureData-${location.pathname}`)) {
         __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.info("You have an incomplete timing session. Start time capture to begin where you left off.");
+      } else if (__WEBPACK_IMPORTED_MODULE_2_store___default.a.get(`captureData-${location.pathname}`)) {
+        __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.info("You have a complete but unsubmited timing session. Please send us the data.");
+        retrySubmit();
       }
     }
   },
@@ -36613,7 +36635,7 @@ $(document).ready(() => {
     __WEBPACK_IMPORTED_MODULE_4__modules_search_search__["a" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_3__modules_bookmark_bookmark__["b" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize();
-    Object(__WEBPACK_IMPORTED_MODULE_1__modules_util_url__["b" /* showParagraph */])();
+    Object(__WEBPACK_IMPORTED_MODULE_1__modules_util_url__["c" /* showParagraph */])();
   }).catch(error => {
     //report error to the user - somehow
     console.error(error);

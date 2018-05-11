@@ -53,3 +53,16 @@ export function showSearchMatch() {
   }
   return null;
 }
+
+/*
+  used for testing
+*/
+export function getUser() {
+  let user = getQueryString("user");
+
+  if (user) {
+    return user;
+  }
+
+  return null;
+}
