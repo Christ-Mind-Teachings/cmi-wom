@@ -80,6 +80,9 @@ function setAsSignedIn() {
   $(".main.menu a > span > i.bookmark.icon")
     .addClass("green")
     .removeClass("red");
+
+  //add color to menu background to further indicate signed in status
+  $(".main.menu .ui.text.container").addClass("signed-in");
 }
 
 /*
@@ -96,6 +99,9 @@ function setAsSignedOut() {
   $(".main.menu a > span > i.bookmark.icon")
     .addClass("red")
     .removeClass("green");
+
+  //removed signed-in class
+  $(".main.menu .ui.text.container").removeClass("signed-in");
 }
 
 export default {

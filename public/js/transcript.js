@@ -8898,6 +8898,9 @@ function setAsSignedIn() {
 
   //change bookmark menu icon to green from red
   $(".main.menu a > span > i.bookmark.icon").addClass("green").removeClass("red");
+
+  //add color to menu background to further indicate signed in status
+  $(".main.menu .ui.text.container").addClass("signed-in");
 }
 
 /*
@@ -8910,6 +8913,9 @@ function setAsSignedOut() {
 
   //change bookmark menu icon to green from red
   $(".main.menu a > span > i.bookmark.icon").addClass("red").removeClass("green");
+
+  //removed signed-in class
+  $(".main.menu .ui.text.container").removeClass("signed-in");
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({
