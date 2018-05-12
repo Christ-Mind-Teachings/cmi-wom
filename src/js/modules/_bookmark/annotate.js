@@ -211,7 +211,7 @@ function hoverHandler() {
     let comment = generateComment(annotation.Comment);
     $(".annotation-information > .topic-list").html(topicList);
     $(".annotation-information > .range").html(`Range: ${annotation.rangeStart}/${annotation.rangeEnd}`);
-    $(".annotation-information > .description").html(`Comment: ${comment}`);
+    $(".annotation-information > .description").html(`${comment}`);
     $(this)
       .popup({popup: ".annotation-information.popup"})
       .popup("show");

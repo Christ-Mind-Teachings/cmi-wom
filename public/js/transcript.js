@@ -6333,7 +6333,7 @@ function buildBookmarkListFromLocalStore(keyInfo) {
   }
 
   let sid = parseInt(keyInfo.sourceId, 10);
-  let bookmarks = [];
+  let bookmarks = {};
 
   //build expected structure from local storage
   __WEBPACK_IMPORTED_MODULE_1_store___default.a.each((value, key) => {
@@ -6678,8 +6678,9 @@ function deleteLocalAnnotation(pid, aid) {
   }
 
   let annotations = data[pid];
+  //user pressed delete on an annotation that was not created yet
   if (!annotations) {
-    throw new Error(`Expect annotations not found for pid ${pid}`);
+    return;
   }
 
   //filter deleted annotation from array
@@ -29413,7 +29414,7 @@ function hoverHandler() {
     let comment = generateComment(annotation.Comment);
     $(".annotation-information > .topic-list").html(topicList);
     $(".annotation-information > .range").html(`Range: ${annotation.rangeStart}/${annotation.rangeEnd}`);
-    $(".annotation-information > .description").html(`Comment: ${comment}`);
+    $(".annotation-information > .description").html(`${comment}`);
     $(this).popup({ popup: ".annotation-information.popup" }).popup("show");
   });
 }
@@ -34867,8 +34868,11 @@ module.exports = noop;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__show__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_url__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__navigator__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_toastr__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_toastr__);
 
 const searchEndpoint = "https://d9lsdwxpfg.execute-api.us-east-1.amazonaws.com/latest/wom";
+
 
 
 
@@ -34955,7 +34959,12 @@ function search(query) {
 
   __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(searchEndpoint, searchBody).then(response => {
     displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
-    Object(__WEBPACK_IMPORTED_MODULE_1__show__["b" /* showSearchResults */])(response.data, searchBody.query);
+    if (response.data.count > 0) {
+      Object(__WEBPACK_IMPORTED_MODULE_1__show__["b" /* showSearchResults */])(response.data, searchBody.query);
+    } else {
+      __WEBPACK_IMPORTED_MODULE_4_toastr___default.a.info(`Search for ${query} didn't find any matches`);
+    }
+    document.getElementById("search-input-field").focus();
   }).catch(error => {
     console.error("search error: %o", error);
     displaySearchMessage(SEARCH_ERROR, error.message);
@@ -35168,6 +35177,7 @@ function showSearchResults(data, query) {
       }
     }
     $(".cmi-search-list").html(html);
+    $("#search-results-header").html(`: <em>${query}</em>`);
     saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
   }).catch(error => {
     console.error("Error: %s", error.message);
@@ -35227,6 +35237,7 @@ function showSavedQuery() {
 
   $(".search-message.header").text("Last Search Result");
   $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+  $("#search-results-header").html(`: <em>${queryResult.query}</em>`);
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
@@ -36801,6 +36812,15 @@ function setEventListeners(player, userStatus, haveTimingData) {
     capture = true;
     __WEBPACK_IMPORTED_MODULE_20__capture__["a" /* default */].initialize(player, haveTimingData);
   }
+
+  /*
+    seems to be called only once with readyState = 3
+     Have this here to research a way to indicate when audio is ready to be played
+    - eg: could indicate load and clear the indicator when this event is called
+  */
+  player.media.addEventListener("canplay", function () {
+    console.log("Media ready for playing: readyState: %s", player.readyState);
+  });
 
   /*
     Communicate current audio playback time to focus and capture

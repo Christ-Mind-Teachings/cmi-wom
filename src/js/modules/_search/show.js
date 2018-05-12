@@ -132,6 +132,7 @@ export function showSearchResults(data, query) {
         }
       }
       $(".cmi-search-list").html(html);
+      $("#search-results-header").html(`: <em>${query}</em>`);
       saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
 
     })
@@ -193,6 +194,7 @@ export function showSavedQuery() {
 
   $(".search-message.header").text("Last Search Result");
   $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+  $("#search-results-header").html(`: <em>${queryResult.query}</em>`);
 }
 
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import { showSavedQuery, showSearchResults } from "./show";
 import {showSearchMatch} from "../_util/url"; 
 import { initNavigator } from "./navigator";
+import notify from "toastr";
 
 //search modal
 const uiSearchModal = ".search.ui.modal";
@@ -87,7 +88,13 @@ function search(query) {
   axios.post(searchEndpoint, searchBody)
     .then((response) => {
       displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
-      showSearchResults(response.data, searchBody.query);
+      if (response.data.count > 0) {
+        showSearchResults(response.data, searchBody.query);
+      }
+      else {
+        notify.info(`Search for ${query} didn't find any matches`);
+      }
+      document.getElementById("search-input-field").focus();
     })
     .catch((error) => {
       console.error("search error: %o", error);

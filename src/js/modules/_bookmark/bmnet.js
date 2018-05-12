@@ -188,7 +188,7 @@ function buildBookmarkListFromLocalStore(keyInfo) {
   }
 
   let sid = parseInt(keyInfo.sourceId, 10);
-  let bookmarks = [];
+  let bookmarks = {};
 
   //build expected structure from local storage
   store.each((value, key) => {
@@ -546,8 +546,9 @@ function deleteLocalAnnotation(pid, aid) {
   }
 
   let annotations = data[pid];
+  //user pressed delete on an annotation that was not created yet
   if (!annotations) {
-    throw new Error(`Expect annotations not found for pid ${pid}`);
+    return;
   }
 
   //filter deleted annotation from array
