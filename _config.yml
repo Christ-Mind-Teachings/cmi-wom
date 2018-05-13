@@ -9,8 +9,6 @@ description:  'A pathway of awakening from Jeshua through Jon Marc Hammer (Jayem
 url:          'https://wom.christmind.info'
 baseurl:      ''
 keywords:     "Christ Mind, Way of Mastery, Jeshua, Jayem, Way of the Heart, Way of Transformation, Way of Knowing"
-gems:
-  - jekyll-sitemap
 
 # About/contact
 author:
@@ -98,14 +96,8 @@ defaults:
       layout: transcript
       book: "The Early Years"
       bid: "Early"
-  - scope:
-      path: ""
-      type: questions
-    values:
-      layout: transcript
-      book: "Questions"
-      bid: "Questions"
 
 exclude: [
   Gemfile, Gemfile.lock, package.json, package-lock.json, node_modules, webpack.config.js, src, project
 ]
+
