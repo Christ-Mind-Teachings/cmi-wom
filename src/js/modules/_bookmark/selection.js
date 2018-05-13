@@ -266,6 +266,11 @@ function processSelection() {
 
   if (startParent === "mark" || endParent === "mark") {
     notify.info("Your selection is overlapping with another; overlapping is not supported.");
+
+    if (location.hostname === "localhost") {
+      debugger;
+    }
+
     return;
   }
 

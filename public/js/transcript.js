@@ -12510,6 +12510,11 @@ function processSelection() {
 
   if (startParent === "mark" || endParent === "mark") {
     __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.info("Your selection is overlapping with another; overlapping is not supported.");
+
+    if (location.hostname === "localhost") {
+      debugger;
+    }
+
     return;
   }
 
@@ -36097,6 +36102,13 @@ module.exports = findLastIndex;
 
 
 
+/*
+  if a timer closes the submit form without pressing submit the data 
+  will be lost. So we check for this condition and warn them once
+*/
+let posted = false;
+let warned = false;
+
 let captureData;
 let audioPlayer;
 
@@ -36187,10 +36199,12 @@ function captureProgress(operation) {
 
 /*
  * Capture time for a given paragraph - programatically
+ * args: o - time stamp, {pid, seconds}
+ *       save - boolean, indicates of time should be saved to local store by markParagraph
  */
-function autoCapture(o) {
+function autoCapture(o, save = true) {
   captureRequested = true;
-  markParagraph(o);
+  markParagraph(o, save);
 }
 
 /*
@@ -36204,7 +36218,7 @@ function autoCapture(o) {
   marker is set to a 'bullseye' to indicate we don't have a time point for the
   paragraph. 
 */
-function markParagraph(o) {
+function markParagraph(o, save = true) {
   var pi = $("#" + o.id).children("i.timing");
 
   //console.log("markParagraph: ");
@@ -36216,17 +36230,24 @@ function markParagraph(o) {
   if (pi.hasClass(markerIcon)) {
     pi.removeClass(markerIcon).addClass("check");
     captureData.add(o);
-    captureProgress("SAVE");
+
+    if (save) {
+      captureProgress("SAVE");
+    }
   } else if (pi.hasClass("bullseye")) {
     pi.removeClass("bullseye").addClass("check");
     captureData.add(o);
-    captureProgress("SAVE");
+    if (save) {
+      captureProgress("SAVE");
+    }
   }
   //user clicked a captured paragraph, mark for delete
   else if (pi.hasClass("check")) {
       pi.removeClass("check").addClass("bullseye");
       captureData.remove(o);
-      captureProgress("SAVE");
+      if (save) {
+        captureProgress("SAVE");
+      }
     }
 
   captureRequested = false;
@@ -36253,12 +36274,20 @@ function createListener() {
   //initialize time capture modal
   $(uiTimeCaptureModal).modal({
     dimmerSettings: { opacity: uiModalOpacity },
-    closable: false
+    closable: false,
+    onHide: function () {
+      if (!posted && !warned) {
+        __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.warning("Warning, your timing data will be lost if you close the window without submitting the data.", "Your Data Will Be Lost", { timeOut: 10000, closeButton: true });
+        warned = true;
+        return false;
+      }
+    }
   });
 
   //time submit form in modal window
   $("#audio-data-form").submit(function (e) {
     e.preventDefault();
+    posted = true;
     //console.log("submit pressed");
 
     let $form = $(this);
@@ -36292,7 +36321,9 @@ function retrySubmit() {
   let data = __WEBPACK_IMPORTED_MODULE_2_store___default.a.get(`captureData-${location.pathname}`);
 
   if (data) {
-    //store.remove(`captureData-${location.pathname}`);
+    //setting posted = true, prevents the warning message displayed when user exits the modal without
+    //submitting data. The warning is not needed when data is being resubmited due to previous failure.
+    posted = true;
 
     captureData.setData(data);
     //console.log("timing data: ", data);
@@ -36377,7 +36408,9 @@ function restoreState() {
     //if no partial session was found, just mark first paragraph as selected
     if (!recoverPartialSession()) {
       if (!haveTimingData) {
-        autoCapture({ id: "p0", seconds: 0 });
+        //create first data point but don't save in local store since user
+        //has not initiated timing
+        autoCapture({ id: "p0", seconds: 0 }, false);
       }
     }
   }
@@ -36391,6 +36424,8 @@ function restoreState() {
     times
   */
   initialize: function (player, timingData) {
+
+    console.log("capture.init");
 
     //if we support time capture and we already have timing data, mark paragraphs
     //with a clock instead of the bullseye to indicate that we do have data
@@ -36499,7 +36534,8 @@ function restoreState() {
 
     let pCount = $("p.cmiTranPara").length;
     if (pCount !== newData.time.length) {
-      $("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+      //$("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+      $("#captured-audio-comments").val(`Incomplete data, there is data for ${newData.time.length} of ${pCount} paragraphs`);
     }
 
     //add timing data to form
@@ -36820,13 +36856,13 @@ function setEventListeners(player, userStatus, haveTimingData) {
   }
 
   /*
-    seems to be called only once with readyState = 3
+    seems to be called only once with readyState = 3 or 4
      Have this here to research a way to indicate when audio is ready to be played
     - eg: could indicate load and clear the indicator when this event is called
-  */
-  player.media.addEventListener("canplay", function () {
+  player.media.addEventListener("canplay", function() {
     console.log("Media ready for playing: readyState: %s", player.readyState);
   });
+  */
 
   /*
     Communicate current audio playback time to focus and capture

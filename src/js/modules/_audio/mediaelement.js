@@ -55,14 +55,14 @@ function setEventListeners(player, userStatus, haveTimingData) {
   }
 
   /*
-    seems to be called only once with readyState = 3
+    seems to be called only once with readyState = 3 or 4
 
     Have this here to research a way to indicate when audio is ready to be played
     - eg: could indicate load and clear the indicator when this event is called
-  */
   player.media.addEventListener("canplay", function() {
     console.log("Media ready for playing: readyState: %s", player.readyState);
   });
+  */
 
   /*
     Communicate current audio playback time to focus and capture

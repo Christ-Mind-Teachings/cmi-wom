@@ -12510,6 +12510,11 @@ function processSelection() {
 
   if (startParent === "mark" || endParent === "mark") {
     __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.info("Your selection is overlapping with another; overlapping is not supported.");
+
+    if (location.hostname === "localhost") {
+      debugger;
+    }
+
     return;
   }
 

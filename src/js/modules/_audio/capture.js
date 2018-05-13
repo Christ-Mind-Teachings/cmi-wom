@@ -33,6 +33,13 @@ import {getUserInfo} from "../_user/netlify";
 import scroll from "scroll-into-view";
 import {disableScroll} from "./focus";
 
+/*
+  if a timer closes the submit form without pressing submit the data 
+  will be lost. So we check for this condition and warn them once
+*/
+let posted = false;
+let warned = false;
+
 let captureData;
 let audioPlayer;
 
@@ -80,7 +87,7 @@ function initializeEdit() {
           onDeny    : function(){
             resolve(false);
           },
-          onApprove : function() {
+          onApprove: function() {
             //check current timing has the correct number of data points
             let noOfParagraphs = $("p.cmiTranPara").length;
             
@@ -127,10 +134,12 @@ function captureProgress(operation) {
 
 /*
  * Capture time for a given paragraph - programatically
+ * args: o - time stamp, {pid, seconds}
+ *       save - boolean, indicates of time should be saved to local store by markParagraph
  */
-function autoCapture(o) {
+function autoCapture(o, save = true) {
   captureRequested = true;
-  markParagraph(o);
+  markParagraph(o, save);
 }
 
 /*
@@ -144,7 +153,7 @@ function autoCapture(o) {
   marker is set to a 'bullseye' to indicate we don't have a time point for the
   paragraph. 
 */
-function markParagraph(o) {
+function markParagraph(o, save = true) {
   var pi = $("#" + o.id).children("i.timing");
 
   //console.log("markParagraph: ");
@@ -156,18 +165,25 @@ function markParagraph(o) {
   if (pi.hasClass(markerIcon)) {
     pi.removeClass(markerIcon).addClass("check");
     captureData.add(o);
-    captureProgress("SAVE");
+
+    if (save) {
+      captureProgress("SAVE");
+    }
   }
   else if (pi.hasClass("bullseye")) {
     pi.removeClass("bullseye").addClass("check");
     captureData.add(o);
-    captureProgress("SAVE");
+    if (save) {
+      captureProgress("SAVE");
+    }
   }
   //user clicked a captured paragraph, mark for delete
   else if (pi.hasClass("check")) {
     pi.removeClass("check").addClass("bullseye");
     captureData.remove(o);
-    captureProgress("SAVE");
+    if (save) {
+      captureProgress("SAVE");
+    }
   }
 
   captureRequested = false;
@@ -195,12 +211,20 @@ function createListener() {
   //initialize time capture modal
   $(uiTimeCaptureModal).modal({
     dimmerSettings: {opacity: uiModalOpacity},
-    closable: false
+    closable: false,
+    onHide: function() {
+      if (!posted && !warned) {
+        notify.warning("Warning, your timing data will be lost if you close the window without submitting the data.", "Your Data Will Be Lost", {timeOut: 10000, closeButton: true});
+        warned = true;
+        return false;
+      }
+    }
   });
 
   //time submit form in modal window
   $("#audio-data-form").submit(function(e) {
     e.preventDefault();
+    posted = true;
     //console.log("submit pressed");
 
     let $form = $(this);
@@ -239,7 +263,9 @@ function retrySubmit() {
   let data = store.get(`captureData-${location.pathname}`);
 
   if (data) {
-    //store.remove(`captureData-${location.pathname}`);
+    //setting posted = true, prevents the warning message displayed when user exits the modal without
+    //submitting data. The warning is not needed when data is being resubmited due to previous failure.
+    posted = true;
 
     captureData.setData(data);
     //console.log("timing data: ", data);
@@ -282,7 +308,7 @@ function recoverPartialSession() {
     //adjust audio play time to last timed paragraph
     audioPlayer.setCurrentTime(lastParagraph.seconds);
 
-    notify.info("Partial audio capture data restored. You can continue timing where you left off.")
+    notify.info("Partial audio capture data restored. You can continue timing where you left off.");
 
     //scroll last timed paragraph into viewport
     scroll(document.getElementById(lastParagraph.id));
@@ -326,7 +352,9 @@ function restoreState() {
     //if no partial session was found, just mark first paragraph as selected
     if (!recoverPartialSession()) {
       if (!haveTimingData) {
-        autoCapture({id: "p0", seconds: 0});
+        //create first data point but don't save in local store since user
+        //has not initiated timing
+        autoCapture({id: "p0", seconds: 0}, false);
       }
     }
   }
@@ -340,6 +368,8 @@ export default {
     times
   */
   initialize: function(player, timingData) {
+
+    console.log("capture.init");
 
     //if we support time capture and we already have timing data, mark paragraphs
     //with a clock instead of the bullseye to indicate that we do have data
@@ -452,7 +482,8 @@ export default {
 
     let pCount = $("p.cmiTranPara").length;
     if (pCount !== newData.time.length) {
-      $("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+      //$("#captured-audio-comments").val(`Unexpected: pCount (${pCount}) !== newData.time.length (${newData.time.length})`);
+      $("#captured-audio-comments").val(`Incomplete data, there is data for ${newData.time.length} of ${pCount} paragraphs`);
     }
 
     //add timing data to form
