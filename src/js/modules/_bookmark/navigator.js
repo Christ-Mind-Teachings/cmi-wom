@@ -370,13 +370,13 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
 
 /*
   Setup the bookmark navigator for the page.
-
   arg: pid - paragraph id.
 */
 function bookmarkManager(actualPid) {
+  let sourceId = transcript.getSourceId();
   let pageKey = transcript.genPageKey().toString(10);
-  let bmList = store.get(`bmList_${transcript.getSourceId()}`);
-  let bmModal = store.get(`bmModal_${transcript.getSourceId()}`);
+  let bmList = store.get(`bmList_${sourceId}`);
+  let bmModal = store.get(`bmModal_${sourceId}`);
 
   if (bmList) {
     //store globally
@@ -385,7 +385,7 @@ function bookmarkManager(actualPid) {
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal)
       .then((responses) => {
-        console.log("next url: ", responses);
+        //console.log("next url: ", responses);
 
         //set prev and next hrefs
         if (responses[0] !== null) {
@@ -409,7 +409,7 @@ function bookmarkManager(actualPid) {
       });
   }
   else {
-    console.log("bmList_10 not found");
+    console.log(`bmList_${sourceId}`);
   }
 }
 
@@ -468,6 +468,13 @@ function initClickListeners() {
     $(".transcript").removeClass("bookmark-navigator-active");
   });
 
+  //share icon click handler
+  $(".transcript").on("click", ".selected-annotation-wrapper .share-annotation", function(e) {
+    e.preventDefault();
+    console.log("share icon clicked");
+  });
+
+  //highlights an annotation by wrapping it in a segment
   $(".bookmark-navigator").on("click", ".annotation-item", function(e) {
     e.preventDefault();
     clearSelectedAnnotation();
@@ -477,13 +484,23 @@ function initClickListeners() {
     let rangeArray = dataRange.split("/");
     let numericRange = rangeArray.map((r) => parseInt(r.substr(1),10));
     let annotationRange = range(numericRange[0], numericRange[1] + 1);
+    let header = `
+      <h4 class="ui header">
+        <i class="share-annotation share square small icon"></i>
+        <div class="content">
+          ${$(this).text()}
+        </div>
+      </h4>
+    `;
+
+    console.log("wrapper");
 
     for (let i = 0; i < annotationRange.length; i++) {
       $(`#p${annotationRange[i]}`).addClass("selected-annotation");
     }
 
     $(".selected-annotation").wrapAll("<div class='selected-annotation-wrapper ui raised segment'></div>");
-    $(".selected-annotation-wrapper").prepend(`<h4 class='ui header'>${$(this).text()}</h4>`);
+    $(".selected-annotation-wrapper").prepend(header);
 
     if (aid !== "undefined") {
       $(`[data-annotation-id="${aid}"]`).addClass("show");

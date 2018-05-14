@@ -204,6 +204,14 @@ function hoverHandler() {
       return;
     }
 
+    //disable popup for paragraphs wrapped in segment div
+    if ($(`#${pid}`).hasClass("selected-annotation")) {
+      $(`#${pid} [data-annotation-id]`).each(function() {
+        $(this).popup("hide").popup("destroy");
+      });
+      return;
+    }
+
     let bookmarkData = getBookmark(pid);
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
 

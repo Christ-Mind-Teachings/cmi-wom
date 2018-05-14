@@ -178,3 +178,8 @@
 .menu.transition.visible > .header > span.red {
   color: red;
 }
+
+.selected-annotation-wrapper .share-annotation {
+  cursor: pointer;
+}
+
