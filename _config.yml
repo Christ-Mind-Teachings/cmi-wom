@@ -16,6 +16,9 @@ author:
   url:               https://twitter.com/rmercer33
   email:             rmercer33@gmail.com
 
+fb-appId:     448658485318107
+src-url:      'https://wom.christmind.info'
+
 # Permalinks
 permalink: pretty
 permalink: /:title/
@@ -60,6 +63,9 @@ defaults:
     values:
       layout: transcript
       book: "Way of the Heart"
+      image: "/public/img/wom/woh-big.jpg"
+      image-width: 612
+      image-height: 792
       bid: "WOH"
   - scope:
       path: ""
@@ -67,6 +73,9 @@ defaults:
     values:
       layout: transcript
       book: "Way of Transformation"
+      image: "/public/img/wom/wot-big.jpg"
+      image-width: 612
+      image-height: 792
       "bid": "WOT"
   - scope:
       path: ""
@@ -74,6 +83,9 @@ defaults:
     values:
       layout: transcript
       book: "Way of Knowing"
+      image: "/public/img/wom/wok-big.jpg"
+      image-width: 612
+      image-height: 792
       bid: "WOK"
   - scope:
       path: ""
@@ -81,6 +93,9 @@ defaults:
     values:
       layout: transcript
       book: "Way of the Servant"
+      image: "/public/img/wom/wos-big.jpg"
+      image-width: 612
+      image-height: 792
       bid: "WOS"
   - scope:
       path: ""
@@ -88,6 +103,9 @@ defaults:
     values:
       layout: transcript
       book: "The Jeshua Letters"
+      image: "/public/img/wom/tjl-big.jpg"
+      image-width: 612
+      image-height: 792
       bid: "TJL"
   - scope:
       path: ""
@@ -95,6 +113,9 @@ defaults:
     values:
       layout: transcript
       book: "The Early Years"
+      image: "/public/img/wom/early.jpg"
+      image-width: 250
+      image-height: 324
       bid: "Early"
 
 exclude: [

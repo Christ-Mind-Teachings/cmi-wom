@@ -300,6 +300,22 @@ function deleteAnnotation(pid, creationDate) {
 }
 
 /*
+  Fetch requested bookmark from server
+*/
+export function fetchBookmark(bookmarkId, userId) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${bookmarkApi}/bookmark/${userId}/${bookmarkId}`)
+      .then((response) => {
+        console.log("fetchBookmark(): %o", response.data.response);
+        resolve(response.data.response);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/*
   When user is signed in the bookmark has been returned from the server
   and saved to local storage. We get the bookmark from there rather than 
   having to go back to the server.

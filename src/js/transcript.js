@@ -13,6 +13,8 @@ import search from "./modules/_search/search";
 import auth from "./modules/_user/netlify";
 import toc, {getBookId} from "./modules/_contents/toc";
 import audio from "./modules/_audio/audio";
+import fb from "./modules/_util/facebook";
+import share from "./modules/_share/share";
 
 /*
  * For all transcript paragraphs -
@@ -106,6 +108,8 @@ $(document).ready(() => {
       bookmark.initialize();
       audio.initialize();
       showParagraph();
+      fb.initialize();
+      share.initialize();
     })
     .catch((error) => {
       //report error to the user - somehow

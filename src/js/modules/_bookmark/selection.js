@@ -19,6 +19,11 @@ let pageAnnotations = {};
 export function updateSelectionTopicList(annotation) {
   let topicList;
 
+  //annotation has no selected text
+  if (!annotation.aid) {
+    return;
+  }
+
   //if annotation.topicList exists convert it to a string
   if (annotation.topicList && annotation.topicList.length > 0) {
     topicList = annotation.topicList.reduce((result, topic) => {
@@ -75,7 +80,7 @@ export function updateSelectionTopicList(annotation) {
     topics.addTopics(addedTopics);
   }
 
-  topics.report();
+  //topics.report();
 }
 
 /*
@@ -157,7 +162,7 @@ export function updateSelectedText(id, aid) {
   $(`[data-annotation-id="${id}"]`).attr("data-aid", aid);
 }
 
-function highlight(annotation, toNode = document.body) {
+export function highlight(annotation, toNode = document.body) {
   var anno_id = annotation.id;
 
   if (annotation.target.source) {
@@ -168,7 +173,6 @@ function highlight(annotation, toNode = document.body) {
       switch (type) {
         case "TextPositionSelector":
           // skip existing marks
-          //var existing_marks = toNode.querySelectorAll(`[data-annotation-id="${anno_id}"]`);
           var existing_marks = document.querySelectorAll(`[data-annotation-id="${anno_id}"]`);
           if (existing_marks.length === 0) {
             var mark = document.createElement("mark");

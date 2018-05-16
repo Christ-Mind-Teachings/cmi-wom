@@ -165,8 +165,12 @@
   background-color: #f9d07252; 
 }
 
+.transcript:not(.topic-filter-active):not(.hide-bookmark-highlights) mark.bookmark-selected-text.shared {
+  background-color: lavender;
+}
+
 .transcript.topic-filter-active mark.bookmark-selected-text.show,
-.transcript:not(.hide-bookmark-highlights):not(.topic-filter-active) mark.bookmark-selected-text {
+.transcript:not(.hide-bookmark-highlights):not(.topic-filter-active) mark.bookmark-selected-text:not(.shared) {
   cursor: pointer;
 }
 
@@ -178,3 +182,8 @@
 .menu.transition.visible > .header > span.red {
   color: red;
 }
+
+.selected-annotation-wrapper .share-annotation {
+  cursor: pointer;
+}
+

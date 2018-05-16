@@ -4,6 +4,8 @@ import intersection from "lodash/intersection";
 import range from "lodash/range";
 import store from "store";
 import scroll from "scroll-into-view";
+import {getUserInfo} from "../_user/netlify";
+import notify from "toastr";
 
 //import {getSourceId, genPageKey} from "../_config/key";
 const transcript = require("../_config/key");
@@ -370,13 +372,13 @@ function getCurrentBookmark(pageKey, actualPid, allBookmarks, bmModal, whoCalled
 
 /*
   Setup the bookmark navigator for the page.
-
   arg: pid - paragraph id.
 */
 function bookmarkManager(actualPid) {
+  let sourceId = transcript.getSourceId();
   let pageKey = transcript.genPageKey().toString(10);
-  let bmList = store.get(`bmList_${transcript.getSourceId()}`);
-  let bmModal = store.get(`bmModal_${transcript.getSourceId()}`);
+  let bmList = store.get(`bmList_${sourceId}`);
+  let bmModal = store.get(`bmModal_${sourceId}`);
 
   if (bmList) {
     //store globally
@@ -385,7 +387,7 @@ function bookmarkManager(actualPid) {
     //get previous and next url's
     getNextPrevUrl(pageKey, bmList, bmModal)
       .then((responses) => {
-        console.log("next url: ", responses);
+        //console.log("next url: ", responses);
 
         //set prev and next hrefs
         if (responses[0] !== null) {
@@ -409,7 +411,7 @@ function bookmarkManager(actualPid) {
       });
   }
   else {
-    console.log("bmList_10 not found");
+    console.log(`bmList_${sourceId}`);
   }
 }
 
@@ -468,6 +470,50 @@ function initClickListeners() {
     $(".transcript").removeClass("bookmark-navigator-active");
   });
 
+  //share icon click handler
+  $(".transcript").on("click", ".selected-annotation-wrapper .share-annotation", function(e) {
+    e.preventDefault();
+    let annotation = $(".selected-annotation-wrapper mark.show");
+    let userInfo;
+    let pid, aid, text;
+
+    //no highlighted text
+    if (annotation.length === 0) {
+      return;
+    }
+
+    userInfo = getUserInfo();
+    if (!userInfo) {
+      notify.info("You must be signed in to share to Facebook");
+      return;
+    }
+
+    pid = $(".selected-annotation-wrapper p").attr("id");
+    aid = annotation.data("aid");
+    text = annotation.text().replace(/\n/," ");
+    
+    let url = `https://wom.christmind.info${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
+    let channel = $(this).hasClass("facebook")?"facebook":"email";
+
+    console.log("url: %s", url);
+    console.log("quote: %s", text);
+    console.log("share to: %s", channel);
+
+    if (channel === "facebook") {
+      let options = {
+        method: "share",
+        hashtag: "#christmind",
+        quote: text,
+        href: url
+      };
+      FB.ui(options, function(){});
+    }
+    else if (channel === "email") {
+      notify.info("Sharing by email is not ready yet.");
+    }
+  });
+
+  //highlights an annotation by wrapping it in a segment
   $(".bookmark-navigator").on("click", ".annotation-item", function(e) {
     e.preventDefault();
     clearSelectedAnnotation();
@@ -477,13 +523,24 @@ function initClickListeners() {
     let rangeArray = dataRange.split("/");
     let numericRange = rangeArray.map((r) => parseInt(r.substr(1),10));
     let annotationRange = range(numericRange[0], numericRange[1] + 1);
+    let header = `
+      <h4 class="ui header">
+        <i title="Share to Facebook" class="share-annotation facebook small icon"></i>
+        <i title="Share via email" class="share-annotation envelope outline small icon"></i>
+        <div class="content">
+          ${$(this).text()}
+        </div>
+      </h4>
+    `;
+
+    console.log("wrapper");
 
     for (let i = 0; i < annotationRange.length; i++) {
       $(`#p${annotationRange[i]}`).addClass("selected-annotation");
     }
 
     $(".selected-annotation").wrapAll("<div class='selected-annotation-wrapper ui raised segment'></div>");
-    $(".selected-annotation-wrapper").prepend(`<h4 class='ui header'>${$(this).text()}</h4>`);
+    $(".selected-annotation-wrapper").prepend(header);
 
     if (aid !== "undefined") {
       $(`[data-annotation-id="${aid}"]`).addClass("show");

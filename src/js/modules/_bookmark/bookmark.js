@@ -79,6 +79,7 @@ function getPageBookmarks() {
   Clean up form values and prepare to send to API  
 */
 function createAnnotaion(formValues) {
+  console.log("createAnnotation");
 
   let annotation = cloneDeep(formValues);
 
@@ -281,7 +282,6 @@ export const annotation = {
         updateHighlightColor(formData.aid, annotationCount);
       }
     }
-
   },
 
   //user pressed cancel on annotation form
