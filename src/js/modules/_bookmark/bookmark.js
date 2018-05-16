@@ -33,7 +33,11 @@ function addTopicsAsClasses(bookmark) {
   }
 }
 
-function getPageBookmarks() {
+/*
+  Highlight all annotations with selected text
+  ** except for paragraph of a shared annotation 0 sharePid
+*/
+function getPageBookmarks(sharePid) {
   //identify paragraphs with bookmarks
   net.getBookmarks()
     .then((response) => {
@@ -47,7 +51,8 @@ function getPageBookmarks() {
 
           for (const bm of response[id]) {
             if (bm.selectedText) {
-              markSelection(bm.selectedText, count);
+              console.log("getPageBookmarks(): sharePid: %s", sharePid);
+              markSelection(bm.selectedText, count, sharePid);
               addTopicsAsClasses(bm);
               topics.add(bm);
               count++;
@@ -222,10 +227,10 @@ function highlightHandler() {
 /*
   initialize transcript page
 */
-function initTranscriptPage() {
+function initTranscriptPage(sharePid) {
 
   //get existing bookmarks for page
-  getPageBookmarks();
+  getPageBookmarks(sharePid);
 
   //add support for text selection
   selectInit();
@@ -321,10 +326,10 @@ export const annotation = {
   - create bookmark toggle listener
 */
 export default {
-  initialize: function() {
+  initialize: function(pid) {
     if ($(".transcript").length) {
       //this is a transcript page
-      initTranscriptPage();
+      initTranscriptPage(pid);
     }
 
     //initialize bookmark list modal - available on all pages

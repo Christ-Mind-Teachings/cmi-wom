@@ -11,7 +11,35 @@ import difference from "lodash/difference";
 
 import topics from "./topics";
 
+//all annotations on the page
 let pageAnnotations = {};
+
+//all annotations that were not highlighted due to shared annotation conflict
+let skippedAnnotations = [];
+
+export function highlightSkippedAnnotations() {
+  let sequence = 0;
+
+  if (skippedAnnotations.length === 0) {
+    return;
+  }
+
+  let node;
+
+  for (let a of skippedAnnotations) {
+    let annotation = pageAnnotations[a];
+    console.log("annotation: %o", annotation);
+
+    //all skiped annotations are on the same pid, so get id just once
+    if (!node) {
+      node = document.getElementById(annotation.pid);
+    }
+
+    highlight(annotation, node);
+    updateHighlightColor(annotation.id, sequence);
+    sequence += 1;
+  }
+}
 
 /*
   add or update selected text class list with topics
@@ -149,12 +177,20 @@ export function updateHighlightColor(id, sequence) {
   args:
     annotation: a bookmark annotation with selected text
     sequence: the sequence of this annotation within the paragraph
+    sharePid: the pid of a shared bookmark, null otherwise. The pid is highlighted after
+              the sharedPid is closed
 */
-export function markSelection(annotation, sequence = 0) {
+export function markSelection(annotation, sequence = 0, sharePid = null) {
   let node = document.getElementById(annotation.pid);
 
-  highlight(annotation, node);
-  updateHighlightColor(annotation.id, sequence);
+  if (!sharePid || sharePid !== annotation.pid) {
+    highlight(annotation, node);
+    updateHighlightColor(annotation.id, sequence);
+  }
+  else if (sharePid) {
+    console.log("highlight of %s skipped due to share", sharePid);
+    skippedAnnotations.push(annotation.id);
+  }
   pageAnnotations[annotation.id] = annotation;
 }
 

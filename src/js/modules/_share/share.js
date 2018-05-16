@@ -1,10 +1,54 @@
+/*
+  NOTE: When an annotation is shared and seen on a computer with bookmarks there could be a conflict between the users
+        bookmarks and the shared bookmark. Not sure what to do in this case...
+
+        An idea:
+        Disable highlighting annotations on the paragraph of the shared annotation:w
+
+        Approach:
+        Load all bookmarks except that of a shared annotation.
+        Add a close button to the shared annotation
+        When the close button is pressed then add the omitted bookmark
+
+*/
 import {showAnnotation as showAnnotationRequest} from "../_util/url";
 import {fetchBookmark} from "../_bookmark/bmnet";
-import {highlight} from "../_bookmark/selection";
+import {highlightSkippedAnnotations, highlight} from "../_bookmark/selection";
 import range from "lodash/range";
 import scroll from "scroll-into-view";
 
 const key = require("../_config/key");
+
+//persist shared annotation so it can be unwraped when closed
+let sharedAnnotation;
+
+/*
+  check if user has bookmark that was not highlighted due to shared annotion and
+  highlight the bookmarks annotations. This is called if there is a problem getting
+  the requested bookmark and when the user closes the share raised segment
+*/
+function clearSharedAnnotation() {
+  console.log("clearSharedAnnotation");
+
+  //unwrap shared annotation
+  sharedAnnotation.selectedText.wrap.unwrap();
+
+  //remove wrapper
+  $("#shared-annotation-wrapper > .header").remove();
+  $(".shared-selected-annotation").unwrap();
+  $(".selected-annotation").removeClass("shared-selected-annotation");
+  $(".bookmark-selected-text.shared").removeClass("shared");
+
+  //highlight user annotations that were skipped because they were on same paragraph as shared annotation
+  highlightSkippedAnnotations();
+}
+
+function initCloseHandler() {
+  $(".share-annotation-close").on("click", function(e) {
+    e.preventDefault();
+    clearSharedAnnotation();
+  });
+}
 
 //highlights an annotation by wrapping it in a segment
 function wrapRange(annotation) {
@@ -13,6 +57,7 @@ function wrapRange(annotation) {
   let annotationRange = range(numericRange[0], numericRange[1] + 1);
   let header = `
     <h4 class="ui header">
+      <i title="Close" class="share-annotation-close small window close icon"></i>
       <div class="content">
         ${annotation.Comment}
       </div>
@@ -20,11 +65,11 @@ function wrapRange(annotation) {
   `;
 
   for (let i = 0; i < annotationRange.length; i++) {
-    $(`#p${annotationRange[i]}`).addClass("selected-annotation");
+    $(`#p${annotationRange[i]}`).addClass("shared-selected-annotation");
   }
 
-  $(".selected-annotation").wrapAll("<div id='shared-annotation-wrapper' class='selected-annotation-wrapper ui raised segment'></div>");
-  $(".selected-annotation-wrapper").prepend(header);
+  $(".shared-selected-annotation").wrapAll("<div id='shared-annotation-wrapper' class='ui raised segment'></div>");
+  $("#shared-annotation-wrapper").prepend(header);
 
   //scroll into view
   scroll(document.getElementById("shared-annotation-wrapper"), {align: {top: 0.2}});
@@ -36,32 +81,36 @@ function wrapRange(annotation) {
 */
 function showAnnotation() {
   let info = showAnnotationRequest();
-
   if (!info) {
-    return;
+    return false;
   }
 
   let [pid, aid, uid] = decodeURIComponent(info).split(":");
-  // console.log("pid: %s, aid: %s, uid: %s", pid, aid, uid);
 
   //make sure pid exists
   if (!pid) {
-    return;
+    return false;
   }
 
   if ($(`#${pid}`).length === 0) {
     // console.log("invalid pid: %s", pid);
-    return;
+    return false;
   }
 
   let bookmarkId = key.genParagraphKey(pid);
-  // console.log("bookmarkId: %s", bookmarkId);
 
+  /*
+    fetch shared bookmark and wrap it in a raised segment
+    - if user has a bookmark in the same paragraph as the shared annotation, it will not be highlighted so
+      if we fail to get the bookmark or can't find the shared annotation we need to highlight the users
+      annotations for the paragraph before returning
+  */
   fetchBookmark(bookmarkId, uid)
     .then((response) => {
       //bookmark not found
       if (!response.Item) {
         // console.log("bookmark not found");
+        highlightSkippedAnnotations();
         return;
       }
 
@@ -72,6 +121,7 @@ function showAnnotation() {
 
       if (!annotation) {
         // console.log("annotation not found");
+        highlightSkippedAnnotations();
         return;
       }
       // console.log("annotation: %o", annotation);
@@ -81,14 +131,20 @@ function showAnnotation() {
       $(`[data-aid="${aid}"]`).addClass("shared");
 
       wrapRange(annotation);
+      sharedAnnotation = annotation;
+
+      initCloseHandler();
+      console.log("sharing pid: %s", pid);
     })
     .catch((err) => {
       console.error(err);
     });
+
+  return pid;
 }
 
 export default {
   initialize: function() {
-    showAnnotation();
+    return showAnnotation();
   }
 };

@@ -533,8 +533,6 @@ function initClickListeners() {
       </h4>
     `;
 
-    console.log("wrapper");
-
     for (let i = 0; i < annotationRange.length; i++) {
       $(`#p${annotationRange[i]}`).addClass("selected-annotation");
     }

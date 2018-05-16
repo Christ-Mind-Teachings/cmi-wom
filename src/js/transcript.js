@@ -99,21 +99,21 @@ $(document).ready(() => {
   labelParagraphs();
   createParagraphNumberToggleListener();
   auth.initialize();
+  fb.initialize();
 
   //load config file and do initializations that depend on a loaded config file
   loadConfig(getBookId())
     .then(() => {
       toc.initialize();
       search.initialize();
-      bookmark.initialize();
       audio.initialize();
       showParagraph();
-      fb.initialize();
-      share.initialize();
+      console.log("calling share");
+      let pid = share.initialize();
+      bookmark.initialize(pid);
     })
     .catch((error) => {
       //report error to the user - somehow
       console.error(error);
     });
-
 });
