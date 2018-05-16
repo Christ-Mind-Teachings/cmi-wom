@@ -7,7 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>{{page.bid}}:{{page.title}}</title>
+  <title>Way of Mastery:{{page.title}}</title>
+
+  {% include common/load-open-graph.html %}
 
   <link rel="stylesheet" href="/public/css/semantic.css">
   <link rel="stylesheet" href="/public/js/me-styles.css">
@@ -20,12 +22,6 @@
 
 </head>
 <body>
-    <div
-    class="fb-like"
-    data-share="true"
-    data-width="450"
-    data-show-faces="true">
-  </div>
   {% include common/masthead.html %}
   {% include common/transcript-menu.html %}
 

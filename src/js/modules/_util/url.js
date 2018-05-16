@@ -54,6 +54,15 @@ export function showSearchMatch() {
   return null;
 }
 
+export function showAnnotation() {
+  let aInfo = getQueryString("as");
+
+  if (aInfo) {
+    return aInfo;
+  }
+  return null;
+}
+
 /*
   used for testing
 */

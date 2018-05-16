@@ -212,6 +212,12 @@ function hoverHandler() {
       return;
     }
 
+    //disable popup for shared annotations
+    if ($(this).hasClass("shared")) {
+      $(this).popup("hide").popup("destroy");
+      return;
+    }
+
     let bookmarkData = getBookmark(pid);
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
 
@@ -248,6 +254,11 @@ function editHandler() {
       if (!$(this).hasClass("show")) {
         return;
       }
+    }
+
+    //disable edit for shared annotations
+    if ($(this).hasClass("shared")) {
+      return;
     }
 
     //hide this popup

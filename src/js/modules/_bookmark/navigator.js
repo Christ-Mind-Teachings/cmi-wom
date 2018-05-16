@@ -4,6 +4,8 @@ import intersection from "lodash/intersection";
 import range from "lodash/range";
 import store from "store";
 import scroll from "scroll-into-view";
+import {getUserInfo} from "../_user/netlify";
+import notify from "toastr";
 
 //import {getSourceId, genPageKey} from "../_config/key";
 const transcript = require("../_config/key");
@@ -471,7 +473,44 @@ function initClickListeners() {
   //share icon click handler
   $(".transcript").on("click", ".selected-annotation-wrapper .share-annotation", function(e) {
     e.preventDefault();
-    console.log("share icon clicked");
+    let annotation = $(".selected-annotation-wrapper mark.show");
+    let userInfo;
+    let pid, aid, text;
+
+    //no highlighted text
+    if (annotation.length === 0) {
+      return;
+    }
+
+    userInfo = getUserInfo();
+    if (!userInfo) {
+      notify.info("You must be signed in to share to Facebook");
+      return;
+    }
+
+    pid = $(".selected-annotation-wrapper p").attr("id");
+    aid = annotation.data("aid");
+    text = annotation.text().replace(/\n/," ");
+    
+    let url = `https://wom.christmind.info${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
+    let channel = $(this).hasClass("facebook")?"facebook":"email";
+
+    console.log("url: %s", url);
+    console.log("quote: %s", text);
+    console.log("share to: %s", channel);
+
+    if (channel === "facebook") {
+      let options = {
+        method: "share",
+        hashtag: "#christmind",
+        quote: text,
+        href: url
+      };
+      FB.ui(options, function(){});
+    }
+    else if (channel === "email") {
+      notify.info("Sharing by email is not ready yet.");
+    }
   });
 
   //highlights an annotation by wrapping it in a segment
@@ -486,7 +525,8 @@ function initClickListeners() {
     let annotationRange = range(numericRange[0], numericRange[1] + 1);
     let header = `
       <h4 class="ui header">
-        <i class="share-annotation share square small icon"></i>
+        <i title="Share to Facebook" class="share-annotation facebook small icon"></i>
+        <i title="Share via email" class="share-annotation envelope outline small icon"></i>
         <div class="content">
           ${$(this).text()}
         </div>

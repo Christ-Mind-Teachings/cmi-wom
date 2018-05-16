@@ -169,6 +169,11 @@ function getUserStatus() {
   }
   console.log("userInfo: ", user);
 
+  //not all users have a role defined
+  if (!user.roles) {
+    return "LISTENER";
+  }
+
   let timer = user.roles.find(r => r === "timer");
   let editor = user.roles.find(r => r === "editor");
 
