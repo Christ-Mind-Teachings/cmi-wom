@@ -5603,6 +5603,14 @@ function getBookmarks() {
           let bookmarks = {};
           response.data.response.forEach(b => {
             let key = transcript.parseKey(b.id);
+
+            //parson JSON to object
+            for (let a of b.bookmark) {
+              if (a.selectedText) {
+                a.selectedText = JSON.parse(a.selectedText);
+              }
+              //console.log("a: %o", a);
+            }
             bookmarks[key.pid] = b.bookmark;
           });
 
@@ -5656,6 +5664,17 @@ function queryBookmarks(key) {
       __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${bookmarkApi}/bookmark/query/${userInfo.userId}/${key}`).then(response => {
         //convert to local data structure and store locally 
         if (response.data.response) {
+          //console.log("bookmarks: %o", response.data.response);
+
+          //convert selectedText from JSON to object
+          for (let b of response.data.response) {
+            for (let a of b.bookmark) {
+              if (a.selectedText) {
+                a.selectedText = JSON.parse(a.selectedText);
+              }
+              //console.log("a: %o", a);
+            }
+          }
           let bookmarks = buildBookmarkListFromServer(response, keyInfo);
           resolve(bookmarks);
         }
@@ -5773,12 +5792,17 @@ function postAnnotation(annotation) {
       serverAnnotation.selectedText.aid = now.toString(10);
     }
 
+    //convert selectedText to JSON
+    serverAnnotation.selectedText = JSON.stringify(serverAnnotation.selectedText);
+
     let postBody = {
       userId: userInfo.userId,
       bookmarkId: transcript.genParagraphKey(serverAnnotation.rangeStart, pageKey),
       annotationId: serverAnnotation.creationDate ? serverAnnotation.creationDate : now,
       annotation: serverAnnotation
     };
+
+    //console.log("posting: %o", serverAnnotation);
 
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(`${bookmarkApi}/bookmark/annotation`, postBody).then(data => {
       if (data.data.message !== "OK") {
@@ -5822,7 +5846,13 @@ function deleteAnnotation(pid, creationDate) {
 function fetchBookmark(bookmarkId, userId) {
   return new Promise((resolve, reject) => {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(`${bookmarkApi}/bookmark/${userId}/${bookmarkId}`).then(response => {
-      console.log("fetchBookmark(): %o", response.data.response);
+      if (response.data.response.Item) {
+        for (let a of response.data.response.Item.bookmark) {
+          if (a.selectedText) {
+            a.selectedText = JSON.parse(a.selectedText);
+          }
+        }
+      }
       resolve(response.data.response);
     }).catch(err => {
       reject(err);
@@ -6890,9 +6920,11 @@ function getUserInfo(name) {
   Modify menubar icons "bookmark" and "sign in" to 
   indicate user is signed in
 */
-function setAsSignedIn(name) {
+function setAsSignedIn() {
+  let userInfo = getUserInfo();
+
   //change sign-in icon to sign-out and change color from red to green
-  $(".login-menu-option > span").html("<i class='green sign out icon'></i>").attr("data-tooltip", `Sign Out: ${name}`);
+  $(".login-menu-option > span").html("<i class='green sign out icon'></i>").attr("data-tooltip", `Sign Out: ${userInfo.name}`);
 
   //change bookmark menu icon to green from red
   $(".main.menu a > span > i.bookmark.icon").addClass("green").removeClass("red");
@@ -6928,7 +6960,7 @@ function setAsSignedOut() {
       //console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
-        setAsSignedIn(userInfo.name);
+        setAsSignedIn();
       }
     });
 
@@ -6939,9 +6971,10 @@ function setAsSignedOut() {
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("logout", () => {
-      //console.log("user.logout()");
+      console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
+      location.href = "/";
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("error", err => console.error("user.on('error'): ", err));
@@ -10451,11 +10484,13 @@ function processSelection() {
   //Safari calls this function twice for each selection, the second time
   //rangeCount === 0 and type == "None"
   if (selObj.rangeCount === 0) {
+    console.log("selObj.rangeCount === 0)");
     return;
   }
 
   let range = selObj.getRangeAt(0);
   if (range.collapsed) {
+    console.log("range collapsed");
     return;
   }
 
@@ -10465,11 +10500,13 @@ function processSelection() {
 
   if (startParent === "span") {
     __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.info("Don't include the paragraph number in your selection, please try again.");
+    console.log("selection includes <p>");
     return;
   }
 
   if (startParent === "mark" || endParent === "mark") {
     __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.info("Your selection is overlapping with another; overlapping is not supported.");
+    console.log("overlapping selections");
 
     if (location.hostname === "localhost") {
       debugger;
@@ -10483,21 +10520,25 @@ function processSelection() {
 
   //the range must start with a transcript paragraph, one whose id = "p<number>"
   if (!rangeStart) {
+    console.log("non transcript paragraph selected");
     return;
   }
 
   if (!rangeStart.startsWith("p")) {
+    console.log("range does not start with <p>");
     return;
   }
 
   let pid = parseInt(rangeStart.substr(1), 10);
   if (!__WEBPACK_IMPORTED_MODULE_2_lodash_isFinite___default()(pid)) {
+    console.log("Pid: %s !isFinite()");
     return;
   }
 
   //not sure how to handl text selected across paragraphs, so disallow it.
   if (rangeStart !== rangeEnd) {
     __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.info("Please limit selected text to a single paragraph");
+    console.log("multi paragraph selection: start: %s, end: %s", rangeStart, rangeEnd);
     return;
   }
 
@@ -12360,7 +12401,6 @@ function getPageBookmarks(sharePid) {
 
         for (const bm of response[id]) {
           if (bm.selectedText) {
-            console.log("getPageBookmarks(): sharePid: %s", sharePid);
             Object(__WEBPACK_IMPORTED_MODULE_9__selection__["g" /* markSelection */])(bm.selectedText, count, sharePid);
             addTopicsAsClasses(bm);
             __WEBPACK_IMPORTED_MODULE_8__topics__["a" /* default */].add(bm);
@@ -12452,7 +12492,7 @@ function createAnnotaion(formValues) {
 function formatNewTopics({ newTopics }) {
 
   //only allow alpha chars and comma's and spaces
-  let topics = newTopics.replace(/[^a-zA-Z, ]/g, "");
+  let topics = newTopics.replace(/[^a-zA-Z0-9, ]/g, "");
 
   if (!topics || topics === "") {
     return [];
@@ -29504,8 +29544,18 @@ function hoverHandler() {
       return;
     }
 
+    //bookmark wont be found if it is still being created
     let bookmarkData = Object(__WEBPACK_IMPORTED_MODULE_0__bmnet__["c" /* getBookmark */])(pid);
+    if (!bookmarkData.bookmark) {
+      return;
+    }
+
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
+
+    //sometimes the annotation won't be found because it is being created, so just return
+    if (!annotation) {
+      return;
+    }
 
     let topicList = generateHorizontalList(annotation.topicList);
     let comment = generateComment(annotation.Comment);
@@ -34124,7 +34174,7 @@ function initClickListeners() {
 
     userInfo = Object(__WEBPACK_IMPORTED_MODULE_5__user_netlify__["b" /* getUserInfo */])();
     if (!userInfo) {
-      __WEBPACK_IMPORTED_MODULE_6_toastr___default.a.info("You must be signed in to share to Facebook");
+      __WEBPACK_IMPORTED_MODULE_6_toastr___default.a.info("You must be signed in to share selected text");
       return;
     }
 
@@ -34135,9 +34185,9 @@ function initClickListeners() {
     let url = `https://wom.christmind.info${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
     let channel = $(this).hasClass("facebook") ? "facebook" : "email";
 
-    console.log("url: %s", url);
-    console.log("quote: %s", text);
-    console.log("share to: %s", channel);
+    // console.log("url: %s", url);
+    // console.log("quote: %s", text);
+    // console.log("share to: %s", channel);
 
     if (channel === "facebook") {
       let options = {

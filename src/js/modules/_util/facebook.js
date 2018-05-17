@@ -8,7 +8,6 @@ export default {
       dataType: "script",
       cache: true,
       success: function() {
-        console.log("fb init");
         FB.init({
           appId      : "448658485318107",
           xfbml      : true,

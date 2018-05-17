@@ -287,11 +287,13 @@ function processSelection() {
   //Safari calls this function twice for each selection, the second time
   //rangeCount === 0 and type == "None"
   if (selObj.rangeCount === 0) {
+    console.log("selObj.rangeCount === 0)");
     return;
   }
 
   let range = selObj.getRangeAt(0);
   if (range.collapsed) {
+    console.log("range collapsed");
     return;
   }
 
@@ -301,11 +303,13 @@ function processSelection() {
 
   if (startParent === "span") {
     notify.info("Don't include the paragraph number in your selection, please try again.");
+    console.log("selection includes <p>");
     return;
   }
 
   if (startParent === "mark" || endParent === "mark") {
     notify.info("Your selection is overlapping with another; overlapping is not supported.");
+    console.log("overlapping selections");
 
     if (location.hostname === "localhost") {
       debugger;
@@ -319,21 +323,25 @@ function processSelection() {
 
   //the range must start with a transcript paragraph, one whose id = "p<number>"
   if (!rangeStart) {
+    console.log("non transcript paragraph selected");
     return;
   }
 
   if (!rangeStart.startsWith("p")) {
+    console.log("range does not start with <p>");
     return;
   }
 
   let pid = parseInt(rangeStart.substr(1), 10);
   if (!isFinite(pid)) {
+    console.log("Pid: %s !isFinite()");
     return;
   }
 
   //not sure how to handl text selected across paragraphs, so disallow it.
   if (rangeStart !== rangeEnd) {
     notify.info("Please limit selected text to a single paragraph");
+    console.log("multi paragraph selection: start: %s, end: %s", rangeStart, rangeEnd);
     return;
   }
 

@@ -76,6 +76,14 @@ function getBookmarks() {
             let bookmarks = {};
             response.data.response.forEach((b) => {
               let key = transcript.parseKey(b.id);
+
+              //parson JSON to object
+              for (let a of b.bookmark) {
+                if (a.selectedText) {
+                  a.selectedText = JSON.parse(a.selectedText);
+                }
+                //console.log("a: %o", a);
+              }
               bookmarks[key.pid] = b.bookmark;
             });
 
@@ -132,6 +140,17 @@ function queryBookmarks(key) {
         .then((response) => {
           //convert to local data structure and store locally 
           if (response.data.response) {
+            //console.log("bookmarks: %o", response.data.response);
+
+            //convert selectedText from JSON to object
+            for (let b of response.data.response) {
+              for (let a of b.bookmark) {
+                if (a.selectedText) {
+                  a.selectedText = JSON.parse(a.selectedText);
+                }
+                //console.log("a: %o", a);
+              }
+            }
             let bookmarks = buildBookmarkListFromServer(response, keyInfo);
             resolve(bookmarks);
           }
@@ -252,12 +271,17 @@ function postAnnotation(annotation) {
       serverAnnotation.selectedText.aid = now.toString(10);
     }
 
+    //convert selectedText to JSON
+    serverAnnotation.selectedText = JSON.stringify(serverAnnotation.selectedText);
+
     let postBody = {
       userId: userInfo.userId,
       bookmarkId: transcript.genParagraphKey(serverAnnotation.rangeStart, pageKey),
       annotationId: serverAnnotation.creationDate ? serverAnnotation.creationDate : now,
       annotation: serverAnnotation
     };
+
+    //console.log("posting: %o", serverAnnotation);
 
     axios.post(`${bookmarkApi}/bookmark/annotation`, postBody)
       .then((data) => {
@@ -306,7 +330,13 @@ export function fetchBookmark(bookmarkId, userId) {
   return new Promise((resolve, reject) => {
     axios.get(`${bookmarkApi}/bookmark/${userId}/${bookmarkId}`)
       .then((response) => {
-        console.log("fetchBookmark(): %o", response.data.response);
+        if (response.data.response.Item) {
+          for (let a of response.data.response.Item.bookmark) {
+            if (a.selectedText) {
+              a.selectedText = JSON.parse(a.selectedText);
+            }
+          }
+        }
         resolve(response.data.response);
       })
       .catch((err) => {

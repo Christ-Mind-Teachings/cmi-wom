@@ -178,6 +178,10 @@
   cursor: inherit !important;
 }
 
+.share-annotation-close {
+  cursor: pointer;
+}
+
 #topic-menu-select > .item.active.selected,
 .menu.transition.visible > .header > span.red {
   color: red;

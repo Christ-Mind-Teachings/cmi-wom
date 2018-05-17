@@ -70,11 +70,13 @@ export function getUserInfo(name) {
   Modify menubar icons "bookmark" and "sign in" to 
   indicate user is signed in
 */
-function setAsSignedIn(name) {
+function setAsSignedIn() {
+  let userInfo = getUserInfo();
+
   //change sign-in icon to sign-out and change color from red to green
   $(".login-menu-option > span")
     .html("<i class='green sign out icon'></i>")
-    .attr("data-tooltip", `Sign Out: ${name}`);
+    .attr("data-tooltip", `Sign Out: ${userInfo.name}`);
 
   //change bookmark menu icon to green from red
   $(".main.menu a > span > i.bookmark.icon")
@@ -116,7 +118,7 @@ export default {
       //console.log("user.on('init')");
       userInfo = user;
       if (userInfo) {
-        setAsSignedIn(userInfo.name);
+        setAsSignedIn();
       }
     });
 
@@ -127,9 +129,10 @@ export default {
     });
 
     user.on("logout", () => {
-      //console.log("user.logout()");
+      console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
+      location.href = "/";
     });
 
     user.on("error", (err) => console.error("user.on('error'): ", err));

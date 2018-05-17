@@ -108,7 +108,10 @@ $(document).ready(() => {
       search.initialize();
       audio.initialize();
       showParagraph();
-      console.log("calling share");
+
+      //get pid of shared annotation and pass it to bookmark.initizalize
+      //so any bookmarks defined on the shared paragraph won't be highlighted
+      //until the share window is closed
       let pid = share.initialize();
       bookmark.initialize(pid);
     })

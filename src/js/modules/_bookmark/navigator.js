@@ -484,7 +484,7 @@ function initClickListeners() {
 
     userInfo = getUserInfo();
     if (!userInfo) {
-      notify.info("You must be signed in to share to Facebook");
+      notify.info("You must be signed in to share selected text");
       return;
     }
 
@@ -495,9 +495,9 @@ function initClickListeners() {
     let url = `https://wom.christmind.info${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
     let channel = $(this).hasClass("facebook")?"facebook":"email";
 
-    console.log("url: %s", url);
-    console.log("quote: %s", text);
-    console.log("share to: %s", channel);
+    // console.log("url: %s", url);
+    // console.log("quote: %s", text);
+    // console.log("share to: %s", channel);
 
     if (channel === "facebook") {
       let options = {

@@ -51,7 +51,6 @@ function getPageBookmarks(sharePid) {
 
           for (const bm of response[id]) {
             if (bm.selectedText) {
-              console.log("getPageBookmarks(): sharePid: %s", sharePid);
               markSelection(bm.selectedText, count, sharePid);
               addTopicsAsClasses(bm);
               topics.add(bm);
@@ -146,7 +145,7 @@ function createAnnotaion(formValues) {
 function formatNewTopics({newTopics}) {
 
   //only allow alpha chars and comma's and spaces
-  let topics = newTopics.replace(/[^a-zA-Z, ]/g, "");
+  let topics = newTopics.replace(/[^a-zA-Z0-9, ]/g, "");
 
   if (!topics || topics === "" ) {
     return [];

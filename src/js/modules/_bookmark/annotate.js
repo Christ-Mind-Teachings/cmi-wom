@@ -218,8 +218,18 @@ function hoverHandler() {
       return;
     }
 
+    //bookmark wont be found if it is still being created
     let bookmarkData = getBookmark(pid);
+    if (!bookmarkData.bookmark) {
+      return;
+    }
+
     let annotation = bookmarkData.bookmark.find(value => value.aid === aid);
+
+    //sometimes the annotation won't be found because it is being created, so just return
+    if (!annotation) {
+      return;
+    }
 
     let topicList = generateHorizontalList(annotation.topicList);
     let comment = generateComment(annotation.Comment);
