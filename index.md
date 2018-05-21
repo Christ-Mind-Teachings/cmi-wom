@@ -1,9 +1,12 @@
 ---
 layout: page
 masthead: home
+title: "Way of Mastery Contents"
+footer:
+  display: true
 ---
 
-<div class="ui three cards">
+<div id="page-contents" class="ui three cards">
   <div class="card">
     <a href="#" data-book="woh" class="toc-modal-open image">
       <img src="/public/img/wom/woh-big.jpg">

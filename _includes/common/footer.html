@@ -14,24 +14,21 @@ add footer.donate true to display donate button
         </div>
       </div>
       <div class="three wide column">
-        <h4 class="ui inverted header">CMI</h4>
+        <h4 class="ui inverted header">CMI-WOM</h4>
         <div class="ui inverted link list">
-          <a class="item" href="https://github.com/rmercer33/christmind.info" target="_blank">GitHub Repo</a>
-          <a class="item" href="/about/project/">Project Info</a>
+          <a class="item" href="https://github.com/rmercer33/cmi-wom" target="_blank">GitHub Repo</a>
+          <a class="item">Project Info</a>
           {% if page.url != "/about/" %}
-            <a class="item" href="/about/">About CMI</a>
+            <a class="item">About CMI</a>
           {% endif %}
+          {% comment %}
           <a class="item" href="https://docs.christmind.info" target="_blank">Documentation</a>
+          {% endcomment %}
         </div>
       </div>
       <div class="three wide column">
         <a href="https://www.netlify.com">
           <img target="_blank" src="https://www.netlify.com/img/global/badges/netlify-light.svg">
-        </a>
-        <a width="150" height="50" href="https://auth0.com/?utm_source=oss&utm_medium=gp&utm_campaign=oss"
-          target="_blank" alt="Single Sign On & Token Based Authentication - Auth0">
-          <img width="150" height="50" alt="JWT Auth for open source projects"
-            src="//cdn.auth0.com/oss/badges/a0-badge-light.png"/>
         </a>
       </div>
       {% if page.footer.donate == true %}

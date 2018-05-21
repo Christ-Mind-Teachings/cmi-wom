@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1526457174241,
-    wot: 1526457174241,
-    wok: 1526457174241,
-    wos: 1526457174241,
-    tjl: 1526457174241,
-    early: 1526457174241
+    woh: 1526617945770,
+    wot: 1526617945770,
+    wok: 1526617945770,
+    wos: 1526617945770,
+    tjl: 1526617945770,
+    early: 1526617945770
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -6971,7 +6971,7 @@ function setAsSignedOut() {
     });
 
     __WEBPACK_IMPORTED_MODULE_0_netlify_identity_widget___default.a.on("logout", () => {
-      console.log("user.logout()");
+      //console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
       location.href = "/";

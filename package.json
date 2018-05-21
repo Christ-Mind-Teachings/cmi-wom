@@ -28,6 +28,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "dom-anchor-text-quote": "^4.0.2",
+    "driver.js": "^0.5.2",
     "hotkeys-js": "^3.1.1",
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",

@@ -129,7 +129,7 @@ export default {
     });
 
     user.on("logout", () => {
-      console.log("user.logout()");
+      //console.log("user.logout()");
       setAsSignedOut();
       userInfo = null;
       location.href = "/";

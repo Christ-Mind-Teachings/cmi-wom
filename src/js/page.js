@@ -3,10 +3,9 @@
 import "../vendor/semantic/semantic.min.js";
 import bookmark from "./modules/_bookmark/bookmark";
 import search from "./modules/_search/search";
-//import toc, {getBookId} from "./modules/_contents/toc";
 import toc from "./modules/_contents/toc";
 import auth from "./modules/_user/netlify";
-//import {loadConfig} from "./modules/_config/config";
+import about from "./modules/_about/about";
 
 /*
   Fix main menu to top of page when scrolled
@@ -17,7 +16,7 @@ function initStickyMenu() {
     type: "fixed"
   });
 
-  // show dropdown on hover
+  //show dropdown on hover
   $(".main.menu  .ui.dropdown").dropdown({
     on: "hover"
   });
@@ -25,8 +24,12 @@ function initStickyMenu() {
 
 $(document).ready(() => {
   initStickyMenu();
+
   bookmark.initialize();
   search.initialize();
   auth.initialize();
   toc.initialize();
+  about.initialize();
+
 });
+
