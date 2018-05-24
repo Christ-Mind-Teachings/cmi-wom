@@ -15,6 +15,7 @@ import toc, {getBookId} from "./modules/_contents/toc";
 import audio from "./modules/_audio/audio";
 import fb from "./modules/_util/facebook";
 import share from "./modules/_share/share";
+import about from "./modules/_about/about";
 
 /*
  * For all transcript paragraphs -
@@ -74,7 +75,12 @@ function initStickyMenu() {
   });
 
   // show dropdown on hover
-  $(".main.menu  .ui.dropdown").dropdown({
+  // $(".main.menu  .ui.dropdown").dropdown({
+  $("#bookmark-dropdown-menu").dropdown({
+    on: "hover"
+  });
+
+  $("#about-dropdown-menu").dropdown({
     on: "hover"
   });
 }
@@ -100,6 +106,7 @@ $(document).ready(() => {
   createParagraphNumberToggleListener();
   auth.initialize();
   fb.initialize();
+  about.initialize();
 
   //load config file and do initializations that depend on a loaded config file
   loadConfig(getBookId())

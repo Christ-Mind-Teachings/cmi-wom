@@ -1,13 +1,13 @@
 <!-- _includes/common/transcript-menu.html -->
 <div class="ui borderless main menu">
-  <div class="ui text container">
-    <a href="#" class="ui dropdown item">
+  <div id="transcript-menu" class="ui text container">
+    <a id="bookmark-dropdown-menu" href="#" class="ui dropdown item">
       <span data-xposition="left center" data-xtooltip="Show/Set Bookmarks">
         <i class="red bookmark icon"></i>
       </span>
       <div class="menu">
-        <div class="bookmark-modal-open item">Show Bookmarks</div>
-        <div class="toggle-bookmark-highlight item">Hide Highlighted Text</div>
+        <div id="bookmark-modal-open" class="bookmark-modal-open item">Show Bookmarks</div>
+        <div id="bookmark-toggle-highlight" class="toggle-bookmark-highlight item">Hide Highlighted Text</div>
         <div class="divider"></div>
         <div data-filter="none" class="header">Topic Filter: None</div>
         <div id="topic-menu-item" class="item">
@@ -18,7 +18,7 @@
         </div>
       </div>
     </a>
-    <a href="#" class="item search-modal-open">
+    <a href="#" id="search-modal-open" class="item search-modal-open">
       <span data-position="bottom center" data-tooltip="Search {{site.title}}">
         <i class="search icon"></i>
       </span>
@@ -47,10 +47,10 @@
         <i class="align justify icon"></i>
       </span>
     </a>
-    <a href="#" class="ui dropdown item">
+    <a id="about-dropdown-menu" href="#" class="ui dropdown item">
       <i class="question icon"></i>
       <div id="help-menu" class="menu">
-        <div class="page-tour item">Take a Quick Tour</div>
+        <div class="transcript-tour item">Take a Quick Tour</div>
         <div class="about-wom item">About Way of Mastery</div>
         <div class="read-documentation item">Read Documentation</div>
         <div class="view-documentation item">Watch Video Instruction</div>

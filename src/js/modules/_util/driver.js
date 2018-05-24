@@ -3,7 +3,10 @@ import Driver from "driver.js";
 export function pageDriver() {
   const driver = new Driver({
     allowClose: false,
-    opacity: 0.5
+    opacity: 0.5,
+    onHighlightStarted: (el) => {
+      console.log("highlighting %o", el);
+    }
   });
 
   driver.defineSteps([
@@ -113,6 +116,55 @@ export function pageDriver() {
     }
   ]);
 
+  driver.start();
+}
+
+export function transcriptDriver() {
+  const driver = new Driver({
+    allowClose: false,
+    opacity: 0.5,
+    onReset: () => {
+      $("#bookmark-dropdown-menu").dropdown("hide");
+    }
+  });
+
+  driver.defineSteps([
+    {
+      element: "#bookmark-dropdown-menu",
+      popover: {
+        title: "Bookmark Feature",
+        description: "Here you can list and filter bookmarks by topic.",
+        position: "right"
+      }
+    },
+    {
+      element: "#bookmark-modal-open",
+      popover: {
+        title: "List Bookmarks",
+        description: "Display a list of bookmarks you have created and optionally filter by topic. You can quickly jump to any bookmark. Learn more about bookmarks in the documentation.",
+        position: "right"
+      }
+    },
+    {
+      element: "#bookmark-toggle-highlight",
+      popover: {
+        title: "Show/Hide Bookmark Highlight",
+        description: "Hide or show all highlighted text.",
+        position: "right"
+      }
+    },
+    {
+      element: ".search-modal-open",
+      popover: {
+        title: "Search Through All Books",
+        description: "Find topics of interest by searching through all Way of Mastery books.",
+        position: "bottom"
+      }
+    }
+  ]);
+
+  //show bookmark menu
+  $("#bookmark-dropdown-menu").dropdown("show");
   driver.start();
 }
 
