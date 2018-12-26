@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1541009263161,
-    wot: 1541009263161,
-    wok: 1541009263161,
-    wos: 1541009263161,
-    tjl: 1541009263161,
-    early: 1541009263161
+    woh: 1545808103113,
+    wot: 1545808103113,
+    wok: 1545808103113,
+    wos: 1545808103113,
+    tjl: 1545808103113,
+    early: 1545808103113
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -29371,10 +29371,10 @@ const form = `
       <input type="text" name="newTopics" placeholder="New topics? Comma delimited list">
     </div>
     <div class="fields">
-      <button class="annotation-submit ui button" type="submit">Submit</button>
+      <button class="annotation-submit ui green button" type="submit">Submit</button>
       <button class="annotation-cancel ui red basic button">Cancel</button>
       <div class="twelve wide field">
-        <button class="annotation-delete ui red right floated button">Delete</button>
+        <button class="annotation-delete ui red disabled right floated button">Delete</button>
       </div>
     </div>
   </form>
@@ -29481,9 +29481,11 @@ function editAnnotation(pid, aid, annotation) {
   } else {
     $(`#${pid}`).addClass("annotation-edit");
   }
+  console.log("editAnnotation");
 
   $(".annotation-edit").wrapAll(wrapper);
   $(".annotate-wrapper").prepend(form);
+  $(".annotation-delete.disabled").removeClass("disabled");
   getTopicList(pid, aid, annotation);
 }
 
