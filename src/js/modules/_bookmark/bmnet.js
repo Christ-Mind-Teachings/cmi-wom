@@ -44,7 +44,7 @@ export function getBookmark(pid) {
   const pageKey = transcript.genPageKey();
   const bookmarks = store.get(pageKey);
 
-  if (bookmarks) {
+  if (bookmarks && pid) {
     //generate id
     let id = parseInt(pid.substr(1), 10) + 1;
 
@@ -282,22 +282,29 @@ function postAnnotation(annotation) {
     };
 
     //console.log("posting: %o", serverAnnotation);
-
     axios.post(`${bookmarkApi}/bookmark/annotation`, postBody)
       .then((data) => {
         if (data.data.message !== "OK") {
-          console.error(data.data.message);
+          console.error("not OK message: %s", data.data.message);
           notify.error(data.data.message);
+        }
+        else {
+          //store locally
+          storeAnnotation(annotation, now);
         }
       })
       .catch((err) => {
         console.error(`Error saving annotation: ${err}`);
-        notify.error(`Error saving annotation: ${err}`);
+        notify.error("Error saving annotation, please try again");
+
+        //if error and this is a new annotation we need to remove the highlight from the page
+        console.log("postBody", postBody);
       });
   }
-
-  //store locally
-  storeAnnotation(annotation, now);
+  else {
+    //store locally
+    storeAnnotation(annotation, now);
+  }
 }
 
 /*

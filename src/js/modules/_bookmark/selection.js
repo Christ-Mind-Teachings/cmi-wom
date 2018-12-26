@@ -270,8 +270,30 @@ function getSelectedText(range, fromNode = document.body) {
   Capture user text selection
 */
 export function initialize() {
-  $("div.transcript.ui").on("mouseup", function() {
-    processSelection("transcript");
+  $("div.transcript.ui").on("mouseup", function(e) {
+    e.preventDefault();
+
+    if (document.getSelection().isCollapsed) {
+      return;
+    }
+
+    let selObj = document.getSelection(); 
+    console.log("selection: %o", selObj);
+
+    //Safari calls this function twice for each selection, the second time
+    //rangeCount === 0 and type == "None"
+    if (selObj.rangeCount === 0) {
+      console.log("selObj.rangeCount === 0)");
+      return;
+    }
+
+    if (selObj.getRangeAt(0).collapsed) {
+      console.log("range collapsed");
+      return;
+    }
+
+    let range = selObj.getRangeAt(0);
+    processSelection(range);
   });
 
   //init annotation input, edit, and delete
@@ -281,21 +303,8 @@ export function initialize() {
 /*
   create annotation from selected text
 */
-function processSelection() {
-  let selObj = document.getSelection(); 
-
-  //Safari calls this function twice for each selection, the second time
-  //rangeCount === 0 and type == "None"
-  if (selObj.rangeCount === 0) {
-    console.log("selObj.rangeCount === 0)");
-    return;
-  }
-
-  let range = selObj.getRangeAt(0);
-  if (range.collapsed) {
-    console.log("range collapsed");
-    return;
-  }
+function processSelection(range) {
+  console.log("range: %o", range);
 
   //check for overlap with other highlighted text
   let startParent = range.startContainer.parentElement.localName;
@@ -319,11 +328,13 @@ function processSelection() {
   }
 
   let rangeStart = range.startContainer.parentElement.id;
+  //let rangeStart = range.commonAncestorContainer.id;
   let rangeEnd = range.endContainer.parentElement.id;
 
-  //the range must start with a transcript paragraph, one whose id = "p<number>"
+  //the range must start with a transcript paragraph, one whose id = "p<number>" or an <em> found
+  //within a paragraph
   if (!rangeStart) {
-    console.log("non transcript paragraph selected");
+    console.log("selection parent element: %s", range.startContainer.parentElement.nodeName);
     return;
   }
 

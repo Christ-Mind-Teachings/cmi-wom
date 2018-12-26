@@ -39,6 +39,10 @@ function devUserInfo() {
   if (user && testUsers[user]) {
     return testUsers[user];
   }
+  else {
+    //use rick
+    return testUsers["rick"];
+  }
 
   return null;
 }
