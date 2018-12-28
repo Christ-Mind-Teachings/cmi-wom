@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1545808103113,
-    wot: 1545808103113,
-    wok: 1545808103113,
-    wos: 1545808103113,
-    tjl: 1545808103113,
-    early: 1545808103113
+    woh: 1545898540861,
+    wot: 1545898540861,
+    wok: 1545898540861,
+    wos: 1545898540861,
+    tjl: 1545898540861,
+    early: 1545898540861
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35849,6 +35849,20 @@ function createClickHandlers() {
     if ($(this).hasClass("transcript-tour")) {
       console.log("transcriptDriver");
       Object(__WEBPACK_IMPORTED_MODULE_0__util_driver__["b" /* transcriptDriver */])();
+    }
+
+    if ($(this).hasClass("about-src")) {
+      location.href = "/about/";
+    }
+
+    if ($(this).hasClass("read-documentation")) {
+      console.log("documentation not ready yet");
+      //location.href = "";
+    }
+
+    if ($(this).hasClass("view-documentation")) {
+      console.log("video documentation not ready yet");
+      //location.href = "";
     }
   });
 }

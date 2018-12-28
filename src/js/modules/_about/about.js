@@ -13,6 +13,20 @@ function createClickHandlers() {
       console.log("transcriptDriver");
       transcriptDriver();
     }
+
+    if ($(this).hasClass("about-src")) {
+      location.href = "/about/";
+    }
+
+    if ($(this).hasClass("read-documentation")) {
+      console.log("documentation not ready yet");
+      //location.href = "";
+    }
+
+    if ($(this).hasClass("view-documentation")) {
+      console.log("video documentation not ready yet");
+      //location.href = "";
+    }
   });
 }
 

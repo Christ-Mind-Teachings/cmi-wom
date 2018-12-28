@@ -19,7 +19,7 @@ function makeContents(contents) {
   return (`
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
-        <div class="item"> 
+        <div class="item">
           <a href="${unit.url}">${unit.title}</a>
           ${unit.questions ? renderQuestions(unit.questions) : ""}
         </div>
@@ -29,7 +29,7 @@ function makeContents(contents) {
 }
 
 /*
-  If we're on a transcript page, highlight the 
+  If we're on a transcript page, highlight the
   current transcript in the list
 */
 function highlightCurrentTranscript() {
