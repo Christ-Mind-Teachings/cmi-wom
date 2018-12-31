@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1545898540861,
-    wot: 1545898540861,
-    wok: 1545898540861,
-    wos: 1545898540861,
-    tjl: 1545898540861,
-    early: 1545898540861
+    woh: 1546236971608,
+    wot: 1546236971608,
+    wok: 1546236971608,
+    wos: 1546236971608,
+    tjl: 1546236971608,
+    early: 1546236971608
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35756,7 +35756,7 @@ function makeContents(contents) {
   return `
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
-        <div class="item"> 
+        <div class="item">
           <a href="${unit.url}">${unit.title}</a>
           ${unit.questions ? renderQuestions(unit.questions) : ""}
         </div>
@@ -35766,7 +35766,7 @@ function makeContents(contents) {
 }
 
 /*
-  If we're on a transcript page, highlight the 
+  If we're on a transcript page, highlight the
   current transcript in the list
 */
 function highlightCurrentTranscript() {
@@ -35846,9 +35846,14 @@ function createClickHandlers() {
       Object(__WEBPACK_IMPORTED_MODULE_0__util_driver__["a" /* pageDriver */])();
     }
 
+    if ($(this).hasClass("page-navtour")) {
+      console.log("page Nav Driver");
+      Object(__WEBPACK_IMPORTED_MODULE_0__util_driver__["b" /* pageNavigationDriver */])();
+    }
+
     if ($(this).hasClass("transcript-tour")) {
       console.log("transcriptDriver");
-      Object(__WEBPACK_IMPORTED_MODULE_0__util_driver__["b" /* transcriptDriver */])();
+      Object(__WEBPACK_IMPORTED_MODULE_0__util_driver__["c" /* transcriptDriver */])();
     }
 
     if ($(this).hasClass("about-src")) {
@@ -35880,7 +35885,8 @@ function createClickHandlers() {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = pageDriver;
-/* harmony export (immutable) */ __webpack_exports__["b"] = transcriptDriver;
+/* harmony export (immutable) */ __webpack_exports__["b"] = pageNavigationDriver;
+/* harmony export (immutable) */ __webpack_exports__["c"] = transcriptDriver;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_driver_js__ = __webpack_require__(399);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_driver_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_driver_js__);
 
@@ -35943,7 +35949,20 @@ function pageDriver() {
       description: "A collection of messages given before the Way of the Heart.",
       position: "top"
     }
-  }, {
+  }]);
+
+  driver.start();
+}
+
+function pageNavigationDriver() {
+  const driver = new __WEBPACK_IMPORTED_MODULE_0_driver_js___default.a({
+    allowClose: false,
+    opacity: 0.5,
+    onReset: () => {
+      $("#bookmark-dropdown-menu").dropdown("hide");
+    }
+  });
+  driver.defineSteps([{
     element: "#masthead-title",
     popover: {
       title: "Navigation and Features",
@@ -35985,6 +36004,13 @@ function pageDriver() {
       description: "Create an account and sign in to the site. It's free and allows you to create bookmarks that you can share via Facebook and keep synchronized between devices.",
       position: "left"
     }
+  }, {
+    element: "[data-book='wot']",
+    popover: {
+      title: "Display Table of Contents",
+      description: "Click on any image to display and navigate to the volume contents.",
+      position: "left"
+    }
   }]);
 
   driver.start();
@@ -35993,31 +36019,40 @@ function pageDriver() {
 function transcriptDriver() {
   const driver = new __WEBPACK_IMPORTED_MODULE_0_driver_js___default.a({
     allowClose: false,
-    opacity: 0.5,
+    opacity: 0.5
+    /*
     onReset: () => {
       $("#bookmark-dropdown-menu").dropdown("hide");
     }
+    */
   });
 
   driver.defineSteps([{
+    element: "#masthead-title",
+    popover: {
+      title: "Library of Christ Mind Teachings",
+      description: "This page is part of the Teachings of Christ Mind Library. Click this link to navigate to the Library's Home page.",
+      position: "bottom"
+    }
+  }, {
+    element: "#src-title",
+    popover: {
+      title: "Way of Mastery",
+      description: "This page comes from the Way of Mastery. Click this link to navigate to the Home page of the Way of Mastery.",
+      position: "bottom"
+    }
+  }, {
+    element: "#book-title",
+    popover: {
+      title: "Book Title",
+      description: "This identifies the book and chapter of the content on this page.",
+      position: "bottom"
+    }
+  }, {
     element: "#bookmark-dropdown-menu",
     popover: {
-      title: "Bookmark Feature",
-      description: "Here you can list and filter bookmarks by topic.",
-      position: "right"
-    }
-  }, {
-    element: "#bookmark-modal-open",
-    popover: {
-      title: "List Bookmarks",
-      description: "Display a list of bookmarks you have created and optionally filter by topic. You can quickly jump to any bookmark. Learn more about bookmarks in the documentation.",
-      position: "right"
-    }
-  }, {
-    element: "#bookmark-toggle-highlight",
-    popover: {
-      title: "Show/Hide Bookmark Highlight",
-      description: "Hide or show all highlighted text.",
+      title: "Bookmarks",
+      description: "You can create a bookmark from highlighted text and associate the bookmark with one or more categories. Learn more about bookmarks by reading the documentation.",
       position: "right"
     }
   }, {
@@ -36027,10 +36062,52 @@ function transcriptDriver() {
       description: "Find topics of interest by searching through all Way of Mastery books.",
       position: "bottom"
     }
+  }, {
+    element: ".audio-player-toggle",
+    popover: {
+      title: "Listen to the Audio",
+      description: "Click the speaker icon to display the audio player and listen along as you read.",
+      position: "bottom"
+    }
+  }, {
+    element: ".toggle-paragraph-markers",
+    popover: {
+      title: "Show/Hide Paragraph Markers",
+      description: "Show or hide the markers that preceed each paragraph.",
+      position: "bottom"
+    }
+  }, {
+    element: ".top-of-page",
+    popover: {
+      title: "Go To Top of Page",
+      description: "Quickly jump to the top of the page.",
+      position: "bottom"
+    }
+  }, {
+    element: "#contents-modal-open",
+    popover: {
+      title: "Table of Contents",
+      description: "View the table of contents.",
+      position: "bottom"
+    }
+  }, {
+    element: "#about-dropdown-menu",
+    popover: {
+      title: "Get Help",
+      description: "Learn how to use features of the Library.",
+      position: "bottom"
+    }
+  }, {
+    element: ".login-menu-option",
+    popover: {
+      title: "Sign In/Sign Out",
+      description: "Create an account and sign in or sign out. When you sign in, bookmarks you create will be available on all devices you use to access the library.",
+      position: "bottom"
+    }
   }]);
 
   //show bookmark menu
-  $("#bookmark-dropdown-menu").dropdown("show");
+  //$("#bookmark-dropdown-menu").dropdown("show");
   driver.start();
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))

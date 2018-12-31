@@ -1,4 +1,4 @@
-import {pageDriver, transcriptDriver} from "../_util/driver";
+import {pageDriver, pageNavigationDriver, transcriptDriver} from "../_util/driver";
 
 function createClickHandlers() {
   $("#help-menu").on("click", "div.item", function(e) {
@@ -7,6 +7,11 @@ function createClickHandlers() {
     if ($(this).hasClass("page-tour")) {
       console.log("pageDriver");
       pageDriver();
+    }
+
+    if ($(this).hasClass("page-navtour")) {
+      console.log("page Nav Driver");
+      pageNavigationDriver();
     }
 
     if ($(this).hasClass("transcript-tour")) {

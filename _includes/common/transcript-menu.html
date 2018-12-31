@@ -33,16 +33,19 @@
         <i class="paragraph icon"></i>
       </span>
     </a>
-    <a href="#" class="item">
+    <a href="#" class="top-of-page item">
       <span data-position="bottom center" data-tooltip="Top of Page">
         <i class="level up icon"></i>
       </span>
     </a>
+    {% comment %}
     {% if page.bid == "Questions" %}
     <a href="#" data-book="{{page.contents | downcase}}" class="item toc-modal-open">
     {% else %}
     <a href="#" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
     {% endif %}
+    {% endcomment %}
+    <a href="#" id="contents-modal-open" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
       <span data-position="bottom center" data-tooltip="Show Contents">
         <i class="align justify icon"></i>
       </span>
@@ -50,7 +53,7 @@
     <a id="about-dropdown-menu" href="#" class="ui dropdown item">
       <i class="question icon"></i>
       <div id="help-menu" class="menu">
-        <div class="transcript-tour item">Take a Quick Tour</div>
+        <div class="transcript-tour item">Learn About This Page</div>
         <div class="about-src item">About Way of Mastery</div>
         <div class="read-documentation item">Read Documentation</div>
         <div class="view-documentation item">Watch Video Instruction</div>

@@ -11,7 +11,7 @@ The five core texts that have resulted from this partnership are listed
 below.
 
 The original recording of each session is available along
-side of transcript. When viewing the transcript click on the
+side the transcript. When viewing the transcript click on the
 <i class="volume up icon"></i> icon to reveal the audio player.
 
 To see the *table of contents* click on the image for each core text.
@@ -112,6 +112,8 @@ To see the *table of contents* click on the image for each core text.
     </div>
   </div>
 </div>
+
+
 
 
 
