@@ -24,8 +24,7 @@ function createClickHandlers() {
     }
 
     if ($(this).hasClass("read-documentation")) {
-      console.log("documentation not ready yet");
-      //location.href = "";
+      location.href = "https://docs.christmind.info";
     }
 
     if ($(this).hasClass("view-documentation")) {

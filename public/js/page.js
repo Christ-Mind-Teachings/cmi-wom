@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1546236971608,
-    wot: 1546236971608,
-    wok: 1546236971608,
-    wos: 1546236971608,
-    tjl: 1546236971608,
-    early: 1546236971608
+    woh: 1546666107082,
+    wot: 1546666107082,
+    wok: 1546666107082,
+    wos: 1546666107082,
+    tjl: 1546666107082,
+    early: 1546666107082
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35861,8 +35861,7 @@ function createClickHandlers() {
     }
 
     if ($(this).hasClass("read-documentation")) {
-      console.log("documentation not ready yet");
-      //location.href = "";
+      location.href = "https://docs.christmind.info";
     }
 
     if ($(this).hasClass("view-documentation")) {
