@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1546666107082,
-    wot: 1546666107082,
-    wok: 1546666107082,
-    wos: 1546666107082,
-    tjl: 1546666107082,
-    early: 1546666107082
+    woh: 1547468998354,
+    wot: 1547468998354,
+    wok: 1547468998354,
+    wos: 1547468998354,
+    tjl: 1547468998354,
+    early: 1547468998354
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35743,42 +35743,131 @@ const uiOpenTocModal = ".toc-modal-open";
 const uiModalOpacity = 0.5;
 
 //generate html for questions
-function renderQuestions(questions) {
+function renderQuestions(questions, c) {
   return `
     <div class="list">
-      ${questions.map(q => `<a class="item" href="${q.url}">${q.title}</a>`).join("")}
+      ${questions.map(q => `<a data-lid="${++c.counter}" class="item" href="${q.url}">${q.title}</a>`).join("")}
     </div>
   `;
 }
 
 //generate html for Contents
 function makeContents(contents) {
+  var c = { counter: 0 };
   return `
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
         <div class="item">
-          <a href="${unit.url}">${unit.title}</a>
-          ${unit.questions ? renderQuestions(unit.questions) : ""}
+          <a data-lid="${++c.counter}" href="${unit.url}">${unit.title}</a>
+          ${unit.questions ? renderQuestions(unit.questions, c) : ""}
         </div>
       `).join("")}
     </div>
   `;
 }
 
+//called for transcript pages
+function loadTOC() {
+  console.log("transcript page: loading toc");
+  let book = $("#contents-modal-open").attr("data-book").toLowerCase();
+
+  Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["c" /* getConfig */])(book).then(contents => {
+    $(".toc-image").attr("src", `${contents.image}`);
+    $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
+
+    $(".toc-list").html(makeContents(contents.contents));
+    highlightCurrentTranscript(contents.bid);
+  }).catch(error => {
+    console.error(error);
+    $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
+    $(".toc-title").html("Table of Contents: <em>Error</em>");
+    $(".toc-list").html(`<p>Error: ${error.message}</p>`);
+    $(uiTocModal).modal("show");
+  });
+}
+
+/*
+  set next/prev controls on menu for workbook transcripts
+*/
+function nextPrev($el, max) {
+  let LAST_ID = max;
+  let prevId = -1,
+      nextId = -1,
+      href,
+      text;
+  let lid = $el.attr("data-lid");
+  let lessonId = parseInt(lid, 10);
+
+  //disable prev control
+  if (lessonId === 1) {
+    $(".previous-page").addClass("disabled");
+  } else {
+    $(".previous-page").removeClass("disabled");
+    prevId = lessonId - 1;
+  }
+
+  //disable next control
+  if (lessonId === LAST_ID) {
+    $(".next-page").addClass("disabled");
+  } else {
+    $(".next-page").removeClass("disabled");
+    nextId = lessonId + 1;
+  }
+
+  if (prevId > -1) {
+    href = $(`a[data-lid="${prevId}"]`).attr("href");
+    text = $(`a[data-lid="${prevId}"]`).text();
+
+    //set prev tooltip and href
+    $("a.previous-page > span").attr("data-tooltip", `${text}`);
+    $("a.previous-page").attr("href", `${href}`);
+  }
+
+  if (nextId > -1) {
+    href = $(`a[data-lid="${nextId}"]`).attr("href");
+    text = $(`a[data-lid="${nextId}"]`).text();
+
+    //set prev tooltip and href
+    $("a.next-page > span").attr("data-tooltip", `${text}`);
+    $("a.next-page").attr("href", `${href}`);
+  }
+}
+
 /*
   If we're on a transcript page, highlight the
   current transcript in the list
 */
-function highlightCurrentTranscript() {
-  if ($(".transcript").length > 0) {
-    let page = location.pathname;
-    let $el = $(`.toc-list a[href='${page}']`);
+function highlightCurrentTranscript(bid) {
+  let page = location.pathname;
+  let $el = $(`.toc-list a[href='${page}']`);
 
-    //remove href to deactivate link for current page and
-    //scroll into middle of viewport
-    $el.addClass("current-unit").removeAttr("href");
-    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()($el.get(0));
+  //remove href to deactivate link for current page and
+  //scroll into middle of viewport
+  $el.addClass("current-unit").removeAttr("href");
+  __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()($el.get(0));
+
+  let max = 1;
+  switch (bid) {
+    case "woh":
+      max = 37;
+      break;
+    case "wot":
+      max = 24;
+      break;
+    case "wok":
+      max = 21;
+      break;
+    case "tjl":
+      max = 15;
+      break;
+    case "wos":
+      max = 9;
+      break;
+    case "early":
+      max = 43;
+      break;
   }
+  nextPrev($el, max);
 }
 
 /*
@@ -35794,12 +35883,17 @@ function getBookId() {
    * Init the modal dialog with data from JSON file 
    * or local storage
    */
-  initialize: function () {
+  initialize: function (env) {
     //dialog settings
     $(uiTocModal).modal({
       dimmerSettings: { opacity: uiModalOpacity },
       observeChanges: true
     });
+
+    //load toc once for transcript pages
+    if (env === "transcript") {
+      loadTOC();
+    }
 
     /*
      * TOC populated by JSON file from AJAX call if not found
@@ -35812,18 +35906,22 @@ function getBookId() {
       e.preventDefault();
       let book = $(e.currentTarget).attr("data-book").toLowerCase();
 
-      Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["c" /* getConfig */])(book).then(contents => {
-        $(".toc-image").attr("src", `${contents.image}`);
-        $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
-        $(".toc-list").html(makeContents(contents.contents));
-        highlightCurrentTranscript();
+      //load the TOC if we're not on a transcript page
+      if (env !== "transcript") {
+        Object(__WEBPACK_IMPORTED_MODULE_1__config_config__["c" /* getConfig */])(book).then(contents => {
+          $(".toc-image").attr("src", `${contents.image}`);
+          $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
+          $(".toc-list").html(makeContents(contents.contents));
+          $(uiTocModal).modal("show");
+        }).catch(error => {
+          $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
+          $(".toc-title").html("Table of Contents: <em>Error</em>");
+          $(".toc-list").html(`<p>Error: ${error.message}</p><p>Failed to get ${url}`);
+          $(uiTocModal).modal("show");
+        });
+      } else {
         $(uiTocModal).modal("show");
-      }).catch(error => {
-        $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
-        $(".toc-title").html("Table of Contents: <em>Error</em>");
-        $(".toc-list").html(`<p>Error: ${error.message}</p><p>Failed to get ${url}`);
-        $(uiTocModal).modal("show");
-      });
+      }
     });
   }
 });
@@ -36026,87 +36124,130 @@ function transcriptDriver() {
     */
   });
 
-  driver.defineSteps([{
+  let steps = [];
+
+  steps.push({
     element: "#masthead-title",
     popover: {
       title: "Library of Christ Mind Teachings",
       description: "This page is part of the Teachings of Christ Mind Library. Click this link to navigate to the Library's Home page.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: "#src-title",
     popover: {
       title: "Way of Mastery",
       description: "This page comes from the Way of Mastery. Click this link to navigate to the Home page of the Way of Mastery.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: "#book-title",
     popover: {
       title: "Book Title",
       description: "This identifies the book and chapter of the content on this page.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: "#bookmark-dropdown-menu",
     popover: {
       title: "Bookmarks",
       description: "You can create a bookmark from highlighted text and associate the bookmark with one or more categories. Learn more about bookmarks by reading the documentation.",
       position: "right"
     }
-  }, {
-    element: ".search-modal-open",
-    popover: {
-      title: "Search Through All Books",
-      description: "Find topics of interest by searching through all Way of Mastery books.",
-      position: "bottom"
-    }
-  }, {
-    element: ".audio-player-toggle",
-    popover: {
-      title: "Listen to the Audio",
-      description: "Click the speaker icon to display the audio player and listen along as you read.",
-      position: "bottom"
-    }
-  }, {
+  });
+
+  if ($(".search-modal-open").length > 0) {
+    steps.push({
+      element: ".search-modal-open",
+      popover: {
+        title: "Search Through All Books",
+        description: "Find topics of interest by searching through all Way of Mastery books.",
+        position: "bottom"
+      }
+    });
+  }
+
+  if (!$(".audio-player-toggle").hasClass("hide")) {
+    steps.push({
+      element: ".audio-player-toggle",
+      popover: {
+        title: "Listen to the Audio",
+        description: "Click the speaker icon to display the audio player and listen along as you read.",
+        position: "bottom"
+      }
+    });
+  }
+
+  steps.push({
     element: ".toggle-paragraph-markers",
     popover: {
       title: "Show/Hide Paragraph Markers",
       description: "Show or hide the markers that preceed each paragraph.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: ".top-of-page",
     popover: {
       title: "Go To Top of Page",
       description: "Quickly jump to the top of the page.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: "#contents-modal-open",
     popover: {
       title: "Table of Contents",
       description: "View the table of contents.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
+    element: ".previous-page",
+    popover: {
+      title: "Previous Page",
+      description: "Go to the previous page. This will be disabled when the first page is displayed.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: ".next-page",
+    popover: {
+      title: "Next Page",
+      description: "Go to the next page. This will be disabled when the last page is displayed.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
     element: "#about-dropdown-menu",
     popover: {
       title: "Get Help",
       description: "Learn how to use features of the Library.",
       position: "bottom"
     }
-  }, {
+  });
+
+  steps.push({
     element: ".login-menu-option",
     popover: {
       title: "Sign In/Sign Out",
       description: "Create an account and sign in or sign out. When you sign in, bookmarks you create will be available on all devices you use to access the library.",
       position: "bottom"
     }
-  }]);
+  });
 
-  //show bookmark menu
-  //$("#bookmark-dropdown-menu").dropdown("show");
+  driver.defineSteps(steps);
   driver.start();
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
@@ -37205,7 +37346,7 @@ $(document).ready(() => {
 
   //load config file and do initializations that depend on a loaded config file
   Object(__WEBPACK_IMPORTED_MODULE_2__modules_config_config__["f" /* loadConfig */])(Object(__WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["b" /* getBookId */])()).then(() => {
-    __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["a" /* default */].initialize();
+    __WEBPACK_IMPORTED_MODULE_6__modules_contents_toc__["a" /* default */].initialize("transcript");
     __WEBPACK_IMPORTED_MODULE_4__modules_search_search__["a" /* default */].initialize();
     __WEBPACK_IMPORTED_MODULE_7__modules_audio_audio__["a" /* default */].initialize();
     Object(__WEBPACK_IMPORTED_MODULE_1__modules_util_url__["d" /* showParagraph */])();

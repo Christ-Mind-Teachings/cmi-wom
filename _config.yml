@@ -30,8 +30,9 @@ encoding: utf-8
 # Build settings
 markdown: kramdown
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
+
+#  - jekyll-feed
 
 # Collections for transcripts
 collections:

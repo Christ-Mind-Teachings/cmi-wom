@@ -152,99 +152,131 @@ export function transcriptDriver() {
     */
   });
 
-  driver.defineSteps([
-    {
-      element: "#masthead-title",
-      popover: {
-        title: "Library of Christ Mind Teachings",
-        description: "This page is part of the Teachings of Christ Mind Library. Click this link to navigate to the Library's Home page.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#src-title",
-      popover: {
-        title: "Way of Mastery",
-        description: "This page comes from the Way of Mastery. Click this link to navigate to the Home page of the Way of Mastery.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#book-title",
-      popover: {
-        title: "Book Title",
-        description: "This identifies the book and chapter of the content on this page.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#bookmark-dropdown-menu",
-      popover: {
-        title: "Bookmarks",
-        description: "You can create a bookmark from highlighted text and associate the bookmark with one or more categories. Learn more about bookmarks by reading the documentation.",
-        position: "right"
-      }
-    },
-    {
+  let steps = [];
+
+  steps.push({
+    element: "#masthead-title",
+    popover: {
+      title: "Library of Christ Mind Teachings",
+      description: "This page is part of the Teachings of Christ Mind Library. Click this link to navigate to the Library's Home page.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: "#src-title",
+    popover: {
+      title: "Way of Mastery",
+      description: "This page comes from the Way of Mastery. Click this link to navigate to the Home page of the Way of Mastery.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: "#book-title",
+    popover: {
+      title: "Book Title",
+      description: "This identifies the book and chapter of the content on this page.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: "#bookmark-dropdown-menu",
+    popover: {
+      title: "Bookmarks",
+      description: "You can create a bookmark from highlighted text and associate the bookmark with one or more categories. Learn more about bookmarks by reading the documentation.",
+      position: "right"
+    }
+  });
+
+  if ($(".search-modal-open").length > 0) {
+    steps.push({
       element: ".search-modal-open",
       popover: {
         title: "Search Through All Books",
         description: "Find topics of interest by searching through all Way of Mastery books.",
         position: "bottom"
       }
-    },
-    {
+    });
+  }
+
+  if (!$(".audio-player-toggle").hasClass("hide")) {
+    steps.push({
       element: ".audio-player-toggle",
       popover: {
         title: "Listen to the Audio",
         description: "Click the speaker icon to display the audio player and listen along as you read.",
         position: "bottom"
       }
-    },
-    {
-      element: ".toggle-paragraph-markers",
-      popover: {
-        title: "Show/Hide Paragraph Markers",
-        description: "Show or hide the markers that preceed each paragraph.",
-        position: "bottom"
-      }
-    },
-    {
-      element: ".top-of-page",
-      popover: {
-        title: "Go To Top of Page",
-        description: "Quickly jump to the top of the page.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#contents-modal-open",
-      popover: {
-        title: "Table of Contents",
-        description: "View the table of contents.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#about-dropdown-menu",
-      popover: {
-        title: "Get Help",
-        description: "Learn how to use features of the Library.",
-        position: "bottom"
-      }
-    },
-    {
-      element: ".login-menu-option",
-      popover: {
-        title: "Sign In/Sign Out",
-        description: "Create an account and sign in or sign out. When you sign in, bookmarks you create will be available on all devices you use to access the library.",
-        position: "bottom"
-      }
-    }
-  ]);
+    });
+  }
 
-  //show bookmark menu
-  //$("#bookmark-dropdown-menu").dropdown("show");
+  steps.push({
+    element: ".toggle-paragraph-markers",
+    popover: {
+      title: "Show/Hide Paragraph Markers",
+      description: "Show or hide the markers that preceed each paragraph.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: ".top-of-page",
+    popover: {
+      title: "Go To Top of Page",
+      description: "Quickly jump to the top of the page.",
+      position: "bottom"
+    }
+  });
+
+
+  steps.push({
+    element: "#contents-modal-open",
+    popover: {
+      title: "Table of Contents",
+      description: "View the table of contents.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: ".previous-page",
+    popover: {
+      title: "Previous Page",
+      description: "Go to the previous page. This will be disabled when the first page is displayed.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: ".next-page",
+    popover: {
+      title: "Next Page",
+      description: "Go to the next page. This will be disabled when the last page is displayed.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: "#about-dropdown-menu",
+    popover: {
+      title: "Get Help",
+      description: "Learn how to use features of the Library.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: ".login-menu-option",
+    popover: {
+      title: "Sign In/Sign Out",
+      description: "Create an account and sign in or sign out. When you sign in, bookmarks you create will be available on all devices you use to access the library.",
+      position: "bottom"
+    }
+  });
+
+  driver.defineSteps(steps);
   driver.start();
 }
 

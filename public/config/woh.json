@@ -239,12 +239,6 @@
           "url": "/woh/l12/q3/",
           "audio": "/questions/Q12.03.mp3",
           "timing": "/questions/h12q3.json"
-        },
-        {
-          "title": "Q4. Audio Test",
-          "url": "/woh/l12/q4/",
-          "audio": "/questions/test.mp3",
-          "timing": "/questions/h12q4.json"
         }
       ]
     }
