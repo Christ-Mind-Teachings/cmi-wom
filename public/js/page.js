@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1547468998354,
-    wot: 1547468998354,
-    wok: 1547468998354,
-    wos: 1547468998354,
-    tjl: 1547468998354,
-    early: 1547468998354
+    woh: 1547804306770,
+    wot: 1547804306770,
+    wok: 1547804306770,
+    wos: 1547804306770,
+    tjl: 1547804306770,
+    early: 1547804306770
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35800,17 +35800,17 @@ function nextPrev($el, max) {
 
   //disable prev control
   if (lessonId === 1) {
-    $(".previous-page").addClass("disabled");
+    $("#toc-previous-page").addClass("disabled");
   } else {
-    $(".previous-page").removeClass("disabled");
+    $("#toc-previous-page").removeClass("disabled");
     prevId = lessonId - 1;
   }
 
   //disable next control
   if (lessonId === LAST_ID) {
-    $(".next-page").addClass("disabled");
+    $("#toc-next-page").addClass("disabled");
   } else {
-    $(".next-page").removeClass("disabled");
+    $("#toc-next-page").removeClass("disabled");
     nextId = lessonId + 1;
   }
 
@@ -35819,8 +35819,8 @@ function nextPrev($el, max) {
     text = $(`a[data-lid="${prevId}"]`).text();
 
     //set prev tooltip and href
-    $("a.previous-page > span").attr("data-tooltip", `${text}`);
-    $("a.previous-page").attr("href", `${href}`);
+    $("#toc-previous-page > span").attr("data-tooltip", `${text}`);
+    $("#toc-previous-page").attr("href", `${href}`);
   }
 
   if (nextId > -1) {
@@ -35828,8 +35828,8 @@ function nextPrev($el, max) {
     text = $(`a[data-lid="${nextId}"]`).text();
 
     //set prev tooltip and href
-    $("a.next-page > span").attr("data-tooltip", `${text}`);
-    $("a.next-page").attr("href", `${href}`);
+    $("#toc-next-page > span").attr("data-tooltip", `${text}`);
+    $("#toc-next-page").attr("href", `${href}`);
   }
 }
 

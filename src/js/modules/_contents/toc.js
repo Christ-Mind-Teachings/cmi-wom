@@ -62,19 +62,19 @@ function nextPrev($el, max) {
 
   //disable prev control
   if (lessonId === 1) {
-    $(".previous-page").addClass("disabled");
+    $("#toc-previous-page").addClass("disabled");
   }
   else {
-    $(".previous-page").removeClass("disabled");
+    $("#toc-previous-page").removeClass("disabled");
     prevId = lessonId - 1;
   }
 
   //disable next control
   if (lessonId === LAST_ID) {
-    $(".next-page").addClass("disabled");
+    $("#toc-next-page").addClass("disabled");
   }
   else {
-    $(".next-page").removeClass("disabled");
+    $("#toc-next-page").removeClass("disabled");
     nextId = lessonId + 1;
   }
 
@@ -83,8 +83,8 @@ function nextPrev($el, max) {
     text = $(`a[data-lid="${prevId}"]`).text();
 
     //set prev tooltip and href
-    $("a.previous-page > span").attr("data-tooltip", `${text}`);
-    $("a.previous-page").attr("href", `${href}`);
+    $("#toc-previous-page > span").attr("data-tooltip", `${text}`);
+    $("#toc-previous-page").attr("href", `${href}`);
   }
 
   if (nextId > -1) {
@@ -92,8 +92,8 @@ function nextPrev($el, max) {
     text = $(`a[data-lid="${nextId}"]`).text();
 
     //set prev tooltip and href
-    $("a.next-page > span").attr("data-tooltip", `${text}`);
-    $("a.next-page").attr("href", `${href}`);
+    $("#toc-next-page > span").attr("data-tooltip", `${text}`);
+    $("#toc-next-page").attr("href", `${href}`);
   }
 }
 
