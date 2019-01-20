@@ -4315,12 +4315,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1547804306770,
-    wot: 1547804306770,
-    wok: 1547804306770,
-    wos: 1547804306770,
-    tjl: 1547804306770,
-    early: 1547804306770
+    woh: 1547991850979,
+    wot: 1547991850979,
+    wok: 1547991850979,
+    wos: 1547991850979,
+    tjl: 1547991850979,
+    early: 1547991850979
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -6733,6 +6733,9 @@ return jQuery;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_scroll_into_view__);
 
 
+//timeout interval before calling scroll
+const INTERVAL = 250;
+
 // get query string from window.location unless the arg 'qString' is not
 // null, in that case it represents the query string
 function getQueryString(key, qString) {
@@ -6754,6 +6757,16 @@ function getQueryString(key, qString) {
   return null;
 }
 
+function scrollComplete(message, type) {
+  console.log(`${message}: ${type}`);
+}
+
+function scrollIntoView(id, caller) {
+  __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(id), { align: { top: 0.2 } }, type => {
+    scrollComplete(`scroll from url.js ${caller}(${id})`, type);
+  });
+}
+
 /*
   Check for url query string requesting to scroll given paragraph into view
   Syntax: ?v=pid, example: ?v=p20
@@ -6763,7 +6776,7 @@ function getQueryString(key, qString) {
 function showParagraph() {
   let pId = getQueryString("v");
   if (pId) {
-    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
+    setTimeout(scrollIntoView, INTERVAL, pId, "showParagraph");
   }
 }
 
@@ -6771,7 +6784,7 @@ function showBookmark() {
   let pId = getQueryString("bkmk");
 
   if (pId) {
-    __WEBPACK_IMPORTED_MODULE_0_scroll_into_view___default()(document.getElementById(pId), { align: { top: 0.2 } });
+    setTimeout(scrollIntoView, INTERVAL, pId, "showBookmark");
     return pId;
   }
   return null;
@@ -6781,6 +6794,7 @@ function showSearchMatch() {
   let pId = getQueryString("srch");
 
   if (pId) {
+    setTimeout(scrollIntoView, INTERVAL, pId, "showSearchMatch");
     return pId;
   }
   return null;
