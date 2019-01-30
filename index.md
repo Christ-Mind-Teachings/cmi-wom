@@ -8,6 +8,17 @@ footer:
 
 <div id="page-contents" class="ui three cards">
   <div class="card">
+    <a href="#" data-book="acq" class="toc-modal-open image">
+      <img src="/public/img/wom/acq-big.jpg">
+    </a>
+    <div class="content">
+      <div class="header">Get Acquainted</div>
+      <div class="description">
+        Learn about The Way of Mastery
+      </div>
+    </div>
+  </div>
+  <div class="card">
     <a href="#" data-book="woh" class="toc-modal-open image">
       <img src="/public/img/wom/woh-big.jpg">
     </a>

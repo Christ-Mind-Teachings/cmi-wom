@@ -1812,8 +1812,9 @@ const sourceId = 10;
 //length of pageKey excluding decimal portion
 const keyLength = 8;
 
-const books = ["tjl", "wos", "early", "woh", "wot", "wok"];
+const books = ["tjl", "wos", "early", "woh", "wot", "wok", "acq"];
 const bookIds = ["xxx", ...books];
+const acq = ["xxx", "welcome", "wom", "web"];
 const tjl = ["xxx", "ack", "foreword", "chap01", "chap02", "chap03", "chap04", "chap05", "chap06", "chap07", "chap08", "chap09", "chap10", "chap11", "chap12", "epilogue"];
 const wos = ["xxx", "foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilogue", "prayer"];
 const early = ["xxx", "ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoi", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
@@ -1831,18 +1832,17 @@ function splitUrl(url) {
 function getUnitId(bid, unit) {
   switch (bid) {
     case "tjl":
-      //return indexOf(tjl, unit);
       return tjl.indexOf(unit);
     case "wos":
-      //return indexOf(wos, unit);
       return wos.indexOf(unit);
     case "woh":
     case "wot":
     case "wok":
       return parseInt(unit.substr(1), 10);
     case "early":
-      //return indexOf(early, unit);
       return early.indexOf(unit);
+    case "acq":
+      return acq.indexOf(unit);
     default:
       throw new Error(`unexpected bookId: ${bid}`);
   }
@@ -5200,12 +5200,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1548050266597,
-    wot: 1548050266597,
-    wok: 1548050266597,
-    wos: 1548050266597,
-    tjl: 1548050266597,
-    early: 1548050266597
+    woh: 1548765163732,
+    wot: 1548765163732,
+    wok: 1548765163732,
+    wos: 1548765163732,
+    tjl: 1548765163732,
+    early: 1548765163732
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -35956,6 +35956,9 @@ function highlightCurrentTranscript(bid) {
     case "early":
       max = 43;
       break;
+    case "acq":
+      max = 3;
+      break;
   }
   nextPrev($el, max);
 }
@@ -37348,6 +37351,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+const ports = {
+  acim: 9912,
+  wom: 9910,
+  raj: 9913,
+  jsb: 9911,
+  www: 9999
+};
+
+function setLinks() {
+  if (location.hostname === "localhost") {
+    $("#www-christmind-info").attr("href", `http://localhost:${ports.www}/`);
+  }
+}
+
 /*
  * For all transcript paragraphs -
  *   That are not footnotes and that don't have class .omit
@@ -37428,6 +37445,7 @@ function createParagraphNumberToggleListener() {
 $(document).ready(() => {
 
   initStickyMenu();
+  setLinks();
   labelParagraphs();
   createParagraphNumberToggleListener();
   __WEBPACK_IMPORTED_MODULE_5__modules_user_netlify__["a" /* default */].initialize();
