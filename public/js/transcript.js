@@ -5200,12 +5200,12 @@ let config;
 function refreshNeeded(bid, fetchDate) {
   //values of lastChanged are loaded from webpack
   const lastChanged = {
-    woh: 1548765163732,
-    wot: 1548765163732,
-    wok: 1548765163732,
-    wos: 1548765163732,
-    tjl: 1548765163732,
-    early: 1548765163732
+    woh: 1549352528262,
+    wot: 1549352528262,
+    wok: 1549352528262,
+    wos: 1549352528262,
+    tjl: 1549352528262,
+    early: 1549352528262
   };
 
   if (lastChanged[bid] > fetchDate) {
@@ -34664,7 +34664,7 @@ function generateBookmarkList(books) {
         <li>Clicking on the paragraph number, eg: (p21)</li>
       </ul>
       <p>
-        See <a href="">the Bookmark documentation</a> for more information.
+        See <a href="https://www.christmind.info/acq/bookmark/">the Bookmark documentation</a> for more information.
       </p>
     `;
   }
