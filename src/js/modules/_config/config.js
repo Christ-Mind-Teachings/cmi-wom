@@ -224,7 +224,7 @@ export function getPageInfo(pageKey, data = false) {
     getConfig(decodedKey.bookId, false)
       .then((data) => {
         info.bookTitle = data.title;
-        
+
         if (decodedKey.hasQuestions) {
           info.title = data.contents[decodedKey.uid].title;
           info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
@@ -234,12 +234,12 @@ export function getPageInfo(pageKey, data = false) {
           info.title = data.contents[decodedKey.uid].title;
           info.url = data.contents[decodedKey.uid].url;
         }
-        
+
         resolve(info);
       })
       .catch((error) => {
         reject(error);
       });
   });
-
 }
+

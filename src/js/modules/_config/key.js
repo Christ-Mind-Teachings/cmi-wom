@@ -36,6 +36,13 @@ const tjl = ["xxx", "ack", "foreword", "chap01", "chap02", "chap03", "chap04", "
 const wos = ["xxx", "foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilogue", "prayer"];
 const early = ["xxx", "ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoi", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
 
+const contents = {
+  acq: acq,
+  tjl: tjl,
+  wos: wos,
+  early: early
+};
+
 function splitUrl(url) {
   let u = url;
 
@@ -46,6 +53,23 @@ function splitUrl(url) {
   return u.split("/");
 }
 
+/*
+  return the position of unit in the bid array
+*/
+function getUnitId(bid, unit) {
+  if (bid === "woh" || bid === "wot" || bid === "wok") {
+    return parseInt(unit.substr(1), 10);
+  }
+
+  if (contents[bid]) {
+    return contents[bid].indexOf(unit);
+  }
+  else {
+    throw new Error(`unexpected bookId: ${bid}`);
+  }
+}
+
+/*
 function getUnitId(bid, unit) {
   switch(bid) {
     case "tjl":
@@ -64,6 +88,7 @@ function getUnitId(bid, unit) {
       throw new Error(`unexpected bookId: ${bid}`);
   }
 }
+*/
 
 function getSourceId() {
   return sourceId;
