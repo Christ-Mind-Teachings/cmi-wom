@@ -1,7 +1,7 @@
 {
   "name": "cmi-wom",
   "version": "0.1.0",
-  "description": "Way of Mastery",
+  "description": "Teachings of Christ Mind: Way of Mastery",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -10,7 +10,7 @@
     "start": "npm run jekyll & npm run watch"
   },
   "keywords": [
-    "cmi"
+    "cmi", "wom"
   ],
   "author": "Rick Mercer",
   "license": "MIT",
