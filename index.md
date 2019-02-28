@@ -4,6 +4,10 @@ masthead: home
 title: "Way of Mastery Contents"
 footer:
   display: true
+  donate: false
+  id: "CMI-WOM"
+  source: "WOM"
+  repohref: "https://github.com/rmercer33/cmi-wom"
 ---
 
 ## Welcome to The Way of Mastery
