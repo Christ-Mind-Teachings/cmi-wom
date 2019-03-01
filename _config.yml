@@ -72,6 +72,7 @@ defaults:
       image-width: 612
       image-height: 792
       bid: "acq"
+      audio: false
   - scope:
       path: ""
       type: woh
@@ -112,6 +113,7 @@ defaults:
       image-width: 612
       image-height: 792
       bid: "WOS"
+      audio: false
   - scope:
       path: ""
       type: tjl
@@ -122,6 +124,7 @@ defaults:
       image-width: 612
       image-height: 792
       bid: "TJL"
+      audio: false
   - scope:
       path: ""
       type: early
