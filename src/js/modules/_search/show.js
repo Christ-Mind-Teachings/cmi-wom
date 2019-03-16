@@ -164,10 +164,10 @@ function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data, o
   }
 
   store.set(queryResultName, {
-    query: queryString, 
-    count: matchCount, 
-    titleArray: titleArray, 
-    pageInfo: pageInfo, 
+    query: queryString,
+    count: matchCount,
+    titleArray: titleArray,
+    pageInfo: pageInfo,
     data: data,
     flat: flatMatches
   });
