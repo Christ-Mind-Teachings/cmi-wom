@@ -8,7 +8,7 @@ so, too<br/>
 do you resist your own salvation.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -57,7 +57,7 @@ home with me; I am well ahead of schedule. Time to kick back and savor
 it all.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -131,7 +131,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -200,7 +200,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -368,7 +368,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -397,7 +397,7 @@ me as so radical - it demands change at fundamental levels, and in ways
 I do not yet understand. How, then, can I share it?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -471,7 +471,7 @@ will have fuel to discredit all of this! And now one question occurs:
 What if I do receive the tape?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -611,7 +611,7 @@ words reverberate continually in my mind, resonating like an echo
 without end: “Truth Giver, Truth Giver, Truth Giver...”
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -724,7 +724,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

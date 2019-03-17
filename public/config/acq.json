@@ -1,19 +1,19 @@
 {
   "bid": "acq",
   "title": "Get Acquainted",
-  "image": "/public/img/wom/acq-toc.jpg",
+  "image": "/wom/public/img/wom/acq-toc.jpg",
   "contents": [
     {
       "title": "Welcome",
-      "url": "/acq/welcome/"
+      "url": "/wom/acq/welcome/"
     },
     {
       "title": "About Way of Mastery",
-      "url": "/acq/wom/"
+      "url": "/wom/acq/wom/"
     },
     {
       "title": "Related Sites",
-      "url": "/acq/web/"
+      "url": "/wom/acq/web/"
     }
   ]
 }

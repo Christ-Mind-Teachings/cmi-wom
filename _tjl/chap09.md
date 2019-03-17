@@ -6,7 +6,7 @@ title: Nine
 There is no effort in the Kingdom.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -77,7 +77,7 @@ How can I ever hope to discover what this mystery means, unless I fully
 submit to the way of love Jeshua reveals, and to which he has called us?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -178,7 +178,7 @@ it. And touch for a moment, even as the flow continues, a hint of peace,
 of real peace.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

@@ -11,7 +11,7 @@ Therefore,<br/>
 so is your unhappiness.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -211,7 +211,7 @@ Coming out of the water, I feel as if all my energy is gone. Collapsing
 in the sand, I fall into a deep sleep.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -257,7 +257,7 @@ to drop it back as far as possible, and deliberately turn my attention
 to the movie, wishing I had paid my six bucks for the headphones.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -442,7 +442,7 @@ must be? Or is it, perhaps, a zendo?
 For a moment, I am a Zen Buddhist monk, but only for a fleeting moment.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -496,7 +496,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -527,7 +527,7 @@ to work and don’t think about it. Good idea. Maybe tonight I’ll rent a
 movie, have a glass or two of wine.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -852,7 +852,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -907,7 +907,7 @@ me fifteen minutes to get here? In that traffic jam? That is not
 possible!
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

@@ -8,10 +8,11 @@ const transcript = require("./key");
 
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
-const timingBase = "/public/timing";
+const timingBase = "/wom/public/timing";
 
 //location of configuration files
-const configUrl = "/public/config";
+const configUrl = "/wom/public/config";
+const configStore = "config.wom.";
 
 //the current configuration, initially null, assigned by getConfig()
 let config;
@@ -82,7 +83,7 @@ export function fetchTimingData(url) {
 */
 export function getConfig(book, assign = true) {
   return new Promise((resolve, reject) => {
-    let cfg = store.get(`config-${book}`);
+    let cfg = store.get(`${configStore}${book}`);
     let url;
 
     //if config in local storage check if we need to get a freash copy
@@ -99,7 +100,7 @@ export function getConfig(book, assign = true) {
       .then((response) => {
         //add save date before storing
         response.data.saveDate = status[response.data.bid];
-        store.set(`config-${book}`, response.data);
+        store.set(`${configStore}${book}`, response.data);
         if (assign) {
           config = response.data;
         }
@@ -121,7 +122,7 @@ export function getConfig(book, assign = true) {
 */
 export function loadConfig(book) {
   return new Promise((resolve, reject) => {
-    let cfg = store.get(`config-${book}`);
+    let cfg = store.get(`${configStore}${book}`);
     let url;
 
     //if config in local storage check if we need to get a freash copy
@@ -136,7 +137,7 @@ export function loadConfig(book) {
       .then((response) => {
         //add save date before storing
         response.data.saveDate = status[response.data.bid];
-        store.set(`config-${book}`, response.data);
+        store.set(`${configStore}${book}`, response.data);
         config = response.data;
         resolve("config fetched from server");
       })
@@ -153,8 +154,8 @@ export function loadConfig(book) {
 function _getAudioInfo(idx, cIdx) {
   let audioInfo;
 
-  if (idx.length === 3) {
-    let qIdx = parseInt(idx[2].substr(1), 10) - 1;
+  if (idx.length === 4) {
+    let qIdx = parseInt(idx[3].substr(1), 10) - 1;
     audioInfo = config.contents[cIdx].questions[qIdx];
   }
   else {
@@ -176,7 +177,7 @@ export function getAudioInfo(url) {
   let idx = url.split("/");
 
   //check the correct configuration file is loaded
-  if (config.bid !== idx[0]) {
+  if (config.bid !== idx[1]) {
     throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[0], config.bid);
   }
 
@@ -184,16 +185,16 @@ export function getAudioInfo(url) {
   let cIdx;
   let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
 
-  switch(idx[0]) {
+  switch(idx[1]) {
     case "tjl":
     case "wos":
       break;
     case "early":
-      cIdx = indexOf(lookup, idx[1]);
+      cIdx = indexOf(lookup, idx[2]);
       audioInfo = _getAudioInfo(idx, cIdx);
       break;
     default:
-      cIdx = parseInt(idx[1].substr(1), 10) - 1;
+      cIdx = parseInt(idx[2].substr(1), 10) - 1;
       audioInfo = _getAudioInfo(idx, cIdx);
       break;
   }

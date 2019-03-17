@@ -9,7 +9,7 @@ to call them to Myself<br/>
 yet again.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -42,7 +42,7 @@ from the airport, in Wailuku, called Down to Earth. And I could use a
 little of that!
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -98,7 +98,7 @@ the one to shape *The Jeshua Letters* into form. And I haven’t even made
 it to my condominium yet!
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -179,7 +179,7 @@ now, I have to ‘cold-call’ a stranger, and ‘fess up! Boy, do I need to
 take a nice, long swim. How far is it back to Tacoma, anyway?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -231,7 +231,7 @@ us!”
 Saying ‘yes’ to joy? Really? Fully? Is that okay? Does it actually work?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -305,7 +305,7 @@ of life. I’d forgotten that moment in Vietnam. It got buried under the
 deluge of the rest of that year, and of years since then.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -442,7 +442,7 @@ now, at least, the resistance is gone.
 deep sleep.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

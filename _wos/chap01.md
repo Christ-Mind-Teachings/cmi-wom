@@ -3,7 +3,7 @@ title: Book One
 ---
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -102,7 +102,7 @@ has been,<br/>
 and forever shall be.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -235,7 +235,7 @@ Behold!<br/>
 The servant is born.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -670,7 +670,7 @@ his final, and consummate,<br/>
 death.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

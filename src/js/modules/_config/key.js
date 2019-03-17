@@ -56,7 +56,7 @@ function splitUrl(url) {
 /*
   return the position of unit in the bid array
 */
-function getUnitId(bid, unit) {
+function getUnitId(bid, unit, fromKey = false) {
   if (bid === "woh" || bid === "wot" || bid === "wok") {
     return parseInt(unit.substr(1), 10);
   }
@@ -70,25 +70,20 @@ function getUnitId(bid, unit) {
 }
 
 /*
-function getUnitId(bid, unit) {
-  switch(bid) {
-    case "tjl":
-      return tjl.indexOf(unit);
-    case "wos":
-      return wos.indexOf(unit);
-    case "woh":
-    case "wot":
-    case "wok":
-      return parseInt(unit.substr(1), 10);
-    case "early":
-      return early.indexOf(unit);
-    case "acq":
-      return acq.indexOf(unit);
-    default:
-      throw new Error(`unexpected bookId: ${bid}`);
+  Return the unit name given keys bid, uid
+*/
+function getUnitFromKey(bid, uid) {
+  if (bid === "woh" || bid === "wot" || bid === "wok") {
+    return sprintf("l%02s", uid);
+  }
+
+  if (contents[bid]) {
+    return contents[bid][unit];
+  }
+  else {
+    throw new Error(`unexpected bookId: ${bid}`);
   }
 }
-*/
 
 function getSourceId() {
   return sourceId;
@@ -160,18 +155,18 @@ function genPageKey(url = location.pathname) {
   let parts = splitUrl(url);
 
   //key.bid = indexOf(bookIds, parts[0]);
-  key.bid = bookIds.indexOf(parts[0]);
+  key.bid = bookIds.indexOf(parts[1]);
   if (key.bid === -1) {
     return -1;
   }
-  key.uid = getUnitId(parts[0], parts[1]);
+  key.uid = getUnitId(parts[1], parts[2]);
   if (key.bid === -1) {
     return -1;
   }
 
-  if (parts.length === 3) {
+  if (parts.length === 4) {
     key.hasQuestions = 1;
-    key.qid = parseInt(parts[2].substr(1), 10);
+    key.qid = parseInt(parts[3].substr(1), 10);
   }
 
   let compositeKey = sprintf("%02s%01s%02s%1s%02s", key.sid, key.bid, key.uid, key.hasQuestions, key.qid);
@@ -220,8 +215,10 @@ function genParagraphKey(pid, key = location.pathname) {
           I: question indicator, 0:no questions 1:questions
          qq: question Id
         ppp: paragraph number - not positional
+
+  Added arg 'subtract' to prevent subtraction of uid and qid.
 */
-function decodeKey(key) {
+function decodeKey(key, substract = true) {
   let {pid, pageKey} = parseKey(key);
   let pageKeyString = pageKey.toString(10);
   let decodedKey = {
@@ -246,11 +243,19 @@ function decodeKey(key) {
   decodedKey.bookId = bookIds[bid];
 
   //substract 1 from key value to get index
-  decodedKey.uid = parseInt(pageKeyString.substr(3,2), 10) - 1;
-  decodedKey.hasQuestions = pageKeyString.substr(5,1) === "1";
+  // ** don't know why we subtract from uid and quid **
+  // ** genPageKey() doesn't add **
+  if (substract) {
+    //subtract 1 from key value to get index
+    decodedKey.uid = parseInt(pageKeyString.substr(3,2), 10) - 1;
+    decodedKey.qid = parseInt(pageKeyString.substr(6,2), 10) - 1;
+  }
+  else {
+    decodedKey.uid = parseInt(pageKeyString.substr(3,2), 10);
+    decodedKey.qid = parseInt(pageKeyString.substr(6,2), 10);
+  }
 
-  //subtract 1 from key value to get index
-  decodedKey.qid = parseInt(pageKeyString.substr(6,2), 10) - 1;
+  decodedKey.hasQuestions = pageKeyString.substr(5,1) === "1";
 
   return decodedKey;
 }
@@ -259,10 +264,42 @@ function getBooks() {
   return books;
 }
 
+/*
+ * Convert page key to url, this is used to determine url of 
+ *  note style bookmarks
+ * 
+ * Prefix the url with "/wom" when prefix = true
+ */
+function getUrl(key, prefix = false) {
+  //decode key but don't subtract one from uid and qid
+  let decodedKey = decodeKey(key, false);
+  let unit = "invalid";
+  let question;
+  let url = `/wom/${decodedKey.bookId}`;
+
+  if (decodedKey.error) {
+    return "/invalid/key/";
+  }
+
+  unit = getUnitFromKey(decodedKey.bookId, decodedKey.uid);
+  url = `${url}/${unit}/`;
+
+  if (decodedKey.hasQuestions) {
+    question = `q${decodedKey.qid}`;
+    url = `${url}${question}/`;
+  }
+
+  if (prefix) {
+    return `/wom/${url}/`;
+  }
+  return url;
+}
+
 module.exports = {
   getBooks: getBooks,
   getSourceId: getSourceId,
   getKeyInfo: getKeyInfo,
+  getUrl: getUrl,
   parseKey: parseKey,
   genPageKey: genPageKey,
   genParagraphKey: genParagraphKey,

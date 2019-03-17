@@ -17,7 +17,7 @@ side the transcript. When viewing the transcript click on the
 <div class="ui items">
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/public/img/wom/tjl-toc.jpg">
+      <img src="/wom/public/img/wom/tjl-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">The Jeshua Letters</dir>
@@ -32,7 +32,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/public/img/wom/wos-toc.jpg">
+      <img src="/wom/public/img/wom/wos-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of the Servant</dir>
@@ -51,7 +51,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir href="#" class="ui tiny image">
-      <img src="/public/img/wom/woh-toc.jpg">
+      <img src="/wom/public/img/wom/woh-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of the Heart</dir>
@@ -65,7 +65,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir href="#" class="ui tiny image">
-      <img src="/public/img/wom/wot-toc.jpg">
+      <img src="/wom/public/img/wom/wot-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of Transformation</dir>
@@ -79,7 +79,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/public/img/wom/wok-toc.jpg">
+      <img src="/wom/public/img/wom/wok-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of Knowing</dir>
@@ -97,7 +97,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/public/img/wom/early-toc.jpg">
+      <img src="/wom/public/img/wom/early-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">The Early Years</dir>

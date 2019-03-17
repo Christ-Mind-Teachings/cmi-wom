@@ -44,7 +44,7 @@ I am distracted. The mosquitoes have won. Sighing, I rise from the rock,
 dress, and return to camp...
 
 <div markdown="1">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

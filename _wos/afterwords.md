@@ -3,7 +3,7 @@ title: After Words
 ---
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
