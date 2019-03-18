@@ -13538,13 +13538,14 @@ function initShareDialog(source) {
     }
 
     pid = $(".selected-annotation-wrapper p").attr("id");
+    let url = $(".selected-annotation-wrapper i[data-clipboard-text]").attr("data-clipboard-text");
 
     //no highlighted text so grab the whole paragraph
     if (annotation.length === 0) {
-      aid = $(`#${pid} > span.pnum`).attr("data-aid");
+      //aid = $(`#${pid} > span.pnum`).attr("data-aid");
       text = $(`#${pid}`).text().replace(/\n/, " ");
     } else {
-      aid = annotation.data("aid");
+      //aid = annotation.data("aid");
       text = annotation.text().replace(/\n/, " ");
     }
 
@@ -13552,7 +13553,7 @@ function initShareDialog(source) {
     let bookTitle = $("#book-title").text();
     let citation = `~ ${srcTitle}: ${bookTitle}`;
 
-    let url = `https://${location.hostname}${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
+    //let url = `https://${location.hostname}${location.pathname}?as=${pid}:${aid}:${userInfo.userId}`;
 
     if (channel === "facebook") {
       let options = {
