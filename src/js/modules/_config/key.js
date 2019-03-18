@@ -78,7 +78,7 @@ function getUnitFromKey(bid, uid) {
   }
 
   if (contents[bid]) {
-    return contents[bid][unit];
+    return contents[bid][uid];
   }
   else {
     throw new Error(`unexpected bookId: ${bid}`);
@@ -155,18 +155,18 @@ function genPageKey(url = location.pathname) {
   let parts = splitUrl(url);
 
   //key.bid = indexOf(bookIds, parts[0]);
-  key.bid = bookIds.indexOf(parts[1]);
+  key.bid = bookIds.indexOf(parts[2]);
   if (key.bid === -1) {
     return -1;
   }
-  key.uid = getUnitId(parts[1], parts[2]);
+  key.uid = getUnitId(parts[2], parts[3]);
   if (key.bid === -1) {
     return -1;
   }
 
-  if (parts.length === 4) {
+  if (parts.length === 5) {
     key.hasQuestions = 1;
-    key.qid = parseInt(parts[3].substr(1), 10);
+    key.qid = parseInt(parts[4].substr(1), 10);
   }
 
   let compositeKey = sprintf("%02s%01s%02s%1s%02s", key.sid, key.bid, key.uid, key.hasQuestions, key.qid);
@@ -267,15 +267,13 @@ function getBooks() {
 /*
  * Convert page key to url, this is used to determine url of 
  *  note style bookmarks
- * 
- * Prefix the url with "/wom" when prefix = true
  */
-function getUrl(key, prefix = false) {
+function getUrl(key) {
   //decode key but don't subtract one from uid and qid
   let decodedKey = decodeKey(key, false);
   let unit = "invalid";
   let question;
-  let url = `/wom/${decodedKey.bookId}`;
+  let url = `/${decodedKey.bookId}`;
 
   if (decodedKey.error) {
     return "/invalid/key/";
@@ -289,9 +287,6 @@ function getUrl(key, prefix = false) {
     url = `${url}${question}/`;
   }
 
-  if (prefix) {
-    return `/wom/${url}/`;
-  }
   return url;
 }
 

@@ -18,7 +18,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
 <div id="page-contents" class="ui three cards">
   <div class="card">
     <a href="#" data-book="acq" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/acq-big.jpg">
+      <img src="/t/wom/public/img/wom/acq-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -28,7 +28,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="woh" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/woh-big.jpg">
+      <img src="/t/wom/public/img/wom/woh-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -38,7 +38,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="wot" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/wot-big.jpg">
+      <img src="/t/wom/public/img/wom/wot-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -48,7 +48,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="wok" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/wok-big.jpg">
+      <img src="/t/wom/public/img/wom/wok-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -58,7 +58,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="tjl" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/tjl-big.jpg">
+      <img src="/t/wom/public/img/wom/tjl-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -68,7 +68,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="wos" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/wos-big.jpg">
+      <img src="/t/wom/public/img/wom/wos-big.jpg">
     </a>
     <div class="content">
       <div class="description">
@@ -78,7 +78,7 @@ The central teaching of *The Way of Mastery* is a pathway of awakening described
   </div>
   <div class="card">
     <a href="#" data-book="early" class="toc-modal-open image">
-      <img src="/wom/public/img/wom/early-big.jpg">
+      <img src="/t/wom/public/img/wom/early-big.jpg">
     </a>
     <div class="content">
       <div class="description">

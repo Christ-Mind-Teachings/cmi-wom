@@ -2028,7 +2028,7 @@ function getUnitFromKey(bid, uid) {
   }
 
   if (contents[bid]) {
-    return contents[bid][unit];
+    return contents[bid][uid];
   } else {
     throw new Error(`unexpected bookId: ${bid}`);
   }
@@ -2104,18 +2104,18 @@ function genPageKey(url = location.pathname) {
   let parts = splitUrl(url);
 
   //key.bid = indexOf(bookIds, parts[0]);
-  key.bid = bookIds.indexOf(parts[1]);
+  key.bid = bookIds.indexOf(parts[2]);
   if (key.bid === -1) {
     return -1;
   }
-  key.uid = getUnitId(parts[1], parts[2]);
+  key.uid = getUnitId(parts[2], parts[3]);
   if (key.bid === -1) {
     return -1;
   }
 
-  if (parts.length === 4) {
+  if (parts.length === 5) {
     key.hasQuestions = 1;
-    key.qid = parseInt(parts[3].substr(1), 10);
+    key.qid = parseInt(parts[4].substr(1), 10);
   }
 
   let compositeKey = sprintf("%02s%01s%02s%1s%02s", key.sid, key.bid, key.uid, key.hasQuestions, key.qid);
@@ -2214,15 +2214,13 @@ function getBooks() {
 /*
  * Convert page key to url, this is used to determine url of 
  *  note style bookmarks
- * 
- * Prefix the url with "/wom" when prefix = true
  */
-function getUrl(key, prefix = false) {
+function getUrl(key) {
   //decode key but don't subtract one from uid and qid
   let decodedKey = decodeKey(key, false);
   let unit = "invalid";
   let question;
-  let url = `/wom/${decodedKey.bookId}`;
+  let url = `/${decodedKey.bookId}`;
 
   if (decodedKey.error) {
     return "/invalid/key/";
@@ -2236,9 +2234,6 @@ function getUrl(key, prefix = false) {
     url = `${url}${question}/`;
   }
 
-  if (prefix) {
-    return `/wom/${url}/`;
-  }
   return url;
 }
 
@@ -5415,10 +5410,10 @@ const transcript = __webpack_require__(20);
 
 //mp3 and audio timing base directories
 const audioBase = "https://s3.amazonaws.com/assets.christmind.info/wom/audio";
-const timingBase = "/wom/public/timing";
+const timingBase = "/t/wom/public/timing";
 
 //location of configuration files
-const configUrl = "/wom/public/config";
+const configUrl = "/t/wom/public/config";
 const configStore = "config.wom.";
 
 //the current configuration, initially null, assigned by getConfig()
@@ -5554,8 +5549,8 @@ function loadConfig(book) {
 function _getAudioInfo(idx, cIdx) {
   let audioInfo;
 
-  if (idx.length === 4) {
-    let qIdx = parseInt(idx[3].substr(1), 10) - 1;
+  if (idx.length === 5) {
+    let qIdx = parseInt(idx[4].substr(1), 10) - 1;
     audioInfo = config.contents[cIdx].questions[qIdx];
   } else {
     audioInfo = config.contents[cIdx];
@@ -5576,24 +5571,24 @@ function getAudioInfo(url) {
   let idx = url.split("/");
 
   //check the correct configuration file is loaded
-  if (config.bid !== idx[1]) {
-    throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[0], config.bid);
+  if (config.bid !== idx[2]) {
+    throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[2], config.bid);
   }
 
   let audioInfo = {};
   let cIdx;
   let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
 
-  switch (idx[1]) {
+  switch (idx[2]) {
     case "tjl":
     case "wos":
       break;
     case "early":
-      cIdx = __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default()(lookup, idx[2]);
+      cIdx = __WEBPACK_IMPORTED_MODULE_2_lodash_indexOf___default()(lookup, idx[3]);
       audioInfo = _getAudioInfo(idx, cIdx);
       break;
     default:
-      cIdx = parseInt(idx[2].substr(1), 10) - 1;
+      cIdx = parseInt(idx[3].substr(1), 10) - 1;
       audioInfo = _getAudioInfo(idx, cIdx);
       break;
   }
@@ -13032,6 +13027,7 @@ module.exports = isFunction;
 const transcript = __webpack_require__(20);
 const bm_modal_store = "bm.wom.modal";
 const bm_list_store = "bm.wom.list";
+const url_prefix = "/t/wom";
 
 let shareEventListenerCreated = false;
 let gPageKey;
@@ -13135,7 +13131,7 @@ function getBookmarkUrl(bookmarks, pageKey) {
           url = `${bookmark[prop][0].selectedText.url}?bkmk=${bookmark[prop][0].rangeStart}`;
         } else {
           //we have a bookmark with no selected text, have to get the url in another way
-          url = `${transcript.getUrl(pageKey)}?bkmk=${bookmark[prop][0].rangeStart}`;
+          url = `${url_prefix}${transcript.getUrl(pageKey)}?bkmk=${bookmark[prop][0].rangeStart}`;
         }
         break;
       }
@@ -26747,7 +26743,7 @@ module.exports = objectToString;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const status = { acq: "Sun Mar 17 12:37:45 WITA 2019", early: "Sun Mar 17 12:39:27 WITA 2019", tjl: "Sun Mar 17 12:40:10 WITA 2019", woh: "Sun Mar 17 12:40:48 WITA 2019", wok: "Sun Mar 17 12:41:24 WITA 2019", wos: "Sun Mar 17 12:41:49 WITA 2019", wot: "Sun Mar 17 12:42:15 WITA 2019" };
+const status = { acq: "Mon Mar 18 15:19:14 WITA 2019", early: "Mon Mar 18 15:19:54 WITA 2019", tjl: "Mon Mar 18 15:20:07 WITA 2019", woh: "Mon Mar 18 15:20:19 WITA 2019", wok: "Mon Mar 18 15:20:33 WITA 2019", wos: "Mon Mar 18 15:20:45 WITA 2019", wot: "Mon Mar 18 15:20:57 WITA 2019" };
 /* harmony export (immutable) */ __webpack_exports__["a"] = status;
 
 
@@ -37272,6 +37268,8 @@ function showSavedQuery() {
 const page = __webpack_require__(20);
 
 const queryResultName = "search.wom.result";
+const url_prefix = "/t/wom";
+
 const SCROLL_INTERVAL = 250;
 
 function scrollComplete(message, type) {
@@ -37496,14 +37494,14 @@ function initControls(pid) {
   }
 
   if (hitPositions.prev > -1) {
-    url = `/wom${lastSearch.flat[hitPositions.prev].url}?srch=${lastSearch.flat[hitPositions.prev].location}`;
+    url = `${url_prefix}${lastSearch.flat[hitPositions.prev].url}?srch=${lastSearch.flat[hitPositions.prev].location}`;
     $(".search-navigator .previous-page").attr("href", url);
   } else {
     $(".search-navigator .previous-page").addClass("inactive");
   }
 
   if (hitPositions.next > -1) {
-    url = `/wom${lastSearch.flat[hitPositions.next].url}?srch=${lastSearch.flat[hitPositions.next].location}`;
+    url = `${url_prefix}${lastSearch.flat[hitPositions.next].url}?srch=${lastSearch.flat[hitPositions.next].location}`;
     $(".search-navigator .next-page").attr("href", url);
   } else {
     $(".search-navigator .next-page").addClass("inactive");

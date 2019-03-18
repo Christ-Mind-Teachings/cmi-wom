@@ -1,67 +1,67 @@
 {
   "bid": "tjl",
   "title": "The Jeshua Letters",
-  "image": "/wom/public/img/wom/tjl-toc.jpg",
+  "image": "/t/wom/public/img/wom/tjl-toc.jpg",
   "contents": [
     {
       "title": "Acknowledgements",
-      "url": "/wom/tjl/ack/"
+      "url": "/t/wom/tjl/ack/"
     },
     {
       "title": "Foreword",
-      "url": "/wom/tjl/foreword/"
+      "url": "/t/wom/tjl/foreword/"
     },
     {
       "title": "Chapter One",
-      "url": "/wom/tjl/chap01/"
+      "url": "/t/wom/tjl/chap01/"
     },
     {
       "title": "Chapter Two",
-      "url": "/wom/tjl/chap02/"
+      "url": "/t/wom/tjl/chap02/"
     },
     {
       "title": "Chapter Three",
-      "url": "/wom/tjl/chap03/"
+      "url": "/t/wom/tjl/chap03/"
     },
     {
       "title": "Chapter Four",
-      "url": "/wom/tjl/chap04/"
+      "url": "/t/wom/tjl/chap04/"
     },
     {
       "title": "Chapter Five",
-      "url": "/wom/tjl/chap05/"
+      "url": "/t/wom/tjl/chap05/"
     },
     {
       "title": "Chapter Six",
-      "url": "/wom/tjl/chap06/"
+      "url": "/t/wom/tjl/chap06/"
     },
     {
       "title": "Chapter Seven",
-      "url": "/wom/tjl/chap07/"
+      "url": "/t/wom/tjl/chap07/"
     },
     {
       "title": "Chapter Eight",
-      "url": "/wom/tjl/chap08/"
+      "url": "/t/wom/tjl/chap08/"
     },
     {
       "title": "Chapter Nine",
-      "url": "/wom/tjl/chap09/"
+      "url": "/t/wom/tjl/chap09/"
     },
     {
       "title": "Chapter Ten",
-      "url": "/wom/tjl/chap10/"
+      "url": "/t/wom/tjl/chap10/"
     },
     {
       "title": "Chapter Eleven",
-      "url": "/wom/tjl/chap11/"
+      "url": "/t/wom/tjl/chap11/"
     },
     {
       "title": "Chapter Twelve",
-      "url": "/wom/tjl/chap12/"
+      "url": "/t/wom/tjl/chap12/"
     },
     {
       "title": "Epilogue",
-      "url": "/wom/tjl/epilogue/"
+      "url": "/t/wom/tjl/epilogue/"
     }
   ]
 }

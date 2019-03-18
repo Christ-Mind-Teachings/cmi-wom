@@ -1,5 +1,5 @@
 # CMI
-destination: "../cmi-www/_site/wom"
+destination: "../cmi-www/_site/t/wom"
 
 sourceId: 10
 cmiTitle: "Teachings of Christ Mind"
@@ -8,7 +8,7 @@ cmiTitle: "Teachings of Christ Mind"
 title:        'Way of Mastery'
 tagline:      'Now, we begin...'
 description:  'A pathway of awakening from Jeshua through Jon Marc Hammer (Jayem)'
-url:          'https://wom.christmind.info'
+url:          'https://www.christmind.info/t/wom'
 baseurl:      ''
 keywords:     "Christ Mind, Way of Mastery, Jeshua, Jayem, Way of the Heart, Way of Transformation, Way of Knowing"
 port:         9910
@@ -20,7 +20,7 @@ author:
   email:             rmercer33@gmail.com
 
 fb-appId:     448658485318107
-src-url:      'https://wom.christmind.info'
+src-url:      'https://www.christmind.info/t/wom'
 
 # Permalinks
 permalink: pretty
@@ -70,7 +70,7 @@ defaults:
     values:
       layout: transcript
       book: "Get Acquainted"
-      image: "/wom/public/img/wom/acq-big.jpg"
+      image: "/t/wom/public/img/wom/acq-big.jpg"
       image-width: 612
       image-height: 792
       bid: "acq"
@@ -81,7 +81,7 @@ defaults:
     values:
       layout: transcript
       book: "Way of the Heart"
-      image: "/wom/public/img/wom/woh-big.jpg"
+      image: "/t/wom/public/img/wom/woh-big.jpg"
       image-width: 612
       image-height: 792
       bid: "WOH"
@@ -91,7 +91,7 @@ defaults:
     values:
       layout: transcript
       book: "Way of Transformation"
-      image: "/wom/public/img/wom/wot-big.jpg"
+      image: "/t/wom/public/img/wom/wot-big.jpg"
       image-width: 612
       image-height: 792
       "bid": "WOT"
@@ -101,7 +101,7 @@ defaults:
     values:
       layout: transcript
       book: "Way of Knowing"
-      image: "/wom/public/img/wom/wok-big.jpg"
+      image: "/t/wom/public/img/wom/wok-big.jpg"
       image-width: 612
       image-height: 792
       bid: "WOK"
@@ -111,9 +111,9 @@ defaults:
     values:
       layout: transcript
       book: "Way of the Servant"
-      image: "/wom/public/img/wom/wos-big.jpg"
-      line2: "/wom/public/img/wom/line2.jpg"
-      line4: "/wom/public/img/wom/line4.jpg"
+      image: "/t/wom/public/img/wom/wos-big.jpg"
+      line2: "/t/wom/public/img/wom/line2.jpg"
+      line4: "/t/wom/public/img/wom/line4.jpg"
       image-width: 612
       image-height: 792
       bid: "WOS"
@@ -124,9 +124,9 @@ defaults:
     values:
       layout: transcript
       book: "The Jeshua Letters"
-      image: "/wom/public/img/wom/tjl-big.jpg"
-      line2: "/wom/public/img/wom/line2.jpg"
-      line4: "/wom/public/img/wom/line4.jpg"
+      image: "/t/wom/public/img/wom/tjl-big.jpg"
+      line2: "/t/wom/public/img/wom/line2.jpg"
+      line4: "/t/wom/public/img/wom/line4.jpg"
       image-width: 612
       image-height: 792
       bid: "TJL"
@@ -137,7 +137,7 @@ defaults:
     values:
       layout: transcript
       book: "The Early Years"
-      image: "/wom/public/img/wom/early.jpg"
+      image: "/t/wom/public/img/wom/early.jpg"
       image-width: 250
       image-height: 324
       bid: "Early"
