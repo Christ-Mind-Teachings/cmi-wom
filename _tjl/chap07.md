@@ -10,7 +10,7 @@ __your__ giving to yourself.<br/>
 When will you choose to accept it?
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -119,7 +119,7 @@ thing that has happened is that a bubble has burst.
 And as that realization sinks in, the phone rings.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -257,7 +257,7 @@ her insistence that I tell her everything that happens when I meet with
 “that mystic lady.”
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -366,7 +366,7 @@ the identity of the “Great One.” My teacher, my friend, my guru: Jeshua,
 the one called Jesus.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -461,7 +461,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -591,7 +591,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

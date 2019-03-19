@@ -9,7 +9,7 @@ to realize the Truth<br/>
 and to come Home again.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -221,7 +221,7 @@ it seems, for the whole world.”
 “Yeah, *that* Jeshua.”
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -437,7 +437,7 @@ Kendra sits up quickly, resting her hand on my arm. “It isn’t? When...?”
 “A few weeks ago, when we were all camping at the beach.”
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -524,7 +524,7 @@ merely forgotten?
 the beach.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -606,7 +606,7 @@ means love, and ‘sophia,’ which means wisdom. Philo sophia: the love of
 wisdom. A philosopher is a lover of wisdom.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -744,7 +744,7 @@ understanding for this experience by looking around me. And that is
 disconcerting.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

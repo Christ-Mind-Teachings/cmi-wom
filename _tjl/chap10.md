@@ -8,7 +8,7 @@ it serves mystery beyond reproach.<br/>
 It is that which can be trusted completely.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 

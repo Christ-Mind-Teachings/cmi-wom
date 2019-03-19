@@ -9,7 +9,7 @@ the Reality of who you are<br/>
 will alone remain.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -135,7 +135,7 @@ and irrevocably release the package labeled “Dream”? Am I sure I want
 to?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

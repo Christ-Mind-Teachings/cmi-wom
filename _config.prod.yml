@@ -1,5 +1,5 @@
 # CMI
-destination: "../cmi-www/_site/t/wom"
+destination: "../cmi-www/t/wom"
 
 sourceId: 10
 cmiTitle: "Teachings of Christ Mind"

@@ -9,7 +9,7 @@ that blocks recognition<br/>
 of the Kingdom
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -342,7 +342,7 @@ Amen
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -601,7 +601,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -713,7 +713,7 @@ leads not back into the world, but *through* it. To what?
 My foot shifts slowly from the brakes to the gas pedal.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -759,7 +759,7 @@ shoulders, conclude I have a vivid imagination, and forget the whole
 thing. It happened. I heard that voice so clearly.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -816,7 +816,7 @@ the calm harbor. More importantly, I *feel* it. This is it. How about
 that? It was waiting for me!
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

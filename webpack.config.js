@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const Jarvis = require("webpack-jarvis");
 const etp = require("extract-text-webpack-plugin");
 
 module.exports = {
@@ -49,9 +48,6 @@ module.exports = {
   },
   plugins: [
     new etp('me-styles.css'),
-    new Jarvis({
-      port: 1337 // optional: set a port
-    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"

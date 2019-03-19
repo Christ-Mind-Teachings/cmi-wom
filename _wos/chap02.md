@@ -3,7 +3,7 @@ title: Book Two
 ---
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -163,7 +163,7 @@ would you cling<br/>
 so tightly unto?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -311,7 +311,7 @@ the simple correction<br/>
 of one mistaken perception.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -565,7 +565,7 @@ is now,<br/>
 and forever shall be.<br/>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

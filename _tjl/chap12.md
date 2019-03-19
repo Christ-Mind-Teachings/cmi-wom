@@ -8,7 +8,7 @@ It is also your final lesson<br/>
 in the field of time.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -53,7 +53,7 @@ tonight.”
 With that, the phone call ends, and I descend the stairs to my office.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -177,7 +177,7 @@ Fear not.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -255,7 +255,7 @@ I take the letter, and watch her leave. Whatever occurred, it has
 clearly struck her.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

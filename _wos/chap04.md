@@ -3,7 +3,7 @@ title: Book Four
 ---
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -208,7 +208,7 @@ has restored his precious child<br/>
 to her rightful place.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 

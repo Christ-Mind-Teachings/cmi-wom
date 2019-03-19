@@ -3,7 +3,7 @@ title: Book Three
 ---
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -415,7 +415,7 @@ This are they certain of,<br/>
 and our voices *are* raised as one.
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 

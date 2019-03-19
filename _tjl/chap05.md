@@ -10,7 +10,7 @@ as dawn breaks gently<br/>
 through the night.
 {: .omit}
 
-![line](/public/img/wom/line2.jpg)
+![line]({{page.line2}})
 {: .omit}
 </div>
 
@@ -95,7 +95,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -216,7 +216,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -287,7 +287,7 @@ Amen.
 </div>
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -348,7 +348,7 @@ one I know not well. Or do I simply fear what lies beyond the borders -
 the proscriptions of authority - of consensus “truth”?
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
@@ -436,7 +436,7 @@ I smile, knowing that now I really have no choice but to go through with
 it. “Tomorrow night it is. Thanks for the number. Bye.”
 
 <div markdown="1" class="center">
-![line](/public/img/wom/line4.jpg)
+![line]({{page.line4}})
 {: .omit}
 </div>
 
