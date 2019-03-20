@@ -37287,7 +37287,6 @@ function showSavedQuery() {
 
 const page = __webpack_require__(20);
 
-const queryResultName = "query-result-wom";
 const queryResultName = "search.wom.result";
 const url_prefix = "/t/wom";
 

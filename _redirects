@@ -1,0 +1,11 @@
+# Netlify url rewrite file
+
+/                       https://wom.christmind.info/moved/
+/acq/*                  https://www.christmind.info/t/wom/acq/:splat
+/woh/*                  https://www.christmind.info/t/wom/woh/:splat
+/wot/*                  https://www.christmind.info/t/wom/wot/:splat
+/wok/*                  https://www.christmind.info/t/wom/wok/:splat
+/wos/*                  https://www.christmind.info/t/wom/wos/:splat
+/tjl/*                  https://www.christmind.info/t/wom/tjl/:splat
+/early/*                https://www.christmind.info/t/wom/early/:splat
+
