@@ -5485,7 +5485,7 @@ function getConfig(book, assign = true) {
     let cfg = __WEBPACK_IMPORTED_MODULE_0_store___default.a.get(`${configStore}${book}`);
     let url;
 
-    //if config in local storage check if we need to get a freash copy
+    //if config in local storage check if we need to get a fresh copy
     if (cfg && !refreshNeeded(cfg)) {
       if (assign) {
         config = cfg;
@@ -5616,7 +5616,7 @@ function getReservation(url) {
   returns: book title, page title, url and optionally subtitle.
 
   args:
-    pageKey: a key uniuely identifying a transcript page
+    pageKey: a key uniquely identifying a transcript page
     data: optional, data that will be added to the result, used for convenience
 */
 function getPageInfo(pageKey, data = false) {
@@ -5631,18 +5631,43 @@ function getPageInfo(pageKey, data = false) {
 
     //get configuration data specific to the bookId
     getConfig(decodedKey.bookId, false).then(data => {
-      info.bookTitle = data.title;
-
-      if (decodedKey.hasQuestions) {
-        info.title = data.contents[decodedKey.uid].title;
-        info.subTitle = data.contents[decodedKey.uid].questions[decodedKey.qid].title;
-        info.url = data.contents[decodedKey.uid].questions[decodedKey.qid].url;
+      if (!data) {
+        info.bookTitle = "Book Title Unknown";
+        info.title = "Title Unknown";
+        info.url = "";
       } else {
-        info.title = data.contents[decodedKey.uid].title;
-        info.url = data.contents[decodedKey.uid].url;
-      }
+        info.bookTitle = data.title;
 
-      resolve(info);
+        let unit = data.contents[decodedKey.uid];
+        if (!unit) {
+          info.title = `Title not found, pageKey: ${pageKey}, decodedKey: ${decodedKey}`;
+          info.title = "";
+        } else {
+
+          if (decodedKey.hasQuestions) {
+            let question;
+
+            //this shouldn't happen but did once due to test data that got indexed and later
+            //deleted but the index remained and caused the code to fail. Took me a long time to 
+            //find the problem.
+            if (decodedKey.qid >= unit.questions.length) {
+              console.log("invalid pageKey: %s, specifies out of range qid", pageKey);
+              console.log("decodedKey: %o", decodedKey);
+              question = unit.questions[unit.questions.length - 1];
+            } else {
+              question = unit.questions[decodedKey.qid];
+            }
+            info.title = unit.title;
+            info.subTitle = question.title;
+            info.url = question.url;
+          } else {
+            info.title = unit.title;
+            info.url = unit.url;
+          }
+        }
+
+        resolve(info);
+      }
     }).catch(error => {
       reject(error);
     });
@@ -30625,6 +30650,18 @@ module.exports = bytesToUuid;
 
 
 
+var warningIssued = false;
+function warnNotSignedIn() {
+  let userInfo = Object(__WEBPACK_IMPORTED_MODULE_5__user_netlify__["b" /* getUserInfo */])();
+  if (!userInfo && !warningIssued) {
+    __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.options.timeOut = "10000";
+    __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.success("Cancel, Sign In, and create a new bookmark.");
+    __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.warning("You are not signed in. Bookmarks created when you are not signed in cannot be shared.");
+
+    warningIssued = true;
+  }
+}
+
 const form = `
   <form name="annotation" id="annotation-form" class="ui form">
     <input class="hidden-field" type="text" readonly="" name="creationDate">
@@ -30756,6 +30793,8 @@ function editAnnotation(pid, aid, annotation) {
     $(`#${pid}`).addClass("annotation-edit");
   }
   //console.log("editAnnotation");
+
+  warnNotSignedIn();
 
   $(".annotation-edit").wrapAll(wrapper);
   $(".annotate-wrapper").prepend(form);
@@ -31074,6 +31113,8 @@ function getUserInput(highlight) {
     __WEBPACK_IMPORTED_MODULE_2__bookmark__["a" /* annotation */].cancel({ aid: highlight.id });
     return;
   }
+
+  warnNotSignedIn();
 
   $(`#${highlight.pid}`).addClass("annotation-edit");
   $(".annotation-edit").wrapAll(wrapper);
@@ -37938,6 +37979,13 @@ function pageNavigationDriver() {
       position: "bottom"
     }
   }, {
+    element: "#quick-links-dropdown-menu",
+    popover: {
+      title: "Navigate to Another Teaching",
+      description: "Quickly jump to one of the other teachings in the Library.",
+      position: "bottom"
+    }
+  }, {
     element: "#help-menu",
     popover: {
       title: "Get Help and Learn About",
@@ -38075,6 +38123,15 @@ function transcriptDriver() {
     popover: {
       title: "Next Page",
       description: "Go to the next page. This will be disabled when the last page is displayed.",
+      position: "bottom"
+    }
+  });
+
+  steps.push({
+    element: "#quick-links-dropdown-menu",
+    popover: {
+      title: "Navigate to Another Teaching",
+      description: "Quickly jump to one of the other teachings in the Library.",
       position: "bottom"
     }
   });

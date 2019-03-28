@@ -113,6 +113,14 @@ export function pageNavigationDriver() {
       }
     },
     {
+      element: "#quick-links-dropdown-menu",
+      popover: {
+        title: "Navigate to Another Teaching",
+        description: "Quickly jump to one of the other teachings in the Library.",
+        position: "bottom"
+      }
+    },
+    {
       element: "#help-menu",
       popover: {
         title: "Get Help and Learn About",
@@ -257,6 +265,15 @@ export function transcriptDriver() {
       position: "bottom"
     }
   });
+
+  steps.push({
+      element: "#quick-links-dropdown-menu",
+      popover: {
+        title: "Navigate to Another Teaching",
+        description: "Quickly jump to one of the other teachings in the Library.",
+        position: "bottom"
+      }
+    });
 
   steps.push({
     element: "#about-dropdown-menu",
