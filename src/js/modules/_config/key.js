@@ -25,6 +25,7 @@ const sprintf = require("sprintf-js").sprintf;
 
 //source id: each source has a unique id
 const sourceId = 10;
+const sid = "wom";
 
 //length of pageKey excluding decimal portion
 const keyLength = 8;
@@ -290,6 +291,36 @@ function getUrl(key) {
   return url;
 }
 
+/*
+  Describe key in terms of source:book:unit:p
+*/
+function describeKey(key) {
+  let decodedKey = decodeKey(key, false);
+
+  if (decodedKey.error) {
+    return {key: key, error: true, source: sid};
+  }
+
+  let info = {
+    key: key,
+    source: sid,
+    book: decodedKey.bookId
+  };
+
+  info.unit = getUnitFromKey(decodedKey.bookId, decodedKey.uid);
+
+  if (decodedKey.hasQuestions) {
+    info.question = `q${decodedKey.qid}`;
+  }
+
+
+  if (decodedKey.pid > -1) {
+    info.pid = `p${decodedKey.pid}`;
+  }
+
+  return info;
+}
+
 module.exports = {
   getBooks: getBooks,
   getSourceId: getSourceId,
@@ -298,5 +329,6 @@ module.exports = {
   parseKey: parseKey,
   genPageKey: genPageKey,
   genParagraphKey: genParagraphKey,
-  decodeKey: decodeKey
+  decodeKey: decodeKey,
+  describeKey: describeKey
 };
