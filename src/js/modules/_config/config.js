@@ -9,6 +9,7 @@ const transcript = require("./key");
 //mp3 and audio timing base directories
 const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
 const timingBase = "/t/wom/public/timing";
+const SOURCE = "The Way of Mastery";
 
 //location of configuration files
 const configUrl = "/t/wom/public/config";
@@ -227,7 +228,7 @@ export function getReservation(url) {
 */
 export function getPageInfo(pageKey, data = false) {
   let decodedKey = transcript.decodeKey(pageKey);
-  let info = {pageKey: pageKey, bookId: decodedKey.bookId};
+  let info = {pageKey: pageKey, source: SOURCE, bookId: decodedKey.bookId};
 
   if (data) {
     info.data = data;

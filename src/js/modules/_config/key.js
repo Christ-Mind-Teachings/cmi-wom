@@ -26,6 +26,7 @@ const sprintf = require("sprintf-js").sprintf;
 //source id: each source has a unique id
 const sourceId = 10;
 const sid = "wom";
+const prefix = "/t/wom";
 
 //length of pageKey excluding decimal portion
 const keyLength = 8;
@@ -269,7 +270,7 @@ function getBooks() {
  * Convert page key to url, this is used to determine url of 
  *  note style bookmarks
  */
-function getUrl(key) {
+function getUrl(key, withPrefix = false) {
   //decode key but don't subtract one from uid and qid
   let decodedKey = decodeKey(key, false);
   let unit = "invalid";
@@ -286,6 +287,10 @@ function getUrl(key) {
   if (decodedKey.hasQuestions) {
     question = `q${decodedKey.qid}`;
     url = `${url}${question}/`;
+  }
+
+  if (withPrefix) {
+    return `${prefix}${url}`;
   }
 
   return url;
