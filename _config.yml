@@ -38,6 +38,8 @@ markdown: kramdown
 
 # Collections for transcripts
 collections:
+  notes:
+    output: true
   acq:
     output: true
     title: Get Acquainted

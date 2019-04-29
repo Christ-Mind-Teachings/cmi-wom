@@ -5,6 +5,7 @@ import {showParagraph, loadStart} from "www/modules/_util/url";
 import auth from "www/modules/_user/netlify";
 import fb from "www/modules/_util/facebook";
 import {initTranscriptPage} from "www/modules/_page/startup";
+import {initialize as initNotes} from "www/modules/_page/notes";
 
 //teaching specific modules
 import {loadConfig} from "./modules/_config/config";
@@ -13,6 +14,7 @@ import search from "./modules/_search/search";
 import toc, {getBookId} from "./modules/_contents/toc";
 import audio from "./modules/_audio/audio";
 import about from "./modules/_about/about";
+import { noteInfo } from "./notes";
 
 $(document).ready(() => {
 
@@ -21,6 +23,7 @@ $(document).ready(() => {
   auth.initialize();
   fb.initialize();
   about.initialize();
+  initNotes(noteInfo);
 
   loadConfig(getBookId())
     .then((result) => {
