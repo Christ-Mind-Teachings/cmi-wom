@@ -4,6 +4,7 @@
 import auth from "www/modules/_user/netlify";
 import {initStickyMenu, initAnimation} from "www/modules/_page/startup";
 import {initialize as initNotes} from "www/modules/_page/notes";
+import {showTOC} from "www/modules/_util/url";
 
 //teaching specific modules
 import {bookmarkStart} from "./modules/_bookmark/start";
@@ -23,5 +24,6 @@ $(document).ready(() => {
   about.initialize();
 
   initAnimation();
+  showTOC();
 });
 

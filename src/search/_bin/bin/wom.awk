@@ -9,38 +9,38 @@ function discardParagraph(p) {
     return 1
   }
   if (n = match(p,/^[Aa]men/) > 0) {
-    return 1
+    return 2
   }
   if (n = match(p,/[Nn]ow.*we.*begin\.$/) > 0) {
-    return 1
+    return 3
   }
   if (n = match(p,/^[Nn]o$/) > 0) {
-    return 1
+    return 4
   }
-  if (n = match(p,/[Mm]m/) > 0) {
-    return 1
+  if (n = match(p,/hmm/) > 0) {
+    return 5
   }
   if (n = match(p,/[Th]ank you/) > 0) {
-    return 1
+    return 6
   }
   if (n = match(p,/[Ii]ndeed/) > 0) {
-    return 1
+    return 7
   }
   if (n = match(p,/[Nn]o.*questions/) > 0) {
-    return 1
+    return 8
   }
   if (n = match(p,/[Aa]udience/) > 0) {
-    return 1
+    return 9
   }
   if (n = match(p,/how.*you.*doing/) > 0) {
-    return 1
+    return 10
   }
   # one line paragraph contain the word 'laughter'
   if ((n = match(p,/[Ll]aughter/)) > 0) {
-    return 1
+    return 11
   }
   if ((n = match(p,/[Yy]es it does/)) > 0) {
-    return 1
+    return 12
   }
 
   return 0

@@ -1,5 +1,6 @@
 import scroll from "scroll-into-view";
 import {getConfig} from "../_config/config";
+import clipboard from "www/modules/_bookmark/clipboard";
 
 const uiTocModal = ".toc.ui.modal";
 const uiOpenTocModal = ".toc-modal-open";
@@ -147,7 +148,7 @@ export function getBookId() {
 export default {
 
   /*
-   * Init the modal dialog with data from JSON file 
+   * Init the modal dialog with data from JSON file
    * or local storage
    */
   initialize: function(env) {
@@ -165,7 +166,7 @@ export default {
     /*
      * TOC populated by JSON file from AJAX call if not found
      * in local storage.
-     * 
+     *
      * Read value of data-book attribute to identify name of file
      * with contents.
      */
@@ -177,10 +178,14 @@ export default {
       if (env !== "transcript") {
         getConfig(book)
           .then((contents) => {
+            let share_url=`${location.origin}${location.pathname}?tocbook=${book}`;
+
             $(".toc-image").attr("src", `${contents.image}`);
-            $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
+            $(".toc-title").html(`<i data-clipboard-text="${share_url}" title="Copy to Clipboard" class="tiny share alternate icon toc-share"></i>&nbsp;Table of Contents: <em>${contents.title}</em>`);
             $(".toc-list").html(makeContents(contents.contents));
             $(uiTocModal).modal("show");
+
+            clipboard.register(".share.icon.toc-share");
           })
           .catch((error) => {
             $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
