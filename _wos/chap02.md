@@ -549,7 +549,7 @@ shall pass away,<br/>
 but the things of God shall not.
 
 And the first -<br/>
-made so by the worldshall<br/>
+made so by the world shall<br/>
 be last.
 
 The last -<br/>

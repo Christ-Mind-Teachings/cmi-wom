@@ -185,10 +185,14 @@ export function getAudioInfo(url) {
   let audioInfo = {};
   let cIdx;
   let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
+  let wos = ["foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilog", "prayer"];
 
   switch(idx[2]) {
     case "tjl":
+      break;
     case "wos":
+      cIdx = indexOf(wos, idx[3]);
+      audioInfo = _getAudioInfo(idx, cIdx);
       break;
     case "early":
       cIdx = indexOf(lookup, idx[3]);
@@ -258,7 +262,7 @@ export function getPageInfo(pageKey, data = false) {
               let question;
 
               //this shouldn't happen but did once due to test data that got indexed and later
-              //deleted but the index remained and caused the code to fail. Took me a long time to 
+              //deleted but the index remained and caused the code to fail. Took me a long time to
               //find the problem.
               if (decodedKey.qid >= unit.questions.length) {
                 console.log("invalid pageKey: %s, specifies out of range qid", pageKey);

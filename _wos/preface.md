@@ -60,6 +60,12 @@ break in our communication. This simple fact is a gentle reminder that
 time is somehow not quite what I have learned it is. As He speaks, I see
 it, the title:
 
+<!-- <p markdown="1" class="center omit">
+__The Way of the Servant__ <br/>
+*Living the Light of Christ* <br/>
+“For the first shall be last, and the last, first.”
+</p> -->
+
 <p markdown="1" class="center">__The Way of the Servant__</p>
 {: .omit}
 
@@ -116,7 +122,7 @@ separate self that can gain, or lose.*
 
 *I will clarify the true nature of the servant, as well as the qualities
 of genuine service. We will journey through the field of obstacles which
-peep the highest joy just beyond the grasp of the one who would join in
+keep the highest joy just beyond the grasp of the one who would join in
 union with God.*
 
 *Know this: Nothing ever imagined by the mind of man can bring the soul

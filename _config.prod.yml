@@ -123,7 +123,6 @@ defaults:
       image-width: 612
       image-height: 792
       bid: "WOS"
-      audio: false
   - scope:
       path: ""
       type: tjl
