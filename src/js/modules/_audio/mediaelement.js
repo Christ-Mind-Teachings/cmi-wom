@@ -213,10 +213,10 @@ function assignPlayerFeatures(timingData) {
 
   if (info.status === "LISTENER") {
     if (timingData) {
-      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle"];
+      info.features = ["playpause", "current", "duration", "prevp", "nextp", "ptoggle", "speed"];
     }
     else {
-      info.features = ["playpause", "current", "duration", "skipback", "jumpforward"];
+      info.features = ["playpause", "current", "duration", "skipback", "jumpforward", "speed"];
     }
 
   }

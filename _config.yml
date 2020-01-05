@@ -84,9 +84,9 @@ defaults:
       layout: transcript
       book: "Way of the Heart"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/woh-big.jpg"
+      image: "/t/wom/public/img/wom/wohN-big.jpg"
       image-width: 612
-      image-height: 792
+      image-height: 928
       bid: "WOH"
   - scope:
       path: ""
@@ -95,9 +95,9 @@ defaults:
       layout: transcript
       book: "Way of Transformation"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/wot-big.jpg"
+      image: "/t/wom/public/img/wom/wotN-big.jpg"
       image-width: 612
-      image-height: 792
+      image-height: 924
       "bid": "WOT"
   - scope:
       path: ""
@@ -106,9 +106,9 @@ defaults:
       layout: transcript
       book: "Way of Knowing"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/wok-big.jpg"
+      image: "/t/wom/public/img/wom/wokN-big.jpg"
       image-width: 612
-      image-height: 792
+      image-height: 926
       bid: "WOK"
   - scope:
       path: ""
@@ -117,11 +117,11 @@ defaults:
       layout: transcript
       book: "Way of the Servant"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/wos-big.jpg"
+      image: "/t/wom/public/img/wom/wosN-big.jpg"
       line2: "/t/wom/public/img/wom/line2.jpg"
       line4: "/t/wom/public/img/wom/line4.jpg"
       image-width: 612
-      image-height: 792
+      image-height: 926
       bid: "WOS"
   - scope:
       path: ""
@@ -130,11 +130,11 @@ defaults:
       layout: transcript
       book: "The Jeshua Letters"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/tjl-big.jpg"
+      image: "/t/wom/public/img/wom/tjlN-big.jpg"
       line2: "/t/wom/public/img/wom/line2.jpg"
       line4: "/t/wom/public/img/wom/line4.jpg"
       image-width: 612
-      image-height: 792
+      image-height: 938
       bid: "TJL"
       audio: false
   - scope:
@@ -144,9 +144,9 @@ defaults:
       layout: transcript
       book: "The Early Years"
       publisher: "Way of Mastery"
-      image: "/t/wom/public/img/wom/early.jpg"
-      image-width: 250
-      image-height: 324
+      image: "/t/wom/public/img/wom/earlyN-big.jpg"
+      image-width: 612
+      image-height: 926
       bid: "Early"
 
 exclude: [

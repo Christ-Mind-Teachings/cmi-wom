@@ -17,7 +17,7 @@ side the transcript. When viewing the transcript click on the
 <div class="ui items">
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/t/wom/public/img/wom/tjl-toc.jpg">
+      <img src="/t/wom/public/img/wom/tjlN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">The Jeshua Letters</dir>
@@ -27,12 +27,19 @@ side the transcript. When viewing the transcript click on the
           introduction to the pathway of awakening revealed in their
           conversation.
         </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489451/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=20a0af5b136796c911c185f32f9bc6fa&camp=1789&creative=9325">
+            The Jeshua Letters
+          </a>
+          on Amazon.
+        </p>
       </div>
     </div>
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/t/wom/public/img/wom/wos-toc.jpg">
+      <img src="/t/wom/public/img/wom/wosN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of the Servant</dir>
@@ -41,6 +48,12 @@ side the transcript. When viewing the transcript click on the
           A poetic description of the journey of awakening taken from
           inception to recognition of self as the servant &ndash; one who walks this
           world awake.
+        </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489443/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=58402bd33ccf5e996a07401a9ceb5a4f&camp=1789&creative=9325">Way of the Servant
+          </a>
+          on Amazon.
         </p>
       </div>
     </div>
@@ -51,7 +64,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir href="#" class="ui tiny image">
-      <img src="/t/wom/public/img/wom/woh-toc.jpg">
+      <img src="/t/wom/public/img/wom/wohN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of the Heart</dir>
@@ -60,12 +73,26 @@ side the transcript. When viewing the transcript click on the
           The Way of the Heart is the first year of the Way of Mastery
           teachings.
         </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489419/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=b1121c7057fbf22aaec8d084586d4b2c&camp=1789&creative=9325">
+            Way of the Heart
+          </a>
+          on Amazon.
+        </p>
+        <p>
+        Get 
+        <a target="_blank" href="https://www.amazon.com/dp/1941489486/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=a20b86fa0e19dd6e28b56cccd866cd81&camp=1789&creative=9325">
+        Way of the Heart - Pocket Edition
+          </a>
+          on Amazon.
+        </p>
       </div>
     </div>
   </div>
   <div class="item">
     <dir href="#" class="ui tiny image">
-      <img src="/t/wom/public/img/wom/wot-toc.jpg">
+      <img src="/t/wom/public/img/wom/wotN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of Transformation</dir>
@@ -74,12 +101,25 @@ side the transcript. When viewing the transcript click on the
           The Way of Transformation is the second year of the Way of Mastery
           teachings.
         </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489427/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=ab0151208b168d4eed547c6c2dc5d529&camp=1789&creative=9325">
+          Way of Transformation
+          </a>
+          on Amazon.
+        </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489494/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=4a2134f5e61e77e3fd9aa14c33680491&camp=1789&creative=9325">Way of Transformation - Pocket Edition
+          </a>
+          on Amazon.
+        </p>
       </div>
     </div>
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/t/wom/public/img/wom/wok-toc.jpg">
+      <img src="/t/wom/public/img/wom/wokN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">Way of Knowing</dir>
@@ -87,6 +127,20 @@ side the transcript. When viewing the transcript click on the
         <p>
           The Way of Knowing is the third year of the Way of Mastery
           teachings.
+        </p>
+        <p>
+          Get 
+          <a target="_blank" href="https://www.amazon.com/dp/1941489435/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=94e23650f4b7085fd55474ec92003fd4&camp=1789&creative=9325">
+            Way of Knowing
+          </a>
+          on Anazon.
+        </p>
+        <p>
+          Get 
+          <a target="_blank" href="https://www.amazon.com/dp/1941489508/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=6c86d01a9a278fcc7c6c761b8644014c&camp=1789&creative=9325">
+            Way of Knowing - Pocket Edition
+          </a>
+          on Anazon.
         </p>
       </div>
     </div>
@@ -97,7 +151,7 @@ side the transcript. When viewing the transcript click on the
   </div>
   <div class="item">
     <dir class="ui tiny image">
-      <img src="/t/wom/public/img/wom/early-toc.jpg">
+      <img src="/t/wom/public/img/wom/earlyN-toc.jpg">
     </dir>
     <div class="content">
       <dir class="header">The Early Years</dir>
@@ -105,6 +159,20 @@ side the transcript. When viewing the transcript click on the
         <p>
           A collection of channeled messages many containing answers to
           participant questions.
+        </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/194148946X/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=0afeb47fcfa5e4e8881a1ddbee9efb0d&camp=1789&creative=9325">
+            The Early Years - Vol 1
+          </a>
+          on Amazon.
+        </p>
+        <p>
+          Get
+          <a target="_blank" href="https://www.amazon.com/dp/1941489478/?&_encoding=UTF8&tag=cmi0ff-20&linkCode=ur2&linkId=dfb120dea04623803dfcdd2b2ae8124a&camp=1789&creative=9325">
+            The Early Years - Vol 2
+          </a>
+          on Amazon.
         </p>
       </div>
     </div>

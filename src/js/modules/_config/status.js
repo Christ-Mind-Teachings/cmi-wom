@@ -1,1 +1,1 @@
-export const status = {acq: "Wed Apr 3 04:13:21 EDT 2019", early: "Wed Apr 3 04:13:21 EDT 2019", tjl: "Wed Apr 3 04:13:21 EDT 2019", woh: "Wed Apr 3 04:13:21 EDT 2019", wok: "Wed Apr 3 04:13:21 EDT 2019", wos: "Fri Nov 15 16:59:49 EST 2019", wot: "Wed Apr 3 04:13:21 EDT 2019"};
+export const status = {acq: "Tue Apr 2 22:13:21 HST 2019", early: "Thu Dec 26 21:28:01 HST 2019", tjl: "Thu Dec 26 21:27:53 HST 2019", woh: "Thu Dec 26 21:05:52 HST 2019", wok: "Thu Dec 26 21:06:09 HST 2019", wos: "Thu Dec 26 21:27:44 HST 2019", wot: "Thu Dec 26 21:06:01 HST 2019"};
