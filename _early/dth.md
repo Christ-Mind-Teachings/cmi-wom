@@ -182,7 +182,7 @@ to this party.
 
 ## Question One
 
-[*Question*](/wom/questions/dthq1/) So. We want, then, in this evening
+[*Question*](/t/wom/early/dthq1/) So. We want, then, in this evening
 to speak specifically to certain questions that have been generated, for
 they hold a purpose in helping to extend and to clarify a simple message
 about this time frame, about certain changes, about certain things that
@@ -225,7 +225,7 @@ process?
 
 ## Question Two
 
-[*Question*](/wom/questions/dthq2/) Yes, thank you. But everything
+[*Question*](/t/wom/early/dth/q2/) Yes, thank you. But everything
 you’ve said tonight can be taken either physically or metaphorically. Is
 this a physical change that will occur on the planet, or is this a
 metaphorical change and the planet itself remain unscathed?
@@ -235,7 +235,7 @@ metaphorical change and the planet itself remain unscathed?
 
 ## Question Three
 
-[*Question*](/wom/questions/dthq3/) Then the role of Shanti Christo must
+[*Question*](/t/wom/early/dth/q3/) Then the role of Shanti Christo must
 also be clear in this process. Is it a beacon?
 {: .omit}
 
@@ -243,7 +243,7 @@ also be clear in this process. Is it a beacon?
 
 ## Question Four
 
-[*Question*](/wom/questions/dthq4/) Are we going to experience a period
+[*Question*](/t/wom/early/dth/q4/) Are we going to experience a period
 of three days of darkness during this change upon the earth?
 {: .omit}
 
@@ -251,7 +251,7 @@ of three days of darkness during this change upon the earth?
 
 ## Question Five
 
-[*Question*](/wom/questions/dthq5/) Is there truly any difference
+[*Question*](/t/wom/early/dth/q5/) Is there truly any difference
 between entities that describe themselves as Germaine, Jeshua, Michael,
 and who would bring their message through an individual? Is there really
 any difference among the messengers?
@@ -261,7 +261,7 @@ any difference among the messengers?
 
 ## Question Six
 
-[*Question*](/wom/questions/dthq6/) I’d like to discuss with you,
+[*Question*](/t/wom/early/dth/q6/) I’d like to discuss with you,
 pursuant to the book that we’re working on, *The Way Through Death*, you
 brought to our attention this past December that there were many
 individuals who died in the explosion in Oklahoma City who were at that
@@ -276,7 +276,7 @@ Emmanuel says, that death is “like taking off a tight shoe” is true?
 
 ## Question Seven
 
-[*Question*](/wom/questions/dthq7/) So, from what you’re saying then,
+[*Question*](/t/wom/early/dth/q7/) So, from what you’re saying then,
 there is no set sequence that occurs at that moment called death. So a
 lot of people report on going through the tunnel and you’re there
 and&hellip;
@@ -286,7 +286,7 @@ and&hellip;
 
 ## Question Eight
 
-[*Question*](/wom/questions/dthq8/) Is God self-aware, or is it simply a
+[*Question*](/t/wom/early/dth/q8/) Is God self-aware, or is it simply a
 benign metaphysical force?
 {: .omit}
 
@@ -294,14 +294,14 @@ benign metaphysical force?
 
 ## Question Nine
 
-[*Question*](/wom/questions/dthq9/) Is there a force outside of God?
+[*Question*](/t/wom/early/dth/q9/) Is there a force outside of God?
 {: .omit}
 
 ---
 
 ## Question Ten
 
-[*Question*](/wom/questions/dthq10/) Getting back to Shanti Christo,
+[*Question*](/t/wom/early/dth/q10/) Getting back to Shanti Christo,
 could you give us an idea when this will materialize?
 {: .omit}
 

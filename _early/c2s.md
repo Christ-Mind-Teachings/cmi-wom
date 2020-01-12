@@ -369,7 +369,7 @@ Amen.
 
 ## Question One
 
-[*Question*](/wom/questions/c2sq1/): How does Jeshua explain his acts of
+[*Question*](/t/wom/early/c2s/q1/): How does Jeshua explain his acts of
 Crucifixion and Resurrection in relationship to us, and what is the
 symbolism that he intended?
 {: .omit}
@@ -378,7 +378,7 @@ symbolism that he intended?
 
 ## Question Two
 
-[*Question*](/wom/questions/c2sq2/): How do I know when I have
+[*Question*](/t/wom/early/c2s/q2/): How do I know when I have
 surrendered myself to the Holy Spirit?
 {: .omit}
 
@@ -386,7 +386,7 @@ surrendered myself to the Holy Spirit?
 
 ## Question Three
 
-[*Question*](/wom/questions/c2sq3/): What role does Jeshua want me to
+[*Question*](/t/wom/early/c2s/q3/): What role does Jeshua want me to
 play in the bringing of Heaven to Earth?
 {: .omit}
 
@@ -394,14 +394,14 @@ play in the bringing of Heaven to Earth?
 
 ## Question Four
 
-[*Question*](/wom/questions/c2sq4/): Is Christ different from Joshua or Jeshua?
+[*Question*](/t/wom/early/c2s/q4/): Is Christ different from Joshua or Jeshua?
 {: .omit}
 
 ---
 
 ## Question Five
 
-[*Question*](/wom/questions/c2sq5/): Please say more about
+[*Question*](/t/wom/early/c2s/q5/): Please say more about
 non&ndash;physical reality.
 {: .omit}
 

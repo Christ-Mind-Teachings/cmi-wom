@@ -488,7 +488,7 @@ and all of that, we can continue.
 
 ## Question One
 
-[*Question*](/wom/questions/bleq1/): Jeshua, as we enter this very
+[*Question*](/t/wom/early/ble/q1/): Jeshua, as we enter this very
 profound time of year, is there anything that you would recommend that
 we hold in our hearts?
 {: .omit}
@@ -497,7 +497,7 @@ we hold in our hearts?
 
 ## Question Two
 
-[*Question*](/wom/questions/bleq2/): In regard to the land we call
+[*Question*](/t/wom/early/ble/q2/): In regard to the land we call
 Shanti Christo, there are many friends coming to this area to
 participate, and many of us have in our hearts the desire to live more
 closely to each other, in sharing our growth processes, our loving each
@@ -511,7 +511,7 @@ this?
 
 ## Question Three
 
-[*Question*](/wom/questions/bleq3/): Jeshua, I’m reminded of our
+[*Question*](/t/wom/early/ble/q3/): Jeshua, I’m reminded of our
 conversation about co&ndash;creating Christs a few months ago, and I
 wonder if you would extend that conversation somewhat tonight?
 {: .omit}
@@ -520,7 +520,7 @@ wonder if you would extend that conversation somewhat tonight?
 
 ## Question Four
 
-[*Question*](/wom/questions/bleq4/): Okay, I’m wanting to ask about this
+[*Question*](/t/wom/early/ble/q4/): Okay, I’m wanting to ask about this
 12/12 stuff. So I’ve already listened to all these other questions, you
 see, and then I decide what’s the point of asking any questions? The
 answer is already given.

@@ -497,7 +497,7 @@ And so, with that, have you questions?
 
 ## Question One
 
-[*Question*](/wom/questions/hoeq1/): It&rsquo;s the first time in
+[*Question*](/t/wom/early/hoe/q1/): It&rsquo;s the first time in
 feeling the sense of wonder that you&rsquo;re inviting me and us into,
 that I&rsquo;m approaching&mdash;I usually experience goals and desires
 as kind of burdensome, but it&rsquo;s the first time I&rsquo;m feeling a
@@ -510,7 +510,7 @@ but I know that&rsquo;s what I want to talk to you about.
 
 ## Question Two
 
-[*Question*](/wom/questions/hoeq2/): The question is how to develop a
+[*Question*](/t/wom/early/hoe/q2/): The question is how to develop a
 greater clarity and discernment around wearing one&rsquo;s own emotional
 body and energy and staying clear with that and not, so to speak, take
 on the cloak or clothes of another&rsquo;s emotional body and wearing
@@ -521,7 +521,7 @@ theirs?
 
 ## Question Three
 
-[*Question*](/wom/questions/hoeq3/): Jeshua, what is like to live the
+[*Question*](/t/wom/early/hoe/q3/): Jeshua, what is like to live the
 Christ vibration in 3-D?
 {: .omit}
 
@@ -529,7 +529,7 @@ Christ vibration in 3-D?
 
 ## Question Four
 
-[*Question*](/wom/questions/hoeq4/): The question has arisen about the
+[*Question*](/t/wom/early/hoe/q4/): The question has arisen about the
 Shanti Christo membership, and the comment was that it was
 &lsquo;exclusive&rsquo; to have tapes only go to members. And the
 question is&mdash;what is the question? For those not able to manifest

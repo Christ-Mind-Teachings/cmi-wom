@@ -88,12 +88,13 @@ function search(query) {
 
   axios.post(searchEndpoint, searchBody)
     .then((response) => {
-      displaySearchMessage(SEARCH_RESULT, "", query, response.data.count);
+      //console.log("search response: %o", response);
+      displaySearchMessage(SEARCH_RESULT, "", `"${response.data.queryTransformed}"`, response.data.count);
       if (response.data.count > 0) {
-        showSearchResults(response.data, searchBody.query);
+        showSearchResults(response.data, response.data.queryTransformed);
       }
       else {
-        notify.info(`Search for ${query} didn't find any matches`);
+        notify.info(`Search for "${response.data.queryTransformed}" didn't find any matches`);
       }
       searchAudit("WOM", searchBody.query, response.data.count);
       document.getElementById("search-input-field").focus();
