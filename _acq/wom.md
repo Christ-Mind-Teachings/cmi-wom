@@ -59,7 +59,7 @@ students over a three year period. They consist of:
 * *The Way of Transformation  and*
 * *The Way of Knowing*
 
-Each of *The Christ Mind Trilogy* texts and set of exercises is meant be
+Each of *The Christ Mind Trilogy* texts and set of exercises is meant to be
 completed before moving on to the next.
 
 ## The Way of Mastery Living Practices
@@ -128,13 +128,16 @@ It aims at nothing less than a radical shift of Identity from ‘Ego’ to
 ‘Christ’: a return, and capacity aiding students to, increasingly, live
 in and create from Christ Mind itself.
 
-From this is seeks no less than the birthing of “a million Christs” on
+From this it seeks no less than the birthing of “a million Christs” on
 this planet, and to transform life on this world, manifesting the
 presence of Heaven on Earth, in so doing.
 
 ~ Overview of *The Way of Mastery* by Dave Schock[^1] and Jayem[^2].
 
-[^1]: Dave Schock is  a senior pathway teacher of The Way of Mastery, and author of *An Introduction to the Way of Mastery*. Visit his webstie at [MasteryandMiracles.com](https://masteryandmiracles.com).
+[^1]: Dave Schock is  a senior pathway teacher of The Way of Mastery,
+  and author of *An Introduction to the Way of Mastery*. Visit his
+  webstie at [MasteryandMiracles.com](https://masteryandmiracles.com).
 
-[^2]: Jayem is the channel of *The Way of Mastery*. Visit his website at [www.wayofmastery.com](https://www.wayofmastery.com) .
+[^2]: Jayem is the channel of *The Way of Mastery*. Visit his website at
+  [www.wayofmastery.com](https://www.wayofmastery.com) .
 
