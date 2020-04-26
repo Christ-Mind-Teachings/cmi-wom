@@ -75,7 +75,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </a>
       <div class="content">
         <div class="description">
-          This is Jayem's account of his first meetings with Jeshua.
+          The <em>Jeshua Letters</em> is Jayem's account of his first meetings with Jeshua.
         </div>
       </div>
     </div>
@@ -85,7 +85,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </a>
       <div class="content">
         <div class="description">
-          A poetic description of the journey of awakening given by Jeshua through dictation.
+          <em>The Way of the Servant</em> is a poetic description of the journey of awakening given by Jeshua through dictation.
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </a>
       <div class="content">
         <div class="description">
-          This is a series of messages from Jeshua that came before the <em>Way of the Heart</em>.
+          <em>The Early Years</em> is a series of messages from Jeshua that came before the <em>Way of the Heart</em>.
         </div>
       </div>
   </div>

@@ -241,13 +241,18 @@ export default {
   */
   initialize: function(timingDataUri, p, userStatus) {
     player = p;
-    
+
     //load the timing data
     fetchTimingData(timingDataUri)
       .then((data) => {
 
         //round timing data to two decimal places
-        timingData = _map(data.time, function(value) {
+//        timingData = _map(data.time, function(value) {
+//          value.seconds = round(value.seconds);
+//          return value;
+//        });
+
+        timingData = data.time.map((value) => {
           value.seconds = round(value.seconds);
           return value;
         });
