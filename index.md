@@ -13,7 +13,11 @@ footer:
 ## Welcome to The Way of Mastery
 {: .ui.header}
 
-The central teaching of *The Way of Mastery* is a pathway of awakening described in a three year series of monthly channeled lessons given by Jeshua through Jayem. With answers to many questions and much supporting material and effective exercises the *Way of Mastery* is a practical and down to earth guide to transformation.
+The central teaching of *The Way of Mastery* is a pathway of awakening
+described in a three year series of monthly channeled lessons given by
+Jeshua through Jayem. With answers to many questions and much supporting
+material and effective exercises the *Way of Mastery* is a practical and
+down to earth guide to transformation.
 
 <h3 class="ui center aligned icon header">
   <i class="bullhorn green icon"></i>
