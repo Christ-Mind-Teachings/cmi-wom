@@ -93,6 +93,7 @@ export function getConfig(book, assign = true) {
         config = cfg;
       }
       resolve(cfg);
+      return;
     }
 
     //get config from server
@@ -130,6 +131,7 @@ export function loadConfig(book) {
     if (cfg && !refreshNeeded(cfg)) {
       config = cfg;
       resolve("config read from cache");
+      return;
     }
 
     //get config from server

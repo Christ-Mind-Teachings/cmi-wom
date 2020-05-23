@@ -377,7 +377,7 @@ I would like to clarify this statement<br/>
 which is, by the way, one I did make.<br/>
 At a future time,<br/>
 I will clarify for you precisely those teachings<br/>
-found in scripture [^1]<br/>
+found in scripture<br/>
 which were given genuinely by Me;<br/>
 many were not.<br/>
 Through this process,<br/>

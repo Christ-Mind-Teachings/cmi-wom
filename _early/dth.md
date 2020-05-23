@@ -182,7 +182,7 @@ to this party.
 
 ## Question One
 
-[*Question*](/t/wom/early/dthq1/) So. We want, then, in this evening
+[*Question*](/t/wom/early/dth/q1/) So. We want, then, in this evening
 to speak specifically to certain questions that have been generated, for
 they hold a purpose in helping to extend and to clarify a simple message
 about this time frame, about certain changes, about certain things that
