@@ -7,7 +7,7 @@ footer:
   donate: false
   id: "CMI-WOM"
   source: "WOM"
-  repohref: "https://github.com/rmercer33/cmi-wom"
+  repohref: "https://github.com/Christ-Mind-Teachings/cmi-wom"
 ---
 
 ## Welcome to The Way of Mastery

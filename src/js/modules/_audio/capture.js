@@ -90,7 +90,7 @@ function initializeEdit() {
           onApprove: function() {
             //check current timing has the correct number of data points
             let noOfParagraphs = $("p.cmiTranPara").length;
-            
+
             if (noOfParagraphs !== timingData.length) {
               notify.error("Unexpected number of data points in existing timing data, please inform Rick, Can't capture time until this is resolved.");
               resolve(false);
