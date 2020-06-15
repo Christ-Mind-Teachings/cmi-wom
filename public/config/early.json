@@ -231,7 +231,49 @@
     {
       "title": "Love Heals All Things",
       "url": "/t/wom/early/lht/",
-      "audio": "/early/LHT.mp3"
+      "audio": "/early/LHT.mp3",
+      "questions": [
+        {
+          "title": "Q1. Question One",
+          "url": "/t/wom/early/lht/q1/",
+          "audio": "/questions/LHTQ1.mp3"
+        },
+        {
+          "title": "Q2. Question Two",
+          "url": "/t/wom/early/lht/q2/",
+          "audio": "/questions/LHTQ2.mp3"
+        },
+        {
+          "title": "Q3. Question Three",
+          "url": "/t/wom/early/lht/q3/",
+          "audio": "/questions/LHTQ3.mp3"
+        },
+        {
+          "title": "Q4. Question Four",
+          "url": "/t/wom/early/lht/q4/",
+          "audio": "/questions/LHTQ4.mp3"
+        },
+        {
+          "title": "Q5. Question Five",
+          "url": "/t/wom/early/lht/q5/",
+          "audio": "/questions/LHTQ5.mp3"
+        },
+        {
+          "title": "Q6. Question Six",
+          "url": "/t/wom/early/lht/q6/",
+          "audio": "/questions/LHTQ6.mp3"
+        },
+        {
+          "title": "Q7. Question Seven",
+          "url": "/t/wom/early/lht/q7/",
+          "audio": "/questions/LHTQ7.mp3"
+        },
+        {
+          "title": "Q8. Question Eight",
+          "url": "/t/wom/early/lht/q8/",
+          "audio": "/questions/LHTQ8.mp3"
+        }
+      ]
     },
     {
       "title": "Meaning of Ascension",

@@ -129,7 +129,8 @@ function highlightCurrentTranscript(bid) {
       max = 9;
       break;
     case "early":
-      max = 43;
+      max = 51;
+      //max = 43;
       break;
     case "acq":
       max = 3;

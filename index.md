@@ -32,7 +32,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
 <div id="page-contents">
   <div class="ui three cards">
     <div class="card">
-      <a href="#" data-book="acq" class="toc-modal-open image">
+      <a href="#" data-book="acq" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/acq-big.jpg">
       </a>
       <div class="content">
@@ -44,7 +44,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
   </div>
   <div class="ui three cards">
     <div class="card">
-      <a href="#" data-book="woh" class="toc-modal-open image">
+      <a href="#" data-book="woh" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wohN-big.jpg">
       </a>
       <div class="content">
@@ -54,7 +54,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wot" class="toc-modal-open image">
+      <a href="#" data-book="wot" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wotN-big.jpg">
       </a>
       <div class="content">
@@ -64,7 +64,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wok" class="toc-modal-open image">
+      <a href="#" data-book="wok" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wokN-big.jpg">
       </a>
       <div class="content">
@@ -74,7 +74,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="tjl" class="toc-modal-open image">
+      <a href="#" data-book="tjl" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/tjlN-big.jpg">
       </a>
       <div class="content">
@@ -84,7 +84,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wos" class="toc-modal-open image">
+      <a href="#" data-book="wos" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wosN-big.jpg">
       </a>
       <div class="content">
@@ -94,7 +94,7 @@ You can find [information and links here](/t/wom/acq/welcome/).
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="early" class="toc-modal-open image">
+      <a href="#" data-book="early" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/earlyN-big.jpg">
       </a>
       <div class="content">
@@ -102,5 +102,16 @@ You can find [information and links here](/t/wom/acq/welcome/).
           <em>The Early Years</em> is a series of messages from Jeshua that came before the <em>Way of the Heart</em>.
         </div>
       </div>
+    </div>
+    <div class="card">
+      <a id="moavideo" animate href="/t/wom/video/moa/" class="image" data-tooltip="Click to view the Video." data-position="bottom center">
+        <img src="/t/wom/public/img/wom/moa-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          This is a video of Jeshua speaking through Jayem the message titled <em>The Meaning of Ascension</em>.
+        </div>
+      </div>
+    </div>
   </div>
 </div>

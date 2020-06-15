@@ -7,6 +7,7 @@ import fb from "www/modules/_util/facebook";
 import {initTranscriptPage} from "www/modules/_page/startup";
 import {initialize as initNotes} from "www/modules/_page/notes";
 import {setLanguage} from "www/modules/_language/lang";
+import {initialize as initVideo} from "www/modules/_video/acq";
 
 //teaching specific modules
 import {loadConfig} from "./modules/_config/config";
@@ -28,6 +29,7 @@ $(document).ready(() => {
   fb.initialize();
   about.initialize();
   initNotes(noteInfo);
+  initVideo();
 
   loadConfig(getBookId())
     .then((result) => {

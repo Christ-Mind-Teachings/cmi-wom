@@ -26,7 +26,7 @@ $(document).ready(() => {
   initNotes(noteInfo);
   about.initialize();
 
-  initAnimation();
+  initAnimation("[animate]");
   showTOC();
 });
 
