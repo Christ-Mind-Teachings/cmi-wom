@@ -6,6 +6,7 @@
 */
 
 import scroll from "scroll-into-view";
+import notify from "toastr";
 import {fetchTimingData} from "../_config/config";
 import _findLastIndex from "lodash/findLastIndex";
 import _map from "lodash/map";
@@ -246,13 +247,37 @@ export default {
     fetchTimingData(timingDataUri)
       .then((data) => {
 
-        //round timing data to two decimal places
-//        timingData = _map(data.time, function(value) {
-//          value.seconds = round(value.seconds);
-//          return value;
-//        });
+        let timeArray = [];
 
-        timingData = data.time.map((value) => {
+        // if we get a string back from fetchTimingData(), it's because the json file
+        // could not be parsed
+        try {
+          if (typeof data === "string") {
+            let d = JSON.parse(data);
+            timeArray = d.time;
+          }
+          else {
+            timeArray = data.time;
+          }
+        }
+        catch(e) {
+          notify.error(
+            `Timing Error in: ${timingDataUri}
+            Please use the <a target="_blank" href="/acq/contact/">Contact Form</a> to report this problem. Thanks!`,
+            "Invalid Timing File",
+            {closeButton:true, timeOut:0, onCloseClick: () => {
+              notify.remove();
+            }}
+          );
+
+          //notify.error("Please use the contact form to report this problem. Thanks!");
+          console.error("Invalid timing json file: %s", timingDataUri);
+          console.error("%s", e);
+        }
+
+        //round timing data to two decimal places
+        //timingData = data.time.map((value) => {
+        timingData = timeArray.map((value) => {
           value.seconds = round(value.seconds);
           return value;
         });
