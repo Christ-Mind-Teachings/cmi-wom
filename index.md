@@ -30,15 +30,33 @@ New editions of all *Way of Mastery* books are now available on Amazon.
 You can find [information and links here](/t/wom/acq/welcome/).
 
 <div id="page-contents">
-  <div class="ui three cards">
-    <div class="card">
-      <a href="#" data-book="acq" animate class="toc-modal-open image">
-        <img src="/t/wom/public/img/wom/acq-big.jpg">
-      </a>
-      <div class="content">
-        <div class="description">
-          Learn about The Way of Mastery
+  <div class="ui equal width grid source-acq-section">
+    <div class="five wide column">
+      <div class="ui card">
+        <a href="#" data-book="acq" animate class="toc-modal-open image">
+          <img src="/t/wom/public/img/wom/acq-big.jpg">
+        </a>
+        <div class="content">
+          <div class="description">
+            Learn about The Way of Mastery
+          </div>
         </div>
+      </div>
+    </div>
+    <div class="column source-features">
+      <div class="ui top attached tabular menu">
+        <a class="active item" data-tab="first">Announcements</a>
+        <a class="item" data-tab="second">Quotes</a>
+        <a class="item" data-tab="third">Did You Know?</a>
+      </div>
+      <div class="ui bottom attached active tab segment" data-tab="first">
+        Announcements
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="second">
+        Quotes
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="third">
+        Discover
       </div>
     </div>
   </div>
