@@ -7,6 +7,9 @@ import {initialize as initNotes} from "www/modules/_page/notes";
 import {showTOC} from "www/modules/_util/url";
 import {setLanguage} from "www/modules/_language/lang";
 
+import fb from "www/modules/_util/facebook";
+import {initQuoteDisplay} from "www/modules/_topics/events";
+
 //teaching specific modules
 import {bookmarkStart} from "./modules/_bookmark/start";
 import search from "./modules/_search/search";
@@ -22,9 +25,13 @@ $(document).ready(() => {
   bookmarkStart("page");
   search.initialize();
   auth.initialize();
+  fb.initialize();
   toc.initialize("page");
   initNotes(noteInfo);
   about.initialize();
+
+  //support for quote display and sharing
+  initQuoteDisplay("#show-quote-button", constants);
 
   initAnimation("[animate]");
   showTOC();

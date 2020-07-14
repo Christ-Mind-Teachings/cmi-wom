@@ -19,16 +19,6 @@ Jeshua through Jayem. With answers to many questions and much supporting
 material and effective exercises the *Way of Mastery* is a practical and
 down to earth guide to transformation.
 
-<h3 class="ui center aligned icon header">
-  <i class="bullhorn green icon"></i>
-  <div class="content">
-    Please Note!!
-  </div>
-</h3>
-
-New editions of all *Way of Mastery* books are now available on Amazon.
-You can find [information and links here](/t/wom/acq/welcome/).
-
 <div id="page-contents">
   <div class="ui equal width grid source-acq-section">
     <div class="five wide column">
@@ -45,18 +35,39 @@ You can find [information and links here](/t/wom/acq/welcome/).
     </div>
     <div class="column source-features">
       <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="first">Announcements</a>
+        <a class="active item" data-tab="first">News</a>
         <a class="item" data-tab="second">Quotes</a>
-        <a class="item" data-tab="third">Did You Know?</a>
       </div>
       <div class="ui bottom attached active tab segment" data-tab="first">
-        Announcements
+        <div class="box">
+          <p><i class="bullhorn green icon"></i>
+            New editions of all <em>Way of Mastery</em> books are now available on Amazon.
+            You can find <a href="/t/wom/acq/welcome/">information and links here.</a>
+          </p>
+        </div>
       </div>
       <div class="ui bottom attached tab segment" data-tab="second">
-        Quotes
-      </div>
-      <div class="ui bottom attached tab segment" data-tab="third">
-        Discover
+        <h3 class="ui header">Get Inspired!</h3>
+        <div class="ui form">
+          <div class="fields">
+            <div class="field">
+              <button id="show-quote-button" class="ui primary button">
+                <i class="quote left icon"></i>
+                Read A Quote
+              </button> 
+            </div>
+            <div id="user-quote-select" class="field"></div>
+          </div>
+        </div>
+
+        <!--
+        <h3 class="ui header">Get Inspired!</h3>
+        <button id="show-quote-button" class="ui primary button">
+          <i class="quote left icon"></i>
+          Read A Quote
+        </button> 
+        -->
+
       </div>
     </div>
   </div>
