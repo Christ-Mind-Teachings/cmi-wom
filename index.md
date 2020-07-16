@@ -47,10 +47,10 @@ down to earth guide to transformation.
         </div>
       </div>
       <div class="ui bottom attached tab segment" data-tab="second">
-        <h3 class="ui header">Get Inspired!</h3>
         <div class="ui form">
           <div class="fields">
             <div class="field">
+              <label>Get Inspired</label>
               <button id="show-quote-button" class="ui primary button">
                 <i class="quote left icon"></i>
                 Read A Quote
