@@ -59,15 +59,6 @@ down to earth guide to transformation.
             <div id="user-quote-select" class="field"></div>
           </div>
         </div>
-
-        <!--
-        <h3 class="ui header">Get Inspired!</h3>
-        <button id="show-quote-button" class="ui primary button">
-          <i class="quote left icon"></i>
-          Read A Quote
-        </button> 
-        -->
-
       </div>
     </div>
   </div>
