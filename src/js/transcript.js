@@ -1,4 +1,5 @@
 /* eslint no-console: off */
+import {storeInit} from "www/modules/_util/store";
 
 //common modules
 import {showParagraph} from "www/modules/_util/url";
@@ -22,6 +23,7 @@ import constants from "./constants";
 //this is a comment
 
 $(document).ready(() => {
+  storeInit(constants);
 
   setLanguage(constants);
   initTranscriptPage();
