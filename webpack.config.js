@@ -59,7 +59,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    //new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({filename: 'me-styles.css'})
     /*
     new MiniCssExtractPlugin({filename: 'me-styles.css'}),

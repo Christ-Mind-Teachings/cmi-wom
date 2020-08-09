@@ -46,9 +46,16 @@
   <script src="/public/vendor/jquery/jquery.min.js"></script>
   <script src="/public/vendor/semantic/semantic.min.js"></script>
 
-  <script src="/t/wom/public/js/vendors~page~transcript.js"></script>
-  <script src="/t/wom/public/js/page~transcript.js"></script>
-  <script src="/t/wom/public/js/page.js"></script>
-</body>
+  {% if jekyll.environment == "production" %}
+    <!-- WOM page Webpack production -->
+    <script src="/t/wom/public/js/vendors~page~transcript.js"></script>
+    <script src="/t/wom/public/js/page.js"></script>
+  {% else %}
+    <!-- WOM page Webpack development -->
+    <script src="/t/wom/public/js/vendors~page~transcript.js"></script>
+    <script src="/t/wom/public/js/page~transcript.js"></script>
+    <script src="/t/wom/public/js/page.js"></script>
+  {% endif %}
 
+</body>
 </html>
