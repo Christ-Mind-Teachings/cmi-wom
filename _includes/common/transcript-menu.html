@@ -36,13 +36,7 @@
         <i class="level up icon"></i>
       </span>
     </a>
-    {% comment %}
-    {% if page.bid == "Questions" %}
-    <a href="#" data-book="{{page.contents | downcase}}" class="item toc-modal-open">
-    {% else %}
-    <a href="#" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
-    {% endif %}
-    {% endcomment %}
+
     <a href="#" id="contents-modal-open" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
       <span data-position="bottom center" data-tooltip="Show Contents">
         <i class="align justify icon"></i>
