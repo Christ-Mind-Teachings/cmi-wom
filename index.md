@@ -23,7 +23,7 @@ down to earth guide to transformation.
   <div class="ui equal width grid source-acq-section">
     <div class="five wide column">
       <div class="ui card">
-        <a href="#" data-book="acq" animate class="toc-modal-open image">
+        <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
           <img src="/t/wom/public/img/wom/acq-big.jpg">
         </a>
         <div class="content">
@@ -35,10 +35,10 @@ down to earth guide to transformation.
     </div>
     <div class="column source-features">
       <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="first">News</a>
-        <a class="item" data-tab="second">Quotes</a>
+        <a id="news-tab" class="active item" data-tab="first">News</a>
+        <a id="quote-tab" class="item" data-tab="second">Quotes</a>
       </div>
-      <div class="ui bottom attached active tab segment" data-tab="first">
+      <div id="news-tab-content" class="ui bottom attached active tab segment" data-tab="first">
         <div class="box">
           <p><i class="bullhorn green icon"></i>
             New editions of all <em>Way of Mastery</em> books are now available on Amazon.
@@ -46,7 +46,7 @@ down to earth guide to transformation.
           </p>
         </div>
       </div>
-      <div class="ui bottom attached tab segment" data-tab="second">
+      <div id="quote-tab-content" class="ui bottom attached tab segment" data-tab="second">
         <div class="ui form">
           <div class="fields">
             <div class="field">
@@ -64,7 +64,7 @@ down to earth guide to transformation.
   </div>
   <div class="ui three cards">
     <div class="card">
-      <a href="#" data-book="woh" animate class="toc-modal-open image">
+      <a id="book-woh" href="#" data-book="woh" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wohN-big.jpg">
       </a>
       <div class="content">
@@ -74,7 +74,7 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wot" animate class="toc-modal-open image">
+      <a id="book-wot" href="#" data-book="wot" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wotN-big.jpg">
       </a>
       <div class="content">
@@ -84,7 +84,7 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wok" animate class="toc-modal-open image">
+      <a id="book-wok" href="#" data-book="wok" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wokN-big.jpg">
       </a>
       <div class="content">
@@ -94,7 +94,7 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="tjl" animate class="toc-modal-open image">
+      <a id="book-tjl" href="#" data-book="tjl" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/tjlN-big.jpg">
       </a>
       <div class="content">
@@ -104,7 +104,7 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="wos" animate class="toc-modal-open image">
+      <a id="book-wos" href="#" data-book="wos" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wosN-big.jpg">
       </a>
       <div class="content">
@@ -114,7 +114,7 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
-      <a href="#" data-book="early" animate class="toc-modal-open image">
+      <a id="book-early" href="#" data-book="early" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/earlyN-big.jpg">
       </a>
       <div class="content">
@@ -129,7 +129,7 @@ down to earth guide to transformation.
       </a>
       <div class="content">
         <div class="description">
-          This is a video of Jeshua speaking through Jayem the message titled <em>The Meaning of Ascension</em>.
+          <em>The Meaning of Ascension</em> is a video of Jeshua speaking through Jayem the message titled <em>The Meaning of Ascension</em>.
         </div>
       </div>
     </div>

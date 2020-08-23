@@ -1,25 +1,57 @@
-import Driver from "driver.js";
+import {runFeatureIntro} from "www/modules/_util/driver";
 
 export function pageDriver() {
-  const driver = new Driver({
-    allowClose: false,
-    opacity: 0.5,
-    onHighlightStarted: (el) => {
-      console.log("highlighting %o", el);
-    }
-  });
-
-  driver.defineSteps([
+  let steps = [
     {
       element: "#source-homepage",
       popover: {
         title: "The Way of Mastery",
-        description: "This is the homepage for all of <em>The Way of Mastery</em> teachings in the Library. Each of the volumes below contain chapters and some included questions too. And most contain the original audio so you can read along as you listen.<br><br>Click on the image to see the table of contents. The Way of Mastery teachings include&hellip;",
+        description: "This is the homepage for all of <em>The Way of Mastery</em> teachings in the Library. Each of the volumes below contain chapters and some included questions too. And most contain the original audio so you can read along as you listen.",
         position: "bottom"
       }
     },
     {
-      element: "[data-book='woh']",
+      element: "#page-contents",
+      popover: {
+        title: "Books of The Way of Mastery",
+        description: "This is the contents of <em>The Way of Mastery</em>. Click on the cover of each book to see the table of contents.",
+        position: "top"
+      }
+    },
+    {
+      element: "#book-acq",
+      popover: {
+        title: "Get Acquainted",
+        description: "Learn about the Way of Mastery, click on the image to see the table of contents.",
+        position: "top"
+      }
+    },
+    {
+      element: "!#news-tab-content",
+      popover: {
+        title: "News",
+        description: "Short announcements",
+        position: "top"
+      },
+      onNext: () => {
+        $("#quote-tab").trigger("click");
+        //$("#show-quote-button").addClass("disabled");
+      }
+    },
+    {
+      element: "!#quote-tab-content",
+      popover: {
+        title: "Quote",
+        description: "Display inspiring quotes and share them via email or Facebook. (Don't press the button now, it will mess things up!! If you do, just press escape.)",
+        position: "top",
+      },
+      onPrevious: () => {
+        $("#news-tab").trigger("click");
+        //$("#show-quote-button").removeClass("disabled");
+      }
+    },
+    {
+      element: "#book-woh",
       popover: {
         title: "The Way of the Heart",
         description: "The first of three years of monthly messages that present the fundamental ideas and exercises that form a pathway of awakening.",
@@ -27,7 +59,7 @@ export function pageDriver() {
       }
     },
     {
-      element: "[data-book='wot']",
+      element: "#book-wot",
       popover: {
         title: "The Way of Transformation",
         description: "The second year of monthly messages that presents a transformative way of life.",
@@ -35,7 +67,7 @@ export function pageDriver() {
       }
     },
     {
-      element: "[data-book='wok']",
+      element: "#book-wok",
       popover: {
         title: "The Way of Knowing",
         description: "The final year of monthly messages that culminates <em>The Way of Mastery</em>.",
@@ -43,7 +75,7 @@ export function pageDriver() {
       }
     },
     {
-      element: "[data-book='tjl']",
+      element: "#book-tjl",
       popover: {
         title: "The Jeshua Letters",
         description: "Jayem's account of his introduction to Jeshua.",
@@ -51,7 +83,7 @@ export function pageDriver() {
       }
     },
     {
-      element: "[data-book='wos']",
+      element: "#book-wos",
       popover: {
         title: "The Way of the Servant",
         description: "A poetic description of the journey of awakening taken from inception to recognition of self as the servant - one who walks this world awake.",
@@ -59,241 +91,26 @@ export function pageDriver() {
       }
     },
     {
-      element: "[data-book='early']",
+      element: "#book-early",
       popover: {
         title: "The Early Years",
         description: "A collection of messages given before the Way of the Heart.",
         position: "top"
       }
+    },
+    {
+      element: "#moavideo",
+      popover: {
+        title: "The Meaning of Ascension",
+        description: "A video of Jayem channeling Jeshua",
+        position: "top"
+      }
     }
-  ]);
+  ];
 
-  driver.start();
-}
-
-export function pageNavigationDriver() {
-  const driver = new Driver({
+  runFeatureIntro(steps,{
     allowClose: false,
-    opacity: 0.5,
-    onReset: () => {
-      $("#bookmark-dropdown-menu").dropdown("hide");
-    }
+    opacity: 0.3
   });
-  driver.defineSteps([
-    {
-      element: "#masthead-title",
-      popover: {
-        title: "Navigation and Features",
-        description: "The Way of Mastery is part of the Library of Christ Mind Teachings. On every page you can click here to display the Library's main page to see all available teachings.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#page-menu",
-      popover: {
-        title: "The Menu",
-        description: "This is the page menu, it will stick to the top when the page is scrolled (when the tour is over) so it is always available. The menu on other pages is similar but may contain additional features.",
-        position: "bottom"
-      }
-    },
-    {
-      element: ".bookmark-modal-open",
-      popover: {
-        title: "List Bookmarks",
-        description: "Display a list of bookmarks you have created and optionally filter by topic. You can quickly jump to any bookmark. Learn more about bookmarks in the documentation.",
-        position: "bottom"
-      }
-    },
-    {
-      element: ".search-modal-open",
-      popover: {
-        title: "Search Through All Books",
-        description: "Find topics of interest by searching through all Way of Mastery books.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#quick-links-dropdown-menu",
-      popover: {
-        title: "Navigate to Another Teaching",
-        description: "Quickly jump to one of the other teachings in the Library.",
-        position: "bottom"
-      }
-    },
-    {
-      element: "#help-menu",
-      popover: {
-        title: "Get Help and Learn About",
-        description: "Learn about the teaching and using the features of the site.",
-        position: "bottom"
-      }
-    },
-    {
-      element: ".login-menu-option",
-      popover: {
-        title: "Sign In/Sign Out",
-        description: "Create an account and sign in to the site. It's free and allows you to create bookmarks that you can share via Facebook and keep synchronized between devices.",
-        position: "left"
-      }
-    },
-    {
-      element: "[data-book='wot']",
-      popover: {
-        title: "Display Table of Contents",
-        description: "Click on any image to display and navigate to the volume contents.",
-        position: "left"
-      }
-    }
-  ]);
-
-  driver.start();
-}
-
-export function transcriptDriver() {
-  const driver = new Driver({
-    allowClose: false,
-    opacity: 0.5
-    /*
-    onReset: () => {
-      $("#bookmark-dropdown-menu").dropdown("hide");
-    }
-    */
-  });
-
-  let steps = [];
-
-  steps.push({
-    element: "#masthead-title",
-    popover: {
-      title: "Library of Christ Mind Teachings",
-      description: "This page is part of the Teachings of Christ Mind Library. Click this link to navigate to the Library's Home page.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: "#src-title",
-    popover: {
-      title: "Way of Mastery",
-      description: "This page comes from the Way of Mastery. Click this link to navigate to the Home page of the Way of Mastery.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: "#book-title",
-    popover: {
-      title: "Book Title",
-      description: "This identifies the book and chapter of the content on this page.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: "#bookmark-dropdown-menu",
-    popover: {
-      title: "Bookmarks",
-      description: "You can create a bookmark from highlighted text and associate the bookmark with one or more categories. Learn more about bookmarks by reading the documentation.",
-      position: "right"
-    }
-  });
-
-  if ($(".search-modal-open").length > 0) {
-    steps.push({
-      element: ".search-modal-open",
-      popover: {
-        title: "Search Through All Books",
-        description: "Find topics of interest by searching through all Way of Mastery books.",
-        position: "bottom"
-      }
-    });
-  }
-
-  if (!$(".audio-player-toggle").hasClass("hide")) {
-    steps.push({
-      element: ".audio-player-toggle",
-      popover: {
-        title: "Listen to the Audio",
-        description: "Click the speaker icon to display the audio player and listen along as you read.",
-        position: "bottom"
-      }
-    });
-  }
-
-  steps.push({
-    element: ".toggle-paragraph-markers",
-    popover: {
-      title: "Show/Hide Paragraph Markers",
-      description: "Show or hide the markers that preceed each paragraph.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: ".top-of-page",
-    popover: {
-      title: "Go To Top of Page",
-      description: "Quickly jump to the top of the page.",
-      position: "bottom"
-    }
-  });
-
-
-  steps.push({
-    element: "#contents-modal-open",
-    popover: {
-      title: "Table of Contents",
-      description: "View the table of contents.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: ".previous-page",
-    popover: {
-      title: "Previous Page",
-      description: "Go to the previous page. This will be disabled when the first page is displayed.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: ".next-page",
-    popover: {
-      title: "Next Page",
-      description: "Go to the next page. This will be disabled when the last page is displayed.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-      element: "#quick-links-dropdown-menu",
-      popover: {
-        title: "Navigate to Another Teaching",
-        description: "Quickly jump to one of the other teachings in the Library.",
-        position: "bottom"
-      }
-    });
-
-  steps.push({
-    element: "#about-dropdown-menu",
-    popover: {
-      title: "Get Help",
-      description: "Learn how to use features of the Library.",
-      position: "bottom"
-    }
-  });
-
-  steps.push({
-    element: ".login-menu-option",
-    popover: {
-      title: "Sign In/Sign Out",
-      description: "Create an account and sign in or sign out. When you sign in, bookmarks you create will be available on all devices you use to access the library.",
-      position: "bottom"
-    }
-  });
-
-  driver.defineSteps(steps);
-  driver.start();
 }
 

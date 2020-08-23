@@ -1,11 +1,11 @@
 <div class="ui borderless main menu">
   <div id="page-menu" class="ui text container">
-    <a href="#" class="bookmark-modal-open requires-signin hide ui dropdown item">
+    <a id="bookmark-dropdown-menu" href="#" class="bookmark-modal-open requires-signin hide ui dropdown item">
       <span data-position="bottom center" data-tooltip="Show Bookmarks">
         <i class="red bookmark icon"></i>
       </span>
     </a>
-    <a href="#" class="item search-modal-open">
+    <a id="search-modal-open" href="#" class="item search-modal-open">
       <span data-position="bottom center" data-tooltip="Search {{site.title}}">
         <i class="search icon"></i>
       </span>
@@ -14,29 +14,29 @@
     <a id="help-menu" href="#" class="ui dropdown item">
       <i class="question icon"></i>
       <div class="menu">
-        <div data-note="studyguide" class="notes-modal-open item">Read Study Suggestions</div>
+        <div id="help-study-suggestions" data-note="studyguide" class="notes-modal-open item">Read Study Suggestions</div>
         <div class="divider"></div>
-        <div class="page-tour item">Quick Tour of The Way of Mastery</div>
-        <div class="page-navtour item">Learn About This Page</div>
-        <div class="read-documentation item">Read Documentation</div>
-        <div class="view-documentation item">Watch Video Instruction</div>
-        <div class="contact-me item">Get In Touch</div>
+        <div id="help-source-tour" class="page-tour item">Take a Quick Tour</div>
+        <div id="help-page-tour" class="page-navtour item">Learn About This Page</div>
+        <div id="help-read-docs" class="read-documentation item">Read Documentation</div>
+        <div id="help-view-docs" class="view-documentation item">Watch Video Instruction</div>
+        <div id="help-contact-me" class="contact-me item">Get In Touch</div>
       </div>
     </a>
-    <a href="#" class="login-menu-option-guest ui right floated item">
+    <a id="login-guest-menu-option" href="#" class="login-menu-option-guest ui right floated item">
       <span data-position="bottom center" data-tooltip="Sign In">
         <i class="red sign in icon"></i>
       </span>
     </a>
-    <a href="#" class="login-menu-option-account hide dropdown ui right floated item">
+    <a id="login-account-menu-option" href="#" class="login-menu-option-account hide dropdown ui right floated item">
       <span data-xposition="left center" data-xtooltip="Show/Set Bookmarks">
         <i class="green sign out icon"></i>
       </span>
       <div class="menu">
-        <div class="account-signout-option item">Sign Out</div>
+        <div id="account-signout-menu-option" class="account-signout-option item">Sign Out</div>
         <div class="divider"></div>
-        <div class="profile-management item">Manage Email List</div>
-        <div class="topic-management item">Manage Topics</div>
+        <div id="account-manage-email-menu-option" class="profile-management item">Manage Email List</div>
+        <div id="account-manager-topics-menu-option" class="topic-management item">Manage Topics</div>
       </div>
     </a>
   </div>

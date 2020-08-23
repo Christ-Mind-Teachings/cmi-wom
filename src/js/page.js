@@ -29,13 +29,13 @@ $(document).ready(() => {
   auth.initialize();
   fb.initialize();
   toc.initialize("page");
-  initNotes(noteInfo);
   about.initialize();
 
   //support for quote display and sharing
   initQuoteDisplay("#show-quote-button", constants);
-
   initAnimation("[animate]");
+
+  initNotes(noteInfo);
   showTOC();
 });
 
