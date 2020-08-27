@@ -32,7 +32,6 @@ function makeContents(contents) {
 
 //called for transcript pages
 function loadTOC() {
-  console.log("transcript page: loading toc");
   let book = $("#contents-modal-open").attr("data-book").toLowerCase();
 
   getConfig(book).then((contents) => {

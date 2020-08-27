@@ -11,14 +11,6 @@ export function pageDriver() {
       }
     },
     {
-      element: "#page-contents",
-      popover: {
-        title: "Books of The Way of Mastery",
-        description: "This is the contents of <em>The Way of Mastery</em>. Click on the cover of each book to see the table of contents.",
-        position: "top"
-      }
-    },
-    {
       element: "#book-acq",
       popover: {
         title: "Get Acquainted",
@@ -31,7 +23,7 @@ export function pageDriver() {
       popover: {
         title: "News",
         description: "Short announcements",
-        position: "top"
+        position: "left"
       },
       onNext: () => {
         $("#quote-tab").trigger("click");
@@ -43,7 +35,7 @@ export function pageDriver() {
       popover: {
         title: "Quote",
         description: "Display inspiring quotes and share them via email or Facebook. (Don't press the button now, it will mess things up!! If you do, just press escape.)",
-        position: "top",
+        position: "left",
       },
       onPrevious: () => {
         $("#news-tab").trigger("click");
@@ -55,7 +47,7 @@ export function pageDriver() {
       popover: {
         title: "The Way of the Heart",
         description: "The first of three years of monthly messages that present the fundamental ideas and exercises that form a pathway of awakening.",
-        position: "top"
+        position: "right"
       }
     },
     {
@@ -63,7 +55,7 @@ export function pageDriver() {
       popover: {
         title: "The Way of Transformation",
         description: "The second year of monthly messages that presents a transformative way of life.",
-        position: "top"
+        position: "right"
       }
     },
     {
@@ -71,7 +63,7 @@ export function pageDriver() {
       popover: {
         title: "The Way of Knowing",
         description: "The final year of monthly messages that culminates <em>The Way of Mastery</em>.",
-        position: "top"
+        position: "left"
       }
     },
     {
@@ -79,7 +71,7 @@ export function pageDriver() {
       popover: {
         title: "The Jeshua Letters",
         description: "Jayem's account of his introduction to Jeshua.",
-        position: "top"
+        position: "right"
       }
     },
     {
@@ -87,7 +79,7 @@ export function pageDriver() {
       popover: {
         title: "The Way of the Servant",
         description: "A poetic description of the journey of awakening taken from inception to recognition of self as the servant - one who walks this world awake.",
-        position: "top"
+        position: "right"
       }
     },
     {
@@ -95,7 +87,7 @@ export function pageDriver() {
       popover: {
         title: "The Early Years",
         description: "A collection of messages given before the Way of the Heart.",
-        position: "top"
+        position: "left"
       }
     },
     {
@@ -103,7 +95,7 @@ export function pageDriver() {
       popover: {
         title: "The Meaning of Ascension",
         description: "A video of Jayem channeling Jeshua",
-        position: "top"
+        position: "right"
       }
     }
   ];
