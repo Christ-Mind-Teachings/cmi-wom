@@ -32,24 +32,21 @@ function makeContents(contents) {
 
 //called for transcript pages
 function loadTOC() {
-  console.log("transcript page: loading toc");
   let book = $("#contents-modal-open").attr("data-book").toLowerCase();
 
-  getConfig(book)
-    .then((contents) => {
-      $(".toc-image").attr("src", `${contents.image}`);
-      $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
+  getConfig(book).then((contents) => {
+    $(".toc-image").attr("src", `${contents.image}`);
+    $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
 
-      $(".toc-list").html(makeContents(contents.contents));
-      highlightCurrentTranscript(contents.bid);
-    })
-    .catch((error) => {
-      console.error(error);
-      $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
-      $(".toc-title").html("Table of Contents: <em>Error</em>");
-      $(".toc-list").html(`<p>Error: ${error.message}</p>`);
-      $(uiTocModal).modal("show");
-    });
+    $(".toc-list").html(makeContents(contents.contents));
+    highlightCurrentTranscript(contents.bid);
+  }).catch((error) => {
+    console.error(error);
+    $(".toc-image").attr("src", "/public/img/cmi/toc_modal.png");
+    $(".toc-title").html("Table of Contents: <em>Error</em>");
+    $(".toc-list").html(`<p>Error: ${error.message}</p>`);
+    $(uiTocModal).modal("show");
+  });
 }
 
 /*
@@ -106,10 +103,8 @@ function highlightCurrentTranscript(bid) {
   let page = location.pathname;
   let $el = $(`.toc-list a[href='${page}']`);
 
-  //remove href to deactivate link for current page and
-  //scroll into middle of viewport
+  //remove href to deactivate link for current page
   $el.addClass("current-unit").removeAttr("href");
-  scroll($el.get(0));
 
   let max = 1;
   switch(bid) {
@@ -153,10 +148,19 @@ export default {
    * or local storage
    */
   initialize: function(env) {
-    //dialog settings
+
+    //modal dialog settings
     $(uiTocModal).modal({
       dimmerSettings: {opacity: uiModalOpacity},
-      observeChanges: true
+      observeChanges: true,
+      onVisible: function() {
+        let $el = $(".toc-list a.current-unit");
+        scroll($el.get(0), {
+          isScrollable: function(target, defaultIsScrollable) {
+            return defaultIsScrollable(target) || target.className.includes('scrolling');
+          }
+        });
+      }
     });
 
     //load toc once for transcript pages

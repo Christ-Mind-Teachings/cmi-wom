@@ -1,4 +1,5 @@
-import store from "store";
+//import store from "store";
+import {fetchConfiguration} from "www/modules/_util/cmi";
 import axios from "axios";
 import indexOf from "lodash/indexOf";
 import {status} from "./status";
@@ -13,48 +14,9 @@ const SOURCE = "The Way of Mastery";
 
 //location of configuration files
 const configUrl = "/t/wom/public/config";
-const configStore = "config.wom.";
 
 //the current configuration, initially null, assigned by getConfig()
 let config;
-
-/*
-  The status constains the save date for each config file. We compare that to the saveDate
-  in the locally stored config file. If it's different or doesn't exist we need to get
-  a new version.
-
-  return: true - get a new version
-          false - use the one we've got
-*/
-function refreshNeeded(cfg) {
-  let saveDate = status[cfg.bid];
-
-  if (!cfg.saveDate) {
-    cfg.saveDate = saveDate;
-
-    //we don't use this anymore
-    if (cfg.lastFetchDate) {
-      delete cfg.lastFetchDate;
-    }
-    console.log("%s needs to be refreshed", cfg.bid);
-    return true; //refresh needed
-  }
-
-  if (cfg.saveDate === saveDate) {
-    //no refresh needed
-    return false;
-  }
-  else {
-    //config file has changed, refresh needed
-    cfg.saveDate = saveDate;
-    console.log("%s needs to be refreshed", cfg.bid);
-    return true;
-  }
-}
-
-function requestConfiguration(url) {
-  return axios.get(url);
-}
 
 /*
   Fetch audio timing data
@@ -71,100 +33,60 @@ export function fetchTimingData(url) {
   });
 }
 
-/*
-  We use book level configuration that is loaded by request via AJAX. Once
-  loaded the config is persisted in local storage. A check is made for
-  configuration data loaded from storage to determine if the data needs to
-  be reloaded. This is indicated using Define-webpack-plugin to set the timestamp
-  of configurations that have changed.
-
-  args:
-    book: the book identifier, woh, wot, etc
-    assign: when true, assign global variable 'config' to retrieved data
-*/
+/**
+ * Get the configuration file for 'book'. If it's not found in
+ * the cache (local storage) then get it from the server and 
+ * save it in cache.
+ *
+ * @param {string} book - the book identifier
+ * @param {boolean} assign - true if the config is to be assigned to global config variable
+ * @returns {promise}
+ */
 export function getConfig(book, assign = true) {
+  let lsKey = `cfg${book}`;
+  let url = `${configUrl}/${book}.json`;
+
   return new Promise((resolve, reject) => {
-    let cfg = store.get(`${configStore}${book}`);
-    let url;
-
-    //if config in local storage check if we need to get a fresh copy
-    if (cfg && !refreshNeeded(cfg)) {
+    fetchConfiguration(url, lsKey, status).then((resp) => {
       if (assign) {
-        config = cfg;
+        config = resp;
       }
-      resolve(cfg);
-      return;
-    }
-
-    //get config from server
-    url = `${configUrl}/${book}.json`;
-    requestConfiguration(url)
-      .then((response) => {
-        //add save date before storing
-        response.data.saveDate = status[response.data.bid];
-        store.set(`${configStore}${book}`, response.data);
-        if (assign) {
-          config = response.data;
-        }
-        resolve(response.data);
-      })
-      .catch(() => {
-        config = null;
-        reject(`Config file: ${url} is not valid JSON`);
-      });
+      resolve(resp);
+    }).catch((err) => {
+      reject(err);
+    });
   });
 }
 
-/*
-  For transcript pages; load the configuration file.
-  For non-transcript pages; configuration is loaded by getConfig()
-
-  This is the same as getConfig() except it doesn't resolve passing the data
-  but a message indicating source of the configuration file
-*/
+/**
+ * Load the configuration file for 'book'. If it's not found in
+ * the cache (local storage) then get it from the server and 
+ * save it in cache.
+ *
+ * @param {string} book - the book identifier
+ * @returns {promise}
+ */
 export function loadConfig(book) {
+  let lsKey = `cfg${book}`;
+  let url = `${configUrl}/${book}.json`;
+
+  //"book" is a single page, no configuration
+  if (!book) {
+    return Promise.resolve(false);
+  }
+
   return new Promise((resolve, reject) => {
-    let cfg = store.get(`${configStore}${book}`);
-    let url;
-
-    //if config in local storage check if we need to get a freash copy
-    if (cfg && !refreshNeeded(cfg)) {
-      config = cfg;
-      resolve("config read from cache");
-      return;
-    }
-
-    //get config from server
-    url = `${configUrl}/${book}.json`;
-    requestConfiguration(url)
-      .then((response) => {
-        //add save date before storing
-        response.data.saveDate = status[response.data.bid];
-        store.set(`${configStore}${book}`, response.data);
-        config = response.data;
-        resolve("config fetched from server");
+    fetchConfiguration(url, lsKey, status)
+      .then((resp) => {
+        config = resp;
+        resolve(true);
       })
       .catch((error) => {
         config = null;
-        reject(`Config file: ${url} is not valid JSON`);
+        console.error(error);
+        reject(error);
       });
   });
-}
-
-/*
-  get audio info from config file
-*/
-function _getAudioInfo(idx, cIdx) {
-  let audioInfo;
-
-  if (idx.length === 5) {
-    let qIdx = parseInt(idx[4].substr(1), 10) - 1;
-    audioInfo = config.contents[cIdx].questions[qIdx];
-  }
-  else {
-    audioInfo = config.contents[cIdx];
-  }
-  return audioInfo ? audioInfo: {};
 }
 
 export function getAudioInfo(url) {
@@ -186,7 +108,8 @@ export function getAudioInfo(url) {
 
   let audioInfo = {};
   let cIdx;
-  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
+  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa",
+                "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
   let wos = ["foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilog", "prayer"];
 
   switch(idx[2]) {
@@ -241,7 +164,6 @@ export function getPageInfo(pageKey, data = false) {
   }
 
   return new Promise((resolve, reject) => {
-
     //get configuration data specific to the bookId
     getConfig(decodedKey.bookId, false)
       .then((data) => {
@@ -259,7 +181,6 @@ export function getPageInfo(pageKey, data = false) {
             info.title = "";
           }
           else {
-
             if (decodedKey.hasQuestions) {
               let question;
 
@@ -291,5 +212,21 @@ export function getPageInfo(pageKey, data = false) {
         reject(error);
       });
   });
+}
+
+/*
+  get audio info from config file
+*/
+function _getAudioInfo(idx, cIdx) {
+  let audioInfo;
+
+  if (idx.length === 5) {
+    let qIdx = parseInt(idx[4].substr(1), 10) - 1;
+    audioInfo = config.contents[cIdx].questions[qIdx];
+  }
+  else {
+    audioInfo = config.contents[cIdx];
+  }
+  return audioInfo ? audioInfo: {};
 }
 

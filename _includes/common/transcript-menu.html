@@ -1,17 +1,22 @@
 <!-- _includes/common/transcript-menu.html -->
 <div class="ui borderless main menu">
   <div id="transcript-menu" class="ui text container">
-    <a id="bookmark-dropdown-menu" href="#" class="ui dropdown item">
+    <a id="bookmark-dropdown-menu" href="#" class="requires-signin hide ui dropdown item">
       <span data-xposition="left center" data-xtooltip="Show/Set Bookmarks">
-        <i class="red bookmark icon"></i>
+        <i class="icons">
+          <i class="bookmark-icon green bookmark icon"></i>
+          <i class="bookmark-corner-icon hide corner close icon"></i>
+        </i>
       </span>
       <div class="menu">
         <div id="bookmark-modal-open" class="bookmark-modal-open item">Show Bookmarks</div>
         <div id="bookmark-toggle-disable-selection" class="toggle-bookmark-selection item">Disable Bookmark Creation</div>
         <div id="bookmark-toggle-highlight" class="toggle-bookmark-highlight item">Hide Highlighted Text</div>
-        <div class="divider"></div>
-        <div id="current-topic-filter" data-filter="none" class="header">Topic Filter: None</div>
-        <div id="page-topics-modal-open" class="page-topics-modal-open item">Filter Bookmarks</div>
+        <div id="bookmark-filter-wrapper" class="hide">
+          <div class="divider"></div>
+          <div id="current-topic-filter" data-filter="none" class="item header">Topic Filter: None</div>
+          <div id="page-topics-modal-open" class="page-topics-modal-open item">Filter Bookmarks</div>
+        </div>
       </div>
     </a>
     <a href="#" id="search-modal-open" class="item search-modal-open">
@@ -19,30 +24,27 @@
         <i class="search icon"></i>
       </span>
     </a>
-    <a class="audio-player-toggle hide item" >
+    <a id="audio-player-menu-option" class="audio-player-toggle hide item" >
       <span data-position="bottom center" data-tooltip="Play Audio">
         <i class="volume up icon"></i></a>
       </span>
     </a>
     {% unless page.pnumToggle == false %}
-    <a href="#" class="toggle-paragraph-markers item">
+    <a id="pnum-toggle-menu-option" href="#" class="toggle-paragraph-markers item">
       <span data-position="bottom center" data-tooltip="Toggle Display of Paragraph Numbers">
-        <i class="paragraph icon"></i>
+        <i class="icons">
+          <i class="paragraph icon"></i>
+          <i class="paragraph-corner-icon hide corner close icon"></i>
+        </i>
       </span>
     </a>
     {% endunless %}
-    <a href="#" class="top-of-page item">
+    <a id="jump-to-top-menu-option" href="#" class="top-of-page item">
       <span data-position="bottom center" data-tooltip="Top of Page">
         <i class="level up icon"></i>
       </span>
     </a>
-    {% comment %}
-    {% if page.bid == "Questions" %}
-    <a href="#" data-book="{{page.contents | downcase}}" class="item toc-modal-open">
-    {% else %}
-    <a href="#" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
-    {% endif %}
-    {% endcomment %}
+
     <a href="#" id="contents-modal-open" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
       <span data-position="bottom center" data-tooltip="Show Contents">
         <i class="align justify icon"></i>
@@ -64,22 +66,30 @@
       <div id="help-menu" class="menu">
         <div id="transcript-page-info" class="header"></div>
         <div class="divider"></div>
-        <div data-note="studyguide" class="notes-modal-open item">Read Study Suggestions</div>
+        <div id="help-study-suggestions" data-note="studyguide" class="notes-modal-open item">Read Study Suggestions</div>
         <div class="divider"></div>
-        <div class="transcript-tour item">Learn About This Page</div>
-        <div class="read-documentation item">Read Documentation</div>
-        <div class="view-documentation item">Watch Video Instruction</div>
-        <div class="copy-page-key item">Copy Page Key</div>
-        <div class="contact-me item">Get In Touch</div>
-        <div class="divider"></div>
-        <div class="hide profile-management item">Manage Email List</div>
-        <div class="hide topic-management item">Manage Topics</div>
+        <div id="help-page-tour" class="transcript-tour item">Learn About This Page</div>
+        <div id="help-read-docs" class="read-documentation item">Read Documentation</div>
+        <div id="help-view-docs" class="view-documentation item">Watch Video Instruction</div>
+        <div id="help-copy-pagekey" class="copy-page-key item">Copy Page Key</div>
+        <div id="help-contact-me" class="contact-me item">Get In Touch</div>
       </div>
     </a>
-    <a href="#" class="login-menu-option ui right floated item">
+    <a id="login-guest-menu-option" href="#" class="login-menu-option-guest ui right floated item">
       <span data-position="bottom center" data-tooltip="Sign In">
         <i class="red sign in icon"></i>
       </span>
+    </a>
+    <a id="login-account-menu-option" href="#" class="login-menu-option-account hide dropdown ui right floated item">
+      <span data-position="left center" data-tooltip="Sign Out">
+        <i class="green sign out icon"></i>
+      </span>
+      <div class="menu">
+        <div id="account-signout-menu-option" class="account-signout-option item">Sign Out</div>
+        <div class="divider"></div>
+        <div id="account-manage-email-menu-option" class="profile-management item">Manage Email List</div>
+        <div id="account-manager-topics-menu-option" class="topic-management item">Manage Topics</div>
+      </div>
     </a>
   </div>
 </div>
