@@ -373,7 +373,7 @@ I love you.
 
 Now. Take a moment and go into the mind and simply ask:
 
-> *Father what you have me communicate in this moment?*
+> *Father what would you have me communicate in this moment?*
 
 and when you’re ready, say it again.
 

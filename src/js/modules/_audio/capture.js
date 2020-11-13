@@ -386,7 +386,7 @@ export default {
 
     //add bullseye or clock icon to each class without class 'omit'
     $("p.cmiTranPara").each(function() {
-      $(this).prepend(`<i class='timing large circular red ${markerIcon} outline icon'></i>`);
+      $(this).prepend(`<i class='timing large circular red ${markerIcon} icon'></i>`);
     });
 
     //create time capture listeners

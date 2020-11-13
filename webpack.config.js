@@ -1,8 +1,8 @@
 const webpack = require("webpack");
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-//const etp = require("extract-text-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+//const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+//const etp = require("extract-text-webpack-plugin");
 
 module.exports = {
   devtool: "source-map",
@@ -13,7 +13,7 @@ module.exports = {
   resolve: {
     alias: {
       //"jquery": "jquery/src/jquery",
-      "semantic": "../vendor/semantic",
+      //"semantic": "../vendor/semantic",
       "me-plugin": path.resolve(__dirname, "../cmi-audio/dist"),
       "acim": path.resolve(__dirname, "../cmi-acim/src/js"),
       "oe": path.resolve(__dirname, "../cmi-oe/src/js"),

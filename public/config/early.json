@@ -236,42 +236,50 @@
         {
           "title": "Q1. Question One",
           "url": "/t/wom/early/lht/q1/",
-          "audio": "/questions/LHTQ1.mp3"
+          "audio": "/questions/LHTQ1.mp3",
+          "timing": "/questions/lhtq1.json"
         },
         {
           "title": "Q2. Question Two",
           "url": "/t/wom/early/lht/q2/",
-          "audio": "/questions/LHTQ2.mp3"
+          "audio": "/questions/LHTQ2.mp3",
+          "timing": "/questions/lhtq2.json"
         },
         {
           "title": "Q3. Question Three",
           "url": "/t/wom/early/lht/q3/",
-          "audio": "/questions/LHTQ3.mp3"
+          "audio": "/questions/LHTQ3.mp3",
+          "timing": "/questions/lhtq3.json"
         },
         {
           "title": "Q4. Question Four",
           "url": "/t/wom/early/lht/q4/",
-          "audio": "/questions/LHTQ4.mp3"
+          "audio": "/questions/LHTQ4.mp3",
+          "timing": "/questions/lhtq4.json"
         },
         {
           "title": "Q5. Question Five",
           "url": "/t/wom/early/lht/q5/",
-          "audio": "/questions/LHTQ5.mp3"
+          "audio": "/questions/LHTQ5.mp3",
+          "timing": "/questions/lhtq5.json"
         },
         {
           "title": "Q6. Question Six",
           "url": "/t/wom/early/lht/q6/",
-          "audio": "/questions/LHTQ6.mp3"
+          "audio": "/questions/LHTQ6.mp3",
+          "timing": "/questions/lhtq6.json"
         },
         {
           "title": "Q7. Question Seven",
           "url": "/t/wom/early/lht/q7/",
-          "audio": "/questions/LHTQ7.mp3"
+          "audio": "/questions/LHTQ7.mp3",
+          "timing": "/questions/lhtq7.json"
         },
         {
           "title": "Q8. Question Eight",
           "url": "/t/wom/early/lht/q8/",
-          "audio": "/questions/LHTQ8.mp3"
+          "audio": "/questions/LHTQ8.mp3",
+          "timing": "/questions/lhtq8.json"
         }
       ]
     },
