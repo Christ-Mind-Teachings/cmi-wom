@@ -13,7 +13,7 @@ yet again.
 {: .omit}
 </div>
 
-<span class="capital1">S</span>tepping out of the waiting area at the
+<span class="capital">S</span>tepping out of the waiting area at the
 airport gate, I am hit by the sweet, delicious fragrances of Maui, the
 heart-island. Closing my eyes, I drink deeply with my breath this
 intoxicating scent. It’s enough to bring a touch of tears to my eyes. Is

@@ -58,6 +58,7 @@ side the transcript. When viewing the transcript click on the
       </div>
     </div>
   </div>
+  <h2 class="ui heading">The Christ Mind Trilogy</h2>
   <div class="ui yellow message">
     <i class="star icon"></i>
     The core teaching &ndash; a compilation of a three year period of monthly messages.
@@ -157,8 +158,9 @@ side the transcript. When viewing the transcript click on the
       <dir class="header">The Early Years</dir>
       <div class="description">
         <p>
-          A collection of channeled messages many containing answers to
-          participant questions.
+          Channeled sessions given by <em>Jeshua</em> on many individual subjects, prior to, and during, the years of the channeling
+          of the five core texts. This collection of channeled messages often includes answers to participant questions. <em>The Early Years</em>
+          are recently in print for the first time.
         </p>
         <p>
           Get
@@ -177,6 +179,19 @@ side the transcript. When viewing the transcript click on the
       </div>
     </div>
   </div>
+  <h2 class="ui header">Pathway of Enlightenment</h2>
+  <p>
+  <em>The Way of Mastery</em> is a pathway of enlightenment which consists fo four essential and interconnected parts. The five core
+  texts and <em>The Early Years</em>, featured here, are only parts of the pathway.
+  </p>
+  <p>
+  For information on the entire pathway, see the <a href="/t/wom/acq/wom"><em>About the Way of Mastery</em></a> page,
+  of visit this site designed for students: <a href="https://thewayofmastery.online" target="_blank">www.thewayofmastery.online</a>.
+  </p>
+  <p>
+  The official site of <em>The Way of Mastery</em>, and Jayem, is <a href="https://www.wayofmastery.com" target="_blank">www.wayofmastery.com</a>
+  </p>
+
 </div>
 
 
