@@ -133,7 +133,7 @@ and the day comes when each must turn within and finally *allow* that
 part to flower and be played through them. And in whatever way that you
 come to it, you will understand the words that I spoke, seemingly so
 long ago, when I was confronted with the finality of my drama, the
-finality of my own teaching — what some would the Crucifixion (I’ve
+finality of my own teaching — what some would the call Crucifixion (I’ve
 never desired to emphasize *that* part of it; that was just
 stepping-stones to the Resurrection.) And those words are simply this:
 Nevertheless, not my will, not the will of the separate fearful ego, but
