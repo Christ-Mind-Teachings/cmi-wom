@@ -29,6 +29,7 @@ module.exports = {
 
   entry: {
     transcript: ["./src/js/transcript.js"],
+    topic: ["./src/js/topic.js"],
     page: ["./src/js/page.js"]
   },
   output: {

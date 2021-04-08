@@ -28,6 +28,7 @@ export default {
     cfgwok: "cfg.wok",
     cfgwos: "cfg.wos",
     cfgtjl: "cfg.tjl",
-    cfgearly: "cfg.early"
+    cfgearly: "cfg.early",
+    cfgtopics: "cfg.topics"
   }
 };

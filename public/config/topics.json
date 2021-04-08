@@ -1,0 +1,11 @@
+{
+  "bid": "topics",
+  "title": "Topics and Index",
+  "image": "/t/wom/public/img/wom/acq-toc.jpg",
+  "contents": [
+    {
+      "title": "Purpose",
+      "url": "/t/wom/topics/purpose/"
+    }
+  ]
+}
