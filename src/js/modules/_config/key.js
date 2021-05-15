@@ -298,6 +298,7 @@ function getUrl(key, withPrefix = false) {
   if (withPrefix) {
     return `${prefix}${url}`;
   }
+  
 
   return url;
 }

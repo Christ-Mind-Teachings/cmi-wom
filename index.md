@@ -24,11 +24,23 @@ down to earth guide to transformation.
     <div class="five wide column">
       <div class="ui card">
         <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
-          <img src="/t/wom/public/img/wom/acq-big.jpg">
+          <img src="/t/wom/public/img/wom/acq-big2.jpg">
         </a>
         <div class="content">
           <div class="description">
             Learn about The Way of Mastery
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="five wide column">
+      <div class="ui card">
+        <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
+          <img src="/t/wom/public/img/wom/topics-big.jpg">
+        </a>
+        <div class="content">
+          <div class="description">
+            Explore what Jeshua says about various topics.
           </div>
         </div>
       </div>

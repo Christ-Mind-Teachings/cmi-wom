@@ -1,11 +1,12 @@
 /* eslint no-console: off */
 import {storeInit} from "www/modules/_util/store";
+import {getTopicList} from "www/modules/_topics/topics";
 
 //common modules
 // import {showParagraph} from "www/modules/_util/url";
 import auth from "www/modules/_user/netlify";
 // import fb from "www/modules/_util/facebook";
-import {initTranscriptPage} from "www/modules/_page/startup";
+import {initTopicPage} from "www/modules/_page/startup";
 // import {initialize as initNotes} from "www/modules/_page/notes";
 import {setLanguage} from "www/modules/_language/lang";
 // import {initialize as initVideo} from "www/modules/_video/acq";
@@ -25,18 +26,14 @@ import constants from "./constants";
 $(document).ready(() => {
   storeInit(constants);
   setLanguage(constants);
-  initTranscriptPage("pnDisplay");
+  initTopicPage();
   auth.initialize();
-  // fb.initialize();
   about.initialize();
-  // initNotes(noteInfo);
-  // initVideo();
 
   loadConfig(getBookId()).then(() => {
     search.initialize();
     toc.initialize("transcript");
-    // audio.initialize();
-    // showParagraph();
+    getTopicList(constants.topicManagerId, constants.keyInfo);
     // bookmarkStart("transcript");
   }).catch((error) => {
     console.error(error);

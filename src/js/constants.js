@@ -11,12 +11,14 @@ export default {
   lang: "en",
   url_prefix: "/t/wom",                  //navigator,
   sourceId: 10,
+  topicManagerId: "05399539cca9ac38db6db36f5c770ff1",
   quoteManagerId: "05399539cca9ac38db6db36f5c770ff1",
   quoteManagerName: "CMI",
   getPageInfo: getPageInfo,              //list
   keyInfo: keyInfo,                      //list, bmnet
   store: {
     bmList: "bm.list",
+    topicList: "topic.list",
     bmCreation: "bm.creation",
     bmTopics: "bm.topics",
     bmModal: "bm.modal",

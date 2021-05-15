@@ -38,7 +38,8 @@ function loadTOC() {
     $(".toc-image").attr("src", `${contents.image}`);
     $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
 
-    $(".toc-list").html(makeContents(contents.contents));
+    let list = makeContents(contents.contents);
+    $(".toc-list").html(list);
     highlightCurrentTranscript(contents.bid);
   }).catch((error) => {
     console.error(error);
@@ -129,6 +130,9 @@ function highlightCurrentTranscript(bid) {
       break;
     case "acq":
       max = 3;
+      break;
+    case "topics":
+      max = 6;
       break;
   }
   nextPrev($el, max);
