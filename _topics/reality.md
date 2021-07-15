@@ -1,6 +1,6 @@
 ---
-title: Topic Title
-topic: xtopicValue
+title: Reality
+topic: xReality
 key: 10
 source: The Way of Mastery
 ---

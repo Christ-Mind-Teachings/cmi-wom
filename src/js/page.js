@@ -32,7 +32,8 @@ $(document).ready(() => {
   about.initialize();
 
   //support for quote display and sharing
-  initQuoteDisplay("#show-quote-button", constants);
+  //initQuoteDisplay("#show-quote-button", constants);
+  initQuoteDisplay("#book-quotes", constants);
   initAnimation("[animate]");
 
   initNotes(noteInfo);

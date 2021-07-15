@@ -1,8 +1,8 @@
 ---
-title: Topic Title
-topic: xtopicValue
+title: Axiom 4
 key: 10
 source: The Way of Mastery
+topic: xAxiom4
 ---
 
 # {{page.title}}
@@ -16,8 +16,8 @@ Explore what *{{page.source}}* says about related topics.
 
 Here are some of what is said in *{{page.source}}* about {{page.title}}. Some
 of the items have been edited slightly to better convey the idea expressed.
-Click the <i class="linkify icon"></i> icon to read from the source directly.
-Hover the mouse over the icon to see where the excerpt is found.
+Click the <i class="linkify icon"></i> icon to read the source directly. Hover
+the mouse over the icon to see where the excerpt is found.
 
 **Note:** Please read the [Welcome page](/t/wom/topics/welcome/) to learn about
 topics and how this page was created.

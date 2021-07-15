@@ -34,6 +34,14 @@ function makeContents(contents) {
 function loadTOC() {
   let book = $("#contents-modal-open").attr("data-book").toLowerCase();
 
+  // if book not defined disable menu controls
+  if (!book) {
+    $("#contents-modal-open").addClass("disabled");
+    $("#toc-previous-page").addClass("disabled");
+    $("#toc-next-page").addClass("disabled");
+    return;
+  }
+
   getConfig(book).then((contents) => {
     $(".toc-image").attr("src", `${contents.image}`);
     $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
@@ -132,7 +140,7 @@ function highlightCurrentTranscript(bid) {
       max = 3;
       break;
     case "topics":
-      max = 6;
+      max = 42;
       break;
   }
   nextPrev($el, max);

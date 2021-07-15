@@ -1,6 +1,6 @@
 ---
-title: Topic Title
-topic: xtopicValue
+title: Keys to the Kingdom
+topic: KeysToTheKingdom
 key: 10
 source: The Way of Mastery
 ---

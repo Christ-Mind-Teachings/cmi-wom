@@ -1,6 +1,6 @@
 ---
-title: Topic Title
-topic: xtopicValue
+title: Honesty
+topic: xHonesty
 key: 10
 source: The Way of Mastery
 ---

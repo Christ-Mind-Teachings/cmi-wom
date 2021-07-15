@@ -20,6 +20,7 @@ material and effective exercises the *Way of Mastery* is a practical and
 down to earth guide to transformation.
 
 <div id="page-contents">
+  <!--
   <div class="ui equal width grid source-acq-section">
     <div class="five wide column">
       <div class="ui card">
@@ -36,7 +37,7 @@ down to earth guide to transformation.
     <div class="five wide column">
       <div class="ui card">
         <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
-          <img src="/t/wom/public/img/wom/topics-big.jpg">
+          <img src="/t/wom/public/img/wom/topics1-big.jpg">
         </a>
         <div class="content">
           <div class="description">
@@ -74,7 +75,39 @@ down to earth guide to transformation.
       </div>
     </div>
   </div>
+  -->
   <div class="ui three cards">
+    <div class="card">
+      <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
+        <img src="/t/wom/public/img/wom/acq-big2.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Learn about The Way of Mastery
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
+        <img src="/t/wom/public/img/wom/topics1-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Explore what Jeshua says about various topics.
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <a id="book-quotes" href="#" animate class="image">
+        <img src="/t/wom/public/img/wom/quotes-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Discover quotes from the <em>Way of Mastery</em>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <a id="book-woh" href="#" data-book="woh" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wohN-big.jpg">

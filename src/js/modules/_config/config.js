@@ -90,9 +90,13 @@ export function loadConfig(book) {
 }
 
 export function getAudioInfo(url) {
+  let audioInfo = {};
+
   //check that config has been initialized
+  //- not always an error
   if (!config) {
-    throw new Error("Configuration has not been initialized");
+    console.error("Configuration has not been initialized");
+    return audioInfo;
   }
 
   //remove leading and trailing "/"
@@ -106,7 +110,6 @@ export function getAudioInfo(url) {
     throw new Error("Unexpected config file loaded; expecting %s but %s is loaded.", idx[2], config.bid);
   }
 
-  let audioInfo = {};
   let cIdx;
   let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa",
                 "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];

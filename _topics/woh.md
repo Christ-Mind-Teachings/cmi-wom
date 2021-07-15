@@ -30,11 +30,19 @@ Read on to see what The Way of Mastery says about the Way of the Heart.
 
 ## How *{{page.title}}* relates to other topics
 
-Explore what *{{page.source}}* says about related topics.
-
-* The [**Truth that is True Always**](/t/wom/topics/truthalways/){:data-topic="TruthThatIsTrue"}
-* [**Axiom 1**](/t/wom/topics/axiom1/){:data-topic="Axiom1"}
-* [**Axiom 2**](/t/wom/topics/axiom2/){:data-topic="Axiom2"}
+* The *Way of the Heart* is that way that was tauaght to [**Jeshua**](/t/wom/topics/jeshua/){:data-topic="Jeshua"}.
+* The first step of the *Way of the Heart* is to allow [**Axiom 1**](/t/wom/topics/axiom1/){:data-topic="Axiom1"} into the mind.
+* The *Way of the Heart* begins with the decision to embrace the [**Truth that is True Always**](/t/wom/topics/truthalways/){:data-topic="TruthThatIsTrue"}.
+* The *Way of the Heart* introduces four axioms of truth
+    * [**Axiom 1**](/t/wom/topics/axiom1/){:data-topic="Axiom1"}
+    * [**Axiom 2**](/t/wom/topics/axiom2/){:data-topic="Axiom2"}
+    * [**Axiom 3**](/t/wom/topics/axiom3/){:data-topic="Axiom3"}
+    * [**Axiom 4**](/t/wom/topics/axiom4/){:data-topic="Axiom4"}
+* The *Way of the Heart* introduces the Keys to the Kingdom
+    * [**Desire**](/t/wom/topics/desire/){:data-topic="Desire"}
+    * [**Intention**](/t/wom/topics/intention/){:data-topic="Intention"}
+    * [**Allowance**](/t/wom/topics/allowance/){:data-topic="Allowance"}
+    * [**Surrender**](/t/wom/topics/surrender/){:data-topic="Surrender"}
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 
@@ -47,8 +55,14 @@ the mouse over the icon to see where the excerpt is found.
 topics and how this page was created.
 
 <div class="ui basic segments topic-summary-list">
-  <div class="ui loading segment">
-    <p>Please wait&hellip;</p>
+  <div class="ui icon message">
+    <i class="notched circle loading icon"></i>
+    <div class="content">
+      <div class="header">
+        Just one second
+      </div>
+      <p>Loading topic: {{page.title}}</p>
+    </div>
   </div>
 </div>
 

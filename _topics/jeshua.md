@@ -48,8 +48,14 @@ over the icon to see where the excerpt is found.
 topics and how this page was created.
 
 <div class="ui basic segments topic-summary-list">
-  <div class="ui loading segment">
-    <p>Please wait...</p>
+  <div class="ui icon message">
+    <i class="notched circle loading icon"></i>
+    <div class="content">
+      <div class="header">
+        Just one second
+      </div>
+      <p>Loading topic: {{page.title}}</p>
+    </div>
   </div>
 </div>
 

@@ -1,6 +1,6 @@
 ---
-title: Topic Title
-topic: xtopicValue
+title: Time
+topic: xTime
 key: 10
 source: The Way of Mastery
 ---
