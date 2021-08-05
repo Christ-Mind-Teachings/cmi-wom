@@ -2,11 +2,27 @@
 title: Truth that is True Always
 key: 10
 source: The Way of Mastery
-topic: xTruthThatIsTrueAlways
+topic: TruthThatIsTrueAlways
 ---
 
 # {{page.title}}
 {: .cmi-topic-title}
+
+The *Truth that is True always* is what is true about each of us that is hidden behind
+our experience of separation. The remembrance of this truth is awakening, enlightenment and
+the purpose of the *Way of Mastery*.
+
+No matter what our past experience has been, *The Way of Mastery* says:
+
+<p class="cmi-tsi">The Reality of all that you are remains utterly changeless and pure.</p>
+
+Here are some expressions of the *Truth that is True always.*
+
+* I am as God created me to be.
+* Only Love is real.
+* I and my Father are One.
+* I am a creator of all that I think and see and experience.
+* Only Love heals.
 
 ## How *{{page.title}}* relates to other topics
 
