@@ -181,12 +181,12 @@ side the transcript. When viewing the transcript click on the
   </div>
   <h2 class="ui header">Pathway of Enlightenment</h2>
   <p>
-  <em>The Way of Mastery</em> is a pathway of enlightenment which consists fo four essential and interconnected parts. The five core
+  <em>The Way of Mastery</em> is a pathway of enlightenment which consists of four essential and interconnected parts. The five core
   texts and <em>The Early Years</em>, featured here, are only parts of the pathway.
   </p>
   <p>
   For information on the entire pathway, see the <a href="/t/wom/acq/wom"><em>About the Way of Mastery</em></a> page,
-  of visit this site designed for students: <a href="https://thewayofmastery.online" target="_blank">www.thewayofmastery.online</a>.
+  or visit this site designed for students: <a href="https://thewayofmastery.online" target="_blank">www.thewayofmastery.online</a>.
   </p>
   <p>
   The official site of <em>The Way of Mastery</em>, and Jayem, is <a href="https://www.wayofmastery.com" target="_blank">www.wayofmastery.com</a>
