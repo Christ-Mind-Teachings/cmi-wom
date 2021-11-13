@@ -1,16 +1,33 @@
 ---
-title: Axiom 4
+title: Axiom Four
 key: 10
 source: The Way of Mastery
-topic: xAxiom4
+topic: Axiom4
 ---
 
 # {{page.title}}
 {: .cmi-topic-title}
 
+*{{page.source}}* emphasizes four axioms, or statements of truth, that describe
+fundamental aspects of our being that we have forgotten or don't believe. It is
+the acceptance of these truths as we live our lives that lead us to awakening.
+
+The fourth axiom:
+
+The only relationship which holds any value at all is your relationship with God, your
+creative Source, the depth of the ocean.
+{: .cmi-tsi}
+
+## Links to other Axioms
+
+* [**Axiom One**](/t/wom/topics/axiom1/){:data-topic="Axiom One"}: You experience only
+  the effects of your own choice.
+* [**Axiom Two**](/t/wom/topics/axiom2/){:data-topic="Axiom Two"}: I need do nothing.
+* [**Axiom Three**](/t/wom/topics/axiom3/){:data-topic="Axiom Three"}: You do not live any "ordinary" moments.
+
 ## How *{{page.title}}* relates to other topics
 
-Explore what *{{page.source}}* says about related topics.
+* [**God**](/t/wom/topics/god/){:data-topic="God"}
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 

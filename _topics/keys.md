@@ -10,7 +10,12 @@ source: The Way of Mastery
 
 ## How *{{page.title}}* relates to other topics
 
-Explore what *{{page.source}}* says about related topics.
+There are four *Keys* to the Kingdom.
+
+1. [**Desire**](/t/wom/topics/desire/){:data-topic="Desire"}.
+1. [**Intention**](/t/wom/topics/intention/){:data-topic="Intention"}.
+1. [**Allowance**](/t/wom/topics/allowance/){:data-topic="Allowance"}.
+1. [**Surrender**](/t/wom/topics/surrender/){:data-topic="Surrender"}.
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 

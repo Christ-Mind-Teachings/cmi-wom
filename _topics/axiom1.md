@@ -1,16 +1,35 @@
 ---
-title: Axiom 1
+title: Axiom One
 key: 10
 source: The Way of Mastery
-topic: xAxiom1
+topic: Axiom1
 ---
 
 # {{page.title}}
 {: .cmi-topic-title}
 
+*{{page.source}}* emphasizes four axioms, or statements of truth, that describe
+fundamental aspects of our being that we have forgotten or don't believe. It is
+the acceptance of these truths as we live our lives that lead us to awakening.
+
+The first axiom:
+
+Nothing which you are experiencing is caused by anything outside of you. You
+experience only the effects of your own choice.
+{: .cmi-tsi}
+
+## Links to other Axioms
+
+* [**Axiom Two**](/t/wom/topics/axiom2/){:data-topic="Axiom Two"}: I need do nothing.
+* [**Axiom Three**](/t/wom/topics/axiom3/){:data-topic="Axiom Three"}: You do not live any "ordinary" moments.
+* [**Axiom Four**](/t/wom/topics/axiom4/){:data-topic="Axiom Four"}: The only relationship
+  that holds any value at all is your relationship with God.
+
 ## How *{{page.title}}* relates to other topics
 
-Explore what *{{page.source}}* says about related topics.
+* Accepting {{page.title}} is the first step in [**Awakening**](/t/wom/topics/axiom1/){:data-topic="Axiom One"}.
+* {{page.title}} states we are [**Creators**](/t/wom/topics/creator/){:data-topic="Creator"} of our experience.
+* [**Projection**](/t/wom/topics/projection/){:data-topic="Projection"} is the effect of the denial of {{page.title}}.
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 

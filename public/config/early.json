@@ -112,7 +112,7 @@
       "timing": "/early/ign.json"
     },
     {
-      "title": "Mastering Communication",
+      "title": "Mastering Communication (aka Jesus Speaks)",
       "url": "/t/wom/early/com/",
       "audio": "/early/COM.mp3",
       "questions": [
@@ -125,7 +125,7 @@
       ]
     },
     {
-      "title": "Decide to be Christ",
+      "title": "Decide to be Christ (aka Heart of Freedom)",
       "url": "/t/wom/early/dbc/"
     },
     {
@@ -302,6 +302,93 @@
       "url": "/t/wom/early/wlk/",
       "audio": "/early/WLK.mp3",
       "timing": "/early/wlk.json"
+    },
+    {
+      "title": "Healing the Illusions of Hurt",
+      "url": "/t/wom/early/illusions/",
+      "new": true,
+      "description": "From Nov 17, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Easter",
+      "url": "/t/wom/early/easter/",
+      "new": true,
+      "description": "From April 19, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Freedom and Forgiveness",
+      "url": "/t/wom/early/freedom/",
+      "new": true,
+      "description": "From Jan 30, 1993, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Now Is My Purpose Before Me",
+      "url": "/t/wom/early/purpose/",
+      "new": true,
+      "description": "From Jan 1, 1993, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "The Purpose of the World",
+      "url": "/t/wom/early/pow/",
+      "new": true,
+      "description": "From Feb 5, 1993, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "A Time of Celebration",
+      "url": "/t/wom/early/toc/",
+      "new": true,
+      "description": "From Jan 22, 1993, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "The Light that You Are",
+      "url": "/t/wom/early/light/",
+      "new": true,
+      "description": "From Nov 20, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Peace",
+      "url": "/t/wom/early/peace/",
+      "new": true,
+      "description": "From Aug 21, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Perception",
+      "url": "/t/wom/early/perception/",
+      "new": true,
+      "description": "From March 20, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "The End of Seeking is Upon Us",
+      "url": "/t/wom/early/seeking/",
+      "new": true,
+      "description": "From Jan 27, 1993, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Special and Holy Relationships",
+      "url": "/t/wom/early/shr/",
+      "new": true,
+      "description": "From June 26, 1992, provided by Dave Kopsel, formatted by Ken Hoover."
+    },
+    {
+      "title": "Doorway to Self Love",
+      "url": "/t/wom/early/doorway/",
+      "audio": "/early/doorway.mp3",
+      "new": true,
+      "description": "Provided by Dave Kopsel, transcribed and formatted by Ken Hoover."
+    },
+    {
+      "title": "Holy Relationship",
+      "url": "/t/wom/early/holyr/",
+      "audio": "/early/holyr.mp3",
+      "new": true,
+      "description": "Provided by Dave Kopsel, transcribed and formatted by Ken Hoover."
+    },
+    {
+      "title": "Teach Only Love",
+      "url": "/t/wom/early/teach/",
+      "audio": "/early/teach.mp3",
+      "new": true,
+      "description": "Provided by Dave Kopsel, transcribed and formatted by Ken Hoover."
     }
   ]
 }

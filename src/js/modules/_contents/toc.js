@@ -15,6 +15,10 @@ function renderQuestions(questions, c) {
   `;
 }
 
+function markAsNew(unit) {
+  return `<i title="${unit.description}" class="red sun outline icon"></i>`;
+}
+
 //generate html for Contents
 function makeContents(contents) {
   var c = {counter: 0};
@@ -22,7 +26,7 @@ function makeContents(contents) {
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
         <div class="item">
-          <a data-lid="${++c.counter}" href="${unit.url}">${unit.title}</a>
+          <a data-lid="${++c.counter}" href="${unit.url}">${unit.new ? markAsNew(unit) : ""}${unit.title}</a>
           ${unit.questions ? renderQuestions(unit.questions, c) : ""}
         </div>
       `).join("")}
@@ -133,7 +137,7 @@ function highlightCurrentTranscript(bid) {
       max = 9;
       break;
     case "early":
-      max = 51;
+      max = 65;
       //max = 43;
       break;
     case "acq":

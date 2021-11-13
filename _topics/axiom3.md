@@ -1,16 +1,42 @@
 ---
-title: Axiom 3
+title: Axiom Three
 key: 10
 source: The Way of Mastery
-topic: xAxiom3
+topic: Axiom3
 ---
 
 # {{page.title}}
 {: .cmi-topic-title}
 
+*{{page.source}}* emphasizes four axioms, or statements of truth, that describe
+fundamental aspects of our being that we have forgotten or don't believe. It is
+the acceptance of these truths as we live our lives that lead us to awakening.
+
+The third axiom:
+
+You do not live any "ordinary" moments.
+{: .cmi-tsi}
+
+## Links to other Axioms
+
+* [**Axiom One**](/t/wom/topics/axiom1/){:data-topic="Axiom One"}: You experience only
+  the effects of your own choice.
+* [**Axiom Two**](/t/wom/topics/axiom2/){:data-topic="Axiom Two"}: I need do nothing.
+* [**Axiom Four**](/t/wom/topics/axiom4/){:data-topic="Axiom Four"}: The only relationship
+  that holds any value at all is your relationship with God.
+
 ## How *{{page.title}}* relates to other topics
 
-Explore what *{{page.source}}* says about related topics.
+* If each moment is not ordinary it must be *extraordinary*. Therefore:
+    * Learning to [**trust**](/t/wom/topics/trust/){:data-topic="Trust"} and [**allow**](/t/wom/topics/allowance/){:data-topic="Allowance"} each moment
+      is important.
+    * [**Use time wisely**](/t/wom/topics/usetime/){:data-topic="Use Time Wisely"}.
+    * Use each moment to allow [**perception**](/t/wom/topics/perception/){:data-topic="Perception"}
+      to be [**healed**](/t/wom/topics/healing/){:data-topic="Healing"}.
+* You are not in the [**world**](/t/wom/topics/world/){:data-topic="World"} at all but in a context made new by your desire
+  to [**awaken**](/t/wom/topics/awakening/){:data-topic="Awaken"} which invited the [**Holy Spirit**](/t/wom/topics/holyspirit/){:data-topic="Holy Spirit"}
+  to guide the way.
+
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 

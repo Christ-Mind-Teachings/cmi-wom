@@ -112,7 +112,9 @@ export function getAudioInfo(url) {
 
   let cIdx;
   let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa",
-                "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk"];
+                "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk", "illusions", "easter",
+                "freedom", "purpose", "pow", "toc", "light", "peace", "perception", "seeking",
+                "shr", "doorway", "holyr", "teach"];
   let wos = ["foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilog", "prayer"];
 
   switch(idx[2]) {

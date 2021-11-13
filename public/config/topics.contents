@@ -3,27 +3,23 @@
   "url": "/t/wom/topics/welcome/"
 },
 {
-  "title": "Allowance",
-  "url": "/t/wom/topics/allowance/"
-},
-{
   "title": "Awakening",
   "url": "/t/wom/topics/awakening/"
 },
 {
-  "title": "Axiom 1",
+  "title": "Axiom One",
   "url": "/t/wom/topics/axiom1/"
 },
 {
-  "title": "Axiom 2",
+  "title": "Axiom Two",
   "url": "/t/wom/topics/axiom2/"
 },
 {
-  "title": "Axiom 3",
+  "title": "Axiom Three",
   "url": "/t/wom/topics/axiom3/"
 },
 {
-  "title": "Axiom 4",
+  "title": "Axiom Four",
   "url": "/t/wom/topics/axiom4/"
 },
 {
@@ -55,6 +51,18 @@
   "url": "/t/wom/topics/desire/"
 },
 {
+  "title": "Intention",
+  "url": "/t/wom/topics/intention/"
+},
+{
+  "title": "Allowance",
+  "url": "/t/wom/topics/allowance/"
+},
+{
+  "title": "Surrender",
+  "url": "/t/wom/topics/surrender/"
+},
+{
   "title": "Experience",
   "url": "/t/wom/topics/experience/"
 },
@@ -67,8 +75,20 @@
   "url": "/t/wom/topics/forgiveness/"
 },
 {
+  "title": "Freedom",
+  "url": "/t/wom/topics/freedom/"
+},
+{
   "title": "What is God",
   "url": "/t/wom/topics/god/"
+},
+{
+  "title": "Healing",
+  "url": "/t/wom/topics/Healing/"
+},
+{
+  "title": "Holy Spirit",
+  "url": "/t/wom/topics/holyspirit/"
 },
 {
   "title": "Honesty",
@@ -77,10 +97,6 @@
 {
   "title": "Illusion",
   "url": "/t/wom/topics/illusion/"
-},
-{
-  "title": "Intention",
-  "url": "/t/wom/topics/intention/"
 },
 {
   "title": "Jeshua",
@@ -123,10 +139,6 @@
   "url": "/t/wom/topics/selflove/"
 },
 {
-  "title": "Surrender",
-  "url": "/t/wom/topics/surrender/"
-},
-{
   "title": "Thinking",
   "url": "/t/wom/topics/thinking/"
 },
@@ -137,6 +149,14 @@
 {
   "title": "Truth that is True Always",
   "url": "/t/wom/topics/truthalways/"
+},
+{
+  "title": "Trust",
+  "url": "/t/wom/topics/trust/"
+},
+{
+  "title": "Use Time Wisely",
+  "url": "/t/wom/topics/usetime/"
 },
 {
   "title": "Way of the Heart",
@@ -161,4 +181,8 @@
 {
   "title": "Exercises from Way of Knowing",
   "url": "/t/wom/topics/wokexercise/"
+},
+{
+  "title": "World",
+  "url": "/t/wom/topics/world/"
 },

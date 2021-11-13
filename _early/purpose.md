@@ -2,7 +2,9 @@
 title: "Now Is My Purpose Before Me"
 fb:
   desc: "Way of Mastery: The Early Years - Now Is My Purpose Before Me"
-date: "Feb 5, 1993"
+date: "Jan 1, 1993"
+formatted: Sharon
+source: Dave Kopsel
 ---
 
 Now we begin. 
@@ -284,8 +286,8 @@ What do you think? Would it be a worthwhile party?
 *Yes.* 
 
 Will you choose to bring it into manifestation? For, you see, I cannot do it.
-Sorry about that. I've never been able to do it. Love waits on your welcome ?
-on your welcome ? and yet, it comes not from afar, for it is found to be the
+Sorry about that. I've never been able to do it. Love waits on your welcome &mdash;
+on your welcome &mdash; and yet, it comes not from afar, for it is found to be the
 essence of your only reality. Love embraces all things, trusts all things,
 rejoices in all things. It looks beyond the appearances of the world that are
 but as dancing shadows and it remembers itself in the eyes of everyone, and
@@ -356,61 +358,37 @@ how fast you can do it.
 
 {Group moves about hugging, kissing and laughing.}
 
-<div class="jayem" markdown="1">
 Marc: When all of that started, Jeshua asked me to open my eyes and, as I want
 to do at times... I rather like that space so I hesitated. So he said, "Marc,
 please open your eyes."
 
-|So, how are you doing?
-
-</div>
+So, how are you doing?
 
 *Great. Purr.*
  
-<div class="jayem" markdown="1">
 All right.
 
-</div>
- 
-<div class="person" markdown="1">
-Could Jeshua talk about 1993?
+*Could Jeshua talk about 1993?*
 
-</div>
- 
-<div class="jayem" markdown="1">
 He's saying, "Certainly. If you believe it's important."
 
-</div>
+*It is an important year.*
  
-<div class="person" markdown="1">
-It is an important year.
-
-</div>
- 
-<div class="jayem" markdown="1">
 What would you like to ask about it?
 
-</div>
-
-<div class="person" markdown="1">
-Well, oh dear. It's difficult here. People are whispering "community" to me.
+*Well, oh dear. It's difficult here. People are whispering "community" to me.
 That's obviously a very important event that will be happening in my life in
 the coming year and others that wish to be involved in that. I don't know what
 else I can say because you've already said it ? that we have to be that
 presence of Love and believe in miracles. So what else is there to know? But
-anything you can say will be great. Thank you.
+anything you can say will be great. Thank you.*
 
-</div>
- 
-<div class="jayem" markdown="1">
 I just want to share, Robin, as you were saying that...what I am experiencing
 is that I can still see him very, very clearly and feel him as you were sharing
 that, "what else is there to say?" I don't know how he does this any more than
 he already is but he lit up with a great smile, with a great smile, and said,
 "Ah, finally."
 
-</div>
- 
 What must be remembered in the process that some of you are undergoing in
 regard to what you call community is that it is a reflection of what you are
 choosing deep within yourselves to bring into your life and to make manifest,
@@ -480,23 +458,23 @@ Therefore, it requires singing, laughing, dancing, playing and planting the
 seed in the ground with great joy and gratitude for the harvest that has
 already come from it. So, are you ready to put all of that into action?
 
-Absolutely.
+*Absolutely.*
  
 Yes. And yet, beloved friend, it was not so many months ago when there was a
 great weight of hopelessness upon your heart, is that not true?
  
-Oh, yes. I was seriously wondering whether to give the land up; it was such a
-burden.
+*Oh, yes. I was seriously wondering whether to give the land up; it was such a
+burden.*
  
 What does it feel like now?
  
-A wonderful blessing.
+*A wonderful blessing.*
  
 What created the difference?
  
-People. Opening the whole thing up. Just allowing. Changes in my life. Many
+*People. Opening the whole thing up. Just allowing. Changes in my life. Many
 factors have come along, but it's just generally, I guess I'd paraphrase it as
-an opening up inside of me.
+an opening up inside of me.*
  
 There, you finally got to it. Do you see how there's still that little tendency
 to say, "Well, it must have been something out here that came and did this
@@ -526,11 +504,11 @@ to be raised in Light until it becomes only Light. And enjoy the process.
 
 Does that make sense to you?
 
-Thank you. Yes, it does.
+*Thank you. Yes, it does.*
  
-Jeshua, I have a question. Jeshua, you mentioned that it is a time of
-purification, and a lot of old patterns and things are going to be coming up.
- 
+*Jeshua, I have a question. Jeshua, you mentioned that it is a time of
+purification, and a lot of old patterns and things are going to be coming up.* 
+
 Going to be?
  
 They are. Can you offer any suggestions on how to process and deal with these
@@ -589,7 +567,7 @@ mind until nothing else is there and do nothing but extend love to them.
 
 Does that seem overwhelming?
 
-No.
+*No.*
  
 I know it seems almost a little simple - but the Truth is simple. Precious
 friend what is coming up for you now comes only because you've been willing to
@@ -627,16 +605,16 @@ overwhelmed. And you are that close.
 
 Willing to give it a try?
 
-Uh huh. Thank you very much.
+*Uh huh. Thank you very much.*
  
 Precious friend, thank you. The soul comes to the threshold of the Kingdom a
 million times in its journeys. And why? Because the threshold is always right
 there. You have chosen not to let the opportunity slip by, and you have asked
-from the depth of your being - we both know this is true ? you have cried out
+from the depth of your being &mdash; we both know this is true &mdash; you have cried out
 in your prayers for final healing and to awaken that your gifts may truly be
 given to the world. Is that not true?
  
-Uh huh.
+*Uh huh.*
  
 Indeed. And so it shall be: because you have asked, you receive. Trust,
 precious friend, for you are not alone. And even now in this one moment you are
@@ -658,12 +636,12 @@ Feel what is being sent to you and receive it. You are whole and you are loved.
 
 Do you feel a gentle warmth as though it were descending upon you?
 
-Yes.
+*Yes.*
  
 Do you notice how that warmth, at least a part of it, seems to be what you
 would know as touching you along the upper part of the back? Do you feel that?
  
-Yes.
+*Yes.*
  
 Why then would you ever think that I am not with you? I am not over here where
 this carcass sits in a chair. l am with you and I won't go anywhere until this
@@ -671,7 +649,7 @@ is completed.
  
 Beloved friend, haven't you been crying out to rejoin with me?
  
-Yes.
+*Yes.*
  
 How could you possibly hear about one simple little book? How could you
 possibly find yourself in the right place at the right time meet an old brother
@@ -682,7 +660,7 @@ My God, prayer works.
 
 {Laughter.}
 
-Thank God.
+*Thank God.*
  
 Exactly.
 
@@ -699,7 +677,7 @@ Marc: I'm just the telephone here. I'm here, but there's somebody right there.
 This is kind of fun. He wants me to let you know he's staying there. At least
 he knows how to do two things at once. {Laughter.} It's wild.
 
-Could you answer my question? Do l ask you or Jeshua? It's confusing. When I
+*Could you answer my question? Do l ask you or Jeshua? It's confusing. When I
 had my private session with Jeshua a couple of weeks ago, I talked to him?well,
 anyway, first of all, a lot of incredible things have been happening to some of
 us since this window of Light has been opened. When I had my private session
@@ -710,13 +688,13 @@ love for him, and he said I have to find out on my own. Well, I did and I found
 out who he is by listening to the heart and not to the mind, and the same thing
 has happened to four other people just during this past week. They have
 connected with their soulmates or twin flames, and two of them are sitting on
-either side of me. Could Jeshua speak about this?
+either side of me. Could Jeshua speak about this?*
  
 Marc: He is just standing there very quietly. He is asking me to ask you what
 needs to be said?
  
-Why this is happening? I don't know. It's happened to five of us. I don't know.
-Is this something that's happened to a lot of people?
+*Why this is happening? I don't know. It's happened to five of us. I don't know.
+Is this something that's happened to a lot of people?*
  
 Marc: He wants you to consider very carefully that because it is happening to
 you itis, therefore, happening to everyone, and that as you followed
@@ -724,14 +702,14 @@ instruction and trusted your own knowingness in your heart, likewise you know
 truly even now that you do not need to question what is occurring because you
 know what is occurring. It is called miracles.
  
-It sure is.
+*It sure is.*
  
 Miracles do not need to be understood. They need only be celebrated. Beloved
 friend, you have relinquished the weight of a thousand worlds in the span of a
 few short weeks.
  
-That's for sure. It is wonderful.
- 
+*That's for sure. It is wonderful.* 
+
 And it will continue to grow in its wonder as you remember at all times that
 you can trust your ability within your own heart to access all that you need in
 any given moment. In other words, the question that has arisen within you
@@ -742,7 +720,7 @@ fact that your heart can be trusted and there is where you find the doorway
 that leads to life. That's why you have been feeling so good - because life is
 coming back.
  
-Love is coming back to me.
+*Love is coming back to me.*
  
 Indeed. Those are one and the same. And do you see then what I have sought to
 share with you must be true: because you have allowed the miracle to happen
@@ -761,7 +739,7 @@ here who have known you for some time that took a second look because they
 felt, they recognized, not so much with the physical eyes but with the eyes of
 the heart, that something quite profound has shifted.
 
-It sure has.
+*It sure has.*
  
 Is that not true of several of you? Do you see, then, you've given everyone the
 gift of your own willingness to release an insane perception and remember that
@@ -772,24 +750,24 @@ getting started. We will have to call you the cosmic Santa.
 
 {Laughter.}
 
-I am the first one that this has happened to and then just a few days later
-Penne and then the other three.
+*I am the first one that this has happened to and then just a few days later
+Penne and then the other three.*
  
 How about that. And then the other six and the other six thousand and then the
 other sixty million, and Light is remembered and Heaven comes to Earth. Indeed.
  
-Thank you.
+*Thank you.*
  
-Jeshua, I seem to see in this process all of our minds being as one, and our
+*Jeshua, I seem to see in this process all of our minds being as one, and our
 abilities available to whoever needed them, whether they were twenty miles away
-or here, and the soulmates here and above working in conjunction, helping.
+or here, and the soulmates here and above working in conjunction, helping.*
  
 Yes.
  
 Marc: He is saying, that's all he can really say to that. That, of course, the
 answer is yes.
  
-Is that a community or a family? Isn't it?
+*Is that a community or a family? Isn't it?*
  
 Of course. The Son is one. One Mind and one Heart. And that family includes
 everyone, but the steps to that recognition are through the remembering of
@@ -803,10 +781,10 @@ the whole of creation. You have indeed begun to have vision, remembrance, that
 all minds are joined as one. And that must mean that Christ is in you now. And
 it is that that the world once tried to teach you to forget.
  
-I saw healers of every sort. And whether it was healing by talking to someone,
+*I saw healers of every sort. And whether it was healing by talking to someone,
 whether it was healing by vibration, they had the ability to reach each other
 through their minds to help that person if they didn't know that. It was just
-all there ? just coming from each of us to each of us when it was needed.
+all there &mdash; just coming from each of us to each of us when it was needed.*
  
 Now, in reality that is what is occurring at all times. The whole process of
 awakening is only a process of remembering what has been eternally true. So the
@@ -830,10 +808,10 @@ Yes.
  
 You just have to be on guard because you never know where.
  
-Can I ask another question to go with this? Is there a responsibility in this?
+*Can I ask another question to go with this? Is there a responsibility in this?
 I get a feeling that it's sort of a work being done. It's not sort of a... it
 is a gift; it is a miracle, but it's a part of the work of uplifting the
-consciousness by the Love and the joy and the openings that we grow into.
+consciousness by the Love and the joy and the openings that we grow into.*
  
 Is there responsibility in being awake? Yes. The responsibility has a tendency
 in the beginning of the process to seem staggering or overwhelming because it
@@ -862,21 +840,21 @@ Christ is to love all equally. Thank God that's all that's asked.
 
 Does that help you?
 
-Yes. Thank you very much.
+*Yes. Thank you very much.*
  
 Now, it does mean that you never get to punch off the time clock and there's no
 union.
  
-Jeshua, I'd like to ask a question about the concept of grace.
+*Jeshua, I'd like to ask a question about the concept of grace.*
  
 Ah, if you pay enough, you can get it. Interesting word that the Church had for
 those things: indulgences. What do you what to know about grace?
  
-Well, my understanding of grace is rather sketchy. It's sort of connected to
+*Well, my understanding of grace is rather sketchy. It's sort of connected to
 some old church teachings and so forth, but the thing I think that I'd like to
 find out more about is the idea that it is gifted to us. It is given freely to
-us without... in spite of our grasping for it. It's along the same lines as the
-allowing, kind of opening up and allowing the Light to come in.
+us without&hellip; in spite of our grasping for it. It's along the same lines as the
+allowing, kind of opening up and allowing the Light to come in.*
  
 Sounds like a very good description.
  
@@ -884,7 +862,7 @@ I'd like to personally know about grace in my life. How's that?
  
 Are you sure?
  
-Well, yeah. I'm working on allowing. It's kind of an oxymoron.
+*Well, yeah. I'm working on allowing. It's kind of an oxymoron.*
  
 Allowing is indeed the key that opens the floodgate of grace. And yet, allowing
 is not a doing in the normal sense. It is mastered when every attempt to make
@@ -918,7 +896,7 @@ accomplish your salvation.
 
 Willing to stop trying? Are you willing to stop trying?
 
-Oh, absolutely. Absolutely.
+*Oh, absolutely. Absolutely.*
  
 Good. Then do simply this one thing: tonight when you rest your head upon your
 pillow, do what I have just described to you. Not in the hopes that it is going
@@ -929,18 +907,18 @@ felt within you. Trust them. What you are asking for is not far from you.
  
 However, there is one condition. You'll need to receive it. Fair trade?
 
-Fair trade. Thank you.
+*Fair trade. Thank you.*
  
 Beloved friend, you have no idea right now what you have just let loose. You
 have no idea truly of what you have just in this moment released from your
 countenance. But you will.
   
-Thank you.
+*Thank you.*
  
 Don't thank me. Of my self I do nothing. Indeed. So.
  
-Jeshua, my beloved brother, Cliff, asked me to ask you a question for him. And
-what he asked was, how he can best serve in his life in the future?
+*Jeshua, my beloved brother, Cliff, asked me to ask you a question for him. And
+what he asked was, how he can best serve in his life in the future?*
  
 Marc: He is asking me just to say to you, Howard, that when you talk to Cliff,
 let him know that because he has asked, not from the curiosity of the mind but
@@ -955,9 +933,9 @@ question. It does not come from the mind. It comes from the heart. And because
 it is asked from there, it is already answered and he will hear that answer
 each time he turns within and merely thinks upon Jeshua and asks.
  
-Thank you.
+*Thank you.*
  
-Jeshua, I had several things happen to me this last week, just within a few
+*Jeshua, I had several things happen to me this last week, just within a few
 days, and it must be this window. A piece of artwork was given to me and I felt
 an aura off of it...messages. And then I got a letter from some friends who had
 moved out of the area. They had a child that had the same birth condition as
@@ -970,7 +948,7 @@ December and he said that all three parts of my muscle are working and he feels
 it's coming back. This miracle was occurring within me, with all sorts of
 things going on from the Reiki and my perceptions. Can you help me understand
 what is happening with this little girl dying with no medical cause and my
-sorrow over that and my feeling I shed my body?
+sorrow over that and my feeling I shed my body?*
  
 Beloved friend, there are a few things going on for you here. First, remember
 always that in reality death does not exist. That one that you would perceive
@@ -981,14 +959,14 @@ the door and released the perception you have held about yourself as being only
 the body. Much more than just having the concept or the thought, you
 experienced it.
   
-It wasn't just a thought. 
+*It wasn't just a thought.*
 
 No. Now, the former then, the event of what you would perceive as this death,
 triggered and helped you move into that place. Why? Because when you learned
 the news, it struck a place of compassion within you. It also struck a place of
 a sense of kinship and familiarity with the child.
  
-She was beautiful.
+*She was beautiful.*
  
 Yes. And you, as what you would perceive as a soul, longed to be able to convey
 your love to that child. Now, the death then served in helping you realize that
@@ -1003,54 +981,54 @@ perception began to come back. But that's okay because once you've slid through
 such a door, it becomes easier and easier, and that in itself will accelerate
 the healing of the body. Do you see how it all ties together?
  
-Yes. It's part of the miracle process in healing my body.
+*Yes. It's part of the miracle process in healing my body.*
  
 Yes.
  
-I perceived myself as a soul that doesn't really live within my body.
+*I perceived myself as a soul that doesn't really live within my body.*
  
 Not just a perception, an experience.
  
-Yeah, that's what it was. It wasn't a thought. I was like I shed it.
+*Yeah, that's what it was. It wasn't a thought. I was like I shed it.*
  
 Just like you can have a thought about what it means to stand in a downpour or
 you can stand in it.
  
-Right. Okay.
+*Right. Okay.*
  
 Now, remember, hold that child in your heart. Think about her. And when you
 think about her, allow that feeling to come back to you the feeling in the
 heart of compassion and of the desire to extend and communicate love. It will
 be very helpful.
  
-Thank you.
+*Thank you.*
  
 But it's only helpful if you want miracles to continue.
  
-I do. Thank you.
+*I do. Thank you.*
  
 Good choice.
 
-I sent her parents a card, but I don't know if they will be ready for me to
-share that.
+*I sent her parents a card, but I don't know if they will be ready for me to
+share that.*
  
 No, they are not ready yet.
  
-I didn't think so. Thank you.
+*I didn't think so. Thank you.*
  
 Marc: Well, how's everybody doing?
  
-Great.
+*Great.*
  
 Good.
  
-Great but tired.
+*Great but tired.*
  
 Great but tired, huh.
  
-I have another question.
+*I have another question.*
  
-Marc: He's suggesting that we... let's spend some time together here. Just move
+Marc: He's suggesting that we&hellip; let's spend some time together here. Just move
 your chairs so that you can sit facing somebody. Any body will do. 
 
 {Group breaks into dyads.}
@@ -1059,7 +1037,7 @@ Marc: Does everybody have somebody? It might be nice if we have a couple of
 triads to make it a duo. Better be careful over there. A lot of miracles seem
 to happen with those.
  
-That's why I moved.
+*That's why I moved.*
  
 Marc: So just let yourself take a few good deep breaths, and really allow
 yourself to look into the eyes of the person in front of you. 
