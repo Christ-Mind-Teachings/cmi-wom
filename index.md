@@ -20,7 +20,7 @@ material and effective exercises the *Way of Mastery* is a practical and
 down to earth guide to transformation.
 
 <div id="page-contents">
-  <!--
+  <!-- start -->
   <div class="ui equal width grid source-acq-section">
     <div class="five wide column">
       <div class="ui card">
@@ -30,18 +30,6 @@ down to earth guide to transformation.
         <div class="content">
           <div class="description">
             Learn about The Way of Mastery
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="five wide column">
-      <div class="ui card">
-        <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
-          <img src="/t/wom/public/img/wom/topics1-big.jpg">
-        </a>
-        <div class="content">
-          <div class="description">
-            Explore what Jeshua says about various topics.
           </div>
         </div>
       </div>
@@ -75,8 +63,9 @@ down to earth guide to transformation.
       </div>
     </div>
   </div>
-  -->
+  <!-- end -->
   <div class="ui three cards">
+    <!-- edit page.js to change quote init when this is uncommented
     <div class="card">
       <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/acq-big2.jpg">
@@ -107,7 +96,7 @@ down to earth guide to transformation.
         </div>
       </div>
     </div>
-
+    -->
     <div class="card">
       <a id="book-woh" href="#" data-book="woh" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wohN-big.jpg">

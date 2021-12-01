@@ -1,12 +1,18 @@
 ---
 title: Axiom Two
+subtitle: "I need do nothing."
 key: 10
 source: The Way of Mastery
 topic: Axiom2
 ---
 
+{% if page.subtitle %}
+<h1>{{page.title}}<br><small>{{page.subtitle}}</small></h1>
+{: .cmi-topic-title}
+{% else %}
 # {{page.title}}
 {: .cmi-topic-title}
+{% endif %}
 
 *{{page.source}}* emphasizes four axioms, or statements of truth, that describe
 fundamental aspects of our being that we have forgotten or don't believe. It is

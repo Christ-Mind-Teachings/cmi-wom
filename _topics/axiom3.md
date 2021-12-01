@@ -1,12 +1,18 @@
 ---
 title: Axiom Three
+subtitle: "You do not live any 'ordinary' moments"
 key: 10
 source: The Way of Mastery
 topic: Axiom3
 ---
 
+{% if page.subtitle %}
+<h1>{{page.title}}<br><small>{{page.subtitle}}</small></h1>
+{: .cmi-topic-title}
+{% else %}
 # {{page.title}}
 {: .cmi-topic-title}
+{% endif %}
 
 *{{page.source}}* emphasizes four axioms, or statements of truth, that describe
 fundamental aspects of our being that we have forgotten or don't believe. It is
@@ -36,7 +42,6 @@ You do not live any "ordinary" moments.
 * You are not in the [**world**](/t/wom/topics/world/){:data-topic="World"} at all but in a context made new by your desire
   to [**awaken**](/t/wom/topics/awakening/){:data-topic="Awaken"} which invited the [**Holy Spirit**](/t/wom/topics/holyspirit/){:data-topic="Holy Spirit"}
   to guide the way.
-
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 

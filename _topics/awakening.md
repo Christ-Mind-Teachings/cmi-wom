@@ -1,6 +1,6 @@
 ---
 title: Awakening
-topic: xAwakening
+topic: Awakening
 key: 10
 source: The Way of Mastery
 ---
@@ -9,8 +9,6 @@ source: The Way of Mastery
 {: .cmi-topic-title}
 
 ## How *{{page.title}}* relates to other topics
-
-Explore what *{{page.source}}* says about related topics.
 
 ## Excerpts from *{{page.source}}* on "*{{page.title}}*"
 
