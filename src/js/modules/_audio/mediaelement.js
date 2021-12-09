@@ -183,14 +183,17 @@ function getUserStatus() {
 
   //User is a timer, check there is a timing reservation on the page
   let reservation = getReservation(location.pathname);
+  //console.log("reservation: %s", reservation);
 
   //no reservation, the user is a timer
   if (!reservation) {
+    //console.log("no reservation");
     return "TIMER";  
   }
 
   //check if reservation is for the user
   if (reservation === user.email) {
+    //console.log("user: %s has a reservation", user.name);
     return "TIMER";
   }
   //editors can time even if a reservation is held by someone else

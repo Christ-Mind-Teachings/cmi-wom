@@ -41,9 +41,8 @@ down to earth guide to transformation.
       </div>
       <div id="news-tab-content" class="ui bottom attached active tab segment" data-tab="first">
         <div class="box">
-          <p><i class="bullhorn green icon"></i>
-            New editions of all <em>Way of Mastery</em> books are now available on Amazon.
-            You can find <a href="/t/wom/acq/welcome/">information and links here.</a>
+          <p><i class="bullhorn red icon"></i>
+            Fourteeen transcripts have been added to the Early Years thanks to Ken Hover and Dave Kopsell.
           </p>
         </div>
       </div>

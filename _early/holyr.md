@@ -73,22 +73,25 @@ the body, and we'll use that as a standard by which to judge everyone?
 Absolutely. 
 
 {Laughter}
+{: .omit}
 
 And we're going to stay here tonight until everybody gets it.
 
 {Laughter}
+{: .omit}
 
 Now, I make light of that. Hmm, of course not. There is no room for levity in
 the journey to God.
 
 {Laughter}
+{: .omit}
 
 And yet if God be but Light, must not the whole journey be one from the weight
 of seriousness to the levity of lightness? Hmm.
 
 Now, what I've just shared with you that struck the funny bone is actually
 quite true. If you take it to a deeper level, that indeed, it is given unto you
-- because you created it for yourself - to undertake a journey whereby you
+&ndash; because you created it for yourself &ndash; to undertake a journey whereby you
 dissolve from the mind every last trace of perception that you are the body and
 that you are limited by it in any way, shape, or form. Given unto you is the
 journey of realizing that you are never a victim, or a prisoner, to anything
@@ -170,6 +173,7 @@ he was a radical then. He's a radical now.”
 Hmm. Jesus Christ, indeed. 
 
 {Laughter}
+{: .omit}
 
 And that is what in your myths have been called the journey of the hero. The
 willingness to trust something given unto you as a statement or a fact. Not
@@ -198,7 +202,7 @@ with that swirling vortex of illusion and delusion, how it has always lead you
 into pain every time you have given it ascendancy over your true mind. 
 
 Right down, right down to the simple fact that when something occurs around you
-- somebody becomes angry, something doesn't work right - how when you identify
+&ndash; somebody becomes angry, something doesn't work right &ndash; how when you identify
 with that little part of the mind that I have called like a gnat floating in
 the vastness of space, that you have given such power to, how that small part
 of the mind leads you into reactions and choices that only lead you to feel
@@ -219,6 +223,7 @@ It need only be received and utilized.
 Now, does all of that make sense to you? Oh good, then we're done. 
 
 {Laughter}
+{: .omit}
 
 What if you could step back for just a moment? And of course you can. What if
 you were to step back, to view the body that you have called your own? To view
@@ -350,15 +355,15 @@ sit back and say, “Okay, good. I've got it, yes! Yes, yes, there I was. I was
 identifying with that vortex yesterday. Okay, right now I choose to be the
 peace of God. I'm going to be in this situation and I'm going to radiate love."
 And so you hold the thought and you're in that space and the situation around
-you ...[audio missing]... that experience? That is called initiation. But the
+you&hellip; [audio missing] &hellip;that experience? That is called initiation. But the
 mind misperceives it. You choose to abide in peace. The small part of the mind
 says "Hah! No you don't." And it throws up a smokescreen by, shall we say,
 generating activities in the minds of others in your own mind, to convince you
-that it's not true. This is an idea …[audio missing]…and you've just been
+that it's not true. This is an idea&hellip; [audio missing] &hellip;and you've just been
 deluded. And right away the old habit of identifying with that voice takes
 over. 
 
-Do you know that feeling?... Hmmm…. Now...
+Do you know that feeling? Hmmm&hellip; Now&hellip;
 
 And then you begin to say, "I knew it wouldn't work. I guess I'll go somewhere
 else. I'll keep searching for the magic elixir that will awaken my mind." And
@@ -544,7 +549,7 @@ the final dream that needs to be experienced in this plane of demonstration.
 Time has been used constructively. The Atonement is completed, and therefore
 the purpose of time has ended. And you slip away into eternal light. You become
 Christ, without block, without limitation. You. And you realize it wasn't
-anything you did, save this... you learned the simple key of how to choose in
+anything you did, save this&hellip; you learned the simple key of how to choose in
 each moment to be who you are, and not who the world tried to teach you you
 are. The whole thought process has been reversed completely in you.
 
@@ -609,7 +614,7 @@ you're being presented with an opportunity to choose anew. Thank God there is
 no condemnation! You may have made a wrong choice yesterday or ten thousand
 lifetimes ago. It doesn't matter! Now, in every now, the same freedom is
 presented to you that was with you, in the wholeness of your mind before all of
-creation of arose. The same opportunity to choose love instead of fear. And you
+creation arose. The same opportunity to choose love instead of fear. And you
 can practice it, it's perfectly safe. Give it a try. See if it fits.
 
 Now that doesn't mean you have to set up circumstances so people become angry
@@ -619,14 +624,16 @@ wrong choices." It's because you're getting off on it! You become so enthralled
 with trying to get to God that you're not quite ready just to be with God. 
 
 {Laughter}
+{: .omit}
 
 Hmm. Indeed. Hmm.
 
-Holy relationship. Seek first the Kingdom of Heaven...
+Holy relationship. Seek first the Kingdom of Heaven&hellip;
 
-**** CD recording is unintelligible for 5 minutes ****
+**Note:** CD recording is inaudible for 5 minutes
+{: .omit}
 
-... and you withdraw your value from it. You simply withdraw your value, and
+&hellip;and you withdraw your value from it. You simply withdraw your value, and
 you put it away as a child would a toy outgrown. And you realize you don't even
 need to know how to be the presence of love, because the Holy Spirit is with
 you always. Prior to every breath you take, guidance is available. And
@@ -677,6 +684,7 @@ Sometimes leaving a relationship is the greatest thing you could do. Sometimes
 staying is. How to know the difference? Go to a bookstore and buy a book. 
 
 {Laughter}
+{: .omit}
 
 There are no guidelines. There's nowhere outside of yourself you'll ever get an
 answer. And there's nowhere outside of yourself you need to go for the answer.
@@ -693,6 +701,7 @@ determination of the ego to make it work. And of course, when you go out in
 public, you’d better be wearing your best costume.
 
 {Laughter}
+{: .omit}
 
 Or you might want to try it this way. To look into each other's eyes, if they
 be friends, spouses, whatever it is, and say, "You know, we don't know
@@ -709,6 +718,7 @@ watching what you call your Woody Allen movies. Laurel and Hardy live within
 you. 
 
 {Laughter}
+{: .omit}
 
 Ego is a nothing! It can't be pleased. It doesn't want to be pleased, and
 that's by definition. "I'm the ego. I cannot be pleased. But I'm going to lead
@@ -727,15 +737,16 @@ And so you sit and you ask and an answer doesn't come. And then you realize,
 that is the Holy Spirit's answer. You're not getting an answer because you
 don't have to do anything. Nothing's being asked of you. Go sit in the park and
 enjoy the weather. Let it go for that hour or that day! When it's time for the
-answer to be given, it will show up....
+answer to be given, it will show up&hellip;
 
-**** gap while the recording tape was changed ****
+**Note:** Gap in the recording while the tape was changed.
+{: .omit}
 
-… Well, what occurs in these gatherings is that there are many levels of
+Well, what occurs in these gatherings is that there are many levels of
 communication going on at the same time. And some of you know what that's like.
-You hear me activating, blending with the mind of my brother - and I have
+You hear me activating, blending with the mind of my brother &ndash; and I have
 become better and better at using all of the interesting mumble jumble inside
-this mind - to try to make some sense out of it all and use it for something of
+this mind &ndash; to try to make some sense out of it all and use it for something of
 value. But at the same time, some of you know that you catch those little
 moments when you're like having your own conversation with me. Do you know that
 feeling? It's not your imagination. 
@@ -757,11 +768,11 @@ it's only because I have an invitation in my hand that said, Jeshua, would you
 please show up in the year 1992. Okay.
 
 Holy relationship. Look around for just a moment. Allow your eyes to just join
-for just a few moments with another and make the choice within yourself... 
+for just a few moments with another and make the choice within yourself&hellip;
 
-[Laughter}
+{Laughter}
 
-That is rather laughable...  Well, she's made the choice to be vulnerable. 
+That is rather laughable&hellip;  Well, she's made the choice to be vulnerable. 
 
 Just be with that one. And you're safe here because the world is not here to
 press upon you. And just allow the truth to enter into the mind, that you're
@@ -865,6 +876,7 @@ Hmm. Well, I suppose we could have gussied all of that up with a three week
 ritual of some kind to prepare you.
 
 {Laughter}
+{: .omit}
 
 Ritual is only fun when you realize it doesn't prepare you for anything. It
 gives you the opportunity to do what has already been accomplished within you
@@ -872,6 +884,7 @@ through grace. Then it's a dance and a celebration. You might even find
 yourself enjoying going to church.
 
 {Laughter}
+{: .omit}
 
 Hmm. So. If you would well receive it - some of you have noticed it to varying
 degrees - certain doorways have opened in this evening. Continue to walk
@@ -945,6 +958,7 @@ time you even have a thought of me! And if this sounds a little Christian, I'm
 sorry, but they had it somewhat right.
 
 {Laughter}
+{: .omit}
 
 Whenever you have a thought of me, it means that you are with me in Paradise.
 Remember that. Remember it. Just to think about me as your brother and friend
@@ -991,6 +1005,7 @@ Your power rests in your acknowledgement that you don't have to know how to do
 anything. And thank God for that. 
 
 {Laughter}
+{: .omit}
 
 That is what it means, you see, when you realize "Not my will but thine, O
 Lord, be done. I don't know how to do anything anyway. So I might as well get

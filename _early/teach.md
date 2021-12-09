@@ -184,7 +184,7 @@ time and in no moment have you ever failed. You have created. You have added to
 the creation that is the universe. You have never failed. Can you hear that?
 Can you really, honestly, truthfully hear with your soul that you have never
 failed? It's impossible. Now, it's not impossible for someone else to judge you
-as having failed. That's there for use of consciousness. And in that moment,
+as having failed. That's their free use of consciousness. And in that moment,
 they're like one that has held the guillotine above their own head and judged
 you and dropped it upon themselves. That is what judgment does. You have never
 failed, and you never will fail. The only thing that it is wise to consider is
@@ -321,7 +321,7 @@ Seize time every moment! How can I teach love right now? Well, I'm in the
 middle of the desert and there's no one for miles. Hmm. Perhaps it would be
 wise to go to a different dimension. And just shift your thought. Why look for
 someone that's linked to a body? Is that the only way you can teach love? Those
-grand-brothers and -sisters whose bodies were destroyed as the result of one
+grand brothers and sisters whose bodies were destroyed as the result of one
 insane thought in your Oklahoma would deeply appreciate it if you would look
 beyond bodies, to find someone to bless and love. There are beings around you
 right now in this room, around what you call the body. There are an infinite
@@ -405,7 +405,7 @@ No, the body may not vibrate into light and the 60,000 people that live in your
 Santa Fe won't go "Oooh, aaah!" You'll get no press. No movie will be made
 about you for the television. You will simply be free. And you will walk in the
 world but not of it, and only the perfectly enlightened will know the truth of
-who you are. But you will know. And you will never ever be without the bliss of
+who you are. But you will know. And you will never be without the bliss of
 knowing that "I and My Father are one. And all that I do is my Father's Will.
 That where my mind ends, His begins." And the created and the Creator is so
 intimately linked that one cannot tell where one begins and the other ends. And
