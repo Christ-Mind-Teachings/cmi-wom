@@ -40,6 +40,7 @@
       "url": "/t/wom/early/c2s/",
       "audio": "/early/C2S.mp3",
       "timing": "/early/c2s.json",
+      "description": "Oct 1994",
       "questions": [
         {
           "title": "Q1. What is the symbolism of Crucifixion?",
@@ -78,6 +79,7 @@
       "url": "/t/wom/early/hoe/",
       "audio": "/early/HOE.mp3",
       "timing": "/early/hoe.json",
+      "description": "Aug 30, 1994",
       "questions": [
         {
           "title": "Q1. About asking unclear questions.",
@@ -109,6 +111,7 @@
       "title": "Ignorance is Bliss",
       "url": "/t/wom/early/ign/",
       "audio": "/early/IGN.mp3",
+      "description": "Sept 1994",
       "timing": "/early/ign.json"
     },
     {
@@ -210,7 +213,8 @@
     },
     {
       "title": "Healing",
-      "url": "/t/wom/early/hea/"
+      "url": "/t/wom/early/hea/",
+      "description": "April 10, 1992"
     },
     {
       "title": "The Holy Instant",
@@ -218,15 +222,18 @@
     },
     {
       "title": "The Holy Spirit",
-      "url": "/t/wom/early/hsp/"
+      "url": "/t/wom/early/hsp/",
+      "description": "June 26, 1992"
     },
     {
       "title": "Joy I",
-      "url": "/t/wom/early/joy1/"
+      "url": "/t/wom/early/joy1/",
+      "description": "October 30, 1992"
     },
     {
       "title": "Joy II",
-      "url": "/t/wom/early/joy2/"
+      "url": "/t/wom/early/joy2/",
+      "description": "November 6, 1992"
     },
     {
       "title": "Love Heals All Things",
@@ -295,7 +302,8 @@
     },
     {
       "title": "Awakening",
-      "url": "/t/wom/early/wak/"
+      "url": "/t/wom/early/wak/",
+      "description": "July 3, 1992"
     },
     {
       "title": "Walk with Me",
@@ -307,67 +315,67 @@
       "title": "Healing the Illusions of Hurt",
       "url": "/t/wom/early/illusions/",
       "new": true,
-      "description": "From Nov 17, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Nov 17, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Easter",
       "url": "/t/wom/early/easter/",
       "new": true,
-      "description": "From April 19, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "April 19, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Freedom and Forgiveness",
       "url": "/t/wom/early/freedom/",
       "new": true,
-      "description": "From Jan 30, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 30, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Now Is My Purpose Before Me",
       "url": "/t/wom/early/purpose/",
       "new": true,
-      "description": "From Jan 1, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 1, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "The Purpose of the World",
       "url": "/t/wom/early/pow/",
       "new": true,
-      "description": "From Feb 5, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Feb 5, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "A Time of Celebration",
       "url": "/t/wom/early/toc/",
       "new": true,
-      "description": "From Jan 22, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "January 22, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "The Light that You Are",
       "url": "/t/wom/early/light/",
       "new": true,
-      "description": "From Nov 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "November 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Peace",
       "url": "/t/wom/early/peace/",
       "new": true,
-      "description": "From Aug 21, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "August 21, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Perception",
       "url": "/t/wom/early/perception/",
       "new": true,
-      "description": "From March 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "March 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "The End of Seeking is Upon Us",
       "url": "/t/wom/early/seeking/",
       "new": true,
-      "description": "From Jan 27, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 27, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Special and Holy Relationships",
       "url": "/t/wom/early/shr/",
       "new": true,
-      "description": "From June 26, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "June 26, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
     },
     {
       "title": "Doorway to Self Love",
@@ -398,3 +406,4 @@
     }
   ]
 }
+
