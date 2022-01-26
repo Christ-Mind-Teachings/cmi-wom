@@ -135,9 +135,9 @@ presence of Heaven on Earth, in so doing.
 ~ Overview of *The Way of Mastery* by Dave Schock[^1] and Jayem[^2].
 
 [^1]: Dave Schock is  a senior pathway teacher of The Way of Mastery,
-  and author of *An Introduction to the Way of Mastery*. Visit his
-  website at [www.thewayofmastery.online](https://thewayofmastery.online).
+      and author of *an introduction to the way of mastery*. visit his
+      website at [www.thewayofmastery.online](https://thewayofmastery.online).
 
 [^2]: Jayem is the channel of *The Way of Mastery*. Visit his website at
-  [www.wayofmastery.com](https://www.wayofmastery.com).
+      [www.wayofmastery.com](https://www.wayofmastery.com).
 
