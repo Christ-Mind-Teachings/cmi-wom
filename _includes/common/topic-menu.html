@@ -1,0 +1,60 @@
+<!-- _includes/common/transcript-menu.html -->
+<div class="ui borderless main menu">
+  <div id="topic-menu" class="ui text container">
+    <a href="#" id="search-modal-open" class="item search-modal-open">
+      <span data-position="bottom center" data-tooltip="Search {{site.title}}">
+        <i class="search icon"></i>
+      </span>
+    </a>
+    <a id="jump-to-top-menu-option" href="#" class="top-of-page item">
+      <span data-position="bottom center" data-tooltip="Top of Page">
+        <i class="level up icon"></i>
+      </span>
+    </a>
+
+    <a href="#" id="contents-modal-open" data-book="{{page.bid | downcase}}" class="item toc-modal-open">
+      <span data-position="bottom center" data-tooltip="Show Contents">
+        <i class="align justify icon"></i>
+      </span>
+    </a>
+    <a id="toc-previous-page" href="#" class="previous-page item">
+      <span data-position="bottom center" data-tooltip="Previous Page">
+        <i class="arrow circle left icon"></i>
+      </span>
+    </a>
+    <a id="toc-next-page" href="#" class="next-page item">
+      <span data-position="bottom center" data-tooltip="Next Page">
+        <i class="arrow circle right icon"></i>
+      </span>
+    </a>
+    {% include common/quick-link-menu.html name="wom" %}
+    <a id="about-dropdown-menu" href="#" class="ui dropdown item">
+      <i class="question icon"></i>
+      <div id="help-menu" class="menu">
+        <div id="transcript-page-info" class="header"></div>
+        <div class="divider"></div>
+        <div id="help-page-tour" class="transcript-tour item">Learn About This Page</div>
+        <div id="help-read-docs" class="read-documentation item">Read Documentation</div>
+        <div id="help-view-docs" class="view-documentation item">Watch Video Instruction</div>
+        <div id="help-copy-pagekey" class="copy-page-key item">Copy Page Key</div>
+        <div id="help-contact-me" class="contact-me item">Get In Touch</div>
+      </div>
+    </a>
+    <a id="login-guest-menu-option" href="#" class="login-menu-option-guest ui right floated item">
+      <span data-position="bottom center" data-tooltip="Sign In">
+        <i class="red sign in icon"></i>
+      </span>
+    </a>
+    <a id="login-account-menu-option" href="#" class="login-menu-option-account hide dropdown ui right floated item">
+      <span data-position="left center" data-tooltip="Sign Out">
+        <i class="green sign out icon"></i>
+      </span>
+      <div class="menu">
+        <div id="account-signout-menu-option" class="account-signout-option item">Sign Out</div>
+        <div class="divider"></div>
+        <div id="account-manage-email-menu-option" class="profile-management item">Manage Email List</div>
+        <div id="account-manager-topics-menu-option" class="topic-management item">Manage Topics</div>
+      </div>
+    </a>
+  </div>
+</div>

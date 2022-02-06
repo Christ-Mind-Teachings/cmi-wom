@@ -15,6 +15,10 @@ function renderQuestions(questions, c) {
   `;
 }
 
+function markAsNew(unit) {
+  return `<i title="${unit.description}" class="red sun outline icon"></i>`;
+}
+
 //generate html for Contents
 function makeContents(contents) {
   var c = {counter: 0};
@@ -22,7 +26,7 @@ function makeContents(contents) {
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
         <div class="item">
-          <a data-lid="${++c.counter}" href="${unit.url}">${unit.title}</a>
+          <a data-lid="${++c.counter}" href="${unit.url}">${unit.new ? markAsNew(unit) : ""}${unit.title}</a>
           ${unit.questions ? renderQuestions(unit.questions, c) : ""}
         </div>
       `).join("")}
@@ -34,11 +38,20 @@ function makeContents(contents) {
 function loadTOC() {
   let book = $("#contents-modal-open").attr("data-book").toLowerCase();
 
+  // if book not defined disable menu controls
+  if (!book) {
+    $("#contents-modal-open").addClass("disabled");
+    $("#toc-previous-page").addClass("disabled");
+    $("#toc-next-page").addClass("disabled");
+    return;
+  }
+
   getConfig(book).then((contents) => {
     $(".toc-image").attr("src", `${contents.image}`);
     $(".toc-title").html(`Table of Contents: <em>${contents.title}</em>`);
 
-    $(".toc-list").html(makeContents(contents.contents));
+    let list = makeContents(contents.contents);
+    $(".toc-list").html(list);
     highlightCurrentTranscript(contents.bid);
   }).catch((error) => {
     console.error(error);
@@ -124,11 +137,14 @@ function highlightCurrentTranscript(bid) {
       max = 9;
       break;
     case "early":
-      max = 51;
+      max = 65;
       //max = 43;
       break;
     case "acq":
       max = 3;
+      break;
+    case "topics":
+      max = 42;
       break;
   }
   nextPrev($el, max);

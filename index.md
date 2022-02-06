@@ -20,11 +20,12 @@ material and effective exercises the *Way of Mastery* is a practical and
 down to earth guide to transformation.
 
 <div id="page-contents">
+  <!-- start -->
   <div class="ui equal width grid source-acq-section">
     <div class="five wide column">
       <div class="ui card">
         <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
-          <img src="/t/wom/public/img/wom/acq-big.jpg">
+          <img src="/t/wom/public/img/wom/acq-big2.jpg">
         </a>
         <div class="content">
           <div class="description">
@@ -40,9 +41,8 @@ down to earth guide to transformation.
       </div>
       <div id="news-tab-content" class="ui bottom attached active tab segment" data-tab="first">
         <div class="box">
-          <p><i class="bullhorn green icon"></i>
-            New editions of all <em>Way of Mastery</em> books are now available on Amazon.
-            You can find <a href="/t/wom/acq/welcome/">information and links here.</a>
+          <p><i class="bullhorn red icon"></i>
+            Fourteeen transcripts have been added to the Early Years thanks to Ken Hover and Dave Kopsell.
           </p>
         </div>
       </div>
@@ -62,7 +62,40 @@ down to earth guide to transformation.
       </div>
     </div>
   </div>
+  <!-- end -->
   <div class="ui three cards">
+    <!-- edit page.js to change quote init when this is uncommented
+    <div class="card">
+      <a id="book-acq" href="#" data-book="acq" animate class="toc-modal-open image">
+        <img src="/t/wom/public/img/wom/acq-big2.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Learn about The Way of Mastery
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
+        <img src="/t/wom/public/img/wom/topics1-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Explore what Jeshua says about various topics.
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <a id="book-quotes" href="#" animate class="image">
+        <img src="/t/wom/public/img/wom/quotes-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          Discover quotes from the <em>Way of Mastery</em>
+        </div>
+      </div>
+    </div>
+    -->
     <div class="card">
       <a id="book-woh" href="#" data-book="woh" animate class="toc-modal-open image">
         <img src="/t/wom/public/img/wom/wohN-big.jpg">

@@ -1452,7 +1452,7 @@ me rejoice and you will know that, in Truth, I am with you always. And
 we shall walk hand in hand as equals in the Kingdom of our blessed
 Father, doing nothing but serving the Atonement because there is nothing
 else to do. Join with me by being what I am. Of myself I do nothing but
-my Father though me does all things. And my Father is *only* Love.
+my Father through me does all things. And my Father is *only* Love.
 
 Therefore, be that which you are and you are the Love that my Father has
 given to the world through me. Be, therefore, that which I am and *you*

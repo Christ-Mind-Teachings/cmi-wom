@@ -20,18 +20,22 @@ export function bookmarkStart(page) {
 
     //get page info and set as heading under '?' menu option
     let key = constants.keyInfo.genPageKey();
-    getPageInfo(key)
-      .then((info) => {
-        //console.log("pageInfo: %o", info);
-        let title = `${info.source}<br/>${info.bookTitle}`;
+    
+    // there is no key for videos, ie: moa
+    if (key !== -1) {
+      getPageInfo(key)
+        .then((info) => {
+          //console.log("pageInfo: %o", info);
+          let title = `${info.source}<br/>${info.bookTitle}`;
 
-        if (info.subTitle) {
-          title = `${title}<br/>${info.subTitle}`;
-        }
+          if (info.subTitle) {
+            title = `${title}<br/>${info.subTitle}`;
+          }
 
-        title = `${title}<br/>${info.title}`;
-        $("#transcript-page-info").html(title);
-      });
+          title = `${title}<br/>${info.title}`;
+          $("#transcript-page-info").html(title);
+        });
+    }
   }
   //init bookmark for non-transcript pages.
   else {

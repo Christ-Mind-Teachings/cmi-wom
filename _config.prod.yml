@@ -65,6 +65,12 @@ collections:
   questions:
     output: true
     title: Questions
+  topics:
+    output: true
+    title: Topics and Index
+  reveal:
+    output: true
+    title: Presentations
 
 defaults:
   - scope:
@@ -155,6 +161,28 @@ defaults:
       image-width: 612
       image-height: 926
       bid: "Early"
+  - scope:
+      path: ""
+      type: topics
+    values:
+      layout: topic
+      book: "Topics"
+      publisher: "CMI"
+      image: "/t/wom/public/img/wom/earlyN-big.jpg"
+      image-width: 612
+      image-height: 926
+      bid: "Topics"
+  - scope:
+      path: ""
+      type: reveal
+    values:
+      layout: reveal
+      book: "Reveal"
+      publisher: "CMI"
+      image: "/t/wom/public/img/wom/earlyN-big.jpg"
+      image-width: 612
+      image-height: 926
+      bid: "Reveal"
 
 exclude: [
   moved.html, deploy, LICENSE, README.md, Gemfile, Gemfile.lock, package.json, package-lock.json, node_modules, webpack.config.js, src, project

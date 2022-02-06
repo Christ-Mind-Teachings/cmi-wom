@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="{{site.description}}">
+
+    <title>{{page.title}}</title>
+
+		<link rel="stylesheet" href="/public/vendor/reveal/reset.css">
+		<link rel="stylesheet" href="/public/vendor/reveal/reveal.css">
+
+    <!-- plugins -->
+		<link rel="stylesheet" href="/public/vendor/reveal/plugin/drawer/drawer.css">
+		<link rel="stylesheet" href="/public/vendor/reveal/plugin/menu/menu.css">
+
+    {% if page.theme %}
+    <link rel="stylesheet" href="/public/vendor/reveal/theme/{{page.theme}}.css">
+    {% else %}
+    <link rel="stylesheet" href="/public/vendor/reveal/theme/solarized.css">
+    {% endif %}
+
+    <!-- WOM specific styling -->
+		<link rel="stylesheet" href="/t/wom/public/css/cmireveal.css">
+
+    <style>
+      /* override reveal theme transform to uppercase */
+      :root {
+        --r-heading-text-transform: none;
+      }
+    </style>
+
+    {% include favicon/cmi.html %}
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        {{ content }}
+			</div>
+		</div>
+
+		<script src="/public/vendor/reveal/reveal.js"></script>
+		<script src="/public/vendor/reveal/plugin/notes/notes.js"></script>
+		<script src="/public/vendor/reveal/plugin/drawer/drawer.js"></script>
+		<script src="/public/vendor/reveal/plugin/menu/menu.js"></script>
+    <!--
+		<script src="/public/vendor/reveal/plugin/pdfexport/pdfexport.js"></script>
+		<script src="/public/vendor/reveal/plugin/markdown/markdown.js"></script>
+		<script src="/public/vendor/reveal/plugin/highlight/highlight.js"></script>
+    -->
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				// plugins: [ PdfExport, RevealHighlight, RevealNotes ]
+				plugins: [ RevealMenu, RevealDrawer, RevealNotes ],
+        menu: {
+          // https://github.com/denehyg/reveal.js-menu
+          side: "left"
+        }
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+  <meta name="description" content="{{site.description}}">
+
+  <!-- Site Properties -->
+  <title>Way of Mastery:{{page.title}}</title>
+
+  {% include common/load-open-graph.html %}
+
+  <link rel="stylesheet" href="/public/css/{{site.semantic}}/semantic.css">
+  <link rel="stylesheet" href="/t/wom/public/js/vendors~transcript.me-styles.css">
+  <link rel="stylesheet" href="/t/wom/public/js/me-styles.css">
+  <link rel="stylesheet" href="/public/css/toastr.css">
+  <link rel="stylesheet" href="/public/css/cmi.css">
+  <link rel="stylesheet" href="/public/css/transcript.css">
+  <link rel="stylesheet" href="/t/wom/public/css/wom.css">
+  <link rel="stylesheet" href="/public/css/driver.min.css">
+
+  {% include favicon/cmi.html %}
+
+</head>
+<body data-key="{{page.key}}" data-topic="{{page.topic}}" sourceId="{{site.sourceId}}">
+  {% include common/masthead.html %}
+  {% include common/topic-menu.html %}
+
+  {% if page.bid %}
+  <div class="{{page.bid | downcase }} topic ui text container">
+  {% else %}
+  <div class="topic ui text container">
+  {% endif %}
+    {{ content }}
+  </div>
+
+  {% if page.footer.display == true %}
+    <div class="ui section divider"></div>
+    {% include common/footer.html %}
+  {% endif %}
+
+  {% include components/toc-modal.html %}
+  {% if page.search != false %}
+    <!-- include search support -->
+    {% include components/search-modal.html %}
+    {% include components/search-navigator.html %}
+  {% endif %}
+  <div class="fixed" id="netlify-modal"></div>
+  {% include common/javascript.html %}
+
+  {% if jekyll.environment == "production" %}
+    <!-- WOM transcript Webpack production ({{site.semantic}})  -->
+    <script src="/public/vendor/jquery/jquery.min.js"></script>
+    <script src="/public/vendor/{{site.semantic}}/semantic.min.js"></script>
+    <script src="/t/wom/public/js/vendors~page~topic~transcript.js"></script>
+    <script src="/t/wom/public/js/topic.js"></script>
+  {% else %}
+    <!-- WOM transcript Webpack development ({{site.semantic}})  -->
+    <script src="/public/vendor/jquery/jquery.js"></script>
+    <script src="/public/vendor/{{site.semantic}}/semantic.js"></script>
+    <script src="/t/wom/public/js/vendors~page~topic~transcript.js"></script>
+    <script src="/t/wom/public/js/page~topic~transcript.js"></script>
+    <script src="/t/wom/public/js/topic.js"></script>
+
+  {% endif %}
+
+</body>
+</html>
