@@ -1,11 +1,11 @@
 /* eslint no-console: off */
 import {storeInit} from "www/modules/_util/store";
+import {showTOC, showQuotes, showSearch} from "www/modules/_util/url";
 
 //common modules
 import auth from "www/modules/_user/netlify";
 import {initStickyMenu, initAnimation} from "www/modules/_page/startup";
 import {initialize as initNotes} from "www/modules/_page/notes";
-import {showTOC} from "www/modules/_util/url";
 import {setLanguage} from "www/modules/_language/lang";
 
 import fb from "www/modules/_util/facebook";
@@ -38,5 +38,11 @@ $(document).ready(() => {
 
   initNotes(noteInfo);
   showTOC();
+
+  //look for ?search=1 on url, if found display search dialog
+  showSearch();
+
+  //look for ?quotes=1 on url, if found display quote dialog
+  showQuotes();
 });
 

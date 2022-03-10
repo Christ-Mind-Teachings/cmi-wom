@@ -42,7 +42,7 @@ down to earth guide to transformation.
       <div id="news-tab-content" class="ui bottom attached active tab segment" data-tab="first">
         <div class="box">
           <p><i class="bullhorn red icon"></i>
-            Fourteeen transcripts have been added to the Early Years thanks to Ken Hover and Dave Kopsell.
+            Fourteeen transcripts have been added to the Early Years thanks to Ken Hoover and Dave Kopsell.
           </p>
         </div>
       </div>
