@@ -436,7 +436,7 @@ seek for all of the ways in which you have blocked Love from being your only rea
 > How in this moment am I using the infinite power of my beingness to create something which
 > is less than Love, something less than what I truly want?
 
-This tape, then, is the first in a series that will be shared with you through this
+This tape, then, is the first in a series[^1] that will be shared with you through this
 vehicle, through this joining, in which many of us, what you would call teachers,
 friends, masters, will come to teach you how consciousness works and how to begin
 to re-discipline the focus of your mind so it becomes like a laser, unwilling to see
@@ -537,4 +537,12 @@ the means to become a member right now, whether the Shanti Christo play
 in that role to open up and extend tapes to those?  What&rsquo;s your
 view on that?
 {: .omit}
+
+[^1]: This is the first of a four part series called *Heaven on Earth*.
+    <ol>
+      <li>Heaven on Earth</li>
+      <li><a href="/t/wom/early/ign">Ignorance is Bliss</a></li>
+      <li><a href="/t/wom/early/c2s">Choose to See</a></li>
+      <li><a href="/t/wom/early/ble">The Blessing of Forgiveness</a></li>
+    </ol>
 

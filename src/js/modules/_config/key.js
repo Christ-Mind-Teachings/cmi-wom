@@ -36,7 +36,7 @@ const bookIds = ["xxx", ...books];
 const acq = ["xxx", "welcome", "wom", "web"];
 const tjl = ["xxx", "ack", "foreword", "chap01", "chap02", "chap03", "chap04", "chap05", "chap06", "chap07", "chap08", "chap09", "chap10", "chap11", "chap12", "epilogue"];
 const wos = ["xxx", "foreword", "preface", "chap01", "chap02", "chap03", "chap04", "afterwords", "epilog", "prayer"];
-const early = ["xxx", "ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoi", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk", "illusions", "easter", "freedom", "purpose", "pow", "toc", "light", "peace", "perception", "seeking", "shr", "doorway", "holyr", "teach"];
+const early = ["xxx", "hoe", "ign", "c2s", "ble", "com", "dbc", "dth", "fem", "gar", "hea", "hoi", "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk", "illusions", "easter", "freedom", "purpose", "pow", "toc", "light", "peace", "perception", "seeking", "shr", "doorway", "holyr", "teach"];
 const topics = ["xxx", "jeshua", "woh", "wohexercises", "wot", "wotexercises", "wok", "wokexercises", "god", "creation", "christmind", "christ", "creator", "purpose", "forgiveness", "selflove", "karma"];
 
 const contents = {

@@ -16,7 +16,7 @@ function renderQuestions(questions, c) {
 }
 
 function markAsNew(unit) {
-  return `<i title="${unit.description}" class="red sun outline icon"></i>`;
+  return `<i title="${unit.description}" class="${unit.icon} icon"></i>`;
 }
 
 //generate html for Contents
@@ -26,7 +26,7 @@ function makeContents(contents) {
     <div class="ui ordered relaxed list">
       ${contents.map(unit => `
         <div class="item">
-          <a data-lid="${++c.counter}" href="${unit.url}">${unit.new ? markAsNew(unit) : ""}${unit.title}</a>
+          <a data-lid="${++c.counter}" href="${unit.url}">${unit.showIcon && unit.showIcon === true ? markAsNew(unit) : ""}${unit.title}</a>
           ${unit.questions ? renderQuestions(unit.questions, c) : ""}
         </div>
       `).join("")}

@@ -36,17 +36,17 @@ down to earth guide to transformation.
     </div>
     <div class="column source-features">
       <div class="ui top attached tabular menu">
-        <a id="news-tab" class="active item" data-tab="first">News</a>
-        <a id="quote-tab" class="item" data-tab="second">Quotes</a>
+        <a id="news-tab" class="item" data-tab="first">News</a>
+        <a id="quote-tab" class="active item" data-tab="second">Quotes</a>
       </div>
-      <div id="news-tab-content" class="ui bottom attached active tab segment" data-tab="first">
+      <div id="news-tab-content" class="ui bottom attached tab segment" data-tab="first">
         <div class="box">
           <p><i class="bullhorn red icon"></i>
             Fourteeen transcripts have been added to the Early Years thanks to Ken Hoover and Dave Kopsell.
           </p>
         </div>
       </div>
-      <div id="quote-tab-content" class="ui bottom attached tab segment" data-tab="second">
+      <div id="quote-tab-content" class="ui bottom attached active tab segment" data-tab="second">
         <div class="ui form">
           <div class="fields">
             <div class="field">

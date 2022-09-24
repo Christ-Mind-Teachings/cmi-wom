@@ -4,43 +4,57 @@
   "image": "/t/wom/public/img/wom/earlyN-toc.jpg",
   "contents": [
     {
-      "title": "The Blessing of Forgiveness",
-      "url": "/t/wom/early/ble/",
-      "audio": "/early/BLE.mp3",
-      "timing": "/early/ble.json",
+      "title": "Heaven on Earth",
+      "url": "/t/wom/early/hoe/",
+      "audio": "/early/HOE.mp3",
+      "timing": "/early/hoe.json",
+      "icon": "layer group",
+      "showIcon": true,
+      "description": "Part I of the Heaven on Earth Series (Aug 30, 1994)",
       "questions": [
         {
-          "title": "Q1. Profound Time of Year",
-          "url": "/t/wom/early/ble/q1/",
-          "audio": "/questions/BLEQ1.mp3",
-          "timing": "/questions/bleq1.json"
+          "title": "Q1. About asking unclear questions.",
+          "url": "/t/wom/early/hoe/q1/",
+          "audio": "/questions/HOEQ1.mp3",
+          "timing": "/questions/hoeq1.json"
         },
         {
-          "title": "Q2. Living in Community",
-          "url": "/t/wom/early/ble/q2/",
-          "audio": "/questions/BLEQ2.mp3",
-          "timing": "/questions/bleq2.json"
+          "title": "Q2. How to develop greater clarity.",
+          "url": "/t/wom/early/hoe/q2/",
+          "audio": "/questions/HOEQ2.mp3",
+          "timing": "/questions/hoeq2.json"
         },
         {
-          "title": "Q3. Co-creating Christ",
-          "url": "/t/wom/early/ble/q3/",
-          "audio": "/questions/BLEQ3.mp3",
-          "timing": "/questions/bleq3.json"
+          "title": "Q3. What is it like living as Christ?",
+          "url": "/t/wom/early/hoe/q3/",
+          "audio": "/questions/HOEQ3.mp3",
+          "timing": "/questions/hoeq3.json"
         },
         {
-          "title": "Q4. 12/12",
-          "url": "/t/wom/early/ble/q4/",
-          "audio": "/questions/BLEQ4.mp3",
-          "timing": "/questions/bleq4.json"
+          "title": "Q4. About Shanti Christo membership",
+          "url": "/t/wom/early/hoe/q4/",
+          "audio": "/questions/HOEQ5.mp3",
+          "timing": "/questions/hoeq4.json"
         }
       ]
+    },
+    {
+      "title": "Ignorance is Bliss",
+      "url": "/t/wom/early/ign/",
+      "audio": "/early/IGN.mp3",
+      "timing": "/early/ign.json",
+      "icon": "layer group",
+      "showIcon": true,
+      "description": "Part II of the Heaven on Earth Series (Sept 1994)"
     },
     {
       "title": "Choose to See",
       "url": "/t/wom/early/c2s/",
       "audio": "/early/C2S.mp3",
       "timing": "/early/c2s.json",
-      "description": "Oct 1994",
+      "description": "Part III of the Heaven on Earth Series (Oct 1994)",
+      "icon": "layer group",
+      "showIcon": true,
       "questions": [
         {
           "title": "Q1. What is the symbolism of Crucifixion?",
@@ -75,44 +89,39 @@
       ]
     },
     {
-      "title": "Heaven on Earth",
-      "url": "/t/wom/early/hoe/",
-      "audio": "/early/HOE.mp3",
-      "timing": "/early/hoe.json",
-      "description": "Aug 30, 1994",
+      "title": "The Blessing of Forgiveness",
+      "url": "/t/wom/early/ble/",
+      "audio": "/early/BLE.mp3",
+      "timing": "/early/ble.json",
+      "description": "Part IV of the Heaven on Earth Series (Nov 1994?)",
+      "icon": "layer group",
+      "showIcon": true,
       "questions": [
         {
-          "title": "Q1. About asking unclear questions.",
-          "url": "/t/wom/early/hoe/q1/",
-          "audio": "/questions/HOEQ1.mp3",
-          "timing": "/questions/hoeq1.json"
+          "title": "Q1. Profound Time of Year",
+          "url": "/t/wom/early/ble/q1/",
+          "audio": "/questions/BLEQ1.mp3",
+          "timing": "/questions/bleq1.json"
         },
         {
-          "title": "Q2. How to develop greater clarity.",
-          "url": "/t/wom/early/hoe/q2/",
-          "audio": "/questions/HOEQ2.mp3",
-          "timing": "/questions/hoeq2.json"
+          "title": "Q2. Living in Community",
+          "url": "/t/wom/early/ble/q2/",
+          "audio": "/questions/BLEQ2.mp3",
+          "timing": "/questions/bleq2.json"
         },
         {
-          "title": "Q3. What is it like living as Christ?",
-          "url": "/t/wom/early/hoe/q3/",
-          "audio": "/questions/HOEQ3.mp3",
-          "timing": "/questions/hoeq3.json"
+          "title": "Q3. Co-creating Christ",
+          "url": "/t/wom/early/ble/q3/",
+          "audio": "/questions/BLEQ3.mp3",
+          "timing": "/questions/bleq3.json"
         },
         {
-          "title": "Q4. About Shanti Christo membership",
-          "url": "/t/wom/early/hoe/q4/",
-          "audio": "/questions/HOEQ5.mp3",
-          "timing": "/questions/hoeq4.json"
+          "title": "Q4. 12/12",
+          "url": "/t/wom/early/ble/q4/",
+          "audio": "/questions/BLEQ4.mp3",
+          "timing": "/questions/bleq4.json"
         }
       ]
-    },
-    {
-      "title": "Ignorance is Bliss",
-      "url": "/t/wom/early/ign/",
-      "audio": "/early/IGN.mp3",
-      "description": "Sept 1994",
-      "timing": "/early/ign.json"
     },
     {
       "title": "Mastering Communication (aka Jesus Speaks)",
@@ -314,95 +323,78 @@
     {
       "title": "Healing the Illusions of Hurt",
       "url": "/t/wom/early/illusions/",
-      "new": true,
-      "description": "Nov 17, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Nov 17, 1992"
     },
     {
       "title": "Easter",
       "url": "/t/wom/early/easter/",
-      "new": true,
-      "description": "April 19, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "April 19, 1992"
     },
     {
       "title": "Freedom and Forgiveness",
       "url": "/t/wom/early/freedom/",
-      "new": true,
-      "description": "Jan 30, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 30, 1993"
     },
     {
       "title": "Now Is My Purpose Before Me",
       "url": "/t/wom/early/purpose/",
-      "new": true,
-      "description": "Jan 1, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 1, 1993"
     },
     {
       "title": "The Purpose of the World",
       "url": "/t/wom/early/pow/",
-      "new": true,
-      "description": "Feb 5, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Feb 5, 1993"
     },
     {
       "title": "A Time of Celebration",
       "url": "/t/wom/early/toc/",
-      "new": true,
-      "description": "January 22, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "January 22, 1993"
     },
     {
       "title": "The Light that You Are",
       "url": "/t/wom/early/light/",
-      "new": true,
-      "description": "November 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "November 20, 1992"
     },
     {
       "title": "Peace",
       "url": "/t/wom/early/peace/",
-      "new": true,
-      "description": "August 21, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "August 21, 1992"
     },
     {
       "title": "Perception",
       "url": "/t/wom/early/perception/",
-      "new": true,
-      "description": "March 20, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "March 20, 1992"
     },
     {
       "title": "The End of Seeking is Upon Us",
       "url": "/t/wom/early/seeking/",
-      "new": true,
-      "description": "Jan 27, 1993, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "Jan 27, 1993"
     },
     {
       "title": "Special and Holy Relationships",
       "url": "/t/wom/early/shr/",
-      "new": true,
-      "description": "June 26, 1992, provided by Dave Kopsell, formatted by Ken Hoover."
+      "description": "June 26, 1992"
     },
     {
       "title": "Healing through Self Love (aka Doorway to Self Love)",
       "url": "/t/wom/early/doorway/",
       "audio": "/early/doorway.mp3",
       "timer": "onemillionchrists@gmail.com",
-      "timing": "/early/doorway.json",
-      "new": true,
-      "description": "Provided by Dave Kopsell, transcribed and formatted by Ken Hoover."
+      "timing": "/early/doorway.json"
     },
     {
       "title": "Holy Relationship",
       "url": "/t/wom/early/holyr/",
       "audio": "/early/holyr.mp3",
       "timer": "onemillionchrists@gmail.com",
-      "timing": "/early/holyr.json",
-      "new": true,
-      "description": "Provided by Dave Kopsell, transcribed and formatted by Ken Hoover."
+      "timing": "/early/holyr.json"
     },
     {
       "title": "Teach Only Love",
       "url": "/t/wom/early/teach/",
       "audio": "/early/teach.mp3",
       "timer": "onemillionchrists@gmail.com",
-      "timing": "/early/teach.json",
-      "new": true,
-      "description": "Provided by Dave Kopsell, transcribed and formatted by Ken Hoover."
+      "timing": "/early/teach.json"
     }
   ]
 }
