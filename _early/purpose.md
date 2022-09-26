@@ -7,7 +7,7 @@ formatted: Sharon
 source: Dave Kopsel
 ---
 
-Now we begin. 
+Now we begin.
 
 And in Truth, greetings unto you, beloved and holy friends. I come forth always
 in joy to abide with you, and indeed as I have said unto you, I am with you
@@ -15,18 +15,18 @@ always. Therefore, I come forth in joy from the place within you and within me
 that we share eternally. That place cannot be lost to you, as it has never been
 lost to me, and in each moment and in each thought and with each breath as you
 choose - and I emphasize the word "choose" - to be but the presence of Love,
-you are the one through whom the Light that lights all worlds shines forth. 
+you are the one through whom the Light that lights all worlds shines forth.
 
 Does it take a great miracle for you to allow that Light to shine through you?
 No, it takes indeed the simplest of miracles, a miracle that has already
 occurred in the depth of your being and waits, not for it to occur within you,
 but waits on your welcome and your acknowledgement that because you are, the
-Love of God is made present. 
+Love of God is made present.
 
 You are that one sent forth in my name, even as I was sent forth in yours, for
 we share in one Mind and one Heart and one great and eternal Truth, and
 throughout all of eternity there is but the union of Father and Son, all that
-God is, and God's one creation. 
+God is, and God's one creation.
 
 So, would you join with me then? Let the eyes of the body close. Release the
 sense of rigidity from the body and from the mind and especially from the
@@ -44,7 +44,7 @@ easily and use the power given unto you, not to make but to allow, to allow
 yourself to begin to truly join with me ? and if you believe that that must be
 hard, realize that that is just a perception. Set it aside. Replace it with a
 loving thought that teaches you communion with all that Jeshua is is simple and
-natural, for minds that are joined in love cannot be separate one from another. 
+natural, for minds that are joined in love cannot be separate one from another.
 
 Open, then, the shutters of the heart. Touch deeply the place of peace within
 you and begin to see and to feel a soft and warm and radiant Light that seems
@@ -102,7 +102,7 @@ awaken, my brothers and sisters can awaken within me. For this am I created.
 For this alone am I sent forth. For this have I entered the world. For this
 have I suffered the world, and for this do I enlighten this world."
 
-{Pause.}
+[Pause]
 
 And now, in this moment that is both without beginning and end, understand well
 that you hold the power to forgive the world, and if there is anyone or any
@@ -115,24 +115,24 @@ ever blocked your awareness of the Truth and kept it from your mind and your
 heart. Forgiveness is the great need of this world, and you are the one who can
 bestow it.
 
-{Pause.}
+[Pause]
 
 And if that feels just a little difficult, remember that you are not alone
 because I am with you and I will indeed give you my strength until yours is as
 certain as mine. Take it, then. Ask it of me and it is yours.
 
-{Pause.}
+[Pause]
 
 Some of you are becoming aware in that quiet place of peace that you are indeed
 never alone. For even as I am with you, there are other friends who are
 likewise with you. Trust what you feel and what you know ? not with the mind
 but with the heart. Forgive, then, the world and you will have forgiven
 yourself. And in forgiving yourself the heart begins to open. It begins to
-trust in safety, and peace comes to be remembered.  {Pause.}
- 
+trust in safety, and peace comes to be remembered.  [Pause]
+
 And together we are the Light that lights this world.
 
-{Pause.}
+[Pause]
 
 Begin now just to let the breath move a little more deeply in the body, as if
 you were just breathing in life itself, just saying "yes" to it. It is never
@@ -140,7 +140,7 @@ hidden from you at any moment. It's as though all the Love of God is in a soft,
 gentle golden Light, which is pouring into the very cells of your being, and
 yet you do nothing but receive what is rightfully yours.
 
-{Pause.}
+[Pause]
 
 So, if you would like, simply let the eyes open. However, it is perfectly okay
 to leave them closed since it is not with the physical eyes that the essence of
@@ -245,7 +245,7 @@ descends upon this world, transforming it, translating it into Heaven on Earth.
 Doesn't that seem incredible that such a thing could take place, that such a
 thing could be witnessed? Rest assured that the only thing that is incredible
 is that we could have ever believed that we were separate from God. That is
-what is incredible. The rest of it is just detail. 
+what is incredible. The rest of it is just detail.
 
 So, you see, always and always again there is but one thing, just one thing,
 one little lesson that needs to be learned. And once it is learned, it need
@@ -279,11 +279,11 @@ involve the whole of humanity. And then, when every voice has been raised with
 ours, the world will cease to be. And it will cease to be as effortlessly as it
 arose in the beginning as the result of a single thought, a thought shared by
 all minds equally. It is like being at a costume party and suddenly everybody
-decides to take the mask off and just be the presence of Love. 
+decides to take the mask off and just be the presence of Love.
 
 What do you think? Would it be a worthwhile party?
 
-*Yes.* 
+*Yes.*
 
 Will you choose to bring it into manifestation? For, you see, I cannot do it.
 Sorry about that. I've never been able to do it. Love waits on your welcome &mdash;
@@ -337,9 +337,9 @@ each moment whenever you choose to remember that you are the Light that lights
 all worlds.
 
 So what do you think? Is joy worth it?
- 
+
 *Yep. Uh huh.*
- 
+
 But if you're feeling wholly joyous, how can you just sit there? Have you ever
 had that feeling where it felt like you couldn't do anything but just sit? Now,
 you have all felt that at least ten thousand times. And yet, did you know that
@@ -365,7 +365,7 @@ please open your eyes."
 So, how are you doing?
 
 *Great. Purr.*
- 
+
 All right.
 
 *Could Jeshua talk about 1993?*
@@ -373,7 +373,7 @@ All right.
 He's saying, "Certainly. If you believe it's important."
 
 *It is an important year.*
- 
+
 What would you like to ask about it?
 
 *Well, oh dear. It's difficult here. People are whispering "community" to me.
@@ -459,23 +459,23 @@ seed in the ground with great joy and gratitude for the harvest that has
 already come from it. So, are you ready to put all of that into action?
 
 *Absolutely.*
- 
+
 Yes. And yet, beloved friend, it was not so many months ago when there was a
 great weight of hopelessness upon your heart, is that not true?
- 
+
 *Oh, yes. I was seriously wondering whether to give the land up; it was such a
 burden.*
- 
+
 What does it feel like now?
- 
+
 *A wonderful blessing.*
- 
+
 What created the difference?
- 
+
 *People. Opening the whole thing up. Just allowing. Changes in my life. Many
 factors have come along, but it's just generally, I guess I'd paraphrase it as
 an opening up inside of me.*
- 
+
 There, you finally got to it. Do you see how there's still that little tendency
 to say, "Well, it must have been something out here that came and did this
 thing for me"? The reversal of the thought processes of the world reveals to
@@ -505,28 +505,28 @@ to be raised in Light until it becomes only Light. And enjoy the process.
 Does that make sense to you?
 
 *Thank you. Yes, it does.*
- 
+
 *Jeshua, I have a question. Jeshua, you mentioned that it is a time of
-purification, and a lot of old patterns and things are going to be coming up.* 
+purification, and a lot of old patterns and things are going to be coming up.*
 
 Going to be?
- 
+
 They are. Can you offer any suggestions on how to process and deal with these
 "negative aspects" of our self that are not, so that...ways to have better in
 sight for healing? For they seem very powerful and overwhelming a lot, and I
 lose sight of who l am in the midst of all of it and continue living in this
 reality. It's been a real challenge and I need some insight.
- 
+
 If I say to you that you must find a way to deal with the negative aspects of
 yourself, I would be a liar and I would be the worst thing that could possibly
 happen to you.
- 
+
 Remember, beloved friend, there is no such thing as a negative aspect within
 you. And so, you see, that in the way you phrased the question you have
 revealed to yourself the crux of why these events, these emotions, seem to be
 overwhelming ? because you have chosen, unwittingly, to identify yourself with
 them.
- 
+
 Now, that sounds like a great metaphysical idea. It is, by the way, true. How,
 then, do you deal with it? What you are seeking to learn is how to be the
 presence of Love no matter what the circumstances are. In Truth, that cannot be
@@ -568,7 +568,7 @@ mind until nothing else is there and do nothing but extend love to them.
 Does that seem overwhelming?
 
 *No.*
- 
+
 I know it seems almost a little simple - but the Truth is simple. Precious
 friend what is coming up for you now comes only because you've been willing to
 open a little trapdoor and let some shadows fly up. Remember that this world
@@ -606,51 +606,51 @@ overwhelmed. And you are that close.
 Willing to give it a try?
 
 *Uh huh. Thank you very much.*
- 
+
 Precious friend, thank you. The soul comes to the threshold of the Kingdom a
 million times in its journeys. And why? Because the threshold is always right
 there. You have chosen not to let the opportunity slip by, and you have asked
 from the depth of your being &mdash; we both know this is true &mdash; you have cried out
 in your prayers for final healing and to awaken that your gifts may truly be
 given to the world. Is that not true?
- 
+
 *Uh huh.*
- 
+
 Indeed. And so it shall be: because you have asked, you receive. Trust,
 precious friend, for you are not alone. And even now in this one moment you are
 not alone because your brothers and sisters are wholly with you in this.
 Indeed.
 
-{Weeping.}
+[Weeping]
 
 Don't block it. And all of you, beam all the Love and all the support and all
 the gratitude you can. Give thanks unto this, your precious friend, because she
 really has chosen to awaken and to let the past be gone.
 
-{Pause.}
+[Pause]
 
 Block not the tears. Take your awareness within yourself for just a moment.
 Feel what is being sent to you and receive it. You are whole and you are loved.
 
-{Pause.}
+[Pause]
 
 Do you feel a gentle warmth as though it were descending upon you?
 
 *Yes.*
- 
+
 Do you notice how that warmth, at least a part of it, seems to be what you
 would know as touching you along the upper part of the back? Do you feel that?
- 
+
 *Yes.*
- 
+
 Why then would you ever think that I am not with you? I am not over here where
 this carcass sits in a chair. l am with you and I won't go anywhere until this
 is completed.
- 
+
 Beloved friend, haven't you been crying out to rejoin with me?
- 
+
 *Yes.*
- 
+
 How could you possibly hear about one simple little book? How could you
 possibly find yourself in the right place at the right time meet an old brother
 through whom the work was given? And it has all brought you to this moment
@@ -658,10 +658,10 @@ because you've asked.
 
 My God, prayer works.
 
-{Laughter.}
+[Laughter]
 
 *Thank God.*
- 
+
 Exactly.
 
 Some day, beloved friend, you are going to laugh as you've never laughed. Yes,
@@ -671,7 +671,7 @@ World Will Laugh With You."
 There, much better. Did you feel that? You just let me come in a little deeper.
 Don't block it. There. There. Yes.
 
-{Sobbing.}
+[Sobbing]
 
 Marc: I'm just the telephone here. I'm here, but there's somebody right there.
 This is kind of fun. He wants me to let you know he's staying there. At least
@@ -682,33 +682,33 @@ had my private session with Jeshua a couple of weeks ago, I talked to him?well,
 anyway, first of all, a lot of incredible things have been happening to some of
 us since this window of Light has been opened. When I had my private session
 with Jeshua a couple of weeks ago, I talked to him about one of my guides. This
-is one of my guides. He said to call him Mark, and l asked him, who was he? He
-seemed to be more than just a mere guide and teacher to me, and l feel such
+is one of my guides. He said to call him Mark, and I asked him, who was he? He
+seemed to be more than just a mere guide and teacher to me, and I feel such
 love for him, and he said I have to find out on my own. Well, I did and I found
 out who he is by listening to the heart and not to the mind, and the same thing
 has happened to four other people just during this past week. They have
 connected with their soulmates or twin flames, and two of them are sitting on
 either side of me. Could Jeshua speak about this?*
- 
+
 Marc: He is just standing there very quietly. He is asking me to ask you what
 needs to be said?
- 
+
 *Why this is happening? I don't know. It's happened to five of us. I don't know.
 Is this something that's happened to a lot of people?*
- 
+
 Marc: He wants you to consider very carefully that because it is happening to
-you itis, therefore, happening to everyone, and that as you followed
+you it is, therefore, happening to everyone, and that as you followed
 instruction and trusted your own knowingness in your heart, likewise you know
 truly even now that you do not need to question what is occurring because you
 know what is occurring. It is called miracles.
- 
+
 *It sure is.*
- 
+
 Miracles do not need to be understood. They need only be celebrated. Beloved
 friend, you have relinquished the weight of a thousand worlds in the span of a
 few short weeks.
- 
-*That's for sure. It is wonderful.* 
+
+*That's for sure. It is wonderful.*
 
 And it will continue to grow in its wonder as you remember at all times that
 you can trust your ability within your own heart to access all that you need in
@@ -719,9 +719,9 @@ miracles both within you and around you have again begun to restore to you the
 fact that your heart can be trusted and there is where you find the doorway
 that leads to life. That's why you have been feeling so good - because life is
 coming back.
- 
+
 *Love is coming back to me.*
- 
+
 Indeed. Those are one and the same. And do you see then what I have sought to
 share with you must be true: because you have allowed the miracle to happen
 within you, it makes it easier for those on the right and left to let it happen
@@ -740,7 +740,7 @@ felt, they recognized, not so much with the physical eyes but with the eyes of
 the heart, that something quite profound has shifted.
 
 *It sure has.*
- 
+
 Is that not true of several of you? Do you see, then, you've given everyone the
 gift of your own willingness to release an insane perception and remember that
 the Truth is in you now. You have allowed that Truth to set you free. And
@@ -748,44 +748,44 @@ because they see the radiance that begins to shine through you, they remember
 their own. You have given the greatest of gifts imaginable, and it's just
 getting started. We will have to call you the cosmic Santa.
 
-{Laughter.}
+[Laughter]
 
 *I am the first one that this has happened to and then just a few days later
 Penne and then the other three.*
- 
+
 How about that. And then the other six and the other six thousand and then the
 other sixty million, and Light is remembered and Heaven comes to Earth. Indeed.
- 
+
 *Thank you.*
- 
+
 *Jeshua, I seem to see in this process all of our minds being as one, and our
 abilities available to whoever needed them, whether they were twenty miles away
 or here, and the soulmates here and above working in conjunction, helping.*
- 
+
 Yes.
- 
+
 Marc: He is saying, that's all he can really say to that. That, of course, the
 answer is yes.
- 
+
 *Is that a community or a family? Isn't it?*
- 
+
 Of course. The Son is one. One Mind and one Heart. And that family includes
 everyone, but the steps to that recognition are through the remembering of
 those that have been made special in the process of their experience over the
 whole of time and so you begin by gathering first a few old friends that were
 once singled out of the whole within the drama. Do you see?
- 
+
 But by recognizing your safety and your love with them, the strength is reborn
 within you. Spread your wings a little further and wrap them around ultimately
 the whole of creation. You have indeed begun to have vision, remembrance, that
 all minds are joined as one. And that must mean that Christ is in you now. And
 it is that that the world once tried to teach you to forget.
- 
+
 *I saw healers of every sort. And whether it was healing by talking to someone,
 whether it was healing by vibration, they had the ability to reach each other
 through their minds to help that person if they didn't know that. It was just
 all there &mdash; just coming from each of us to each of us when it was needed.*
- 
+
 Now, in reality that is what is occurring at all times. The whole process of
 awakening is only a process of remembering what has been eternally true. So the
 vision speaks both of what is and what will be demonstrated in the field of
@@ -795,24 +795,24 @@ Mind, the holy Son of God, sees reflected in the things of time the Truth about
 Himself. There will come a time when all gifts will be shared equally by
 everyone, and that indeed will mark the end of specialness and the remembrance
 of union.
- 
+
 Your vision, then, beloved friend, shows you what is true eternally and reveals
 to you what comes to pass. Do you see?
- 
+
 Yes.
- 
+
 Yes, you do see. I said it wouldn't be very long until I came to you and you
 would feel me again.
- 
+
 Yes.
- 
+
 You just have to be on guard because you never know where.
- 
+
 *Can I ask another question to go with this? Is there a responsibility in this?
 I get a feeling that it's sort of a work being done. It's not sort of a... it
 is a gift; it is a miracle, but it's a part of the work of uplifting the
 consciousness by the Love and the joy and the openings that we grow into.*
- 
+
 Is there responsibility in being awake? Yes. The responsibility has a tendency
 in the beginning of the process to seem staggering or overwhelming because it
 is not quite perceived clearly. The extent of your responsibility knows no
@@ -841,36 +841,36 @@ Christ is to love all equally. Thank God that's all that's asked.
 Does that help you?
 
 *Yes. Thank you very much.*
- 
+
 Now, it does mean that you never get to punch off the time clock and there's no
 union.
- 
+
 *Jeshua, I'd like to ask a question about the concept of grace.*
- 
+
 Ah, if you pay enough, you can get it. Interesting word that the Church had for
 those things: indulgences. What do you what to know about grace?
- 
+
 *Well, my understanding of grace is rather sketchy. It's sort of connected to
 some old church teachings and so forth, but the thing I think that I'd like to
 find out more about is the idea that it is gifted to us. It is given freely to
 us without&hellip; in spite of our grasping for it. It's along the same lines as the
 allowing, kind of opening up and allowing the Light to come in.*
- 
+
 Sounds like a very good description.
- 
+
 I'd like to personally know about grace in my life. How's that?
- 
+
 Are you sure?
- 
+
 *Well, yeah. I'm working on allowing. It's kind of an oxymoron.*
- 
+
 Allowing is indeed the key that opens the floodgate of grace. And yet, allowing
 is not a doing in the normal sense. It is mastered when every attempt to make
 or do or create what you perceive will be your highest good has utterly failed
 you and you begin to set aside the perception of the doer and the maker. The
 key of allowing is the key that unlocks Heaven, and yet you do not place the
 key within the lock. It is placed there for you by none other than God.
- 
+
 Allowing, then, is the process in which you relinquish the key back to the One
 Who has given it to you, with the understanding that you have never understood
 how to use it or what it's for. When you give the key back, you become empty
@@ -897,29 +897,29 @@ accomplish your salvation.
 Willing to stop trying? Are you willing to stop trying?
 
 *Oh, absolutely. Absolutely.*
- 
+
 Good. Then do simply this one thing: tonight when you rest your head upon your
 pillow, do what I have just described to you. Not in the hopes that it is going
 to work, but do it because you truly understand that there is nothing else that
 can be done. Nothing. And then just go off to sleep. And I give you this
 promise: certain miracles will begin to appear, certain shifts will begin to be
 felt within you. Trust them. What you are asking for is not far from you.
- 
+
 However, there is one condition. You'll need to receive it. Fair trade?
 
 *Fair trade. Thank you.*
- 
+
 Beloved friend, you have no idea right now what you have just let loose. You
 have no idea truly of what you have just in this moment released from your
 countenance. But you will.
-  
+
 *Thank you.*
- 
+
 Don't thank me. Of my self I do nothing. Indeed. So.
- 
+
 *Jeshua, my beloved brother, Cliff, asked me to ask you a question for him. And
 what he asked was, how he can best serve in his life in the future?*
- 
+
 Marc: He is asking me just to say to you, Howard, that when you talk to Cliff,
 let him know that because he has asked, not from the curiosity of the mind but
 from the purity of the heart, that the past is released from him and that he
@@ -932,9 +932,9 @@ has been made and has been strengthened because of his willingness to ask the
 question. It does not come from the mind. It comes from the heart. And because
 it is asked from there, it is already answered and he will hear that answer
 each time he turns within and merely thinks upon Jeshua and asks.
- 
+
 *Thank you.*
- 
+
 *Jeshua, I had several things happen to me this last week, just within a few
 days, and it must be this window. A piece of artwork was given to me and I felt
 an aura off of it...messages. And then I got a letter from some friends who had
@@ -949,7 +949,7 @@ it's coming back. This miracle was occurring within me, with all sorts of
 things going on from the Reiki and my perceptions. Can you help me understand
 what is happening with this little girl dying with no medical cause and my
 sorrow over that and my feeling I shed my body?*
- 
+
 Beloved friend, there are a few things going on for you here. First, remember
 always that in reality death does not exist. That one that you would perceive
 as a child bas not died and has not gone anywhere. The experience you had
@@ -958,16 +958,16 @@ the body, was an experience in which, for a moment, you kind of slid through
 the door and released the perception you have held about yourself as being only
 the body. Much more than just having the concept or the thought, you
 experienced it.
-  
+
 *It wasn't just a thought.*
 
 No. Now, the former then, the event of what you would perceive as this death,
 triggered and helped you move into that place. Why? Because when you learned
 the news, it struck a place of compassion within you. It also struck a place of
 a sense of kinship and familiarity with the child.
- 
+
 *She was beautiful.*
- 
+
 Yes. And you, as what you would perceive as a soul, longed to be able to convey
 your love to that child. Now, the death then served in helping you realize that
 the only way to do that was to surrender your perception of yourself as being
@@ -980,109 +980,109 @@ because you noticed that something felt different. Do you see? And so the
 perception began to come back. But that's okay because once you've slid through
 such a door, it becomes easier and easier, and that in itself will accelerate
 the healing of the body. Do you see how it all ties together?
- 
+
 *Yes. It's part of the miracle process in healing my body.*
- 
+
 Yes.
- 
+
 *I perceived myself as a soul that doesn't really live within my body.*
- 
+
 Not just a perception, an experience.
- 
+
 *Yeah, that's what it was. It wasn't a thought. I was like I shed it.*
- 
+
 Just like you can have a thought about what it means to stand in a downpour or
 you can stand in it.
- 
+
 *Right. Okay.*
- 
+
 Now, remember, hold that child in your heart. Think about her. And when you
 think about her, allow that feeling to come back to you the feeling in the
 heart of compassion and of the desire to extend and communicate love. It will
 be very helpful.
- 
+
 *Thank you.*
- 
+
 But it's only helpful if you want miracles to continue.
- 
+
 *I do. Thank you.*
- 
+
 Good choice.
 
 *I sent her parents a card, but I don't know if they will be ready for me to
 share that.*
- 
-No, they are not ready yet.
- 
-*I didn't think so. Thank you.*
- 
-Marc: Well, how's everybody doing?
- 
-*Great.*
- 
-Good.
- 
-*Great but tired.*
- 
-Great but tired, huh.
- 
-*I have another question.*
- 
-Marc: He's suggesting that we&hellip; let's spend some time together here. Just move
-your chairs so that you can sit facing somebody. Any body will do. 
 
-{Group breaks into dyads.}
- 
+No, they are not ready yet.
+
+*I didn't think so. Thank you.*
+
+Marc: Well, how's everybody doing?
+
+*Great.*
+
+Good.
+
+*Great but tired.*
+
+Great but tired, huh.
+
+*I have another question.*
+
+Marc: He's suggesting that we&hellip; let's spend some time together here. Just move
+your chairs so that you can sit facing somebody. Anybody will do.
+
+[Group breaks into dyads.]
+
 Marc: Does everybody have somebody? It might be nice if we have a couple of
 triads to make it a duo. Better be careful over there. A lot of miracles seem
 to happen with those.
- 
+
 *That's why I moved.*
- 
+
 Marc: So just let yourself take a few good deep breaths, and really allow
-yourself to look into the eyes of the person in front of you. 
+yourself to look into the eyes of the person in front of you.
 
 Let the shoulders relax. It doesn't take effort. And as you look into the eyes
 of your partner, truly allow every thought of the past to be gone. Let yourself
 feel as though there is absolutely nowhere to go. There isn't anything to
 achieve. There are no burdens. And begin to allow a feeling of penetration to
 occur through the eyes as if there is only Light, just Light, radiant, shining.
- 
-{Pause.}
- 
+
+[Pause]
+
 And if things seem to begin to change a little, just allow it as if there were
 no perception or image of this being in front of you that you had to hold on
 to.
- 
-{Pause.}
+
+[Pause]
 
 And then gently within yourself simply begin to repeat: "I see only
 myself. I see only Christ." And as that continues, just allow all the Light and
 the Love you know that Christ has to radiate through your eyes and to be given
 to the one before you.
- 
-{Pause.}
- 
+
+[Pause]
+
 "I see only myself. I see only Christ."
- 
-{Pause.}
- 
+
+[Pause]
+
 Feel that Light just expanding, growing, radiating. Feel the sense of joy it
 begins to bring.
- 
-{Pause.}
- 
+
+[Pause]
+
 And remaining in that very special and sacred place, take just a few moments to
 use the gift of your words to say to the one in front of you, "Thank you for
 all that you are." Whatever feels appropriate for you, just express it from the
 depth of your being.
 
-{Group shares with each other.
+[Group shares with each other.]
 
 Don't resist hugs if it feels like a good idea.
 
 Okay. So let's close things up tonight. Let's move the chairs aside.
 
-{The group made a close-knit circle, hugging each other, singing along with
-music from a tape by John Astin.} 
+[The group made a close-knit circle, hugging each other, singing along with
+music from a tape by John Astin.]
 

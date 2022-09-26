@@ -6,7 +6,7 @@ const key = require("../../../js/modules/_config/key");
 var local = "http://localhost:8000";
 var remote = "https://dynamodb.us-east-1.amazonaws.com";
 
-var table = "wom2";
+var table = "cmiSearch";
 
 var awsConfig = {
   region: "us-east-1"
@@ -59,11 +59,11 @@ function load(table, fileName, verify) {
     return;
   }
 
-  let url = `/${data.book}/${data.unit}/`;
+  let url = `/t/wom/${data.book}/${data.unit}/`;
   let pageKey = key.genPageKey(url);
 
   data.paragraph.forEach((p) => {
-    discarded += loadParagraph(pageKey, p, data.book, data.unit, fileName);
+    discarded += loadParagraph(pageKey, p, data.book, data.unit, fileName, data.source);
   });
 
   let fne = fileName.substr(fileName.lastIndexOf("/") + 1);
@@ -71,13 +71,14 @@ function load(table, fileName, verify) {
   console.log("+%s:%s:%s:%s", fn, pageKey, data.paragraph.length, discarded);
 }
 
-function loadParagraph(pageKey, p, book, unit, fn) {
+function loadParagraph(pageKey, p, book, unit, fn, source) {
   let discard = p.discard ? p.discard : 0;
   let paraKey = key.genParagraphKey(p.pid, pageKey);
 
   let params = {
       TableName: table,
       Item: {
+          "source": source,
           "parakey": paraKey.toString(10),
           "book": book,
           "unit": unit,

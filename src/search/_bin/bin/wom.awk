@@ -104,15 +104,15 @@ $1 ~ /##/ {
     for (line in lines) {
       raw = lines[line]
       # remove html elements
-      gsub(/\&hellip;/, "", raw)
-      gsub(/ \&ndash; /, "", raw)
-      gsub(/\&ndash;/, " ", raw)
-      gsub(/ \&mdash; /, "", raw)
-      gsub(/\&mdash;/, " ", raw)
-      gsub(/\&ldquo;/, "", raw)
-      gsub(/\&rdquo;/, "", raw)
-      gsub(/\&lsquo;/, "", raw)
-      gsub(/\&rsquo;/, "", raw)
+      gsub(/&hellip;/, "", raw)
+      gsub(/ &ndash; /, "", raw)
+      gsub(/&ndash;/, " ", raw)
+      gsub(/ &mdash; /, "", raw)
+      gsub(/&mdash;/, " ", raw)
+      gsub(/&ldquo;/, "", raw)
+      gsub(/&rdquo;/, "", raw)
+      gsub(/&lsquo;/, "", raw)
+      gsub(/&rsquo;/, "", raw)
       # remove <br/> 
       gsub(/<br\/>/,"",raw)
       # remove <p></p> 
