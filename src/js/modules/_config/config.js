@@ -111,7 +111,7 @@ export function getAudioInfo(url) {
   }
 
   let cIdx;
-  let lookup = ["ble", "c2s", "hoe", "ign", "com", "dbc", "dth", "fem", "gar", "hea", "hoa",
+  let lookup = ["hoe", "ign", "c2s", "ble", "com", "dbc", "dth", "fem", "gar", "hea", "hoa",
                 "hsp", "joy1", "joy2", "lht", "moa", "mot", "wak", "wlk", "illusions", "easter",
                 "freedom", "purpose", "pow", "toc", "light", "peace", "perception", "seeking",
                 "shr", "doorway", "holyr", "teach"];

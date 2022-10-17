@@ -13,7 +13,7 @@ toc:
 
 Now, we begin.
 
-&hellip;And, indeed, once again, greetings unto you, beloved and holy friends. In truth, all
+And, indeed, once again, greetings unto you, beloved and holy friends. In truth, all
 that occurs within your dimension is not unknown or unavailable to us. For where
 we abide (and there are many of us), we abide in a state of consciousness in which
 the transmutation of energies through your third-dimensional realm are entirely
