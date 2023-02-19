@@ -42,7 +42,8 @@ down to earth guide to transformation.
       <div id="news-tab-content" class="ui bottom attached tab segment" data-tab="first">
         <div class="box">
           <p><i class="bullhorn red icon"></i>
-            Fourteeen transcripts have been added to the Early Years thanks to Ken Hoover and Dave Kopsell.
+            Early Years transcripts Joy1 and Joy 2 now have audio. Thanks
+            Blaise Lafon!
           </p>
         </div>
       </div>

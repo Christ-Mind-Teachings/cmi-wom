@@ -478,8 +478,6 @@ joy. Joy! Has anybody dropped the bag off their shoulder underneath one
 of your lights at the intersection this week? [Reference to Joy
 I](/wom/early/joy1/)
 
-\[Laughter.\]
-
 Why not?
 
 I didn’t have the courage.
@@ -597,8 +595,6 @@ just a little bit more.
 
 > *Oh, God. Jeshua is talking about responsibility and discipline
 > tonight. I knew I should have gone to the movies.*
-
-\[Laughter.\]
 
 *Responsibility is what makes your joy full!* Please remember that.
 Responsibility for the whole of creation is what will make your joy
@@ -792,7 +788,7 @@ know, mastery is only a blink away.*
 Interesting thought, don’t you think?
 
 And take it another step further: when you are willing to learn what you
-couldn’t even possibly learn that you don’t know . . . that is called
+couldn’t even possibly learn that you don’t know&hellip; that is called
 willingness.
 
 Now in your language that sounds a little funny, but the same thing was
@@ -835,7 +831,7 @@ Has any of this made a bit of sense?
 
 Yes.
 
-Look around you for a moment . . . fellow travelers, desirous of
+Look around you for a moment&hellip; fellow travelers, desirous of
 mastering the only curriculum that needs to be learned. There are many
 ways to approach it, but until you accept that to learn that curriculum
 *must mean that the structure of your life around* *you becomes wholly
@@ -944,8 +940,6 @@ I have a sore back.
 Ah. Now, what I want you to do is clap your hands three times as loudly
 as you can.
 
-\[He claps.\]
-
 Get into it.
 
 Now, pick what an old friend of mine would call a goddess. Pick a
@@ -963,8 +957,6 @@ them. Let’s go. Come on.
 Shout your joy, Firewalker. I don’t hear you. Shout your joy.
 
 Joy! Joy! Joy! Yes. Yes.
-
-\[Clapping, dancing and shouting continue.\]
 
 Okay, all right. Now, thank your goddess.
 
@@ -1062,8 +1054,6 @@ Ah. It wasn’t so bad, was it? Now, I know some of you are going,
 
 > *Boy, I’m glad he didn’t pick on me.*
 
-\[Laughter.\]
-
 When you can’t wait to get picked on, the end of the journey comes much
 more quickly.
 
@@ -1155,7 +1145,7 @@ that the joy in you might become full and the life in you might shine
 forth, and that life and that Light will be the means by which the
 atonement is completed on Earth as it is in Heaven.
 
-Be at peace in all things, and know . . . it’s not serious. Sing, laugh,
+Be at peace in all things, and know&hellip; it’s not serious. Sing, laugh,
 dance, play. Indeed.
 
 Peace be unto you.

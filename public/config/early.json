@@ -237,11 +237,15 @@
     {
       "title": "Joy I",
       "url": "/t/wom/early/joy1/",
+      "audio": "/early/joy1.mp3",
+      "timing": "/early/joy1.json",
       "description": "October 30, 1992"
     },
     {
       "title": "Joy II",
       "url": "/t/wom/early/joy2/",
+      "audio": "/early/joy2.mp3",
+      "timing": "/early/joy2.json",
       "description": "November 6, 1992"
     },
     {
