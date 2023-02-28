@@ -71,6 +71,9 @@ collections:
   reveal:
     output: true
     title: Presentations
+  rick:
+    output: true
+    title: Rick's Notes
 
 defaults:
   - scope:
@@ -161,6 +164,17 @@ defaults:
       image-width: 612
       image-height: 926
       bid: "Early"
+  - scope:
+      path: ""
+      type: rick
+    values:
+      layout: transcript
+      book: "Rick's Notes"
+      publisher: "CMI"
+      image: "/t/wom/public/img/wom/earlyN-early.jpg"
+      image-width: 612
+      image-height: 926
+      bid: "Rick"
   - scope:
       path: ""
       type: topics

@@ -158,6 +158,17 @@ down to earth guide to transformation.
       </div>
     </div>
     <div class="card">
+      <a id="book-topics" href="#" data-book="topics" animate class="toc-modal-open image">
+        <img src="/t/wom/public/img/wom/topics1-big.jpg">
+      </a>
+      <div class="content">
+        <div class="description">
+          An Index of topics and their relationships from <em>The Way of
+          Mastery</em>
+        </div>
+      </div>
+    </div>
+    <div class="card">
       <a id="moavideo" animate href="/t/wom/video/moa/" class="image" data-tooltip="Click to view the Video." data-position="bottom center">
         <img src="/t/wom/public/img/wom/moa-big.jpg">
       </a>

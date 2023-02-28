@@ -138,13 +138,12 @@ function highlightCurrentTranscript(bid) {
       break;
     case "early":
       max = 65;
-      //max = 43;
       break;
     case "acq":
       max = 3;
       break;
     case "topics":
-      max = 42;
+      max = 29;
       break;
   }
   nextPrev($el, max);

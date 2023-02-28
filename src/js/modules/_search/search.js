@@ -84,6 +84,7 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
 async function search(query) {
   let searchBody = {
     source: "wom",
+    strict: true,
     query: query,
     width: 30
   };
