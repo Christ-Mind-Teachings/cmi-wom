@@ -4,6 +4,20 @@
   font-style: italic;
 }
 
+.transcript.rick h3 {
+  color: #0978b9;
+  font-size: larger;
+}
+
+.transcript.rick .aside {
+  color: red;
+}
+
+.transcript.rick span.def {
+  font-weight: bold;
+  font-style: italic;
+}
+
 .transcript.tjl .date { 
     font-style: bold;
     font-size: 1.1em;

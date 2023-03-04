@@ -81,14 +81,19 @@ function displaySearchMessage(msgId, arg1, arg2, arg3) {
 
 //run query
 //import {searchSource} from "www/modules/_ajax/search";
-async function search(query) {
+//args:
+//  query: the search string
+//  exact: when true, limit results to exact matches
+//         eg: return devil but not devilish
+async function search(query, exact=false) {
   let searchBody = {
     source: "wom",
-    strict: true,
+    strict: exact,
     query: query,
     width: 30
   };
 
+  //console.log("searchBody: %o", searchBody);
   try {
     let result = await searchSource(searchBody);
     displaySearchMessage(SEARCH_RESULT, "", `"${result.queryTransformed}"`, result.count);
@@ -141,19 +146,39 @@ function initSearchModal() {
   $(uiSearchForm).submit(function(e) {
     e.preventDefault();
     var searchSource = $(uiSearchSource).text();
-    var searchString = $(uiSearchString).val();
+    var $form = $("#search");
+    var searchString = $form.form("get value", "query");
+    var exactcb = $form.form("get value", "exact");
+    var exact;
 
     //ignore and return if search string is empty
     if (searchString.length === 0) {
       return;
     }
 
+    //console.log("query: %s, exactcb: %s", searchString, exactcb);
+    //console.log("typeof exactcb: %s", typeof(exactcb));
+
     //console.log("Search requested: source: %s, string: %s", searchSource, searchString);
     displaySearchMessage(SEARCHING, searchSource, searchString);
 
+    //the value of 'exact' is a string on the first call with value 'on'
+    //it changes to either true or false if the value is changed on the form
+    if (typeof exactcb === "string") {
+      exact = exactcb==="on";
+    }
+    else {
+      exact = exactcb;
+    }
+
+    //console.log("exact: %s", exact);
+
     //run search
-    search(searchString);
+    search(searchString, exact);
   });
+
+  // init exact checkbox on search modal
+  $(".ui.exact.checkbox").checkbox("check");
 
 }
 

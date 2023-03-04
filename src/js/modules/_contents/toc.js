@@ -143,7 +143,7 @@ function highlightCurrentTranscript(bid) {
       max = 3;
       break;
     case "topics":
-      max = 29;
+      max = 30;
       break;
   }
   nextPrev($el, max);
