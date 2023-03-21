@@ -10,11 +10,45 @@ function getUnitName(pageInfo, unitInfo) {
   return pageInfo[unitInfo.pageKey].title;
 }
 
+/*
+ * Show or hide delete icon in front of search matches
+ */
+function setUpEditHandler() {
+  $(".ui.toggle.edit.checkbox").checkbox({
+    onChecked: function() {
+      //console.log("checkbox checked");
+      $("div.cmi-search-list").addClass("edit");
+    },
+    onUnchecked: function() {
+      //console.log("checkbox unchecked");
+      $("div.cmi-search-list").removeClass("edit");
+    }
+  });
+}
+
+function addEditToggle(html) {
+  // delete existing checkbox if present
+  $(".ui.toggle.edit.checkbox").checkbox("destroy");
+
+  //remove edit class if set
+  $("div.cmi-search-list").removeClass("edit");
+
+  return `<button class="ui disabled primary button save-modified-search-list">
+            <i class="save outline icon"></i>
+            Save Changes
+          </button>
+          <div class="ui toggle edit checkbox">
+            <input type="checkbox" name="public">
+            <label>Remove Selected Matches</label>
+          </div>
+          ${html}`;
+}
+
 function makeList(bid, title, pageInfo, matchArray) {
   return `
     <h3>${title[bid]} (${matchArray.length})</h3>
     <div class="ui list">
-      ${matchArray.map(m => `
+      ${matchArray.map((m, hidx) => `
         <div class="item">
           <i class="book icon"></i>
           <div class="content">
@@ -22,11 +56,12 @@ function makeList(bid, title, pageInfo, matchArray) {
               ${getUnitName(pageInfo, m)} (${m.m.length})
             </div>
             <div class="list">
-              ${m.m.map(h => `
+              ${m.m.map((h, midx) => `
                 <div class="item">
                   <i class="search icon"></i>
                   <div class="content">
                     <div class="header">
+                      <i data-bid="${bid}" data-m="${midx}" data-h="${hidx}" class="edit-match trash green icon"></i>
                       <a href="${pageInfo[m.pageKey].url}?srch=${h.location}">Paragraph ${h.location.substr(1)}</a>
                     </div>
                     <div class="description">
@@ -86,6 +121,7 @@ function getPageKeys(data) {
 export function showSearchResults(data, query) {
   const books = womInfo.getBooks();
   let pageInfoPromises = [];
+  //console.log("search results: %o", data);
 
   //get array of all unique page info - promises
   for (let b = 0; b < books.length; b++) {
@@ -130,13 +166,16 @@ export function showSearchResults(data, query) {
           html += makeList(bid, titleArray, pageInfo, matches[bid]);
         }
       }
-      $(".cmi-search-list").html(html);
-      $("#search-results-header").html(`: <em>${query}</em>`);
-      saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
 
+      $(".cmi-search-list").html(addEditToggle(html));
+      $("#search-results-header").html(`: <em>${query}</em>`);
+      setUpEditHandler();
+
+      //save search results to local store
+      saveQueryResults(query, data.count, titleArray, pageInfo, matches, data);
     })
     .catch((error) => {
-      console.error("Error: %s", error.message);
+      console.error("Error: %o", error);
     });
 }
 
@@ -166,6 +205,7 @@ function saveQueryResults(queryString, matchCount, titleArray, pageInfo, data, o
   storeSet("srchResults", {
     query: queryString,
     count: matchCount,
+    strict: originalResult.strict,
     titleArray: titleArray,
     pageInfo: pageInfo,
     data: data,
@@ -190,11 +230,34 @@ export function showSavedQuery() {
       html += makeList(bid, queryResult.titleArray, queryResult.pageInfo, queryResult.data[bid]);
     }
   }
-  $(".cmi-search-list").html(html);
 
-  $(".search-message.header").text("Last Search Result");
-  $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+  $(".cmi-search-list").html(addEditToggle(html));
+
+  //if the result has a uniqueId it's been saved
+  if (queryResult.uniqueId) {
+    $(".search-message.header").text("Saved Search Result");
+    $(".search-message-body").html(`<p>Saved Search <em>${queryResult.query}</em> has ${queryResult.count} matches</p>`);
+  }
+  else {
+    $(".search-message.header").text("Last Search Result");
+    $(".search-message-body").html(`<p>Search for <em>${queryResult.query}</em> found ${queryResult.count} matches</p>`);
+  }
+
   $("#search-results-header").html(`: <em>${queryResult.query}</em>`);
+
+  //indicate result has been modified and will be saved when query next changes
+  if (queryResult.modified) {
+    $(".search.message").addClass("orange");
+  }
+  //console.log("show search results: strict: %s", queryResult.strict);
+  if (queryResult.strict) {
+    $(".ui.exact.checkbox").checkbox("check");
+  }
+  else {
+    $(".ui.exact.checkbox").checkbox("uncheck");
+  }
+
+  setUpEditHandler();
 }
 
 

@@ -25,8 +25,8 @@ $(document).ready(() => {
 
   setLanguage(constants);
   bookmarkStart("page");
-  search.initialize();
   auth.initialize();
+  search.initialize();
   fb.initialize();
   toc.initialize("page");
   about.initialize();
