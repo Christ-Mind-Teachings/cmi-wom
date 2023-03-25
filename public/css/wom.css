@@ -1,37 +1,5 @@
 /* wom css */
 
-/* edit search list */
-div.cmi-search-list:not(.edit) i.edit-match {
-  display:none;
-}
-
-i.edit-match.trash.icon {
-    cursor: pointer;
-}
-
-i.edit-match.item-removed + a {
-  text-decoration: line-through;
-  color: red;
-}
-
-.search-navigator-active p.current {
-  padding: 5px;
-  border: 1px green dotted;
-}
-
-.search-navigator-active p.current.remove {
-  padding: 5px;
-  border: 3px red dotted;
-}
-
-.search-navigator-header-book .remove-count {
-  color:red;
-}
-
-#search .four.wide.field {
-  align-self: flex-end;
-}
-
 .transcript blockquote {
   font-style: italic;
 }

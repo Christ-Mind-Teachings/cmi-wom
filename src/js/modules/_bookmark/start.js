@@ -7,7 +7,7 @@ import bookmark from "www/modules/_bookmark/bookmark";
 import {initShareByEmail} from "www/modules/_bookmark/shareByEmail";
 import share from "www/modules/_share/share";
 
-//teaching specific 
+//teaching specific
 import constants from "../../constants";
 import { getPageInfo } from "../_config/config";
 
@@ -20,7 +20,7 @@ export function bookmarkStart(page) {
 
     //get page info and set as heading under '?' menu option
     let key = constants.keyInfo.genPageKey();
-    
+
     // there is no key for videos, ie: moa
     if (key !== -1) {
       getPageInfo(key)

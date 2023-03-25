@@ -1,5 +1,6 @@
 /* eslint no-console: off */
-import {storeInit} from "www/modules/_util/store";
+import {SourceStore, storeInit} from "www/modules/_util/store";
+import search from "www/modules/_search/search";
 
 //common modules
 import {isReadOnly, setBackgroundColor, showParagraph} from "www/modules/_util/url";
@@ -13,7 +14,10 @@ import {initialize as initVideo} from "www/modules/_video/acq";
 //teaching specific modules
 import {loadConfig} from "./modules/_config/config";
 import {bookmarkStart} from "./modules/_bookmark/start";
-import search from "./modules/_search/search";
+
+//import search from "./modules/_search/search";
+
+import {womSearchInit} from "./modules/_search/womSearch";
 import toc, {getBookId} from "./modules/_contents/toc";
 import audio from "./modules/_audio/audio";
 import about from "./modules/_about/about";
@@ -21,9 +25,11 @@ import { noteInfo } from "./notes";
 import constants from "./constants";
 
 $(document).ready(() => {
+  const store = new SourceStore(constants);
+  storeInit(constants);
+
   // read only, don't load bookmarks or account
   let ro = isReadOnly();
-  storeInit(constants);
   setLanguage(constants);
   initTranscriptPage("pnDisplay");
   if (ro) {
@@ -46,7 +52,8 @@ $(document).ready(() => {
   initVideo();
 
   loadConfig(getBookId()).then(() => {
-    search.initialize();
+    search.initialize(womSearchInit(store));
+    //search.initialize();
     toc.initialize("transcript");
 
     if (!ro) {
