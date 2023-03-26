@@ -13,7 +13,7 @@ import {setLanguage} from "www/modules/_language/lang";
 //teaching specific modules
 import {loadConfig} from "./modules/_config/config";
 import toc, {getBookId} from "./modules/_contents/toc";
-import {womSearchInit} from "./modules/_search/womSearch";
+import {searchInit} from "./modules/_search/search";
 import about from "./modules/_about/about";
 import constants from "./constants";
 
@@ -27,7 +27,7 @@ $(document).ready(() => {
   about.initialize();
 
   loadConfig(getBookId()).then(() => {
-    search.initialize(womSearchInit(store));
+    search.initialize(searchInit(store));
     toc.initialize("transcript");
     getTopicList(constants.topicManagerId, constants.keyInfo);
   }).catch((error) => {

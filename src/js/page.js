@@ -14,7 +14,7 @@ import {initQuoteDisplay} from "www/modules/_topics/events";
 
 //teaching specific modules
 import {bookmarkStart} from "./modules/_bookmark/start";
-import {womSearchInit} from "./modules/_search/womSearch";
+import {searchInit} from "./modules/_search/search";
 
 import toc from "./modules/_contents/toc";
 import about from "./modules/_about/about";
@@ -34,7 +34,7 @@ $(document).ready(() => {
   setLanguage(constants);
   bookmarkStart("page");
 
-  search.initialize(womSearchInit(store));
+  search.initialize(searchInit(store));
 
   fb.initialize();
   toc.initialize("page");

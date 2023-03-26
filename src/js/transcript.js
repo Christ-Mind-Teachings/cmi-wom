@@ -17,7 +17,7 @@ import {bookmarkStart} from "./modules/_bookmark/start";
 
 //import search from "./modules/_search/search";
 
-import {womSearchInit} from "./modules/_search/womSearch";
+import {searchInit} from "./modules/_search/search";
 import toc, {getBookId} from "./modules/_contents/toc";
 import audio from "./modules/_audio/audio";
 import about from "./modules/_about/about";
@@ -52,8 +52,8 @@ $(document).ready(() => {
   initVideo();
 
   loadConfig(getBookId()).then(() => {
-    search.initialize(womSearchInit(store));
-    //search.initialize();
+    search.initialize(searchInit(store));
+
     toc.initialize("transcript");
 
     if (!ro) {
