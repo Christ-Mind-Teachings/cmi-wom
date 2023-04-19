@@ -13,8 +13,6 @@
   {% include common/load-open-graph.html %}
 
   <link rel="stylesheet" href="/public/css/{{site.semantic}}/semantic.css">
-  <link rel="stylesheet" href="/t/wom/public/js/vendors~transcript.me-styles.css">
-  <link rel="stylesheet" href="/t/wom/public/js/me-styles.css">
   <link rel="stylesheet" href="/public/css/toastr.css">
   <link rel="stylesheet" href="/public/css/cmi.css">
   <link rel="stylesheet" href="/public/css/transcript.css">
@@ -48,18 +46,17 @@
     {% include components/search-navigator.html %}
   {% endif %}
   <div class="fixed" id="netlify-modal"></div>
+
   {% include common/javascript.html %}
 
+  <script src="/public/vendor/jquery/jquery.min.js"></script>
+  <script src="/public/vendor/{{site.semantic}}/semantic.min.js"></script>
   {% if jekyll.environment == "production" %}
-    <!-- WOM transcript Webpack production ({{site.semantic}})  -->
-    <script src="/public/vendor/jquery/jquery.min.js"></script>
-    <script src="/public/vendor/{{site.semantic}}/semantic.min.js"></script>
+    <!-- WOM topic Webpack production ({{site.semantic}})  -->
     <script src="/t/wom/public/js/vendors~page~topic~transcript.js"></script>
     <script src="/t/wom/public/js/topic.js"></script>
   {% else %}
-    <!-- WOM transcript Webpack development ({{site.semantic}})  -->
-    <script src="/public/vendor/jquery/jquery.js"></script>
-    <script src="/public/vendor/{{site.semantic}}/semantic.js"></script>
+    <!-- WOM topic Webpack development ({{site.semantic}})  -->
     <script src="/t/wom/public/js/vendors~page~topic~transcript.js"></script>
     <script src="/t/wom/public/js/page~topic~transcript.js"></script>
     <script src="/t/wom/public/js/topic.js"></script>

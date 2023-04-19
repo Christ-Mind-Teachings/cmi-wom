@@ -1,25 +1,20 @@
 /* eslint no-console: off */
-import {SourceStore, storeInit} from "www/modules/_util/store";
-import search from "www/modules/_search/search";
 
-//common modules
-import {isReadOnly, setBackgroundColor, showParagraph} from "www/modules/_util/url";
-import auth from "www/modules/_user/netlify";
-import fb from "www/modules/_util/facebook";
-import {initTranscriptPage} from "www/modules/_page/startup";
-import {initialize as initNotes} from "www/modules/_page/notes";
-import {setLanguage} from "www/modules/_language/lang";
-import {initialize as initVideo} from "www/modules/_video/acq";
+import {SourceStore, storeInit} from "common/modules/_util/store";
+import search from "common/modules/_search/search";
+import {isReadOnly, setBackgroundColor, showParagraph} from "common/modules/_util/url";
+import auth from "common/modules/_user/netlify";
+import audio from "common/modules/_audio/audio";
+import fb from "common/modules/_util/facebook";
+import {initTranscriptPage} from "common/modules/_page/startup";
+import {initialize as initNotes} from "common/modules/_page/notes";
+import {initialize as initVideo} from "common/modules/_video/acq";
 
 //teaching specific modules
-import {loadConfig} from "./modules/_config/config";
+import {setEnv, loadConfig} from "./modules/_config/config";
 import {bookmarkStart} from "./modules/_bookmark/start";
-
-//import search from "./modules/_search/search";
-
 import {searchInit} from "./modules/_search/search";
 import toc, {getBookId} from "./modules/_contents/toc";
-import audio from "./modules/_audio/audio";
 import about from "./modules/_about/about";
 import { noteInfo } from "./notes";
 import constants from "./constants";
@@ -30,11 +25,8 @@ $(document).ready(() => {
 
   // read only, don't load bookmarks or account
   let ro = isReadOnly();
-  setLanguage(constants);
   initTranscriptPage("pnDisplay");
   if (ro) {
-    //console.log("Read only: auth not initialized");
-
     //hide menu
     $("#cmi-transcript-menu").addClass("hide");
 
@@ -46,6 +38,8 @@ $(document).ready(() => {
   else {
     auth.initialize();
   }
+
+  setEnv(store);
   fb.initialize();
   about.initialize();
   initNotes(noteInfo);
@@ -55,15 +49,13 @@ $(document).ready(() => {
     search.initialize(searchInit(store));
 
     toc.initialize("transcript");
-
-    if (!ro) {
-      audio.initialize();
-    }
     showParagraph();
 
     if (!ro) {
-      bookmarkStart("transcript");
+      audio.initialize(store);
+      bookmarkStart("transcript", store);
     }
+
   }).catch((error) => {
     console.error(error);
   });

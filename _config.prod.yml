@@ -16,14 +16,11 @@ port:         9910
 # About/contact
 author:
   name:              Rick Mercer
-  url:               https://twitter.com/rmercer33
-  email:             rmercer33@gmail.com
+  url:               https://rickmercer.us
+  email:             rmercer33@christmind.info
 
 fb-appId:     448658485318107
 semantic:     fui292
-#semantic:     fui286
-#semantic:     sui231
-#semantic:     sui241
 src-url:      'https://www.christmind.info/t/wom'
 
 # Permalinks
@@ -69,12 +66,6 @@ collections:
   topics:
     output: true
     title: Topics and Index
-  reveal:
-    output: true
-    title: Presentations
-  rick:
-    output: true
-    title: Rick's Notes
 
 defaults:
   - scope:
@@ -167,17 +158,6 @@ defaults:
       bid: "Early"
   - scope:
       path: ""
-      type: rick
-    values:
-      layout: transcript
-      book: "Rick's Notes"
-      publisher: "CMI"
-      image: "/t/wom/public/img/wom/earlyN-early.jpg"
-      image-width: 612
-      image-height: 926
-      bid: "Rick"
-  - scope:
-      path: ""
       type: topics
     values:
       layout: topic
@@ -187,17 +167,6 @@ defaults:
       image-width: 612
       image-height: 926
       bid: "Topics"
-  - scope:
-      path: ""
-      type: reveal
-    values:
-      layout: reveal
-      book: "Reveal"
-      publisher: "CMI"
-      image: "/t/wom/public/img/wom/earlyN-big.jpg"
-      image-width: 612
-      image-height: 926
-      bid: "Reveal"
 
 exclude: [
   moved.html, deploy, LICENSE, README.md, Gemfile, Gemfile.lock, package.json, package-lock.json, node_modules, webpack.config.js, src, project

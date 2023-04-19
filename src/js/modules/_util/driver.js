@@ -1,4 +1,4 @@
-import {runFeatureIntro} from "www/modules/_util/driver";
+import {runFeatureIntro} from "common/modules/_util/driver";
 
 export function pageDriver() {
   let steps = [

@@ -1,38 +1,13 @@
-//import store from "store";
-//import {fetchConfiguration} from "www/modules/_util/cmi";
-import {fetchConfiguration} from "www/modules/_ajax/config";
-import axios from "axios";
 import indexOf from "lodash/indexOf";
-import {status} from "./status";
 
-//import {decodeKey, parseKey, genKey} from "./key";
+import {fetchConfiguration} from "common/modules/_ajax/config";
+
+import {status} from "./status";
 const transcript = require("./key");
 
-//mp3 and audio timing base directories
-const audioBase ="https://s3.amazonaws.com/assets.christmind.info/wom/audio";
-const timingBase = "/t/wom/public/timing";
-const SOURCE = "The Way of Mastery";
-
-//location of configuration files
-const configUrl = "/t/wom/public/config";
-
 //the current configuration, initially null, assigned by getConfig()
+let g_sourceInfo;
 let config;
-
-/*
-  Fetch audio timing data
-*/
-export function fetchTimingData(url) {
-  return new Promise((resolve, reject) => {
-    axios.get(`${timingBase}${url}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
 
 /**
  * Get the configuration file for 'book'. If it's not found in
@@ -45,7 +20,7 @@ export function fetchTimingData(url) {
  */
 export function getConfig(book, assign = true) {
   let lsKey = `cfg${book}`;
-  let url = `${configUrl}/${book}.json`;
+  let url = `${g_sourceInfo.configUrl}/${book}.json`;
 
   return new Promise((resolve, reject) => {
     fetchConfiguration(url, lsKey, status).then((resp) => {
@@ -69,7 +44,7 @@ export function getConfig(book, assign = true) {
  */
 export function loadConfig(book) {
   let lsKey = `cfg${book}`;
-  let url = `${configUrl}/${book}.json`;
+  let url = `${g_sourceInfo.configUrl}/${book}.json`;
 
   //"book" is a single page, no configuration
   if (!book) {
@@ -135,7 +110,7 @@ export function getAudioInfo(url) {
       break;
   }
 
-  audioInfo.audioBase = audioBase;
+  audioInfo.audioBase = g_sourceInfo.audioBase;
   return audioInfo;
 }
 
@@ -163,7 +138,7 @@ export function getReservation(url) {
 */
 export function getPageInfo(pageKey, data = false) {
   let decodedKey = transcript.decodeKey(pageKey);
-  let info = {pageKey: pageKey, source: SOURCE, bookId: decodedKey.bookId};
+  let info = {pageKey: pageKey, source: g_sourceInfo.title, bookId: decodedKey.bookId};
 
   if (data) {
     info.data = data;
@@ -234,5 +209,12 @@ function _getAudioInfo(idx, cIdx) {
     audioInfo = config.contents[cIdx];
   }
   return audioInfo ? audioInfo: {};
+}
+
+/*
+ * Set environment to standalone or integrated
+ */
+export function setEnv(si) {
+  g_sourceInfo = si;
 }
 

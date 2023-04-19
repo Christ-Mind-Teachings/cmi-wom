@@ -1,6 +1,8 @@
 import scroll from "scroll-into-view";
+
+import clipboard from "common/modules/_bookmark/clipboard";
+
 import {getConfig} from "../_config/config";
-import clipboard from "www/modules/_bookmark/clipboard";
 
 const uiTocModal = ".toc.ui.modal";
 const uiOpenTocModal = ".toc-modal-open";
