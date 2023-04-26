@@ -16,6 +16,7 @@ export default {
   env: env,
   lang: lang,
   url_prefix: HOME_URI,
+  title: title,
   sourceId: 10,
   configUrl: `${HOME_URI}/public/config`,
   topicManagerId: "05399539cca9ac38db6db36f5c770ff1",

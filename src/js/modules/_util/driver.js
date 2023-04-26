@@ -19,27 +19,21 @@ export function pageDriver() {
       }
     },
     {
-      element: "!#news-tab-content",
+      //element: "!#news-tab-content",
+      element: "!#news-tab",
       popover: {
         title: "News",
         description: "Short announcements",
         position: "left"
-      },
-      onNext: () => {
-        $("#quote-tab").trigger("click");
-        //$("#show-quote-button").addClass("disabled");
       }
     },
     {
-      element: "!#quote-tab-content",
+      //element: "!#quote-tab-content",
+      element: "!#quote-tab",
       popover: {
         title: "Quote",
         description: "Display inspiring quotes and share them via email or Facebook. (Don't press the button now, it will mess things up!! If you do, just press escape.)",
-        position: "left",
-      },
-      onPrevious: () => {
-        $("#news-tab").trigger("click");
-        //$("#show-quote-button").removeClass("disabled");
+        position: "right",
       }
     },
     {
@@ -88,6 +82,14 @@ export function pageDriver() {
         title: "The Early Years",
         description: "A collection of messages given before the Way of the Heart.",
         position: "left"
+      }
+    },
+    {
+      element: "#book-topics",
+      popover: {
+        title: "Way of Mastery Topics",
+        description: "A grouping of Way of Mastery concepts by topic. Topics include <em>forgiveness</em>, <em>Exercises</em>, and many more. See the Welcome page for more information.",
+        position: "right"
       }
     },
     {
