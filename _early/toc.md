@@ -154,7 +154,7 @@ one the world has called Christ. And perhaps I can become so outrageous as to
 think that, sitting right here on my couch, I can chat with him," 
 
 That would be outrageous to some who want to believe that I am somewhere far
-off and difficult to find. Where am 1? If I am not limited by space and time &mdash;
+off and difficult to find. Where am I? If I am not limited by space and time &mdash;
 and I assure you that I am not &mdash; I am wherever you allow me to be. I am
 wherever you allow me to be, and in the silence of the heart, rest assured,
 there can be no barriers that could ever separate us. 

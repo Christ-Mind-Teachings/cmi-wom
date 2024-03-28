@@ -136,7 +136,22 @@ export function getReservation(url) {
     pageKey: a key uniquely identifying a transcript page
     data: optional, data that will be added to the result, used for convenience
 */
-export function getPageInfo(pageKey, data = false) {
+//export function getPageInfo(pageKey, data = false) {
+export function getPageInfo(page, data = false) {
+
+  let pageKey;
+
+  /*
+   * Convert arg: page to pageKey if it is passed in as a url
+   */
+  if (typeof page === "string" && page.startsWith("/t/")) {
+    pageKey = transcript.genPageKey(page);
+    //if (pageKey === -1) return {};
+  }
+  else {
+    pageKey = page;
+  }
+
   let decodedKey = transcript.decodeKey(pageKey);
   let info = {pageKey: pageKey, source: g_sourceInfo.title, bookId: decodedKey.bookId};
 

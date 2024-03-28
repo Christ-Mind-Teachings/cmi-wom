@@ -383,7 +383,7 @@ you could take one step behind the stage curtain, you would discover yourself sa
 > From the depth of the Christ I am, I choose now to create a fearful world and the experience
 > of fear and all that comes with it&mdash;and I step into that creation now!
 
-And there you have it. The experience you&rsquo;re having that seems to be causing your
+And there you have it: the experience you&rsquo;re having that seems to be causing your
 conflict. Hm. That does rather take away excuses. And it takes away blame. For even
 your most fearful creations can be embraced with perfect innocence. And why? Listen
 carefully: All that you see in the realm of beginnings and endings is an illusion. It is

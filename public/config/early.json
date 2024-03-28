@@ -232,7 +232,8 @@
     {
       "title": "The Holy Spirit",
       "url": "/t/wom/early/hsp/",
-      "description": "June 26, 1992"
+      "icon": "clone",
+      "description": "June 26, 1992 (Same as Special and Holy Relationships)"
     },
     {
       "title": "Joy I",
@@ -377,7 +378,8 @@
     {
       "title": "Special and Holy Relationships",
       "url": "/t/wom/early/shr/",
-      "description": "June 26, 1992"
+      "icon": "clone",
+      "description": "June 26, 1992 (Same as The Holy Spirit)"
     },
     {
       "title": "Healing through Self Love (aka Doorway to Self Love)",
