@@ -170,6 +170,7 @@ export function getPageInfo(page, data = false) {
         }
         else {
           info.bookTitle = data.title;
+          info.audioBase = g_sourceInfo.audioBase;
 
           let unit = data.contents[decodedKey.uid];
           if (!unit) {
@@ -194,10 +195,14 @@ export function getPageInfo(page, data = false) {
               info.title = unit.title;
               info.subTitle = question.title;
               info.url = question.url;
+              info.audio = question.audio;
+              info.timing = question.timing;
             }
             else {
               info.title = unit.title;
               info.url = unit.url;
+              info.audio = unit.audio;
+              info.timing = unit.timing;
             }
           }
 
