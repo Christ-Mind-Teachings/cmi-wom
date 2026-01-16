@@ -236,7 +236,7 @@ machine, were you not already operating from a place of consciousness
 that said:
 
 > I know exactly what I&rsquo;m doing. I&rsquo;m in my house. I&rsquo;m in
-> my car. The weather is such-andsuch. I only have so much time and oh my
+> my car. The weather is such-and-such. I only have so much time and oh my
 > goodness, shouldn&rsquo;t the government be doing this and
 > shouldn&rsquo;t that be happening? What about that athletic event? What
 > a dummy to fall on his butt because it was raining, and now the game is
@@ -481,7 +481,7 @@ the Holy Spirit tells you, and you will know when to speak and when not
 to speak, when to act and when not to act. Resting into the quiet of
 your own unknowing allows Life to reveal itself through you and to you.
 But what is revealed will not be perceived as your own and you will
-understand that you can taken no credit for what unfolds through you.
+understand that you can take no credit for what unfolds through you.
 And you will say as I once said,
 
 > Why do you call me good even when miracles are done through me? There
