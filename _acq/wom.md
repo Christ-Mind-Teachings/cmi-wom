@@ -141,5 +141,5 @@ presence of Heaven on Earth, in so doing.
       [enlightenmentteachings.com](https://enlightenmentteachings.com/the-way-of-mastery).
 
 [^2]: Jayem is the channel of *The Way of Mastery*. Visit his website at
-      [www.wayofmastery.com](https://www.wayofmastery.com).
+      [wayofmastery.com](https://wayofmastery.com).
 
