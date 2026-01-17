@@ -115,7 +115,8 @@ Temple Canyon is sacred land in Abiquiu, New Mexico, that Jeshua led
 Jayem to miraculously purchase in the very earliest years of his
 experience with Jeshua, and is meant for future development.
 
-Sacred gatherings on the land have been, and continue to be, a regular occurrence as the pathway develops.
+Sacred gatherings on the land have been, and continue to be, a regular
+occurrence as the pathway develops.
 
 ## In summary
 
@@ -134,10 +135,10 @@ presence of Heaven on Earth, in so doing.
 
 ~ Overview of *The Way of Mastery* by Dave Schock[^1] and Jayem[^2].
 
-[^1]: Dave Schock is  a senior pathway teacher of The Way of Mastery,
+[^1]: Dave Schock is a senior pathway teacher of The Way of Mastery,
       and author of *an introduction to the way of mastery*. Visit his
       website at
-      [www.thewayofmastery.online](https://enlightenmentteachings.com/the-way-of-mastery).
+      [enlightenmentteachings.com](https://enlightenmentteachings.com/the-way-of-mastery).
 
 [^2]: Jayem is the channel of *The Way of Mastery*. Visit his website at
       [www.wayofmastery.com](https://www.wayofmastery.com).
