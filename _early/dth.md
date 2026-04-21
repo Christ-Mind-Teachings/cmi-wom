@@ -1,16 +1,16 @@
 ---
 title: Death and Earth Changes
 toc:
-- Question One
-- Question Two
-- Question Three
-- Question Four
-- Question Five
-- Question Six
-- Question Seven
-- Question Eight
-- Question Nine
-- Question Ten
+  - Question One
+  - Question Two
+  - Question Three
+  - Question Four
+  - Question Five
+  - Question Six
+  - Question Seven
+  - Question Eight
+  - Question Nine
+  - Question Ten
 fb:
   desc: "Way of Mastery: The Early Years - Death and Earth Changes"
 ---
@@ -25,8 +25,8 @@ possibly represent to the mind of mankind. I come forth as a promise
 kept that I am, indeed, with you always. I come forward because the time
 comes quickly. And I come forth to gather my friends to myself who have
 already chosen to join with me in this age, to bring forth that of the
-Christed Consciousness from the depth of their *own* being; to walk this
-earth *as* the arisen Christ; to be that one through whom the Love of
+Christed Consciousness from the depth of their _own_ being; to walk this
+earth _as_ the arisen Christ; to be that one through whom the Love of
 God is extended unto the plants and to the animals, and to every brother
 and sister that walks with you and yet carries the veil of fear; that
 walks the light, the temple of their heart. I come forth because I am
@@ -44,7 +44,7 @@ to bring forth into manifest form that seed of holy vision which the
 Father would place within you.
 
 I come forth because we are one. I come forth because we are friends. I
-come forth *for the simple joy* of abiding with *you*, the Holy Children
+come forth _for the simple joy_ of abiding with _you_, the Holy Children
 of God. For from the beginning, which is before space and time, already
 were we together as One Mind. And in an ancient moment, a useless dream
 was dreamt, a dream of forgetting, a dream of separation. But even in
@@ -52,10 +52,10 @@ that moment, already did your Creator, the one that I have called Abba,
 Father, set the bridge in place that would one day become activated in
 the depth of your soul, by which you would come from the world of your
 making into the truth of the Kingdom &hellip; that the very words I once
-explained to the world would become *your* words, that would become
-*your* truth, *your* reality, your *remembrance* &hellip; that after all
+explained to the world would become _your_ words, that would become
+_your_ truth, _your_ reality, your _remembrance_ &hellip; that after all
 dreams have been dreamt and the soul chooses to cross the bridge, it
-rests and reclines in the simple truth that *I and my Father are one*.
+rests and reclines in the simple truth that _I and my Father are one_.
 And we create together only the good, the holy, and the beautiful.
 
 Therefore, indeed, beloved friends, it is an honor and a joy to abide
@@ -69,7 +69,7 @@ cannot be found, in which fulfillment is forever lacking, and begins to
 hear the crystal-clear but very quiet song of the Creator, whispering
 eternally,
 
-> *Beloved child, I love you. Come, remember me, and let us be as One.*
+> _Beloved child, I love you. Come, remember me, and let us be as One._
 
 So, with all of that by way of greeting, I give thanks unto you, each of
 you, for your willingness to hear the call and to answer it, to step
@@ -84,8 +84,8 @@ collectively — are witnessing and experiencing within yourselves and in
 your relationships, the manner in which the Father, God, is calling
 creation back to Herself.
 
-Therefore, *rejoice* with one another. *Be glad* with one another.
-*Celebrate* one another. *Love you*, one another. For the end was
+Therefore, _rejoice_ with one another. _Be glad_ with one another.
+_Celebrate_ one another. _Love you_, one another. For the end was
 written in the stars before the stars were birthed. And that time comes
 quickly. For long have I waited this age to be upon this plane, when
 enough momentum has been created in the consciousness of mankind so that
@@ -93,8 +93,8 @@ a wave of awakening can no longer be shut out, that a wave of awakening
 can no longer be resisted, that a wave of awakening will melt away all
 fear &hellip; and once again the Kingdom of Heaven will be spread across
 the face of this Earth. But unlike the time when Man recognized it not,
-mankind *will know* that *the truth is true, always — *and that what
-is real cannot be threatened, and *only* what is real exists.
+mankind _will know_ that *the truth is true, always — *and that what
+is real cannot be threatened, and _only_ what is real exists.
 
 There indeed, will come a moment when all dreams of fear are forgotten,
 when all strife and enmity between brothers and sisters is dissolved as
@@ -111,7 +111,7 @@ asking.
 And in that day and hour when all things have been set in place and the
 Atonement, the correction, has occurred, for a brief moment that state
 will be experienced. And then \[snaps fingers\] this whole plane of
-density will simply dissolve from view. Not gone, but *translated* into
+density will simply dissolve from view. Not gone, but _translated_ into
 an entirely new domain.
 
 There are many — indeed, we would say unto you that everyone living on
@@ -129,15 +129,15 @@ ideas that have created the world into which you were birthed.
 
 Each and every one has a role to play, a part that has been assigned. It
 has been with you since the moment your soul was birthed; and the hour
-and the day comes when each must turn within and finally *allow* that
+and the day comes when each must turn within and finally _allow_ that
 part to flower and be played through them. And in whatever way that you
 come to it, you will understand the words that I spoke, seemingly so
 long ago, when I was confronted with the finality of my drama, the
-finality of my own teaching — what some would the call Crucifixion (I’ve
-never desired to emphasize *that* part of it; that was just
+finality of my own teaching — what some would the call the Crucifixion (I’ve
+never desired to emphasize _that_ part of it; that was just
 stepping-stones to the Resurrection.) And those words are simply this:
 Nevertheless, not my will, not the will of the separate fearful ego, but
-Thine be done — the will of the One Mind *that is but Love*. And when
+Thine be done — the will of the One Mind _that is but Love_. And when
 Love guides the way, miracles sprout before you. And not one obstacle is
 left in front of you; it dissolves before you reach it.
 
@@ -149,20 +149,20 @@ Just as many are being called together through different lineages,
 through different teachers — orchestrated, if you will, to gather
 together in their own ways, to learn the lessons they yet need to learn,
 to discover their way of service to the planet, to humanity, to the
-Kosmos, to the Heart of Christ and to the Creator. *An ancient dream
-begins now to end*. The circle is nearly completed, and the pendulum
+Kosmos, to the Heart of Christ and to the Creator. _An ancient dream
+begins now to end_. The circle is nearly completed, and the pendulum
 returns all things to the pristine and innocent truth that all things
 are but the extension of the radiance of God’s presence. And fear can
 have no place in a mind that has awakened to the reality of God.
 
-And what you are doing here, *even in this evening*, is a part of that
+And what you are doing here, _even in this evening_, is a part of that
 very process. I’ve said many times that I come to call my friends to
 myself. Imagine that all of you have been given a script very, very long
 ago. And part of the script said that the day would arise when you would
 reconnect with an old friend — the one the world has called Jesus. And
 that through that connection a vibration would be created that would
 accelerate the fulfillment of your own part, your own unique role to
-play, the stepping into the fullness of *your* Christed nature — just as
+play, the stepping into the fullness of _your_ Christed nature — just as
 once, as a man, I decided to take my Father’s word at face value and
 stepped into my own Christed nature.
 
@@ -170,19 +170,19 @@ And while many beings sit before their televisions in this town of yours
 tonight and many more sit in what you call the rooms for
 unconsciousness, putting the liquid in the body (the bars), while many
 seek a lover to keep them warm through the night, the night never lasts
-forever. *You* have chosen to come *here* because you have heard an
+forever. _You_ have chosen to come _here_ because you have heard an
 invitation for this one evening, and you have accepted. Therefore,
 celebrate and rejoice, for the day is at hand and there is no greater
 joy than the re-communion of ancient friends who, deep within
-themselves, *know* that *the time is now*. The dance has begun, the
-music has started &hellip; Hmmm &hellip; And the whole of creation *will come*
+themselves, _know_ that _the time is now_. The dance has begun, the
+music has started &hellip; Hmmm &hellip; And the whole of creation _will come_
 to this party.
 
 ---
 
 ## Question One
 
-[*Question*](/t/wom/early/dth/q1/) So. We want, then, in this evening
+[_Question_](/t/wom/early/dth/q1/) So. We want, then, in this evening
 to speak specifically to certain questions that have been generated, for
 they hold a purpose in helping to extend and to clarify a simple message
 about this time frame, about certain changes, about certain things that
@@ -190,11 +190,11 @@ are now occurring within your governments, upon your planet, as this
 Armageddon boils to a crescendo in which all souls are being asked,
 {: .omit}
 
-> *Well, are you going to join the dance, or are you going to have to
-> leave the neighborhood?*
-{: .omit}
+> _Well, are you going to join the dance, or are you going to have to
+> leave the neighborhood?_
+> {: .omit}
 
-That is not a judgment, it is an *offering* being made to the soul of
+That is not a judgment, it is an _offering_ being made to the soul of
 everyone: Use time constructively, you can heal your heart, you can
 practice forgiveness, you can awaken as Christ. You’re going to have to,
 because the planet is doing the same thing; and if you don’t come with
@@ -225,7 +225,7 @@ process?
 
 ## Question Two
 
-[*Question*](/t/wom/early/dth/q2/) Yes, thank you. But everything
+[_Question_](/t/wom/early/dth/q2/) Yes, thank you. But everything
 you’ve said tonight can be taken either physically or metaphorically. Is
 this a physical change that will occur on the planet, or is this a
 metaphorical change and the planet itself remain unscathed?
@@ -235,7 +235,7 @@ metaphorical change and the planet itself remain unscathed?
 
 ## Question Three
 
-[*Question*](/t/wom/early/dth/q3/) Then the role of Shanti Christo must
+[_Question_](/t/wom/early/dth/q3/) Then the role of Shanti Christo must
 also be clear in this process. Is it a beacon?
 {: .omit}
 
@@ -243,7 +243,7 @@ also be clear in this process. Is it a beacon?
 
 ## Question Four
 
-[*Question*](/t/wom/early/dth/q4/) Are we going to experience a period
+[_Question_](/t/wom/early/dth/q4/) Are we going to experience a period
 of three days of darkness during this change upon the earth?
 {: .omit}
 
@@ -251,7 +251,7 @@ of three days of darkness during this change upon the earth?
 
 ## Question Five
 
-[*Question*](/t/wom/early/dth/q5/) Is there truly any difference
+[_Question_](/t/wom/early/dth/q5/) Is there truly any difference
 between entities that describe themselves as Germaine, Jeshua, Michael,
 and who would bring their message through an individual? Is there really
 any difference among the messengers?
@@ -261,14 +261,14 @@ any difference among the messengers?
 
 ## Question Six
 
-[*Question*](/t/wom/early/dth/q6/) I’d like to discuss with you,
-pursuant to the book that we’re working on, *The Way Through Death*, you
+[_Question_](/t/wom/early/dth/q6/) I’d like to discuss with you,
+pursuant to the book that we’re working on, _The Way Through Death_, you
 brought to our attention this past December that there were many
 individuals who died in the explosion in Oklahoma City who were at that
-time unaware of their death situation.  They were somehow hung up in
+time unaware of their death situation. They were somehow hung up in
 that moment of time of the explosion, unable to extricate themselves
 from the collapsed building. We’ve all heard stories of ghosts still
-inhabiting the locations of their death.  Why is this so, if what
+inhabiting the locations of their death. Why is this so, if what
 Emmanuel says, that death is “like taking off a tight shoe” is true?
 {: .omit}
 
@@ -276,7 +276,7 @@ Emmanuel says, that death is “like taking off a tight shoe” is true?
 
 ## Question Seven
 
-[*Question*](/t/wom/early/dth/q7/) So, from what you’re saying then,
+[_Question_](/t/wom/early/dth/q7/) So, from what you’re saying then,
 there is no set sequence that occurs at that moment called death. So a
 lot of people report on going through the tunnel and you’re there
 and&hellip;
@@ -286,7 +286,7 @@ and&hellip;
 
 ## Question Eight
 
-[*Question*](/t/wom/early/dth/q8/) Is God self-aware, or is it simply a
+[_Question_](/t/wom/early/dth/q8/) Is God self-aware, or is it simply a
 benign metaphysical force?
 {: .omit}
 
@@ -294,15 +294,13 @@ benign metaphysical force?
 
 ## Question Nine
 
-[*Question*](/t/wom/early/dth/q9/) Is there a force outside of God?
+[_Question_](/t/wom/early/dth/q9/) Is there a force outside of God?
 {: .omit}
 
 ---
 
 ## Question Ten
 
-[*Question*](/t/wom/early/dth/q10/) Getting back to Shanti Christo,
+[_Question_](/t/wom/early/dth/q10/) Getting back to Shanti Christo,
 could you give us an idea when this will materialize?
 {: .omit}
-
-
